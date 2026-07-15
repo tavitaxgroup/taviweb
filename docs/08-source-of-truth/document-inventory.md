@@ -28,6 +28,9 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Trang chon tat ca nganh | Khong con dung; khong tao lai luoi chon nganh trong noi dung |
 | Menu nganh nghe | Chi giu dropdown ngoai header va sidebar trai trong trang kho |
 | Sidebar kho giao dien | Mot khung lon, khong co icon mui ten truoc ten nganh |
+| Anh template dai | Nam trong `public/assets/anh-template/{ten-nganh}/{ma-template}` |
+| Card anh template | Nam ben duoi the render/demo cu, hover auto-scroll, click mo modal chi tiet |
+| Modal anh template | Anh lon nam trong vung scroll doc lap, tu cuon cham sau khi mo, nguoi dung van luot xem het anh dai |
 | Demo renderer | Route `/demo/[place_id]` render website demo truc tiep, khong tao dashboard/playground |
 | Facebook link | Uu tien `facebook_url`; neu trong thi tam dung `website` nhu link Facebook fallback |
 

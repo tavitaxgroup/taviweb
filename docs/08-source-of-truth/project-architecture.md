@@ -51,6 +51,7 @@ Y nghia:
 | `src/template-sources` | 15 template render that theo nganh |
 | `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead`, `DemoPageData` |
 | `public/assets/tavi-software-hero.png` | Anh background hero trang chu |
+| `public/assets/anh-template` | Anh template dai dung trong kho giao dien |
 
 Luu y: `src/public/assets` khong phai thu muc serve static cua Next.js. Anh public phai nam trong `public/...`.
 
@@ -122,7 +123,17 @@ Hien tai moi nganh co mot item `render_template` tro den:
 Sau nay moi nganh co the co nhieu item hon, gom:
 
 - `render_template`: mau code render du lieu that.
-- `reference_image`: anh dai tham khao, khong dung de render `/demo/[place_id]`.
+- `reference_image`: anh dai tham khao trong `public/assets/anh-template`, khong dung de render `/demo/[place_id]`.
+
+Trong trang nganh, card `render_template` phai nam tren cung. Grid card `reference_image` nam ben duoi, co hover auto-scroll va modal xem chi tiet.
+
+Modal xem chi tiet cua `reference_image` phai:
+
+- Dat trong viewport, khong tran khoi man hinh.
+- Co cot anh preview scroll doc lap de xem het anh template dai.
+- Tu cuon cham sau khi mo modal.
+- Dung auto-scroll khi nguoi dung chu dong scroll, cham hoac keo anh.
+- Co cot thong tin mau gom mo ta, ma mau, goi, chi phi, tag va CTA tu van.
 
 ## Bien moi truong
 

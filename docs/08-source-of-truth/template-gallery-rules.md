@@ -24,7 +24,8 @@ Header TAVIWEB
   -> Noi dung phai:
       - Breadcrumb
       - O thong tin chinh dang card
-      - Danh sach mau cua nganh dang xem
+      - The ngang cua mau render/demo hien co
+      - Ben duoi la grid anh template dai cua nganh dang xem
 ```
 
 Quy tac UI:
@@ -34,6 +35,14 @@ Quy tac UI:
 - Noi dung phai phai rong hon sidebar.
 - Khong hien luoi chon tat ca nganh trong noi dung kho giao dien.
 - Click "Kho giao dien" o header phai vao thang nganh mac dinh `noi_that`.
+- Card anh template dai phai nam ben duoi the ngang render/demo cu.
+- Card anh template dai khi hover phai hien nut `Xem chi tiet` va anh tu cuon cham tu tren xuong phan duoi.
+- Khi bam `Xem chi tiet`, hien modal co anh lon trong vung scroll doc lap.
+- Modal chi tiet phai cho nguoi dung luot xem het toan bo anh template dai, khong duoc cat mat phan cuoi anh.
+- Anh trong modal tu cuon cham tu tren xuong sau khi mo, nguoi dung tu scroll/cham/keo thi auto-scroll phai dung lai.
+- Layout modal desktop: ben trai la anh preview scroll doc lap, ben phai la thong tin mau. Modal co chieu cao theo viewport de khong tran khoi man hinh.
+- Layout modal mobile/tablet: noi dung co the xep 1 cot, nhung vung anh van phai scroll duoc het anh.
+- Modal chi tiet phai co thong tin co ban cua mau: ma mau, goi, chi phi, tag va CTA tu van.
 - Khong de cac khoi text dau trang qua lon hoac tho.
 - Khong hien cac tu ky thuat nhu `render`, `Supabase`, `lead`, `mock data` cho khach.
 - Co the dung tu than thien: `Mau website`, `Mau giao dien`, `Mau tham khao`.
@@ -126,12 +135,22 @@ Vi du:
 
 ## Quy tac ten file anh
 
-Anh public phai nam trong:
+Anh preview dai hien tai nam trong:
 
 ```txt
-public/template-previews/{template_id}.jpg
-public/template-long/{template_id}.jpg
+public/assets/anh-template/{ten-nganh}/{ma-template}.jpg
+public/assets/anh-template/{ten-nganh}/{ma-template}.webp
 ```
+
+Vi du:
+
+```txt
+public/assets/anh-template/noi-that/NT001.jpg
+public/assets/anh-template/xay-dung/XD003.jpg
+public/assets/anh-template/nha-hang/NH001.jpg
+```
+
+`ten-nganh` la ten folder khong dau, co gach noi. `ma-template` chinh la ma mau hien tren card, vi du `XD003`.
 
 Khong dat ten file co dau tieng Viet, khoang trang hoac ky tu dac biet.
 
@@ -141,6 +160,14 @@ Khong dat ten file co dau tieng Viet, khoang trang hoac ky tu dac biet.
 - [ ] `id` khong trung.
 - [ ] `industryKey` thuoc 15 key chuan.
 - [ ] Neu la `render_template`, co `templateKey` va `demoUrl`.
-- [ ] Neu la `reference_image`, co `longPreviewImage`.
+- [ ] Neu la `reference_image`, co `thumbnail` va `longPreviewImage` tro den `public/assets/anh-template`.
+- [ ] Card anh hien ben duoi the render/demo cu.
+- [ ] Hover card co nut `Xem chi tiet` va anh cuon cham.
+- [ ] Modal xem chi tiet co anh lon trong vung scroll doc lap.
+- [ ] Nguoi dung co the luot xem het toan bo anh dai trong modal, gom ca phan cuoi anh.
+- [ ] Modal khong tran khoi viewport desktop; mobile/tablet van scroll duoc.
+- [ ] Modal xem chi tiet co anh tu cuon cham sau khi mo.
+- [ ] Auto-scroll trong modal dung lai khi nguoi dung scroll, cham hoac keo anh.
+- [ ] Modal xem chi tiet co ma mau, goi, chi phi va CTA tu van.
 - [ ] UI khong nhac `Supabase`, `lead`, `render engine`, `mock data`.
 - [ ] Khong sua `/demo/[place_id]` neu chi them anh tham khao.
