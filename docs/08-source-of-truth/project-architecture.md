@@ -11,7 +11,7 @@ Tai lieu nay la nguon su that cho kien truc hien tai cua project `taviweb`. Moi 
 | Khu vuc | Route | Vai tro |
 |---|---|---|
 | Website cong ty | `/` | Trang gioi thieu TAVIWEB, dich vu thiet ke website, quy trinh, bang gia va form lien he |
-| Kho giao dien | `/kho-giao-dien` | Thu vien mau website theo 15 nganh nghe de khach xem va chon mau |
+| Kho giao dien | `/kho-giao-dien/noi_that` | Trang kho giao dien mac dinh, hien nganh noi that va sidebar 15 nganh |
 | Demo renderer | `/demo/[place_id]` | Render website demo theo du lieu lead tu Supabase table `leads` hoac mock data |
 
 Khong tach thanh nhieu app deploy trong MVP. Website cong ty, kho giao dien va demo renderer dung chung domain, chung codebase va chung deploy Vercel.
@@ -29,7 +29,7 @@ src/app/kho-giao-dien/[industry_key]/[template_id]/page.tsx
 Y nghia:
 
 - `/`: trang chu TAVIWEB.
-- `/kho-giao-dien`: trang tong kho giao dien, co sidebar 15 nganh nghe.
+- `/kho-giao-dien`: route alias, tu dong redirect ve `/kho-giao-dien/noi_that`.
 - `/kho-giao-dien/[industry_key]`: trang kho giao dien cua tung nganh.
 - `/kho-giao-dien/[industry_key]/[template_id]`: trang chi tiet item trong catalog, dung khi can mo rong nhieu mau.
 - `/demo/[place_id]`: render landing page demo theo `place_id`.
@@ -108,7 +108,7 @@ Kho giao dien khong fetch Supabase.
 
 ```txt
 src/lib/templates/templateCatalog.ts
-  -> /kho-giao-dien
+  -> /kho-giao-dien redirect /kho-giao-dien/noi_that
   -> /kho-giao-dien/[industry_key]
   -> /kho-giao-dien/[industry_key]/[template_id]
 ```
@@ -151,13 +151,14 @@ NEXT_PUBLIC_SITE_URL=
 - Khong xoa `public/assets/tavi-software-hero.png` vi trang chu dang dung file nay lam hero background.
 - Khong commit `.next`, `node_modules`, log hoac `.env.local`.
 - Khong sua `src/template-sources` neu chi thay doi giao dien kho giao dien.
+- Khong tao lai trang chon nganh nghe tong o `/kho-giao-dien`; link Kho giao dien mac dinh phai vao `/kho-giao-dien/noi_that`.
 
 ## Checklist truoc khi ket thuc mot thay doi
 
 - [ ] Chay `npx.cmd tsc --noEmit --incremental false`.
 - [ ] Neu co sua route/build config, chay `npm.cmd run build`.
 - [ ] Kiem tra `/`.
-- [ ] Kiem tra `/kho-giao-dien`.
+- [ ] Kiem tra `/kho-giao-dien` redirect ve `/kho-giao-dien/noi_that`.
 - [ ] Kiem tra mot trang nganh, vi du `/kho-giao-dien/nha_khoa`.
 - [ ] Kiem tra mot route demo, vi du `/demo/mock-nha_khoa`.
 - [ ] Neu build loi cache Next.js, co the xoa rieng `.next` trong `taviweb` roi build lai.

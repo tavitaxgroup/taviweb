@@ -38,6 +38,8 @@ Truoc khi sua code, doc theo thu tu:
 - Sidebar trai co 15 nganh nghe va nam trong mot khung lon.
 - Khong hien mui ten truoc ten nganh trong sidebar.
 - Noi dung phai rong hon sidebar.
+- `/kho-giao-dien` chi redirect ve `/kho-giao-dien/noi_that`; khong tao lai man hinh chon tat ca nganh.
+- Link "Kho giao dien" tren header trang chu phai tro den `/kho-giao-dien/noi_that`.
 - Khong hien cac tu ky thuat `Supabase`, `lead`, `mock data`, `render engine` cho khach.
 - Neu them mau moi, sua `src/lib/templates/templateCatalog.ts`.
 - Neu chi them anh tham khao, khong sua `/demo/[place_id]`.
@@ -62,7 +64,7 @@ Truoc khi sua code, doc theo thu tu:
 - [ ] Neu co sua code runtime, chay `npm.cmd run build`.
 - [ ] Kiem tra route lien quan:
   - `/`
-  - `/kho-giao-dien`
+  - `/kho-giao-dien` redirect ve `/kho-giao-dien/noi_that`
   - `/kho-giao-dien/nha_khoa`
   - `/demo/mock-nha_khoa`
 - [ ] Khong commit `.next`, `node_modules`, log, `.env.local`.

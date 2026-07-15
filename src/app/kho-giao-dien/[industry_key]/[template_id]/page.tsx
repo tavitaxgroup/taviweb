@@ -38,7 +38,7 @@ export default async function TemplateDetailPage({ params }: PageProps) {
           TAVIWEB
         </Link>
         <nav aria-label="Điều hướng chi tiết mẫu">
-          <Link href="/kho-giao-dien">Kho giao diện</Link>
+          <Link href="/kho-giao-dien/noi_that">Kho giao diện</Link>
           <Link href={`/kho-giao-dien/${industry.key}`}>{industry.name}</Link>
         </nav>
       </header>

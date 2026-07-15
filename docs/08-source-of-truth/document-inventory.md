@@ -14,6 +14,23 @@ File nay phan loai tai lieu hien co de developer va AI coding agent biet nen doc
 | `docs/08-source-of-truth/ai-change-protocol.md` | Bat buoc cho AI/developer | Quy trinh sua code an toan |
 | `docs/08-source-of-truth/document-inventory.md` | Bat buoc khi don dep docs | Phan loai tai lieu |
 
+## Quyet dinh runtime hien tai can ghi nho
+
+Nhung quyet dinh sau dang la trang thai dung cua he thong:
+
+| Hang muc | Quyet dinh hien tai |
+|---|---|
+| Brand | Ten hien thi chuan la `TAVIWEB` |
+| Trang chu | Route `/`, dung component trong `src/components/company` |
+| Anh hero trang chu | Bat buoc nam o `public/assets/tavi-software-hero.png` |
+| Kho giao dien mac dinh | Link header `Kho giao dien` phai vao `/kho-giao-dien/noi_that` |
+| Route `/kho-giao-dien` | Chi la alias redirect ve `/kho-giao-dien/noi_that` |
+| Trang chon tat ca nganh | Khong con dung; khong tao lai luoi chon nganh trong noi dung |
+| Menu nganh nghe | Chi giu dropdown ngoai header va sidebar trai trong trang kho |
+| Sidebar kho giao dien | Mot khung lon, khong co icon mui ten truoc ten nganh |
+| Demo renderer | Route `/demo/[place_id]` render website demo truc tiep, khong tao dashboard/playground |
+| Facebook link | Uu tien `facebook_url`; neu trong thi tam dung `website` nhu link Facebook fallback |
+
 ## Tai lieu nen giu lam tham khao
 
 | Folder | Ly do giu |

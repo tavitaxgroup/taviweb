@@ -125,7 +125,7 @@ export function CompanyHome() {
               Dịch vụ
             </Link>
             <div className="nav-dropdown">
-              <Link href="/kho-giao-dien" onClick={closeMenu}>
+              <Link href="/kho-giao-dien/noi_that" onClick={closeMenu}>
                 Kho giao diện
               </Link>
               <div className="nav-dropdown-panel" aria-label="Danh mục kho giao diện">

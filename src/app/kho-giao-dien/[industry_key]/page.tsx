@@ -39,7 +39,7 @@ export default async function IndustryTemplatePage({ params }: PageProps) {
           TAVIWEB
         </Link>
         <nav aria-label="Điều hướng kho giao diện">
-          <Link href="/kho-giao-dien">Tất cả ngành</Link>
+          <Link href="/kho-giao-dien/noi_that">Kho giao diện</Link>
           <Link href="/#contact">Liên hệ</Link>
         </nav>
       </header>

@@ -8,7 +8,7 @@ Kho giao dien la thu vien mau website cua TAVIWEB. Khu vuc nay phuc vu khach xem
 
 | Route | Noi dung |
 |---|---|
-| `/kho-giao-dien` | Trang tong, co sidebar 15 nganh nghe va danh sach nganh |
+| `/kho-giao-dien` | Route alias, redirect ve `/kho-giao-dien/noi_that` |
 | `/kho-giao-dien/[industry_key]` | Trang kho giao dien cua mot nganh |
 | `/kho-giao-dien/[industry_key]/[template_id]` | Trang chi tiet mot mau trong catalog |
 
@@ -18,11 +18,13 @@ Trang kho giao dien dung layout:
 
 ```txt
 Header TAVIWEB
-  -> Sidebar trai: 15 nganh nghe trong mot khung lon
+  -> Link Kho giao dien mac dinh vao /kho-giao-dien/noi_that
+  -> Dropdown ngoai header: 15 nganh nghe
+  -> Sidebar trai trong trang kho: 15 nganh nghe trong mot khung lon
   -> Noi dung phai:
       - Breadcrumb
       - O thong tin chinh dang card
-      - Danh sach mau/nganh
+      - Danh sach mau cua nganh dang xem
 ```
 
 Quy tac UI:
@@ -30,6 +32,8 @@ Quy tac UI:
 - Sidebar trai chi dung mot khung lon, khong tach thanh nhieu khung nho.
 - Sidebar khong hien icon mui ten truoc ten nganh.
 - Noi dung phai phai rong hon sidebar.
+- Khong hien luoi chon tat ca nganh trong noi dung kho giao dien.
+- Click "Kho giao dien" o header phai vao thang nganh mac dinh `noi_that`.
 - Khong de cac khoi text dau trang qua lon hoac tho.
 - Khong hien cac tu ky thuat nhu `render`, `Supabase`, `lead`, `mock data` cho khach.
 - Co the dung tu than thien: `Mau website`, `Mau giao dien`, `Mau tham khao`.
