@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { industryCatalog } from "@/lib/templates/templateCatalog";
 
 const phoneNumber = "0337367643";
@@ -15,8 +15,8 @@ const services = [
   },
   {
     id: "02",
-    title: "Website bán hàng",
-    text: "Danh mục sản phẩm, giỏ hàng, thanh toán, chat tư vấn và quản trị đơn hàng."
+    title: "Website giới thiệu sản phẩm",
+    text: "Trình bày danh mục sản phẩm, hình ảnh sắc nét, thông tin chi tiết và nút gọi điện/Zalo đặt hàng nhanh."
   },
   {
     id: "03",
@@ -26,47 +26,213 @@ const services = [
   {
     id: "04",
     title: "Bảo trì và nâng cấp",
-    text: "Tối ưu giao diện, bảo mật, hosting, SEO kỹ thuật và tích hợp automation."
+    text: "Tối ưu giao diện, bảo mật, hosting và tích hợp các công cụ tự động hóa."
   }
 ];
 
-const projects = [
-  {
-    className: "preview-commerce",
-    title: "Thương mại điện tử",
-    text: "Danh mục rõ ràng, CTA nổi bật, tối ưu mobile và luồng mua hàng nhanh."
-  },
-  {
-    className: "preview-corporate",
-    title: "Công ty dịch vụ",
-    text: "Trình bày năng lực, case study, đội ngũ và form báo giá chuyên nghiệp."
-  },
-  {
-    className: "preview-tour",
-    title: "Du lịch và booking",
-    text: "Bộ lọc tour, landing chiến dịch, banner ưu đãi và form giữ chỗ."
-  }
-];
+function DraggableMarquee() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const isDownRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const [isUserDragging, setIsUserDragging] = useState(false);
+
+  // Duplicate catalog to create seamless loop
+  const list = [...industryCatalog, ...industryCatalog, ...industryCatalog];
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let animId = 0;
+    let delayTimer = 0;
+    let isPaused = false;
+
+    const autoScroll = () => {
+      if (isPaused) return;
+
+      container.scrollLeft += 0.75; // Slow flowing speed
+
+      const singleSetWidth = container.scrollWidth / 3;
+      if (container.scrollLeft >= singleSetWidth * 2) {
+        container.scrollLeft -= singleSetWidth;
+      } else if (container.scrollLeft <= 0) {
+        container.scrollLeft += singleSetWidth;
+      }
+
+      animId = requestAnimationFrame(autoScroll);
+    };
+
+    animId = requestAnimationFrame(autoScroll);
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDownRef.current = true;
+      isDraggingRef.current = false;
+      setIsUserDragging(true);
+      isPaused = true;
+      if (animId) cancelAnimationFrame(animId);
+      if (delayTimer) clearTimeout(delayTimer);
+
+      startXRef.current = e.pageX - container.offsetLeft;
+      scrollLeftRef.current = container.scrollLeft;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDownRef.current) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startXRef.current) * 1.5;
+      isDraggingRef.current = Math.abs(walk) > 4;
+      container.scrollLeft = scrollLeftRef.current - walk;
+
+      const singleSetWidth = container.scrollWidth / 3;
+      if (container.scrollLeft >= singleSetWidth * 2) {
+        container.scrollLeft -= singleSetWidth;
+        scrollLeftRef.current -= singleSetWidth;
+        startXRef.current = x;
+      } else if (container.scrollLeft <= 0) {
+        container.scrollLeft += singleSetWidth;
+        scrollLeftRef.current += singleSetWidth;
+        startXRef.current = x;
+      }
+    };
+
+    const stopDragging = () => {
+      if (!isDownRef.current) return;
+      isDownRef.current = false;
+      setIsUserDragging(false);
+
+      delayTimer = window.setTimeout(() => {
+        isPaused = false;
+        animId = requestAnimationFrame(autoScroll);
+      }, 1200);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      isDownRef.current = true;
+      isDraggingRef.current = false;
+      isPaused = true;
+      if (animId) cancelAnimationFrame(animId);
+      if (delayTimer) clearTimeout(delayTimer);
+
+      startXRef.current = e.touches[0].pageX - container.offsetLeft;
+      scrollLeftRef.current = container.scrollLeft;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDownRef.current) return;
+      const x = e.touches[0].pageX - container.offsetLeft;
+      const walk = (x - startXRef.current) * 1.5;
+      isDraggingRef.current = Math.abs(walk) > 4;
+      container.scrollLeft = scrollLeftRef.current - walk;
+
+      const singleSetWidth = container.scrollWidth / 3;
+      if (container.scrollLeft >= singleSetWidth * 2) {
+        container.scrollLeft -= singleSetWidth;
+        scrollLeftRef.current -= singleSetWidth;
+        startXRef.current = x;
+      } else if (container.scrollLeft <= 0) {
+        container.scrollLeft += singleSetWidth;
+        scrollLeftRef.current += singleSetWidth;
+        startXRef.current = x;
+      }
+    };
+
+    const onLinkClick = (e: MouseEvent) => {
+      if (isDraggingRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    container.addEventListener("mousedown", onMouseDown);
+    container.addEventListener("mousemove", onMouseMove);
+    container.addEventListener("mouseup", stopDragging);
+    container.addEventListener("mouseleave", stopDragging);
+
+    container.addEventListener("touchstart", onTouchStart, { passive: true });
+    container.addEventListener("touchmove", onTouchMove, { passive: true });
+    container.addEventListener("touchend", stopDragging);
+
+    const links = container.querySelectorAll("a");
+    links.forEach((link) => link.addEventListener("click", onLinkClick));
+
+    // Wait until track layout completes
+    const timer = setTimeout(() => {
+      const singleSetWidth = container.scrollWidth / 3;
+      container.scrollLeft = singleSetWidth;
+    }, 100);
+
+    return () => {
+      if (animId) cancelAnimationFrame(animId);
+      if (delayTimer) clearTimeout(delayTimer);
+      clearTimeout(timer);
+      container.removeEventListener("mousedown", onMouseDown);
+      container.removeEventListener("mousemove", onMouseMove);
+      container.removeEventListener("mouseup", stopDragging);
+      container.removeEventListener("mouseleave", stopDragging);
+      container.removeEventListener("touchstart", onTouchStart);
+      container.removeEventListener("touchmove", onTouchMove);
+      container.removeEventListener("touchend", stopDragging);
+      links.forEach((link) => link.removeEventListener("click", onLinkClick));
+    };
+  }, []);
+
+  return (
+    <div
+      className={`marquee-scroller-wrap ${isUserDragging ? "is-dragging" : ""}`}
+      ref={containerRef}
+    >
+      <div className="marquee-scroller-track">
+        {list.map((item, idx) => (
+          <Link
+            className="marquee-card"
+            href={`/kho-giao-dien/${item.key}`}
+            key={`${item.key}-${idx}`}
+            draggable={false}
+          >
+            <div className="marquee-card-image">
+              <img
+                src={`/template-previews/${item.key}.svg`}
+                alt={item.name}
+                loading="lazy"
+                draggable={false}
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+            <div className="marquee-card-info">
+              <h3>{item.name}</h3>
+              <p>{item.description}</p>
+              <span className="marquee-card-link">Xem mẫu →</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const pricing = [
   {
     title: "Starter",
-    price: "Từ 6 triệu",
+    price: "Giá: Liên hệ",
     items: ["Website giới thiệu 5-7 trang", "Responsive mobile", "Form liên hệ cơ bản"],
     cta: "Nhận tư vấn"
   },
   {
     title: "Business",
-    price: "Từ 12 triệu",
-    items: ["CMS quản trị nội dung", "Tối ưu SEO và tốc độ", "Livechat, tracking, bảo mật"],
-    cta: "Chọn gói này",
-    featured: true
+    price: "Giá: Liên hệ",
+    items: ["CMS quản trị nội dung", "Tối ưu tốc độ tải trang", "Livechat, tracking, bảo mật"],
+    cta: "Nhận tư vấn"
   },
   {
     title: "Growth",
-    price: "Theo yêu cầu",
+    price: "Giá: Liên hệ",
     items: ["Website bán hàng hoặc booking", "Tích hợp CRM, automation", "Đo lường chuyển đổi nâng cao"],
-    cta: "Trao đổi dự án"
+    cta: "Nhận tư vấn"
   }
 ];
 
@@ -74,17 +240,83 @@ export function CompanyHome() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [consultMessage, setConsultMessage] = useState("");
   const [contactMessage, setContactMessage] = useState("");
+  const [isConsultSubmitting, setIsConsultSubmitting] = useState(false);
+  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
 
-  function submitConsult(event: React.FormEvent<HTMLFormElement>) {
+  async function submitConsult(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setConsultMessage("TAVIWEB đã ghi nhận thông tin. Đội ngũ tư vấn sẽ liên hệ lại sớm.");
-    event.currentTarget.reset();
+    const form = event.currentTarget;
+    setIsConsultSubmitting(true);
+    setConsultMessage("");
+
+    const formData = new FormData(form);
+    const phone = formData.get("phone") as string;
+
+    if (!phone || phone.trim() === "") {
+      setConsultMessage("Vui lòng nhập số điện thoại hợp lệ.");
+      setIsConsultSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "consult", phone })
+      });
+
+      if (res.ok) {
+        setConsultMessage("TAVIWEB đã ghi nhận thông tin. Đội ngũ tư vấn sẽ liên hệ lại sớm.");
+        form.reset();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        setConsultMessage(errorData.error || "Gửi thông tin thất bại. Vui lòng thử lại.");
+      }
+    } catch (err) {
+      console.error(err);
+      setConsultMessage("Đã xảy ra lỗi kết nối. Vui lòng thử lại sau.");
+    } finally {
+      setIsConsultSubmitting(false);
+    }
   }
 
-  function submitContact(event: React.FormEvent<HTMLFormElement>) {
+  async function submitContact(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setContactMessage("TAVIWEB đã ghi nhận yêu cầu. Chúng tôi sẽ phản hồi trong ngày làm việc.");
-    event.currentTarget.reset();
+    const form = event.currentTarget;
+    setIsContactSubmitting(true);
+    setContactMessage("");
+
+    const formData = new FormData(form);
+    const name = formData.get("name") as string;
+    const phone = formData.get("phone") as string;
+    const service = formData.get("service") as string;
+
+    if (!phone || phone.trim() === "") {
+      setContactMessage("Vui lòng nhập số điện thoại.");
+      setIsContactSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "contact", name, phone, service })
+      });
+
+      if (res.ok) {
+        setContactMessage("TAVIWEB đã ghi nhận yêu cầu. Chúng tôi sẽ phản hồi trong ngày làm việc.");
+        form.reset();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        setContactMessage(errorData.error || "Gửi yêu cầu thất bại. Vui lòng thử lại.");
+      }
+    } catch (err) {
+      console.error(err);
+      setContactMessage("Đã xảy ra lỗi kết nối. Vui lòng thử lại sau.");
+    } finally {
+      setIsContactSubmitting(false);
+    }
   }
 
   function closeMenu() {
@@ -163,7 +395,7 @@ export function CompanyHome() {
               <p className="hero-lead">Tối ưu chi phí - Đột phá doanh thu</p>
               <p className="hero-description">
                 TAVIWEB đồng hành cùng doanh nghiệp xây dựng website bán hàng, website công ty
-                và hệ thống landing page tốc độ cao, chuẩn SEO, dễ quản trị.
+                và hệ thống landing page tốc độ cao, tối ưu chuyển đổi, dễ quản trị.
               </p>
 
               <ul className="benefit-list" aria-label="Ưu đãi khi đăng ký tư vấn">
@@ -179,8 +411,8 @@ export function CompanyHome() {
                     Số điện thoại
                   </label>
                   <input id="phone" name="phone" type="tel" placeholder="Số điện thoại" autoComplete="tel" />
-                  <button className="button button-primary" type="submit">
-                    Đăng ký tư vấn
+                  <button className="button button-primary" type="submit" disabled={isConsultSubmitting}>
+                    {isConsultSubmitting ? "Đang gửi..." : "Đăng ký tư vấn"}
                   </button>
                 </div>
                 <small className="form-message" role="status" aria-live="polite">
@@ -205,8 +437,8 @@ export function CompanyHome() {
             <span>Theo dõi form và hosting</span>
           </div>
           <div>
-            <strong>SEO</strong>
-            <span>Cấu trúc sẵn sàng lên top</span>
+            <strong>Bảo mật</strong>
+            <span>SSL và sao lưu dữ liệu tự động</span>
           </div>
         </section>
 
@@ -237,21 +469,12 @@ export function CompanyHome() {
           <div className="section-heading narrow">
             <p className="eyebrow">Dự án mẫu</p>
             <h2 id="projects-title">Giao diện phù hợp từng ngành</h2>
+            <p style={{ color: "var(--software-ink-muted)", marginTop: "8px" }}>
+              Kéo chuột sang trái hoặc phải để khám phá các mẫu giao diện. Nhấp vào ngành bất kỳ để xem chi tiết.
+            </p>
           </div>
 
-          <div className="project-grid">
-            {projects.map((project) => (
-              <article className="project-card" key={project.title}>
-                <div className={`project-preview ${project.className}`} aria-hidden="true">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <h3>{project.title}</h3>
-                <p>{project.text}</p>
-              </article>
-            ))}
-          </div>
+          <DraggableMarquee />
         </section>
 
         <section className="section process-section" id="process" aria-labelledby="process-title">
@@ -293,8 +516,7 @@ export function CompanyHome() {
 
           <div className="pricing-grid">
             {pricing.map((plan) => (
-              <article className={`price-card${plan.featured ? " featured" : ""}`} key={plan.title}>
-                {plan.featured ? <p className="badge">Phổ biến</p> : null}
+              <article className="price-card" key={plan.title}>
                 <h3>{plan.title}</h3>
                 <p className="price">{plan.price}</p>
                 <ul>
@@ -302,7 +524,7 @@ export function CompanyHome() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <a className={`button ${plan.featured ? "button-primary" : "button-secondary"}`} href="#contact">
+                <a className="button button-primary" href="#contact">
                   {plan.cta}
                 </a>
               </article>
@@ -330,15 +552,15 @@ export function CompanyHome() {
             </label>
             <label>
               <span>Nhu cầu thiết kế</span>
-              <select name="service">
-                <option>Website doanh nghiệp</option>
-                <option>Website bán hàng</option>
-                <option>Landing page quảng cáo</option>
-                <option>Bảo trì hoặc nâng cấp</option>
-              </select>
+              <input
+                type="text"
+                name="service"
+                placeholder="Ví dụ: Website spa, landing page bất động sản..."
+                autoComplete="off"
+              />
             </label>
-            <button className="button button-primary" type="submit">
-              Gửi yêu cầu
+            <button className="button button-primary" type="submit" disabled={isContactSubmitting}>
+              {isContactSubmitting ? "Đang gửi..." : "Gửi yêu cầu"}
             </button>
             <small className="form-message" role="status" aria-live="polite">
               {contactMessage}

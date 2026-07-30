@@ -2071,7 +2071,6 @@ img {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 34px;
 }
-
 .company-software .project-card {
   overflow: hidden;
 }
@@ -2093,6 +2092,121 @@ img {
   padding: 28px;
   align-content: end;
   background: var(--software-blue);
+}
+
+.company-software .pricing-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 34px;
+}
+
+/* Marquee Scroller */
+.company-software .marquee-scroller-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 34px 16px;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.company-software .marquee-scroller-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.company-software .marquee-scroller-wrap {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.company-software .marquee-scroller-wrap.is-dragging {
+  cursor: grabbing;
+}
+
+.company-software .marquee-scroller-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+}
+
+.company-software .marquee-card {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  background: #ffffff;
+  border: 1px solid var(--software-border);
+  border-radius: var(--software-radius-card);
+  box-shadow: var(--software-shadow-card);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+.company-software .marquee-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--software-shadow-soft);
+  border-color: var(--software-red);
+}
+
+.company-software .marquee-card-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: var(--software-surface-blue);
+  position: relative;
+  border-bottom: 1px solid var(--software-border);
+}
+
+.company-software .marquee-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.3s ease;
+}
+
+.company-software .marquee-card:hover .marquee-card-image img {
+  transform: scale(1.05);
+}
+
+.company-software .marquee-card-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.company-software .marquee-card-info h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
+  color: var(--software-ink);
+}
+
+.company-software .marquee-card-info p {
+  margin: 0 0 20px;
+  font-size: 15px;
+  color: var(--software-ink-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 67px;
+}
+
+.company-software .marquee-card-link {
+  margin-top: auto;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--software-blue);
+  transition: color 0.2s ease;
+}
+
+.company-software .marquee-card:hover .marquee-card-link {
+  color: var(--software-red);
 }
 
 .company-software .project-preview span {
@@ -2177,12 +2291,20 @@ img {
 .company-software .price-card {
   position: relative;
   padding: 28px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.company-software .price-card.featured {
-  border-color: var(--software-red);
+.company-software .price-card:hover {
+  transform: translateY(-8px);
   box-shadow: var(--software-shadow-soft);
-  transform: translateY(-10px);
+  border-color: var(--software-blue);
+}
+
+.company-software .price-card .button {
+  margin-top: auto;
 }
 
 .company-software .badge {
