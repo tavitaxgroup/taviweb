@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { industryCatalog } from "@/lib/templates/templateCatalog";
+import { CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap } from "lucide-react";
 
 const phoneNumber = "0337367643";
 const displayPhone = "0337.367.643";
@@ -11,24 +12,97 @@ const services = [
   {
     id: "01",
     title: "Website doanh nghiệp",
-    text: "Giới thiệu công ty, năng lực, dự án và form nhận yêu cầu với bố cục tin cậy."
+    tagline: "Hỗ trợ giới thiệu thương hiệu và dự án",
+    badge: "Website giới thiệu",
+    text: "Hỗ trợ doanh nghiệp trình bày hồ sơ năng lực, danh sách dự án tiêu biểu và tích hợp biểu mẫu tiếp nhận thông tin yêu cầu tự động từ đối tác.",
+    metric: "Chuẩn SEO & Tải nhanh",
+    deliverables: [
+      "Thiết kế giao diện phù hợp với nhận diện thương hiệu",
+      "Cấu trúc sơ đồ trang rõ ràng, tối ưu SEO",
+      "Tích hợp biểu mẫu thu thập thông tin khách hàng",
+      "Tối ưu mã nguồn giúp trang hoạt động ổn định"
+    ]
   },
   {
     id: "02",
     title: "Website giới thiệu sản phẩm",
-    text: "Trình bày danh mục sản phẩm, hình ảnh sắc nét, thông tin chi tiết và nút gọi điện/Zalo đặt hàng nhanh."
+    tagline: "Trình bày danh mục sản phẩm trực quan",
+    badge: "Danh mục sản phẩm",
+    text: "Hỗ trợ trình bày chi tiết sản phẩm, tích hợp bộ lọc tìm kiếm sản phẩm và các nút liên hệ trực tiếp qua Zalo/Hotline hỗ trợ khách hàng nhanh.",
+    metric: "Giao diện thân thiện di động",
+    deliverables: [
+      "Danh mục phân loại sản phẩm rõ ràng, dễ tra cứu",
+      "Trang chi tiết sản phẩm hiển thị đầy đủ thông số",
+      "Tích hợp các nút liên hệ nhanh (Zalo, Hotline)",
+      "Hệ quản trị sản phẩm đơn giản, dễ dàng cập nhật"
+    ]
   },
   {
     id: "03",
     title: "Landing page quảng cáo",
-    text: "Trang chiến dịch có form lead, tracking, nội dung thuyết phục và tốc độ cao."
+    tagline: "Tập trung giới thiệu một sản phẩm, dịch vụ",
+    badge: "Landing Page",
+    text: "Trang đơn tối ưu hiển thị thông tin về một sản phẩm hoặc chương trình cụ thể, tích hợp form đăng ký nhận ưu đãi và cài đặt sẵn mã đo lường quảng cáo.",
+    metric: "Thời gian hoàn thành ngắn",
+    deliverables: [
+      "Bố cục tinh gọn, tập trung giới thiệu thông tin dịch vụ",
+      "Nút kêu gọi hành động (CTA) rõ ràng, trực quan",
+      "Tích hợp sẵn các công cụ đo lường chiến dịch",
+      "Tương thích hiển thị tốt trên các thiết bị di động"
+    ]
   },
   {
     id: "04",
     title: "Bảo trì và nâng cấp",
-    text: "Tối ưu giao diện, bảo mật, hosting và tích hợp các công cụ tự động hóa."
+    tagline: "Chăm sóc và vận hành website ổn định",
+    badge: "Bảo trì định kỳ",
+    text: "Hỗ trợ doanh nghiệp cập nhật nội dung, kiểm tra tình trạng vận hành, sao lưu dữ liệu hệ thống định kỳ và hỗ trợ xử lý lỗi phát sinh.",
+    metric: "Hỗ trợ kỹ thuật định kỳ",
+    deliverables: [
+      "Hỗ trợ sao lưu dữ liệu trang web định kỳ",
+      "Kiểm tra tình trạng chứng chỉ bảo mật SSL",
+      "Cập nhật nội dung, hình ảnh mới theo yêu cầu",
+      "Hỗ trợ xử lý nhanh các lỗi hiển thị phát sinh"
+    ]
   }
 ];
+
+function getIndustrySymbolicImage(key: string): string {
+  switch (key) {
+    case "nha_khoa":
+      return "/template-previews/nha_khoa_user.png";
+    case "spa":
+      return "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80";
+    case "tham_my_vien":
+      return "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=400&q=80";
+    case "phong_kham":
+      return "/template-previews/phong_kham_user.png";
+    case "luat_su":
+      return "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=400&q=80";
+    case "noi_that":
+      return "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80";
+    case "cong_ty_xay_dung":
+      return "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80";
+    case "nha_hang":
+      return "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80";
+    case "dich_vu_ve_sinh":
+      return "/template-previews/dich_vu_ve_sinh_user.png";
+    case "trung_tam_tieng_anh":
+      return "/template-previews/trung_tam_tieng_anh_user.png";
+    case "quan_cafe":
+      return "/template-previews/quan_cafe_user.jpg";
+    case "salon_toc":
+      return "/template-previews/salon_toc_user.jpg";
+    case "phong_gym":
+      return "/template-previews/phong_gym_user.png";
+    case "garage_oto":
+      return "/template-previews/garage_oto_user.jpg";
+    case "studio_chup_anh":
+      return "/template-previews/studio_chup_anh_user.jpg";
+    default:
+      return "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80";
+  }
+}
 
 function DraggableMarquee() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -194,7 +268,7 @@ function DraggableMarquee() {
           >
             <div className="marquee-card-image">
               <img
-                src={`/template-previews/${item.key}.svg`}
+                src={getIndustrySymbolicImage(item.key)}
                 alt={item.name}
                 loading="lazy"
                 draggable={false}
@@ -242,6 +316,7 @@ export function CompanyHome() {
   const [contactMessage, setContactMessage] = useState("");
   const [isConsultSubmitting, setIsConsultSubmitting] = useState(false);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [activeServiceId, setActiveServiceId] = useState("01");
 
   async function submitConsult(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -322,6 +397,8 @@ export function CompanyHome() {
   function closeMenu() {
     setMenuOpen(false);
   }
+
+  const activeService = services.find((s) => s.id === activeServiceId) || services[0];
 
   return (
     <div className="company-site company-software">
@@ -442,26 +519,151 @@ export function CompanyHome() {
           </div>
         </section>
 
-        <section className="section content-section" id="services" aria-labelledby="services-title">
+        <section className="section content-section services-section-tabs" id="services" aria-labelledby="services-title">
           <div className="section-heading">
             <p className="eyebrow">Dịch vụ</p>
-            <h2 id="services-title">Website được thiết kế để bán hàng</h2>
+            <h2 id="services-title">Giải pháp website phù hợp với doanh nghiệp</h2>
             <p>
-              TAVIWEB không chỉ dựng giao diện đẹp. Chúng tôi thiết kế luồng chuyển đổi,
-              tốc độ tải trang, nội dung CTA và công cụ quản trị để đội ngũ kinh doanh dùng được ngay.
+              TAVIWEB thiết kế giao diện trực quan, tối ưu tốc độ tải trang và tính năng
+              để hỗ trợ vận hành hiệu quả.
             </p>
           </div>
 
-          <div className="service-grid">
-            {services.map((service) => (
-              <article className="service-card" key={service.id}>
-                <span className="service-icon" aria-hidden="true">
-                  {service.id}
-                </span>
-                <h3>{service.title}</h3>
-                <p>{service.text}</p>
-              </article>
-            ))}
+          <div className="services-tabs-layout">
+            {/* Cột trái: Danh sách các tab */}
+            <div className="services-tabs-left" role="tablist" aria-label="Danh mục dịch vụ">
+              {services.map((service) => {
+                const isActive = service.id === activeServiceId;
+                return (
+                  <button
+                    key={service.id}
+                    className={`services-tab-btn${isActive ? " is-active" : ""}`}
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={`service-panel-${service.id}`}
+                    id={`service-tab-${service.id}`}
+                    onClick={() => setActiveServiceId(service.id)}
+                  >
+                    <span className="services-tab-num">{service.id}</span>
+                    <div className="services-tab-meta">
+                      <h3>{service.title}</h3>
+                      <p>{service.tagline}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Cột phải: Chi tiết nội dung của dịch vụ đang active */}
+            <div
+              className="services-content-right"
+              id={`service-panel-${activeService.id}`}
+              role="tabpanel"
+              aria-labelledby={`service-tab-${activeService.id}`}
+            >
+              <div className="services-content-card animate-fade-in">
+                <div className="services-content-header">
+                  <span className="services-content-badge">{activeService.badge}</span>
+                  <h2>{activeService.title}</h2>
+                  <p className="services-content-tagline">{activeService.tagline}</p>
+                </div>
+
+                <p className="services-content-desc">{activeService.text}</p>
+
+                <div className="services-content-body">
+                  <div className="services-deliverables-wrap">
+                    <h4>Hạng mục bàn giao chi tiết:</h4>
+                    <ul className="services-deliverables-list">
+                      {activeService.deliverables.map((item, index) => (
+                        <li key={index}>
+                          <span className="check-icon" aria-hidden="true">
+                            <CheckCircle2 size={16} />
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="services-sidebar-info">
+                    <div className="services-metric-box">
+                      <span className="metric-label">Cam kết kỹ thuật</span>
+                      <span className="metric-value">{activeService.metric}</span>
+                    </div>
+
+                    {/* SVG Graphic Mockup mini for the active service */}
+                    <div className="services-mini-mockup" aria-hidden="true">
+                      <svg viewBox="0 0 240 140" width="100%" height="100%">
+                        {/* Browser Frame */}
+                        <rect x="10" y="10" width="220" height="120" rx="8" stroke="var(--software-border)" strokeWidth="1.5" fill="#f8fafc" />
+                        <line x1="10" y1="34" x2="230" y2="34" stroke="var(--software-border)" strokeWidth="1.5" />
+                        <circle cx="24" cy="22" r="4" fill="#ef4444" />
+                        <circle cx="36" cy="22" r="4" fill="#f59e0b" />
+                        <circle cx="48" cy="22" r="4" fill="#10b981" />
+
+                        {/* Custom content depending on the service */}
+                        {activeService.id === "01" && (
+                          <>
+                            {/* Corporate layout */}
+                            <rect x="25" y="48" width="60" height="16" rx="2" fill="var(--software-blue)" opacity="0.15" />
+                            <rect x="25" y="70" width="100" height="6" rx="1" fill="#64748b" opacity="0.5" />
+                            <rect x="25" y="80" width="80" height="6" rx="1" fill="#64748b" opacity="0.3" />
+
+                            <rect x="140" y="48" width="75" height="55" rx="4" fill="var(--software-red)" opacity="0.1" />
+                            <circle cx="177" cy="75" r="10" stroke="var(--software-red)" strokeWidth="1.5" />
+                          </>
+                        )}
+                        {activeService.id === "02" && (
+                          <>
+                            {/* Product catalog layout */}
+                            <rect x="25" y="48" width="55" height="40" rx="4" fill="#cbd5e1" />
+                            <rect x="90" y="48" width="55" height="40" rx="4" fill="#cbd5e1" />
+                            <rect x="155" y="48" width="55" height="40" rx="4" fill="#cbd5e1" />
+
+                            <rect x="25" y="96" width="40" height="6" rx="1" fill="#64748b" opacity="0.5" />
+                            <rect x="90" y="96" width="40" height="6" rx="1" fill="#64748b" opacity="0.5" />
+                            <rect x="155" y="96" width="40" height="6" rx="1" fill="#64748b" opacity="0.5" />
+
+                            <circle cx="205" cy="115" r="12" fill="var(--software-red)" opacity="0.15" />
+                            <path d="M201 115h8M205 111v8" stroke="var(--software-red)" strokeWidth="1.5" />
+                          </>
+                        )}
+                        {activeService.id === "03" && (
+                          <>
+                            {/* Landing page landing focused form */}
+                            <rect x="25" y="48" width="100" height="10" rx="2" fill="var(--software-blue)" opacity="0.15" />
+                            <rect x="25" y="65" width="80" height="6" rx="1" fill="#64748b" opacity="0.5" />
+                            <rect x="25" y="75" width="90" height="6" rx="1" fill="#64748b" opacity="0.3" />
+
+                            <rect x="145" y="48" width="70" height="65" rx="4" fill="#ffffff" stroke="var(--software-blue)" strokeWidth="1.5" />
+                            <rect x="155" y="60" width="50" height="8" rx="2" fill="#e2e8f0" />
+                            <rect x="155" y="74" width="50" height="8" rx="2" fill="#e2e8f0" />
+                            <rect x="155" y="90" width="50" height="12" rx="2" fill="var(--software-red)" />
+                          </>
+                        )}
+                        {activeService.id === "04" && (
+                          <>
+                            {/* Dashboard maintenance health layout */}
+                            <circle cx="60" cy="80" r="24" stroke="var(--software-blue)" strokeWidth="3" strokeDasharray="100 40" fill="none" />
+                            <text x="60" y="84" textAnchor="middle" fontSize="11" fill="var(--software-blue)" fontWeight="bold">99.9%</text>
+
+                            <rect x="110" y="55" width="100" height="8" rx="2" fill="#10b981" />
+                            <rect x="110" y="72" width="100" height="8" rx="2" fill="#10b981" />
+                            <rect x="110" y="89" width="100" height="8" rx="2" fill="#10b981" />
+                          </>
+                        )}
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="services-action-footer" style={{ marginTop: "32px" }}>
+                  <a className="button button-primary" href="#contact">
+                    Đăng ký tư vấn giải pháp này
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
