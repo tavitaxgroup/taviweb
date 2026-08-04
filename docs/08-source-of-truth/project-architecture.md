@@ -163,6 +163,7 @@ NEXT_PUBLIC_SITE_URL=
 - Khong commit `.next`, `node_modules`, log hoac `.env.local`.
 - Khong sua `src/template-sources` neu chi thay doi giao dien kho giao dien.
 - Khong tao lai trang chon nganh nghe tong o `/kho-giao-dien`; link Kho giao dien mac dinh phai vao `/kho-giao-dien/noi_that`.
+- Khong pha bo bo cuc Tab tuong tac (Interactive Tabs) cua phan Dich vu, bo cuc The rong xep chong 3D Bezel kep (Double-Bezel) cua phan Quy trinh va bo cuc chan trang da cot (Premium Footer) cua trang chu TAVIWEB.
 
 ## Checklist truoc khi ket thuc mot thay doi
 

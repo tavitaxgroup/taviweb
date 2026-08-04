@@ -33,6 +33,10 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Modal anh template | Anh lon nam trong vung scroll doc lap, tu cuon cham sau khi mo, nguoi dung van luot xem het anh dai |
 | Demo renderer | Route `/demo/[place_id]` render website demo truc tiep, khong tao dashboard/playground |
 | Facebook link | Uu tien `facebook_url`; neu trong thi tam dung `website` nhu link Facebook fallback |
+| Bo cuc Dich vu | Bố cục Tab tương tác (Interactive Tabs Layout) hai cột tối giản |
+| Bo cuc Quy trinh | Quy trình triển khai dạng thẻ rộng xếp chồng 3D (Double-Bezel vỏ ngoài & lõi trong) nằm dưới tiêu đề căn giữa. Danh sách đầu việc tổ chức dạng lưới 3 cột |
+| Bo cuc Chan trang | Footer đa cột cao cấp (TAVIWEB brand, Solutions, Navigation, Support & Zalo) |
+| Anh slider du an mau | Dùng ảnh tượng trưng (Symbolic Stock Photos) và các ảnh của người dùng tải lên với `object-position: center` |
 
 ## Tai lieu nen giu lam tham khao
 

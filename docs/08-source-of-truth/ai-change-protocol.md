@@ -32,6 +32,10 @@ Truoc khi sua code, doc theo thu tu:
 - Khong chuyen anh hero vao `src/public`.
 - CSS cua trang cong ty nam trong scope `.company-software`.
 - Dropdown kho giao dien trong header lay danh sach tu `industryCatalog`.
+- Phan Dịch vụ dung bo cuc Tab tuong tac (Interactive Tabs) 2 cot toi gian.
+- Phan Quy trình dung bo cuc The rong xep chong 3D (Double-Bezel long nhau: `.process-step-card-outer` va `.process-step-card-inner`) dat duoi tieu de can giua. Danh sach dau viec bàn giao (deliverables) hien thi dang luoi 3 cot (3-column grid).
+- Phan Footer dung bo cuc da cot cao cap (Premium Multi-Column Footer) ho tro chia cot linh hoat va responsive.
+- Anh trong slider marquee (`DraggableMarquee`) dung anh tuong trung (Symbolic Stock Photos) va anh nguoi dung tu tai len trong `/public/template-previews/` voi `object-position: center`.
 
 ## Quy tac sua kho giao dien
 

@@ -74,7 +74,7 @@ function getIndustrySymbolicImage(key: string): string {
     case "spa":
       return "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80";
     case "tham_my_vien":
-      return "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=400&q=80";
+      return "/template-previews/tham_my_vien_user.png";
     case "phong_kham":
       return "/template-previews/phong_kham_user.png";
     case "luat_su":
@@ -288,6 +288,48 @@ function DraggableMarquee() {
     </div>
   );
 }
+const processSteps = [
+  {
+    number: "01",
+    title: "Tư vấn & Định hướng",
+    description: "Khảo sát nhu cầu thực tế, tư vấn cấu trúc trang phù hợp và thống nhất giải pháp website tối ưu theo định hướng phát triển của doanh nghiệp.",
+    deliverables: [
+      "Khảo sát yêu cầu chi tiết",
+      "Đề xuất giải pháp & sơ đồ trang",
+      "Thống nhất kế hoạch triển khai"
+    ]
+  },
+  {
+    number: "02",
+    title: "Thiết kế giao diện",
+    description: "Xây dựng bản vẽ cấu trúc và thiết kế giao diện trực quan, tập trung tối ưu hóa trải nghiệm người dùng thân thiện trên mọi thiết bị.",
+    deliverables: [
+      "Bản vẽ phác thảo cấu trúc (Wireframe)",
+      "Thiết kế giao diện mỹ thuật (UI)",
+      "Tối ưu luồng trải nghiệm (UX)"
+    ]
+  },
+  {
+    number: "03",
+    title: "Lập trình & Hoàn thiện",
+    description: "Phát triển mã nguồn tối ưu hiệu năng, tích hợp hệ quản lý nội dung (CMS) dễ sử dụng và cài đặt các tính năng theo yêu cầu.",
+    deliverables: [
+      "Lập trình giao diện Frontend",
+      "Thiết lập hệ thống quản trị (CMS)",
+      "Tối ưu kỹ thuật & bảo mật cơ bản"
+    ]
+  },
+  {
+    number: "04",
+    title: "Kiểm thử & Bàn giao",
+    description: "Kiểm tra toàn diện tính năng, hỗ trợ vận hành chạy thử và hướng dẫn doanh nghiệp tiếp nhận quản lý website một cách độc lập.",
+    deliverables: [
+      "Kiểm thử vận hành hệ thống",
+      "Hướng dẫn bàn giao quản trị",
+      "Kích hoạt chính sách hỗ trợ kỹ thuật"
+    ]
+  }
+];
 
 const pricing = [
   {
@@ -680,33 +722,42 @@ export function CompanyHome() {
         </section>
 
         <section className="section process-section" id="process" aria-labelledby="process-title">
-          <div className="section-heading">
+          <div className="section-heading center">
             <p className="eyebrow">Quy trình</p>
-            <h2 id="process-title">Triển khai rõ ràng từ tư vấn đến vận hành</h2>
+            <h2 id="process-title">Quy trình triển khai</h2>
             <p>
               Mỗi giai đoạn đều có đầu việc rõ ràng, tiêu chí nghiệm thu cụ thể và người phụ trách
               đồng hành cùng doanh nghiệp.
             </p>
           </div>
 
-          <ol className="process-list">
-            <li>
-              <strong>Tư vấn mục tiêu</strong>
-              <span>Xác định khách hàng, sản phẩm, ngân sách và chỉ số chuyển đổi.</span>
-            </li>
-            <li>
-              <strong>Thiết kế giao diện</strong>
-              <span>Dựng layout, nội dung, CTA và trải nghiệm mobile-first.</span>
-            </li>
-            <li>
-              <strong>Lập trình website</strong>
-              <span>Xây dựng frontend, CMS, form lead, SEO kỹ thuật và tracking.</span>
-            </li>
-            <li>
-              <strong>Bàn giao và tối ưu</strong>
-              <span>Hướng dẫn quản trị, đo hiệu năng, sửa lỗi và bảo trì định kỳ.</span>
-            </li>
-          </ol>
+          <div className="process-timeline-stacked-wide">
+            {processSteps.map((step, index) => (
+              <div
+                className="process-step-card-outer"
+                key={step.number}
+                style={{ "--stack-idx": index } as React.CSSProperties}
+              >
+                <div className="process-step-card-inner">
+                  <div className="process-step-header">
+                    <span className="process-step-number">{step.number}</span>
+                    <h3>{step.title}</h3>
+                  </div>
+                  <div className="process-card-body">
+                    <p>{step.description}</p>
+                    <ul className="process-deliverables-list">
+                      {step.deliverables.map((item) => (
+                        <li key={item}>
+                          <CheckCircle2 size={16} className="deliverable-check-icon" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="section pricing-section" id="pricing" aria-labelledby="pricing-title">
@@ -781,8 +832,53 @@ export function CompanyHome() {
       </div>
 
       <footer className="site-footer">
-        <p>TAVIWEB - Thiết kế website chuyên nghiệp cho doanh nghiệp Việt.</p>
-        <a href="#main">Lên đầu trang</a>
+        <div className="footer-top">
+          <div className="footer-brand">
+            <Link href="/" className="footer-logo">TAVIWEB</Link>
+            <p className="footer-tagline">
+              Nền tảng thiết kế website thông minh & demo tự động dành cho doanh nghiệp Việt.
+            </p>
+            <div className="footer-contact-info">
+              <p>Email: contact@taviweb.vn</p>
+              <p>Hotline: 0337.367.666</p>
+            </div>
+          </div>
+          
+          <div className="footer-links-grid">
+            <div className="footer-col">
+              <h4>Giải pháp</h4>
+              <ul>
+                <li><Link href="#services">Website Doanh nghiệp</Link></li>
+                <li><Link href="#services">Website Sản phẩm</Link></li>
+                <li><Link href="#services">Landing Page quảng cáo</Link></li>
+                <li><Link href="#services">Bảo trì & Nâng cấp</Link></li>
+              </ul>
+            </div>
+            
+            <div className="footer-col">
+              <h4>Quy trình & Báo giá</h4>
+              <ul>
+                <li><Link href="#process">Quy trình triển khai</Link></li>
+                <li><Link href="#pricing">Gói thiết kế linh hoạt</Link></li>
+                <li><Link href="#faq">Câu hỏi thường gặp</Link></li>
+              </ul>
+            </div>
+            
+            <div className="footer-col">
+              <h4>Hỗ trợ & Liên hệ</h4>
+              <ul>
+                <li><Link href="#contact">Tư vấn thiết kế</Link></li>
+                <li><Link href="/kho-giao-dien">Kho giao diện mẫu</Link></li>
+                <li><a href="https://zalo.me/0337367666" target="_blank" rel="noopener noreferrer">Liên hệ qua Zalo</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} TAVIWEB. Tất cả các quyền được bảo lưu.</p>
+          <a href="#main" className="scroll-top-link">Lên đầu trang ↑</a>
+        </div>
       </footer>
     </div>
   );
