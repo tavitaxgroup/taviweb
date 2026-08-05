@@ -1,6 +1,6 @@
 # Source Of Truth - Template Gallery Rules
 
-Cap nhat: 2026-07-15.
+Cap nhat: 2026-08-05.
 
 Kho giao dien la thu vien mau website cua TAVIWEB. Khu vuc nay phuc vu khach xem mau va chon phong cach, khong phai khu vuc ky thuat noi ve lead, Supabase hay render engine.
 

@@ -1,6 +1,6 @@
 # Source Of Truth - Document Inventory
 
-Cap nhat: 2026-07-15.
+Cap nhat: 2026-08-05.
 
 File nay phan loai tai lieu hien co de developer va AI coding agent biet nen doc gi truoc, tai lieu nao chi con gia tri tham khao, va tai lieu nao co the don dep sau.
 
@@ -35,7 +35,9 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Facebook link | Uu tien `facebook_url`; neu trong thi tam dung `website` nhu link Facebook fallback |
 | Bo cuc Dich vu | Bố cục Tab tương tác (Interactive Tabs Layout) hai cột tối giản |
 | Bo cuc Quy trinh | Quy trình triển khai dạng thẻ rộng xếp chồng 3D (Double-Bezel vỏ ngoài & lõi trong) nằm dưới tiêu đề căn giữa. Danh sách đầu việc tổ chức dạng lưới 3 cột |
+| Bo cuc Bang gia | Tên "Bảng giá duy trì các gói dịch vụ", hiển thị ở một dòng duy nhất. Thiết kế 4 thẻ đồng bộ theo nhận diện Taviweb. Ẩn hoàn toàn tính năng không bao gồm (không gạch chéo/làm mờ). Gói Basic mô tả domain là "Đường dẫn con trên tên miền hệ thống". |
 | Bo cuc Chan trang | Footer đa cột cao cấp (TAVIWEB brand, Solutions, Navigation, Support & Zalo) |
+| Nut lien he noi | Zalo & Phone dạng hình tròn 52px gọn gàng. Hotline trượt ngang lộ số điện thoại khi hover, đi kèm hiệu ứng pulse glow nhẹ tự động. Zalo liên kết trực tiếp chat với SĐT hotline. |
 | Anh slider du an mau | Dùng ảnh tượng trưng (Symbolic Stock Photos) và các ảnh của người dùng tải lên với `object-position: center` |
 
 ## Tai lieu nen giu lam tham khao

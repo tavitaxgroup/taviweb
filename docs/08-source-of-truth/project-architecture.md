@@ -1,6 +1,6 @@
 # Source Of Truth - Project Architecture
 
-Cap nhat: 2026-07-15.
+Cap nhat: 2026-08-05.
 
 Tai lieu nay la nguon su that cho kien truc hien tai cua project `taviweb`. Moi developer hoac AI coding agent phai doc file nay truoc khi sua code de tranh lam lech cau truc he thong.
 

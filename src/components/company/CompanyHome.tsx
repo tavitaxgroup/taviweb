@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { industryCatalog } from "@/lib/templates/templateCatalog";
-import { Check, CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap } from "lucide-react";
+import { Check, CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap, Phone } from "lucide-react";
 
 const phoneNumber = "0337367643";
 const displayPhone = "0337.367.643";
@@ -1010,11 +1010,27 @@ export function CompanyHome() {
       </main>
 
       <div className="floating-actions" aria-label="Liên hệ nhanh">
-        <a className="float-zalo" href="#contact" aria-label="Liên hệ Zalo">
-          Zalo
+        <a
+          className="float-zalo"
+          href={`https://zalo.me/${phoneNumber}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Liên hệ Zalo"
+        >
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
+            <path d="M12 2C6.48 2 2 5.84 2 10.59c0 2.82 1.63 5.31 4.14 6.78-.14.54-.51 1.94-.65 2.48-.15.58.29 1.07.82.86.87-.34 2.37-1.04 3.12-1.4 1 .23 2.06.37 3.14.37 5.52 0 10-3.84 10-8.59S17.52 2 12 2z" fill="#ffffff" />
+            <text x="12" y="14" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="900" textAnchor="middle" fill="#0068FF">Z</text>
+          </svg>
         </a>
-        <a className="float-phone" href={`tel:${phoneNumber}`} aria-label={`Gọi ${displayPhone}`}>
-          {displayPhone}
+        <a
+          className="float-phone"
+          href={`tel:${phoneNumber}`}
+          aria-label={`Gọi ${displayPhone}`}
+        >
+          <div className="float-phone-icon-box">
+            <Phone size={22} strokeWidth={2.5} />
+          </div>
+          <span className="float-phone-number">{displayPhone}</span>
         </a>
       </div>
 

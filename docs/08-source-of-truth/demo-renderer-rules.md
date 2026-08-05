@@ -1,6 +1,6 @@
 # Source Of Truth - Demo Renderer Rules
 
-Cap nhat: 2026-07-15.
+Cap nhat: 2026-08-05.
 
 Demo renderer la phan render website demo public theo `place_id`. Route `/demo/[place_id]` phai hien truc tiep landing page cua doanh nghiep, khong hien dashboard hay man hinh cau hinh.
 
