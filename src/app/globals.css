@@ -2010,6 +2010,15 @@ img {
   text-align: center;
 }
 
+.company-software .section-heading.center {
+  display: block;
+  text-align: center;
+  max-width: none;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+}
+
 .company-software .project-grid,
 .company-software .pricing-grid {
   display: grid;
@@ -2324,8 +2333,7 @@ img {
   margin-left: auto;
 }
 
-.company-software .project-grid,
-.company-software .pricing-grid {
+.company-software .project-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 34px;
 }
@@ -2354,7 +2362,7 @@ img {
 }
 
 .company-software .pricing-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 34px;
 }
 
@@ -2624,51 +2632,441 @@ img {
 .company-software .deliverable-check-icon {
   color: #10b981;
   flex-shrink: 0;
+}.company-software .price-card-outer {
+  padding: 6px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 400ms ease, border-color 400ms ease;
 }
 
-.company-software .price-card {
-  position: relative;
-  padding: 28px;
+.company-software .price-card-outer:hover {
+  transform: translateY(-6px);
+}
+
+.company-software .price-card-inner {
+  border-radius: 22px;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  flex-grow: 1;
 }
 
-.company-software .price-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--software-shadow-soft);
-  border-color: var(--software-blue);
+.company-software .price-card-header {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
 }
 
-.company-software .price-card .button {
-  margin-top: auto;
-}
-
-.company-software .badge {
-  display: inline-flex;
-  margin: 0 0 12px;
-  padding: 6px 12px;
-  color: #ffffff;
-  background: var(--software-red);
-  border-radius: var(--software-radius-pill);
+.company-software .price-card-title {
+  display: block;
   font-size: 13px;
   font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+
+.company-software .price-card-desc {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 16px;
+  line-height: 1.3;
 }
 
 .company-software .price {
-  margin: 12px 0 20px;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.company-software .price-number {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.company-software .price-period {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.company-software .price-card-inner ul {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.company-software .price-card-inner li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 0;
+}
+
+.company-software .price-check-icon {
+  stroke-width: 3px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* --- THEME 1: BASIC (Cool Slate Gray) --- */
+.company-software .price-card-basic {
+  background: rgba(100, 116, 139, 0.04);
+  border: 1px solid rgba(100, 116, 139, 0.15);
+}
+.company-software .price-card-basic:hover {
+  border-color: rgba(100, 116, 139, 0.35);
+  box-shadow: 0 20px 48px rgba(100, 116, 139, 0.05);
+}
+.company-software .price-card-basic .price-card-inner {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+.company-software .price-card-basic .price-card-header {
+  border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+}
+.company-software .price-card-basic .price-card-title {
+  color: #64748b;
+}
+.company-software .price-card-basic .price-card-desc {
+  color: #334155;
+}
+.company-software .price-card-basic .price-number {
+  color: #1e293b;
+}
+.company-software .price-card-basic .price-period {
+  color: #64748b;
+}
+.company-software .price-card-basic li {
+  color: #475569;
+  border-bottom: 1px dashed rgba(100, 116, 139, 0.08);
+}
+.company-software .price-card-basic li:last-child {
+  border-bottom: none;
+}
+.company-software .price-card-basic .price-check-icon {
+  color: #64748b;
+}
+
+/* --- THEME 2: STARTER (Taviweb Ice Blue) --- */
+.company-software .price-card-starter {
+  background: rgba(7, 59, 142, 0.04);
+  border: 1px solid rgba(7, 59, 142, 0.15);
+}
+.company-software .price-card-starter:hover {
+  border-color: rgba(7, 59, 142, 0.35);
+  box-shadow: 0 20px 48px rgba(7, 59, 142, 0.06);
+}
+.company-software .price-card-starter .price-card-inner {
+  background: linear-gradient(180deg, #f0f4fa 0%, #ffffff 100%);
+}
+.company-software .price-card-starter .price-card-header {
+  border-bottom: 1px solid rgba(7, 59, 142, 0.1);
+}
+.company-software .price-card-starter .price-card-title {
+  color: #073b8e;
+}
+.company-software .price-card-starter .price-card-desc {
+  color: #0c1e36;
+}
+.company-software .price-card-starter .price-number {
+  color: #073b8e;
+}
+.company-software .price-card-starter .price-period {
+  color: #073b8e;
+}
+.company-software .price-card-starter li {
+  color: #1e293b;
+  border-bottom: 1px dashed rgba(7, 59, 142, 0.08);
+}
+.company-software .price-card-starter li:last-child {
+  border-bottom: none;
+}
+.company-software .price-card-starter .price-check-icon {
+  color: #073b8e;
+}
+
+/* --- THEME 3: PRO (Taviweb Highlighted Blue & Red) --- */
+.company-software .price-card-pro {
+  background: linear-gradient(135deg, rgba(7, 59, 142, 0.15), rgba(7, 59, 142, 0.03));
+  border: 1px solid rgba(7, 59, 142, 0.3);
+  box-shadow: 0 10px 30px rgba(7, 59, 142, 0.04);
+}
+.company-software .price-card-pro:hover {
+  border-color: rgba(7, 59, 142, 0.5);
+  box-shadow: 0 24px 54px rgba(7, 59, 142, 0.12);
+}
+.company-software .price-card-pro .price-card-inner {
+  background: linear-gradient(180deg, #e8f0fe 0%, #ffffff 100%);
+  border: 1px solid rgba(7, 59, 142, 0.08);
+}
+.company-software .price-card-pro .price-card-header {
+  border-bottom: 1px solid rgba(7, 59, 142, 0.15);
+}
+.company-software .price-card-pro .price-card-title {
+  color: #073b8e;
+}
+.company-software .price-card-pro .price-card-desc {
+  color: #0c1e36;
+}
+.company-software .price-card-pro .price-number {
+  color: #e20b12;
+}
+.company-software .price-card-pro .price-period {
+  color: #073b8e;
+}
+.company-software .price-card-pro li {
+  color: #1e293b;
+  border-bottom: 1px dashed rgba(7, 59, 142, 0.08);
+}
+.company-software .price-card-pro li:last-child {
+  border-bottom: none;
+}
+.company-software .price-card-pro .price-check-icon {
+  color: #073b8e;
+}
+
+/* --- THEME 4: SUPER (Midnight Taviweb Navy & Cyan) --- */
+.company-software .price-card-super {
+  background: linear-gradient(135deg, rgba(7, 59, 142, 0.2), rgba(7, 59, 142, 0.02));
+  border: 1px solid rgba(7, 59, 142, 0.25);
+}
+.company-software .price-card-super:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 24px 54px rgba(3, 10, 26, 0.5);
+}
+.company-software .price-card-super .price-card-inner {
+  background: linear-gradient(180deg, #091a36 0%, #020712 100%);
+  color: #ffffff;
+}
+.company-software .price-card-super .price-card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.company-software .price-card-super .price-card-title {
+  color: #ffdf9e;
+}
+.company-software .price-card-super .price-card-desc {
+  color: #ffffff;
+}
+.company-software .price-card-super .price-number {
+  color: #ffdf9e;
+}
+.company-software .price-card-super .price-period {
+  color: rgba(255, 255, 255, 0.6);
+}
+.company-software .price-card-super li {
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+.company-software .price-card-super li:last-child {
+  border-bottom: none;
+}
+.company-software .price-card-super .price-check-icon {
+  color: #ffdf9e;
+}
+/* Pricing Structure Grid Styles */
+.company-software .pricing-structure-section {
+  margin-top: 32px;
+  margin-bottom: 48px;
+  padding: 0 0 42px 0;
+  border-bottom: 1px solid var(--software-border);
+}
+
+.company-software .pricing-structure-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.company-software .cost-card-outer {
+  padding: 6px;
+  background: rgba(6, 27, 70, 0.01);
+  border: 1px solid var(--software-border);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.company-software .cost-card-inner {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--software-shadow-card);
+}
+
+.company-software .cost-tag {
+  display: inline-block;
+  width: max-content;
+  padding: 4px 10px;
+  border-radius: var(--software-radius-pill);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.company-software .cost-tag.tag-red {
+  background: rgba(226, 11, 18, 0.08);
   color: var(--software-red);
-  font-size: 28px;
+}
+
+.company-software .cost-tag.tag-blue {
+  background: var(--software-surface-blue);
+  color: var(--software-blue);
+}
+
+.company-software .cost-tag.tag-green {
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+}
+
+.company-software .cost-card-inner h4 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--software-blue);
+  margin: 0 0 12px;
+}
+
+.company-software .cost-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--software-ink);
+  margin: 0 0 20px;
+}
+
+.company-software .cost-value-divider {
+  color: var(--software-border);
+  font-weight: 300;
+  margin: 0 4px;
+}
+
+.company-software .cost-period {
+  font-size: 14px;
+  color: var(--software-ink-muted);
+  font-weight: 500;
+}
+
+.company-software .cost-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--software-ink-muted);
+}
+
+.company-software .cost-details li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.company-software .cost-details li::before {
+  content: "•";
+  position: absolute;
+  left: 4px;
+  color: var(--software-ink-muted);
   font-weight: 800;
 }
 
-.company-software .price-card ul {
-  display: grid;
-  gap: 10px;
-  min-height: 112px;
-  margin: 0 0 24px;
-  padding-left: 20px;
+/* Detailed Comparison Table Styles */
+.company-software .pricing-comparison {
+  margin-top: 48px;
+  border: 1px solid var(--software-border);
+  border-radius: var(--software-radius-card);
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: var(--software-shadow-card);
+}
+
+.company-software .pricing-comparison-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--software-blue);
+  cursor: pointer;
+  user-select: none;
+  background: #ffffff;
+  transition: background 150ms ease;
+}
+
+.company-software .pricing-comparison-summary:hover {
+  background: var(--software-surface-blue);
+}
+
+.company-software .pricing-comparison-arrow {
+  font-size: 12px;
+  color: var(--software-ink-muted);
+  transition: transform 200ms ease;
+}
+
+.company-software .pricing-comparison[open] .pricing-comparison-arrow {
+  transform: rotate(180deg);
+}
+
+.company-software .pricing-comparison-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-top: 1px solid var(--software-border);
+  -webkit-overflow-scrolling: touch;
+}
+
+.company-software .pricing-comparison-table {
+  width: 100%;
+  min-width: 780px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.company-software .pricing-comparison-table th,
+.company-software .pricing-comparison-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #edf2f8;
+}
+
+.company-software .pricing-comparison-table th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: var(--software-ink);
+}
+
+.company-software .pricing-comparison-table tbody tr:hover {
+  background: rgba(6, 27, 70, 0.005);
+}
+
+.company-software .pricing-comparison-table td.highlight-col,
+.company-software .pricing-comparison-table th.highlight-col {
+  background: rgba(7, 59, 142, 0.015);
+  border-left: 1px solid rgba(7, 59, 142, 0.05);
+  border-right: 1px solid rgba(7, 59, 142, 0.05);
+}
+
+.company-software .pricing-comparison-table td.price-val {
+  font-weight: 700;
+  color: var(--software-red);
+}
+
+@media (max-width: 900px) {
+  .company-software .pricing-structure-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .company-software .contact-section {

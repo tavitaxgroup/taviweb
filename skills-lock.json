@@ -19,6 +19,12 @@
       "skillPath": "skills/image-to-code-skill/SKILL.md",
       "computedHash": "3d2ac14d956fdafc5500d2108b90895e134d847f9f199e7f1d18bf1f814cf7c8"
     },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "783a73dcbf7bbba8d46f30ca29bca493cc53867e9740eb6984c324d07609f002"
+    },
     "redesign-existing-projects": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
