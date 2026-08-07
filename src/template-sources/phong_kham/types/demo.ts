@@ -26,6 +26,10 @@ export interface HeroData {
     src: string;
     alt: string;
   };
+  images?: {
+    src: string;
+    alt: string;
+  }[];
 }
 
 export interface TrustData {

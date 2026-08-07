@@ -12,6 +12,7 @@ File nay phan loai tai lieu hien co de developer va AI coding agent biet nen doc
 | `docs/08-source-of-truth/template-gallery-rules.md` | Bat buoc khi sua kho giao dien | Quy tac catalog, sidebar, route kho giao dien |
 | `docs/08-source-of-truth/demo-renderer-rules.md` | Bat buoc khi sua `/demo/[place_id]` | Quy tac Supabase leads, mock data, Facebook link, fallback |
 | `docs/08-source-of-truth/ai-change-protocol.md` | Bat buoc cho AI/developer | Quy trinh sua code an toan |
+| `docs/08-source-of-truth/template-json-presets.md` | Bat buoc khi cau hinh lead | Thu vien cau hinh JSON template_data cho 6 nganh |
 | `docs/08-source-of-truth/document-inventory.md` | Bat buoc khi don dep docs | Phan loai tai lieu |
 
 ## Quyet dinh runtime hien tai can ghi nho

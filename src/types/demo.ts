@@ -105,6 +105,7 @@ export type DemoPageData = {
     title: string;
     subtitle: string;
     image: DemoImage;
+    images?: DemoImage[];
     primaryCta: DemoCTA;
     secondaryCta?: DemoCTA;
   };

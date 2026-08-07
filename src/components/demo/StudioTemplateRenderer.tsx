@@ -2,6 +2,7 @@
 
 import type { ComponentType, CSSProperties } from "react";
 import type { DemoPageData, IndustryKey } from "@/types/demo";
+import { getTemplateDefaults } from "@/lib/demo/templateDefaults";
 import AestheticClinicTemplate from "@/template-sources/tham_my_vien/components/demo/templates/AestheticClinicTemplate";
 import AutoGarageTemplate from "@/template-sources/garage_oto/components/demo/templates/AutoGarageTemplate";
 import CafeTemplate from "@/template-sources/quan_cafe/components/demo/templates/CafeTemplate";
@@ -614,34 +615,34 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
 }
 
 function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Record<string, any>) {
-  if (!customData) return;
+  const custom = customData || {};
 
   // 1. Standard logo & image mappings (for convenience)
-  if (customData.logo_url && baseData.business) {
-    baseData.business.logoUrl = customData.logo_url;
-    baseData.business.logo_url = customData.logo_url;
-    baseData.business.logoUrlString = customData.logo_url;
+  if (custom.logo_url && baseData.business) {
+    baseData.business.logoUrl = custom.logo_url;
+    baseData.business.logo_url = custom.logo_url;
+    baseData.business.logoUrlString = custom.logo_url;
   }
 
-  if (customData.about_image && baseData.about) {
+  if (custom.about_image && baseData.about) {
     if (baseData.about.image) {
-      baseData.about.image.src = customData.about_image;
+      baseData.about.image.src = custom.about_image;
     } else {
-      baseData.about.image = { src: customData.about_image, alt: "Về chúng tôi" };
+      baseData.about.image = { src: custom.about_image, alt: "Về chúng tôi" };
     }
     if (baseData.about.bgImage) {
-      baseData.about.bgImage.src = customData.about_image;
+      baseData.about.bgImage.src = custom.about_image;
     }
   }
 
-  if (customData.hero_image && baseData.hero) {
-    if (baseData.hero.image) baseData.hero.image.src = customData.hero_image;
-    if (baseData.hero.bgImage) baseData.hero.bgImage.src = customData.hero_image;
-    if (baseData.hero.backgroundImage) baseData.hero.backgroundImage = customData.hero_image;
+  if (custom.hero_image && baseData.hero) {
+    if (baseData.hero.image) baseData.hero.image.src = custom.hero_image;
+    if (baseData.hero.bgImage) baseData.hero.bgImage.src = custom.hero_image;
+    if (baseData.hero.backgroundImage) baseData.hero.backgroundImage = custom.hero_image;
   }
 
   // 2. Allow deep dot-notation overrides, e.g. "about.title": "New Title"
-  for (const [key, value] of Object.entries(customData)) {
+  for (const [key, value] of Object.entries(custom)) {
     if (key.includes(".")) {
       const parts = key.split(".");
       let current = baseData;
@@ -660,6 +661,125 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
       if (key in baseData && value !== undefined && value !== null) {
         baseData[key] = value;
       }
+    }
+  }
+
+  // Sinc primaryCta <-> primaryAction and secondaryCta <-> secondaryAction aliases for compatibility
+  if (baseData.hero) {
+    if (custom["hero.primaryCta.label"] !== undefined) {
+      baseData.hero.primaryAction = { ...(baseData.hero.primaryAction || {}), label: custom["hero.primaryCta.label"] };
+    }
+    if (custom["hero.primaryCta.href"] !== undefined) {
+      baseData.hero.primaryAction = { ...(baseData.hero.primaryAction || {}), href: custom["hero.primaryCta.href"] };
+    }
+    if (custom["hero.secondaryCta.label"] !== undefined) {
+      baseData.hero.secondaryAction = { ...(baseData.hero.secondaryAction || {}), label: custom["hero.secondaryCta.label"] };
+    }
+    if (custom["hero.secondaryCta.href"] !== undefined) {
+      baseData.hero.secondaryAction = { ...(baseData.hero.secondaryAction || {}), href: custom["hero.secondaryCta.href"] };
+    }
+    if (custom.hero?.primaryCta) {
+      baseData.hero.primaryAction = { ...(baseData.hero.primaryAction || {}), ...custom.hero.primaryCta };
+    }
+    if (custom.hero?.secondaryCta) {
+      baseData.hero.secondaryAction = { ...(baseData.hero.secondaryAction || {}), ...custom.hero.secondaryCta };
+    }
+    // Also support custom.hero_primary_action_label overrides if needed
+    if (custom.hero_primary_action_label && baseData.hero.primaryAction) {
+      baseData.hero.primaryAction.label = custom.hero_primary_action_label;
+    }
+    // Sync for Interior Design template which reads primaryActionLabel
+    if (baseData.hero.primaryAction?.label) {
+      baseData.hero.primaryActionLabel = baseData.hero.primaryAction.label;
+    }
+  }
+
+  // Normalize and protect Trust fields (rating, reviewCount, followers) to prevent crashes and ensure consistency
+  if (baseData.trust) {
+    const rawRating = custom["trust.rating"] ?? custom.trust?.rating;
+    if (rawRating !== undefined && rawRating !== null) {
+      if (typeof rawRating === "number" || typeof rawRating === "string") {
+        baseData.trust.rating = {
+          score: typeof rawRating === "number" ? `${rawRating}/5` : rawRating,
+          label: baseData.trust.rating?.label ?? "Đánh giá uy tín"
+        };
+        baseData.trust.ratingText = typeof rawRating === "number" ? `${rawRating}` : rawRating;
+      }
+    }
+
+    const rawReviewCount = custom["trust.reviewCount"] ?? custom.trust?.reviewCount;
+    if (rawReviewCount !== undefined && rawReviewCount !== null) {
+      baseData.trust.reviewCount = rawReviewCount;
+      baseData.trust.reviewCountText = `${rawReviewCount}+ đánh giá`;
+    }
+
+    const rawFollowers = custom["trust.followers"] ?? custom.trust?.followers;
+    if (rawFollowers !== undefined && rawFollowers !== null) {
+      if (typeof rawFollowers === "number" || typeof rawFollowers === "string") {
+        baseData.trust.followers = {
+          count: typeof rawFollowers === "number" ? rawFollowers.toLocaleString() + "+" : rawFollowers,
+          label: baseData.trust.followers?.label ?? "Người theo dõi"
+        };
+        baseData.trust.followersCount = typeof rawFollowers === "number" ? rawFollowers.toLocaleString() + "+" : rawFollowers;
+      }
+    }
+  }
+
+  // 4. Resolve hero.images slideshow array (dynamic support)
+  let heroImages: any[] = [];
+  const customHeroImages = custom.hero_images ?? custom["hero.images"] ?? custom.hero?.images ?? custom.hero_image;
+
+  if (Array.isArray(customHeroImages)) {
+    const activeImages = customHeroImages.filter(img => img);
+    heroImages = activeImages.map((src: any, index: number) => {
+      if (typeof src === "string") {
+        return { src, alt: `Hero Slide ${index + 1}`, source: "fallback" as const };
+      }
+      return {
+        src: src.src ?? "",
+        alt: src.alt ?? `Hero Slide ${index + 1}`,
+        source: "fallback" as const
+      };
+    });
+  } else if (typeof customHeroImages === "string" && customHeroImages) {
+    heroImages = [{ src: customHeroImages, alt: "Hero Slide 1", source: "fallback" as const }];
+  }
+
+  // If no custom images are specified, fallback to template default fallbackImages
+  if (heroImages.length === 0) {
+    if (Array.isArray(baseData.hero?.images) && baseData.hero.images.length > 0) {
+      heroImages = baseData.hero.images;
+    } else {
+      const defaults = getTemplateDefaults(baseData.template?.key);
+      heroImages = defaults.fallbackImages || [];
+    }
+  }
+
+  // Ensure there's always at least one image in the array
+  if (heroImages.length === 0) {
+    const singleImage = baseData.hero?.image?.src ?? baseData.hero?.bgImage?.src ?? baseData.hero?.backgroundImage;
+    if (singleImage) {
+      heroImages = [{ src: singleImage, alt: "Hero Image", source: "fallback" as const }];
+    } else {
+      heroImages = [{ src: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=80", alt: "Hero default", source: "fallback" as const }];
+    }
+  }
+
+  // Assign resolved slideshow array back to the hero structure
+  if (baseData.hero) {
+    baseData.hero.images = heroImages;
+    if (baseData.hero.image) {
+      baseData.hero.image.src = heroImages[0].src;
+    } else {
+      baseData.hero.image = heroImages[0];
+    }
+    if (baseData.hero.bgImage) {
+      baseData.hero.bgImage.src = heroImages[0].src;
+    } else {
+      baseData.hero.bgImage = heroImages[0];
+    }
+    if (baseData.hero.backgroundImage) {
+      baseData.hero.backgroundImage = heroImages[0].src;
     }
   }
 }

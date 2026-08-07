@@ -167,6 +167,9 @@ NEXT_PUBLIC_SITE_URL=
 - Khong pha bo bo cuc Tab tuong tac (Interactive Tabs) cua phan Dich vu, bo cuc The rong xep chong 3D Bezel kep (Double-Bezel) cua phan Quy trinh va bo cuc chan trang da cot (Premium Footer) cua trang chu TAVIWEB.
 - Không phá bỏ cơ cấu tương thích dữ liệu kép (Dual-compatibility) của Gallery và Reviews để tránh gây lỗi crash server-side rendering cho các template khác nhau.
 - Phải duy trì luồng phân tích và đè sâu dữ liệu JSON của cột `template_data` khi xử lý Demo Page Data cho bất kỳ template nào.
+- Phải đảm bảo chiều cao Hero đồng bộ lý tưởng (`h-[600px] md:h-[650px]`) cho tất cả các template chính, không làm mờ/vỡ ảnh.
+- Phải duy trì cơ chế slideshow tự động chuyển đổi ảnh sau 3 giây khi cấu hình mảng `hero_images`.
+- Phải duy trì logic tự động chuyển đổi bí danh nút bấm CTA (primaryCta/secondaryCta) và chuẩn hóa dữ liệu Trust để tránh gây crash trang khi dữ liệu DB thay đổi.
 
 
 ## Checklist truoc khi ket thuc mot thay doi

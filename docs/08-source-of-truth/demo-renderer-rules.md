@@ -41,49 +41,6 @@ Hệ thống phải:
 | `src/lib/supabase/server.ts` | Fetch Supabase REST API |
 | `src/lib/demo/buildDemoPageData.ts` | Map lead thành `DemoPageData` (chứa logic parse JSON `template_data` và chuyển đổi chế độ Blueprint cho Mock) |
 | `src/lib/demo/mockDemoData.ts` | Mock data cho 15 ngành |
-# Source Of Truth - Demo Renderer Rules
-
-Cập nhật: 2026-08-07.
-
-Demo renderer là phần render website demo public theo `place_id`. Route `/demo/[place_id]` phải hiện trực tiếp landing page của doanh nghiệp, không hiện dashboard hay màn hình cấu hình.
-
-## Mục tiêu
-
-Khi truy cập:
-
-```txt
-/demo/{place_id}
-```
-
-Hệ thống phải:
-
-1. Lấy `place_id` từ URL.
-2. Gọi `getBusinessByPlaceId(place_id)` để fetch từ Supabase table `leads`.
-3. Nếu không tìm thấy lead hoặc là mock URL, fallback sang `getMockLeadByPlaceId(place_id)`.
-4. Chọn template bằng `routeTemplateByIndustry(lead.industry)`.
-5. Build `DemoPageData` bằng `buildDemoPageData` (tự động phân tích cú pháp cột JSON `template_data` nếu có).
-6. Áp dụng đè dữ liệu động qua hàm ghép lồng sâu `mergeCustomTemplateData` ở `StudioTemplateRenderer.tsx`.
-7. Render template qua `DemoTemplateRenderer` và `StudioTemplateRenderer`.
-
-## Không được tạo trong route demo
-
-- Dashboard.
-- Playground.
-- Form nhập tên doanh nghiệp.
-- Form chọn doanh nghiệp mẫu.
-- Live editor.
-- Preset launcher.
-- UI cấu hình dữ liệu.
-
-## File chính
-
-| File | Vai trò |
-|---|---|
-| `src/app/demo/[place_id]/page.tsx` | Fetch lead, build data, render template |
-| `src/app/demo/[place_id]/not-found.tsx` | Trang fallback khi không có lead |
-| `src/lib/supabase/server.ts` | Fetch Supabase REST API |
-| `src/lib/demo/buildDemoPageData.ts` | Map lead thành `DemoPageData` (chứa logic parse JSON `template_data` và chuyển đổi chế độ Blueprint cho Mock) |
-| `src/lib/demo/mockDemoData.ts` | Mock data cho 15 ngành |
 | `src/lib/demo/templateRouter.ts` | Chọn template theo industry |
 | `src/lib/demo/templateDefaults.ts` | Fallback text, service, image theo ngành |
 | `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry |
@@ -160,6 +117,20 @@ Khi truy cập trang xem thử mẫu qua đường dẫn `/demo/mock-{industry_k
 Để các template từ các nguồn khác nhau không bị lỗi sập trang (crash), bộ adapter `StudioTemplateRenderer` thực hiện chuẩn hóa:
 *   **Gallery**: Map cả dạng ảnh phẳng `{ src, alt }` và dạng lồng `{ image: { src, alt } }`. Điều này đảm bảo không gây ra lỗi `Cannot read properties of undefined (reading 'src')` trên template Nha khoa.
 *   **Reviews**: Map cả dạng phẳng `{ author, text }` và dạng lồng `{ author, quote }` để tương thích với template Thiết kế nội thất.
+
+---
+
+## Chuẩn hóa dữ liệu nâng cao (Slideshow, Nút CTA & Trust)
+
+Hệ thống tự động đồng bộ hóa và làm sạch cấu hình đầu vào trong `mergeCustomTemplateData` để đảm bảo độ tin cậy:
+1.  **Slideshow 3 giây cho Hero**:
+    *   Sử dụng trường `"hero_images"` trong JSON `template_data` để định nghĩa một danh sách các ảnh nền.
+    *   Hệ thống sẽ render slideshow ảnh tự động chuyển sau mỗi 3 giây.
+    *   Nếu mảng `"hero_images"` trống hoặc bị xóa, hệ thống sẽ tự động dùng ảnh mặc định của template.
+2.  **Đồng bộ Nút bấm CTA (CTA Action Mapping)**:
+    *   Tự động đồng bộ các khóa CTA giữa định dạng Studio (`primaryCta` / `secondaryCta`) sang định dạng Stitch (`primaryAction` / `secondaryAction`) và ngược lại. Điều này giúp admin cấu hình phím tắt nút bấm mà không sợ sai lệch cú pháp của từng template.
+3.  **Chuẩn hóa chỉ số đánh giá (Trust Property Normalization)**:
+    *   Hỗ trợ tự động chuyển đổi các giá trị thô (`trust.rating`, `trust.reviewCount`, `trust.followers`) kiểu số hoặc chuỗi đơn thành đối tượng lồng sâu tương ứng cho các phần tử UI của template (ví dụ: `{ score: "4.9/5", label: "..." }`), triệt tiêu hoàn toàn lỗi crash trang do sai lệch kiểu dữ liệu đầu vào.
 
 ---
 
