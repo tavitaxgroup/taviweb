@@ -48,7 +48,7 @@ export const EnglishCenterTemplate: React.FC<EnglishCenterTemplateProps> = ({ da
         <ServicesSection services={data.services} />
 
         {/* 6. Why Choose Us Section */}
-        <WhyChooseUsSection />
+        <WhyChooseUsSection features={data.about.features} />
 
         {/* 7. Gallery Section */}
         <GallerySection gallery={data.gallery} />

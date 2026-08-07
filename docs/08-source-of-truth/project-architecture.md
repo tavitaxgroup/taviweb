@@ -48,10 +48,11 @@ Y nghia:
 | `src/lib/demo/templateRouter.ts` | Chon template theo `industry` |
 | `src/lib/demo/templateDefaults.ts` | Fallback content theo tung nganh |
 | `src/lib/supabase/server.ts` | Fetch lead tu Supabase REST API |
-| `src/template-sources` | 15 template render that theo nganh |
-| `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead`, `DemoPageData` |
-| `public/assets/tavi-software-hero.png` | Anh background hero trang chu |
-| `public/assets/anh-template` | Anh template dai dung trong kho giao dien |
+| `src/template-sources` | 15 template render thật theo ngành |
+| `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead` (chứa `template_data`), `DemoPageData` |
+| `public/assets/tavi-software-hero.png` | Ảnh background hero trang chủ |
+| `public/assets/anh-template` | Ảnh template dài dùng trong kho giao diện |
+
 
 Luu y: `src/public/assets` khong phai thu muc serve static cua Next.js. Anh public phai nam trong `public/...`.
 
@@ -164,6 +165,9 @@ NEXT_PUBLIC_SITE_URL=
 - Khong sua `src/template-sources` neu chi thay doi giao dien kho giao dien.
 - Khong tao lai trang chon nganh nghe tong o `/kho-giao-dien`; link Kho giao dien mac dinh phai vao `/kho-giao-dien/noi_that`.
 - Khong pha bo bo cuc Tab tuong tac (Interactive Tabs) cua phan Dich vu, bo cuc The rong xep chong 3D Bezel kep (Double-Bezel) cua phan Quy trinh va bo cuc chan trang da cot (Premium Footer) cua trang chu TAVIWEB.
+- Không phá bỏ cơ cấu tương thích dữ liệu kép (Dual-compatibility) của Gallery và Reviews để tránh gây lỗi crash server-side rendering cho các template khác nhau.
+- Phải duy trì luồng phân tích và đè sâu dữ liệu JSON của cột `template_data` khi xử lý Demo Page Data cho bất kỳ template nào.
+
 
 ## Checklist truoc khi ket thuc mot thay doi
 

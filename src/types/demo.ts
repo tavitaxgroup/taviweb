@@ -52,6 +52,7 @@ export type BusinessLead = {
   demo_status?: DemoStatus | string | null;
   outreach_status?: OutreachStatus | string | null;
   notes?: string | null;
+  template_data?: any;
 };
 
 export type DemoImage = {
@@ -90,11 +91,14 @@ export type DemoPageData = {
     website?: string;
     facebookUrl?: string;
     email?: string;
+    logoUrl?: string;
+    aboutImageUrl?: string;
   };
   template: {
     key: IndustryKey;
     label: string;
     palette: TemplatePalette;
+    customData?: Record<string, any>;
   };
   hero: {
     eyebrow: string;

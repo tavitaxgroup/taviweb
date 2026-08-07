@@ -39,6 +39,10 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Bo cuc Chan trang | Footer đa cột cao cấp (TAVIWEB brand, Solutions, Navigation, Support & Zalo) |
 | Nut lien he noi | Zalo & Phone dạng hình tròn 52px gọn gàng. Hotline trượt ngang lộ số điện thoại khi hover, đi kèm hiệu ứng pulse glow nhẹ tự động. Zalo liên kết trực tiếp chat với SĐT hotline. |
 | Anh slider du an mau | Dùng ảnh tượng trưng (Symbolic Stock Photos) và các ảnh của người dùng tải lên với `object-position: center` |
+| Tùy biến template_data | Hỗ trợ trường `template_data` JSONb đè sâu thông tin chữ/ảnh. Dot notation hỗ trợ chỉnh sửa thuộc tính lồng. |
+| Chế độ Bản đồ khóa trực quan | Truy cập `/demo/mock-[industry]` tự động hiển thị nhãn khóa JSON (ví dụ `[hero.title]`) thay vì dữ liệu thật. |
+| Tương thích kép dữ liệu | Chuẩn hóa GalleryItem (flat & nested) và ReviewItem (text & quote) để chống lỗi crash render giữa các template khác nguồn. |
+
 
 ## Tai lieu nen giu lam tham khao
 

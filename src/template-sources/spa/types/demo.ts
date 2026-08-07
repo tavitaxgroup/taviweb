@@ -46,6 +46,7 @@ export interface AboutData {
   title: string;
   description: string;
   image?: ImageAsset;
+  features?: string[];
 }
 
 export interface ServiceItem {

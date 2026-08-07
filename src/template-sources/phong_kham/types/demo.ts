@@ -46,6 +46,7 @@ export interface AboutData {
     src: string;
     alt: string;
   };
+  features?: string[];
   ctaLabel?: string;
 }
 

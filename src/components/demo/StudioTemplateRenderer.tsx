@@ -235,7 +235,9 @@ function applyLeadIdentity(baseData: Record<string, any>, leadData: DemoPageData
     rating: rating ?? replaced.business?.rating,
     reviewCount: reviewCount ?? replaced.business?.reviewCount,
     followers: followers ?? replaced.business?.followers,
-    facebookFollowers: followers ?? replaced.business?.facebookFollowers
+    facebookFollowers: followers ?? replaced.business?.facebookFollowers,
+    logoUrl: lead.logoUrl ?? replaced.business?.logoUrl,
+    logo_url: lead.logoUrl ?? replaced.business?.logo_url ?? replaced.business?.logoUrl
   };
 
   replaced.template = {
@@ -255,6 +257,26 @@ function applyLeadIdentity(baseData: Record<string, any>, leadData: DemoPageData
       "Aura Clinic",
       "Lumina Spa"
     ], leadData.hero.title);
+
+    if (leadData.hero.subtitle) {
+      replaced.hero.subtitle = leadData.hero.subtitle;
+      replaced.hero.description = leadData.hero.subtitle;
+    }
+    if (leadData.hero.eyebrow) {
+      replaced.hero.eyebrow = leadData.hero.eyebrow;
+      replaced.hero.badge = leadData.hero.eyebrow;
+      replaced.hero.tagline = leadData.hero.eyebrow;
+    }
+  }
+
+  if (replaced.about) {
+    if (leadData.about.title) {
+      replaced.about.title = leadData.about.title;
+    }
+    if (leadData.about.body) {
+      replaced.about.body = leadData.about.body;
+      replaced.about.description = leadData.about.body;
+    }
   }
 
   if (replaced.contact) {
@@ -380,11 +402,54 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
 
   if (baseData.about) {
     baseData.about.stats ??= statValues;
-    baseData.about.points ??= baseData.about.points ?? baseData.about.features ?? leadData.about.highlights;
-    baseData.about.features ??= baseData.about.features ?? baseData.about.points ?? leadData.about.highlights;
+    if (leadData.business.aboutImageUrl) {
+      if (baseData.about.image) {
+        baseData.about.image.src = leadData.business.aboutImageUrl;
+      } else {
+        baseData.about.image = {
+          src: leadData.business.aboutImageUrl,
+          alt: `Hình ảnh giới thiệu của ${leadData.business.name}`
+        };
+      }
+      if (baseData.about.bgImage) {
+        baseData.about.bgImage.src = leadData.business.aboutImageUrl;
+      }
+    }
+    if (leadData.about.highlights && leadData.about.highlights.length > 0) {
+      if (leadData.template.key === "trung_tam_tieng_anh") {
+        baseData.about.features = leadData.about.highlights.map((feat, index) => {
+          const parts = feat.split(/[:\-]/);
+          const title = parts[0]?.trim() || "Ưu điểm";
+          const description = parts.slice(1).join("-")?.trim() || "Chương trình học chuẩn hóa quốc tế.";
+          return {
+            title,
+            description,
+            icon: ["Target", "Heart", "Sparkles"][index % 3]
+          };
+        });
+        baseData.about.points = baseData.about.features;
+      } else {
+        baseData.about.features = leadData.about.highlights;
+        baseData.about.points = leadData.about.highlights;
+      }
+    } else {
+      baseData.about.points ??= baseData.about.points ?? baseData.about.features;
+      baseData.about.features ??= baseData.about.features ?? baseData.about.points;
+    }
     baseData.about.content ??= [baseData.about.description, baseData.about.description1, baseData.about.description2]
       .filter(Boolean)
       .join("\n\n");
+  }
+
+  const isMock = leadData.business.placeId?.startsWith("mock-");
+  if (isMock || (leadData.template.customData && leadData.template.customData.services)) {
+    baseData.services = leadData.services;
+  }
+  if (isMock || (leadData.template.customData && (leadData.template.customData.gallery_urls || leadData.template.customData.gallery))) {
+    baseData.gallery = leadData.gallery;
+  }
+  if (isMock || (leadData.template.customData && leadData.template.customData.reviews)) {
+    baseData.reviews = leadData.reviews;
   }
 
   if (Array.isArray(baseData.services)) {
@@ -397,17 +462,25 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
   }
 
   if (Array.isArray(baseData.gallery)) {
-    baseData.gallery = baseData.gallery.map((item: Record<string, any>, index: number) => ({
-      ...item,
-      id: item.id ?? `gallery-${index}`,
-      title: item.title ?? item.caption ?? item.image?.alt ?? `Gallery ${index + 1}`,
-      category: item.category ?? item.caption ?? item.image?.alt ?? "Gallery"
-    }));
+    baseData.gallery = baseData.gallery.map((item: Record<string, any>, index: number) => {
+      const src = item.src ?? item.image?.src ?? "";
+      const alt = item.alt ?? item.image?.alt ?? `Gallery ${index + 1}`;
+      return {
+        ...item,
+        id: item.id ?? `gallery-${index}`,
+        src,
+        alt,
+        image: item.image ?? { src, alt },
+        title: item.title ?? item.caption ?? alt,
+        category: item.category ?? item.caption ?? alt
+      };
+    });
   }
 
   if (Array.isArray(baseData.reviews)) {
     baseData.reviews = baseData.reviews.map((review: Record<string, any>, index: number) => {
       const author = review.authorName ?? review.author ?? "Khách hàng";
+      const text = review.text ?? review.content ?? review.quote ?? "Ý kiến đánh giá";
       return {
         ...review,
         id: review.id ?? `review-${index}`,
@@ -421,8 +494,9 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
             .join("")
             .slice(0, 2)
             .toUpperCase(),
-        text: review.text ?? review.content,
-        content: review.content ?? review.text,
+        text,
+        content: text,
+        quote: text,
         role: review.role ?? review.authorRole ?? "Khách hàng",
         vehicle: review.vehicle ?? leadData.business.industry
       };
@@ -472,12 +546,129 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
     }))
   };
 
+  if (isMock) {
+    if (baseData.business) {
+      baseData.business.name = "[business.name]";
+      baseData.business.logoText = "[business.name]";
+      baseData.business.phone = "[contact.phone]";
+      baseData.business.email = "[contact.email]";
+      baseData.business.address = "[contact.address]";
+      baseData.business.facebookUrl = "https://[contact.MessageCircle]";
+      baseData.business.logoUrl = `https://placehold.co/120x120/073b8e/ffffff?text=[logo_url]`;
+      baseData.business.logo_url = `https://placehold.co/120x120/073b8e/ffffff?text=[logo_url]`;
+      baseData.business.logoUrlString = `https://placehold.co/120x120/073b8e/ffffff?text=[logo_url]`;
+    }
+    if (baseData.hero) {
+      baseData.hero.title = "[hero.title]";
+      baseData.hero.subtitle = "[hero.subtitle]";
+      baseData.hero.description = "[hero.subtitle]";
+      baseData.hero.eyebrow = "[hero.eyebrow]";
+      baseData.hero.badge = "[hero.eyebrow]";
+      baseData.hero.tagline = "[hero.eyebrow]";
+      baseData.hero.primaryAction = { label: "[hero.primaryCta.label]", href: "#" };
+      baseData.hero.secondaryAction = { label: "[hero.secondaryCta.label]", href: "#" };
+      baseData.hero.primaryCta = { label: "[hero.primaryCta.label]", href: "#" };
+      baseData.hero.secondaryCta = { label: "[hero.secondaryCta.label]", href: "#" };
+      baseData.hero.primaryCtaText = "[hero.primaryCta.label]";
+      baseData.hero.secondaryCtaText = "[hero.secondaryCta.label]";
+    }
+    if (baseData.about) {
+      baseData.about.title = "[about.title]";
+      baseData.about.body = "[about.body]";
+      baseData.about.description = "[about.body]";
+      baseData.about.subtitle = "[about.subtitle]";
+      baseData.about.badge = "[about.badge]";
+      baseData.about.features = [
+        "[about.highlights[0]]",
+        "[about.highlights[1]]",
+        "[about.highlights[2]]"
+      ];
+      baseData.about.points = baseData.about.features;
+    }
+    if (baseData.trust) {
+      baseData.trust.ratingText = "[trust.ratingText]";
+      baseData.trust.reviewCountText = "[trust.reviewCountText]";
+      baseData.trust.achievements = ["[trust.badges[0]]", "[trust.badges[1]]", "[trust.badges[2]]"];
+    }
+    if (baseData.contact) {
+      baseData.contact.title = "[contact.title]";
+      baseData.contact.subtitle = "[contact.subtitle]";
+      baseData.contact.phone = "[contact.phone]";
+      baseData.contact.email = "[contact.email]";
+      baseData.contact.address = "[contact.address]";
+      baseData.contact.mapQuery = "[contact.mapQuery]";
+      baseData.contact.primaryAction = { label: "[contact.primaryAction.label]", href: "#" };
+      baseData.contact.secondaryAction = { label: "[contact.secondaryAction.label]", href: "#" };
+      baseData.contact.workingHours = ["[contact.workingHours]"];
+    }
+    if (baseData.whyChooseUs) {
+      baseData.whyChooseUs.items = [
+        { id: "w1", title: "[about.highlights[0]]", description: "[about.highlights[0] description]" },
+        { id: "w2", title: "[about.highlights[1]]", description: "[about.highlights[1] description]" },
+        { id: "w3", title: "[about.highlights[2]]", description: "[about.highlights[2] description]" }
+      ];
+    }
+  }
+
   return baseData;
+}
+
+function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Record<string, any>) {
+  if (!customData) return;
+
+  // 1. Standard logo & image mappings (for convenience)
+  if (customData.logo_url && baseData.business) {
+    baseData.business.logoUrl = customData.logo_url;
+    baseData.business.logo_url = customData.logo_url;
+    baseData.business.logoUrlString = customData.logo_url;
+  }
+
+  if (customData.about_image && baseData.about) {
+    if (baseData.about.image) {
+      baseData.about.image.src = customData.about_image;
+    } else {
+      baseData.about.image = { src: customData.about_image, alt: "Về chúng tôi" };
+    }
+    if (baseData.about.bgImage) {
+      baseData.about.bgImage.src = customData.about_image;
+    }
+  }
+
+  if (customData.hero_image && baseData.hero) {
+    if (baseData.hero.image) baseData.hero.image.src = customData.hero_image;
+    if (baseData.hero.bgImage) baseData.hero.bgImage.src = customData.hero_image;
+    if (baseData.hero.backgroundImage) baseData.hero.backgroundImage = customData.hero_image;
+  }
+
+  // 2. Allow deep dot-notation overrides, e.g. "about.title": "New Title"
+  for (const [key, value] of Object.entries(customData)) {
+    if (key.includes(".")) {
+      const parts = key.split(".");
+      let current = baseData;
+      for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        if (current && typeof current === "object" && current[part]) {
+          current = current[part];
+        }
+      }
+      const lastPart = parts[parts.length - 1];
+      if (current && typeof current === "object" && value !== undefined && value !== null) {
+        current[lastPart] = value;
+      }
+    } else {
+      // 3. Direct root-level overrides (like customData.services) if the property exists in baseData
+      if (key in baseData && value !== undefined && value !== null) {
+        baseData[key] = value;
+      }
+    }
+  }
 }
 
 function toStudioTemplateData(data: DemoPageData) {
   const originalTemplateData = getOriginalStudioData(data.template.key);
-  return applyLeadIdentity(originalTemplateData, data);
+  const replaced = applyLeadIdentity(originalTemplateData, data);
+  mergeCustomTemplateData(replaced, data.template.customData);
+  return replaced;
 }
 
 function getTemplateThemeStyle(templateKey: IndustryKey): CSSProperties {
