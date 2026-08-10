@@ -45,7 +45,7 @@ export const mockBusinesses: Record<string, RawBusinessData> = {
     customAboutTitle: "Về Văn Phòng Luật Sư Juris & Integrity",
     customAboutText1: "Với hơn 15 năm kinh nghiệm thực chiến trong nhiều lĩnh vực pháp lý khác nhau, Juris & Integrity được thành lập với tôn chỉ đặt \"Chính trực\" làm nền tảng cốt lõi. Chúng tôi không chỉ là những chuyên gia pháp luật, mà là những người đồng hành đáng tin cậy.",
     customAboutText2: "Chúng tôi tin rằng sự chuyên nghiệp đến từ sự thấu hiểu sâu sắc nhu cầu của khách hàng và khả năng đưa ra những giải pháp pháp lý an toàn, tối ưu nhất.",
-    customAboutImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuA-4MIXOBlUgt01rPAD9ZoCj09pbhroQ4NQuQWFxz7L_YXBI6fIefoNowki3JhXd_M7qOSw8TDPO0HM7EN88_HKOtCGkh7DletBp4Hu4Td0V_BXzqqsC9yEpW1VpX767ceMv-f6c6dLCDHDARIJVOVIqw6dxrWhnkbR1JwAaFj89L6bfoxKWvWe-Le-67SuC2ti4V-36E7XIMbordrNMl3V1S5tBWxfnRAzc6MMHrgzsP2q6awsjr4M",
+    customAboutImage: "https://i.pinimg.com/1200x/a0/09/49/a00949534bfafd61268aa11d0f3b22d2.jpg",
     customServices: [
       {
         icon: "business",
@@ -117,7 +117,7 @@ export const mockBusinesses: Record<string, RawBusinessData> = {
     customHeroImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuCLudAGAMKW0xwjfCTg9UinDgiwxlVqwikGYNZ7zdEgm5gD4upmbg-_1ARzcoxFJmMUILAfj6f3hIPldSTteHyjz4ibe7SWd_fdy4XIggdX71bbAfkgETDaTCe4S4nKtQh7lFQv95YEwUv-2s--wPcbQ2L5z7s6dlaqghgx2J5h9hpnJthZgS6hJcllONx6UmhrsfGio99athGE0JC4kTwBwkSXeKsdA0-POJWdOfKoek4V5UHxyv0e",
     customAboutTitle: "Về Luật Sư Minh Tâm",
     customAboutText1: "Được sáng lập với tinh thần thượng tôn pháp luật và tận hiến vì quyền lợi hợp pháp của người dân, Văn Phòng Luật Sư Minh Tâm không ngừng nỗ lực trở thành chỗ dựa pháp lý vững chắc.",
-    customAboutImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuA-4MIXOBlUgt01rPAD9ZoCj09pbhroQ4NQuQWFxz7L_YXBI6fIefoNowki3JhXd_M7qOSw8TDPO0HM7EN88_HKOtCGkh7DletBp4Hu4Td0V_BXzqqsC9yEpW1VpX767ceMv-f6c6dLCDHDARIJVOVIqw6dxrWhnkbR1JwAaFj89L6bfoxKWvWe-Le-67SuC2ti4V-36E7XIMbordrNMl3V1S5tBWxfnRAzc6MMHrgzsP2q6awsjr4M",
+    customAboutImage: "https://i.pinimg.com/1200x/a0/09/49/a00949534bfafd61268aa11d0f3b22d2.jpg",
     customServices: [
       {
         icon: "gavel",

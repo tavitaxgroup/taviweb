@@ -3,7 +3,7 @@ import { ServiceInfo, ReviewItem, GalleryItem } from '../../types/demo';
 export const DENTAL_FALLBACK_IMAGES = {
   hero: "/assets/nha_khoa_hero.png",
   gallery1: "https://lh3.googleusercontent.com/aida-public/AB6AXuAhbTGTxgPMvMAUo1yntDWBCnY9Bfjp8fTLYyjuXOCjuugwIqpRdPxGuqw1Cdo0eHHRLS8PxX38ztHke2VjNUZ6Iw7G4GWf_3i17cCkejZagqW--GClqasSaTPndNxtHQxx2bYOTSnVFtAUzUK6EF2wgfqPzw4mQ41FmdOm8WYafUTIoVHxVjufRllagKHpCxCcU97BA5WU9rKxWYH9L2w-iRUHtCLYuSsFWgI5foUxn8lxkEeq0Q8H7A",
-  gallery2: "https://lh3.googleusercontent.com/aida-public/AB6AXuDfWJkL6rVYad9tEUo_4Le-XmUfapqISLZSY5K506V-qWsZAk1f-QnKPy6ql4cqVWVdccLS9At7OytCxDv8EhdPl0rPKOmx9KI1wR1dfvNN-ltpvGp484dcic4JIdY9tyCoyWOE3jtkTAIr6zU2--oQ84aXX5Yi0NsoZNG3U5UzTv8MGmX29N6CYobA8EipXfO5V038agCgMoUa8_Lv4FvG5-htyTWbOgDFDNWmVHy7ckAjN-MwXcAgaQ",
+  gallery2: "https://i.pinimg.com/1200x/88/d2/21/88d2213130a00322e8988563dca0347f.jpg",
   gallery3: "https://lh3.googleusercontent.com/aida-public/AB6AXuDIEib7qRdSdZyWkPCESdCYAFzCgcHcI1ziuXF5y3BgGrelBLNJCN72yxzKlXt71vtVnioNUEl1rKR93VV7eUEbqT30zFEJDFpM8V76k4qi38DqY50ebaI6ar66gR2WMo18RkgrAgMS6p9P19relJu3aSdFAkZ6r75VdMhaPTf1fQOE60eHvvOBxWX1u988Il-M7FGtLLbQMJLowNq-i15LKMGZBvhALaK92m-WBipBNB8xZRJT2o45oQ"
 };
 

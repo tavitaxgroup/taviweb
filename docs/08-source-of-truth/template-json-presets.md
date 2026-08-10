@@ -93,7 +93,7 @@ Tài liệu này là cẩm nang cấu hình đầy đủ mọi thuộc tính (ph
     "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1400&q=80",
     "/assets/nha_khoa_hero.png"
   ],
-  "about_image": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600",
+  "about_image": "https://i.pinimg.com/1200x/88/d2/21/88d2213130a00322e8988563dca0347f.jpg",
   "hero.badge": "HỆ THỐNG NHA KHOA QUỐC TẾ",
   "hero.title": "Nụ Cười Rạng Rỡ - Kiến Tạo Tương Lai",
   "hero.subtitle": "Dịch vụ bọc răng sứ, niềng răng Invisalign chuẩn Đức với đội ngũ bác sĩ chuyên khoa cấp I.",
@@ -171,7 +171,7 @@ Tài liệu này là cẩm nang cấu hình đầy đủ mọi thuộc tính (ph
     "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1400&q=80",
     "https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=1400&q=80"
   ],
-  "about_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600",
+  "about_image": "https://i.pinimg.com/736x/79/4b/84/794b84a46fb138acb8587edf614720d2.jpg",
   "hero.badge": "CHẤT LƯỢNG Y KHOA TIÊN PHONG",
   "hero.title": "Tận Tâm Chăm Sóc - Sức Khỏe Vững Bền",
   "hero.subtitle": "Phòng khám đa khoa chất lượng cao, phục vụ nhanh chóng, không chờ đợi.",
@@ -361,7 +361,7 @@ Tài liệu này là cẩm nang cấu hình đầy đủ mọi thuộc tính (ph
     "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80",
     "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=80"
   ],
-  "about_image": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=600",
+  "about_image": "https://i.pinimg.com/1200x/a0/09/49/a00949534bfafd61268aa11d0f3b22d2.jpg",
   "hero.badge": "CÔNG TY LUẬT UY TÍN HÀNG ĐẦU",
   "hero.title": "Bảo Vệ Quyền Lợi & Lợi Ích Hợp Pháp",
   "hero.subtitle": "Tư vấn luật doanh nghiệp, sở hữu trí tuệ, tranh tụng hình sự chuyên nghiệp.",

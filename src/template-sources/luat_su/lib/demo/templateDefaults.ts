@@ -1,7 +1,7 @@
 import { DemoPageData } from "../../types/demo";
 
 export const DEFAULT_HERO_IMAGE = "https://lh3.googleusercontent.com/aida-public/AB6AXuCLudAGAMKW0xwjfCTg9UinDgiwxlVqwikGYNZ7zdEgm5gD4upmbg-_1ARzcoxFJmMUILAfj6f3hIPldSTteHyjz4ibe7SWd_fdy4XIggdX71bbAfkgETDaTCe4S4nKtQh7lFQv95YEwUv-2s--wPcbQ2L5z7s6dlaqghgx2J5h9hpnJthZgS6hJcllONx6UmhrsfGio99athGE0JC4kTwBwkSXeKsdA0-POJWdOfKoek4V5UHxyv0e";
-export const DEFAULT_ABOUT_IMAGE = "https://lh3.googleusercontent.com/aida-public/AB6AXuA-4MIXOBlUgt01rPAD9ZoCj09pbhroQ4NQuQWFxz7L_YXBI6fIefoNowki3JhXd_M7qOSw8TDPO0HM7EN88_HKOtCGkh7DletBp4Hu4Td0V_BXzqqsC9yEpW1VpX767ceMv-f6c6dLCDHDARIJVOVIqw6dxrWhnkbR1JwAaFj89L6bfoxKWvWe-Le-67SuC2ti4V-36E7XIMbordrNMl3V1S5tBWxfnRAzc6MMHrgzsP2q6awsjr4M";
+export const DEFAULT_ABOUT_IMAGE = "https://i.pinimg.com/1200x/a0/09/49/a00949534bfafd61268aa11d0f3b22d2.jpg";
 
 export const defaultLawFirmData: DemoPageData = {
   business: {

@@ -49,7 +49,7 @@ export const DEFAULT_CLINIC_DATA: DemoPageData = {
       }
     ],
     image: {
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1Ib-dH6x4RjjsQXwtBAqDYWkZoIsFDAva_1Fn77dKQPApTmhzYwBZMsVaALRLrSmS1pgnmHzAdnsrIjc1mDhAYYnqN8yI9SgyrC1jkx042R6jP_Smtb89NsDjIPjvltKYHEg6LC0nN6wxNYKU5UMmFETmW-BTBNiZIT8z6_w89ldqBWmB8g51pXQGL_uUqGPSVqQ7ugGOkzGBQuGkLDet_XrZFEDUaziU1V79MTQ7lU5nMpcayU_Ejg',
+      src: 'https://i.pinimg.com/736x/79/4b/84/794b84a46fb138acb8587edf614720d2.jpg',
       alt: 'Modern medical laboratory at MedCore'
     },
     ctaLabel: 'Tìm hiểu thêm về đội ngũ'
