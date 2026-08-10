@@ -161,8 +161,8 @@ export const templateDefaults: Record<IndustryKey, TemplateDefaults> = {
     highlights: ["Tone dịu nhẹ", "Ảnh dịch vụ rõ", "Không claims quá đà"],
     badges: ["Thư giãn", "Tận tâm", "Dễ đặt lịch"],
     fallbackImages: [
-      image("https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=80", "Không gian spa thư giãn"),
-      image("https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80", "Dịch vụ chăm sóc spa")
+      image("https://i.pinimg.com/736x/31/3b/af/313baffd50152d4c1b6a1f21e5cfb3e2.jpg", "Không gian spa thư giãn"),
+      image("https://i.pinimg.com/736x/c9/c3/31/c9c331b21588c50fa720b9ad4fc48b13.jpg", "Dịch vụ chăm sóc spa")
     ],
     primaryCtaLabel: "Đặt lịch spa",
     secondaryCtaLabel: "Nhắn tư vấn",

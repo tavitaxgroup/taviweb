@@ -10,8 +10,8 @@ Tài liệu này là cẩm nang cấu hình đầy đủ mọi thuộc tính (ph
 {
   "logo_url": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=120",
   "hero_images": [
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"
+    "https://i.pinimg.com/736x/31/3b/af/313baffd50152d4c1b6a1f21e5cfb3e2.jpg",
+    "https://i.pinimg.com/736x/c9/c3/31/c9c331b21588c50fa720b9ad4fc48b13.jpg"
   ],
   "about_image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600",
   "hero.eyebrow": "TRỊ LIỆU THẢO MỘC TỰ NHIÊN",

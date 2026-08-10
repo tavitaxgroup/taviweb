@@ -19,9 +19,13 @@ export const MOCK_SPA_DATA: Record<string, DemoPageData> = {
       title: "Nơi Thư Giãn Tuyệt Đối Tại Lumina Spa",
       subtitle: "Trải nghiệm không gian chăm sóc da và cơ thể chuyên sâu, giúp bạn tìm lại sự cân bằng và vẻ đẹp tự nhiên trong tâm hồn.",
       bgImage: {
-        src: "https://lh3.googleusercontent.com/aida-public/AB6AXuD845kYdCDbb3mcDihpWhu9u9PJ-Gp_08X4M9YOWFbnUx2UDMSLyMljq4B1P3PMKKga4ljlgEgWuhE-R96XGWwnksZAKlEVOJ6WFAHHzU60bzU26xeU46i3tntCulsKIFtVEy670bgjZ5-Fpk08yGgYvK-OQCy_HOao9iltv3q3l_mL852IP7jGCqDyKS4BuUx9tQP2rYI96xyKy65A_i7HqsSVFo0NnciJY3TVda2uaF9MbsUPAkxe",
+        src: "https://i.pinimg.com/736x/31/3b/af/313baffd50152d4c1b6a1f21e5cfb3e2.jpg",
         alt: "Luxury spa entrance"
       },
+      images: [
+        { src: "https://i.pinimg.com/736x/31/3b/af/313baffd50152d4c1b6a1f21e5cfb3e2.jpg", alt: "Không gian spa thư giãn" },
+        { src: "https://i.pinimg.com/736x/c9/c3/31/c9c331b21588c50fa720b9ad4fc48b13.jpg", alt: "Dịch vụ chăm sóc spa" }
+      ],
       primaryAction: {
         label: "Đặt lịch chăm sóc",
         href: "#book"
@@ -45,7 +49,7 @@ export const MOCK_SPA_DATA: Record<string, DemoPageData> = {
       title: "Về Lumina Spa",
       description: "Kiến trúc tối giản kết hợp cùng các yếu tố tự nhiên tạo nên một hành trình cảm xúc trọn vẹn. Chúng tôi tin rằng cái đẹp thực sự bắt nguồn từ một cơ thể khỏe mạnh và một tinh thần bình yên.",
       image: {
-        src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDSmJKqj4-UJJdCKfDm-dmE8NS0ajfCi8Nw9S1ksQQQlQEgyg11TTDTG4vnYLTgNwUTDopc3-jPwJMrgAi3WbpqHpWVEYDtsu966KEse_hEOrR_RHIabnTxa9ljCZpRdYFyXKKL_sS2wtYcJJSHmE1-EZ62wsDZ96kcl-RfjA0pVBCxKAOyU0M5Y8Wh8wV1Qn8jyAv14R3mvc_vHLBhFaqEzZCzjmAH_9ZFjFy0ZJouodW9H8NRBmTs",
+        src: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=80",
         alt: "Spa reception area with warm lighting"
       }
     },
@@ -104,7 +108,7 @@ export const MOCK_SPA_DATA: Record<string, DemoPageData> = {
     gallery: [
       {
         id: "g1",
-        src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDSmJKqj4-UJJdCKfDm-dmE8NS0ajfCi8Nw9S1ksQQQlQEgyg11TTDTG4vnYLTgNwUTDopc3-jPwJMrgAi3WbpqHpWVEYDtsu966KEse_hEOrR_RHIabnTxa9ljCZpRdYFyXKKL_sS2wtYcJJSHmE1-EZ62wsDZ96kcl-RfjA0pVBCxKAOyU0M5Y8Wh8wV1Qn8jyAv14R3mvc_vHLBhFaqEzZCzjmAH_9ZFjFy0ZJouodW9H8NRBmTs",
+        src: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=80",
         alt: "Lumina Spa reception area",
         colSpan: 2,
         rowSpan: 2
@@ -174,7 +178,7 @@ export function getMockBusinessByPlaceId(placeId: string): DemoPageData {
   if (MOCK_SPA_DATA[cleanedId]) {
     return MOCK_SPA_DATA[cleanedId];
   }
-  
+
   // Default fallback if place_id doesn't exist
   return MOCK_SPA_DATA["lumina-spa"];
 }
@@ -200,7 +204,7 @@ export function buildDemoPageData(businessRawData: any): DemoPageData {
       title: businessRawData?.heroTitle || "Nơi Thư Giãn Tuyệt Đối",
       subtitle: businessRawData?.heroSubtitle || "Trải nghiệm không gian chăm sóc da và cơ thể chuyên sâu.",
       bgImage: {
-        src: businessRawData?.heroBgImage || "https://lh3.googleusercontent.com/aida-public/AB6AXuD845kYdCDbb3mcDihpWhu9u9PJ-Gp_08X4M9YOWFbnUx2UDMSLyMljq4B1P3PMKKga4ljlgEgWuhE-R96XGWwnksZAKlEVOJ6WFAHHzU60bzU26xeU46i3tntCulsKIFtVEy670bgjZ5-Fpk08yGgYvK-OQCy_HOao9iltv3q3l_mL852IP7jGCqDyKS4BuUx9tQP2rYI96xyKy65A_i7HqsSVFo0NnciJY3TVda2uaF9MbsUPAkxe",
+        src: businessRawData?.heroBgImage || "https://i.pinimg.com/736x/31/3b/af/313baffd50152d4c1b6a1f21e5cfb3e2.jpg",
         alt: businessRawData?.name || "Lumina Spa"
       },
       primaryAction: {
@@ -226,7 +230,7 @@ export function buildDemoPageData(businessRawData: any): DemoPageData {
       title: "Không Gian Thư Giãn",
       description: businessRawData?.aboutText || "Kiến trúc tối giản kết hợp cùng các yếu tố tự nhiên tạo nên một hành trình cảm xúc trọn vẹn.",
       image: {
-        src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDSmJKqj4-UJJdCKfDm-dmE8NS0ajfCi8Nw9S1ksQQQlQEgyg11TTDTG4vnYLTgNwUTDopc3-jPwJMrgAi3WbpqHpWVEYDtsu966KEse_hEOrR_RHIabnTxa9ljCZpRdYFyXKKL_sS2wtYcJJSHmE1-EZ62wsDZ96kcl-RfjA0pVBCxKAOyU0M5Y8Wh8wV1Qn8jyAv14R3mvc_vHLBhFaqEzZCzjmAH_9ZFjFy0ZJouodW9H8NRBmTs",
+        src: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=80",
         alt: "Spa lobby"
       }
     },

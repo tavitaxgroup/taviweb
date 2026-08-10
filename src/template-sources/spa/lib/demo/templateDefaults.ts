@@ -26,7 +26,7 @@ export const FALLBACK_SPA_SERVICES: ServiceItem[] = [
 export const FALLBACK_SPA_GALLERY: GalleryItem[] = [
   {
     id: "fb-g1",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDSmJKqj4-UJJdCKfDm-dmE8NS0ajfCi8Nw9S1ksQQQlQEgyg11TTDTG4vnYLTgNwUTDopc3-jPwJMrgAi3WbpqHpWVEYDtsu966KEse_hEOrR_RHIabnTxa9ljCZpRdYFyXKKL_sS2wtYcJJSHmE1-EZ62wsDZ96kcl-RfjA0pVBCxKAOyU0M5Y8Wh8wV1Qn8jyAv14R3mvc_vHLBhFaqEzZCzjmAH_9ZFjFy0ZJouodW9H8NRBmTs",
+    src: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=80",
     alt: "Beautiful lobby",
     colSpan: 2,
     rowSpan: 2

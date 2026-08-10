@@ -336,12 +336,12 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
   const facebookHref =
     normalizeExternalHref(
       leadData.business.facebookUrl ??
-        baseData.business?.facebookUrl ??
-        baseData.business?.facebook ??
-        baseData.business?.MessageCircle ??
-        baseData.contact?.facebookUrl ??
-        baseData.contact?.facebook ??
-        baseData.contact?.MessageCircle
+      baseData.business?.facebookUrl ??
+      baseData.business?.facebook ??
+      baseData.business?.MessageCircle ??
+      baseData.contact?.facebookUrl ??
+      baseData.contact?.facebook ??
+      baseData.contact?.MessageCircle
     );
   const statValues = [
     { value: Number(rating).toFixed(1), label: "Google rating" },
@@ -371,14 +371,14 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
     baseData.hero.secondaryAction =
       facebookHref && shouldUseFacebookAction(secondaryAction)
         ? {
-            label: normalizeFacebookLabel(secondaryAction?.label, "Liên hệ Facebook"),
-            href: facebookHref
-          }
+          label: normalizeFacebookLabel(secondaryAction?.label, "Liên hệ Facebook"),
+          href: facebookHref
+        }
         : secondaryAction
           ? {
-              label: secondaryAction.label || leadData.contact.secondaryAction?.label || "Xem thêm",
-              href: secondaryAction.href || leadData.contact.secondaryAction?.href || "#contact"
-            }
+            label: secondaryAction.label || leadData.contact.secondaryAction?.label || "Xem thêm",
+            href: secondaryAction.href || leadData.contact.secondaryAction?.href || "#contact"
+          }
           : undefined;
     baseData.hero.primaryCta ??= baseData.hero.primaryAction;
     baseData.hero.secondaryCta ??= baseData.hero.secondaryAction;
@@ -525,14 +525,14 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
     baseData.contact.secondaryAction =
       facebookHref
         ? {
-            label: shouldUseFacebookAction(secondaryAction) ? normalizeFacebookLabel(secondaryAction?.label, "Liên hệ Facebook") : "Liên hệ Facebook",
-            href: facebookHref
-          }
+          label: shouldUseFacebookAction(secondaryAction) ? normalizeFacebookLabel(secondaryAction?.label, "Liên hệ Facebook") : "Liên hệ Facebook",
+          href: facebookHref
+        }
         : secondaryAction
           ? {
-              label: secondaryAction.label || leadData.contact.secondaryAction?.label || "Xem bản đồ",
-              href: secondaryAction.href || leadData.contact.secondaryAction?.href || "#contact"
-            }
+            label: secondaryAction.label || leadData.contact.secondaryAction?.label || "Xem bản đồ",
+            href: secondaryAction.href || leadData.contact.secondaryAction?.href || "#contact"
+          }
           : undefined;
   }
 
