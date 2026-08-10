@@ -277,7 +277,7 @@ export const templateDefaults: Record<IndustryKey, TemplateDefaults> = {
     badges: ["Tận tâm", "Sạch sẽ", "Dễ đặt lịch"],
     fallbackImages: [
       image("https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1400&q=80", "Phòng khám nha khoa hiện đại"),
-      image("https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=900&q=80", "Ghế nha khoa hiện đại")
+      image("/assets/nha_khoa_hero.png", "Bác sĩ nha khoa thẩm mỹ tận tâm")
     ],
     primaryCtaLabel: "Đặt lịch nha khoa",
     secondaryCtaLabel: "Xem đường đi",

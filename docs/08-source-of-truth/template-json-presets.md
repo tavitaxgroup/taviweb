@@ -91,7 +91,7 @@ Tài liệu này là cẩm nang cấu hình đầy đủ mọi thuộc tính (ph
   "logo_url": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=120",
   "hero_images": [
     "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=1400&q=80"
+    "/assets/nha_khoa_hero.png"
   ],
   "about_image": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600",
   "hero.badge": "HỆ THỐNG NHA KHOA QUỐC TẾ",
