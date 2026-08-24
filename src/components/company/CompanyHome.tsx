@@ -474,29 +474,29 @@ const pricingCombos = [
   {
     name: "Phương án A: Thử nghiệm miễn phí",
     tagline: "Khởi tạo nhanh chóng, trải nghiệm không rủi ro",
-    designCost: "Thiết kế: Giao Diện Mẫu (0đ)",
-    domainCost: "Tên miền: Đường dẫn con hệ thống (0đ)",
-    opCost: "Vận hành: Gói Basic (Miễn phí)",
+    designCost: "• Thiết kế: Giao Diện Mẫu (0đ)",
+    domainCost: "• Tên miền: Tên miền Phụ Hệ Thống (0đ)",
+    opCost: "• Vận hành: Gói Vận hành Basic (0đ)",
     year1Total: "0đ",
-    nextYearTotal: "0đ / năm",
+    nextYearTotal: "0đ",
     target: "Doanh nghiệp muốn chạy thử nghiệm, tự quản trị thô sơ."
   },
   {
     name: "Phương án B: Website giới thiệu cơ bản",
     tagline: "Khởi nghiệp tiết kiệm, đầy đủ tính năng kết nối",
-    designCost: "Thiết kế: Giao Diện Mẫu (0đ)",
-    domainCost: "Tên miền: Quốc tế (Ước tính 400.000đ / năm)",
-    opCost: "Vận hành: Gói Starter (250.000đ / tháng)",
+    designCost: "• Thiết kế: Giao Diện Mẫu (0đ)",
+    domainCost: "• Tên miền: Tên miền Quốc tế (Ước tính 400.000đ / năm)",
+    opCost: "• Vận hành: Gói Vận hành Starter (250.000đ / tháng = 3.000.000đ / năm)",
     year1Total: "3.400.000đ",
     nextYearTotal: "3.400.000đ / năm",
     target: "Shop nhỏ, cá nhân mới bắt đầu kinh doanh online."
   },
   {
     name: "Phương án C: Website Chuyên Nghiệp",
-    tagline: "Giải pháp tối ưu cho Spa, Phòng khám, Dịch vụ (Khuyên dùng)",
-    designCost: "Thiết kế: Gói Tiêu Chuẩn (Ví dụ tính: 5.000.000đ)",
-    domainCost: "Tên miền: Quốc gia (Ước tính 750.000đ / năm)",
-    opCost: "Vận hành: Gói Pro (550.000đ / tháng)",
+    tagline: "Giải pháp tối ưu cho Spa, Phòng khám, Dịch vụ",
+    designCost: "• Thiết kế: Gói Tiêu Chuẩn (5.000.000đ - đóng 1 lần)",
+    domainCost: "• Tên miền: Tên miền Quốc gia (Ước tính 750.000đ / năm)",
+    opCost: "• Vận hành: Gói Vận hành Pro (550.000đ / tháng = 6.600.000đ / năm)",
     year1Total: "12.350.000đ",
     nextYearTotal: "7.350.000đ / năm",
     target: "Doanh nghiệp cần giao diện cao cấp, đặt lịch AI & train Chatbot AI.",
@@ -505,9 +505,9 @@ const pricingCombos = [
   {
     name: "Phương án D: Giải pháp Tự động hóa toàn diện",
     tagline: "Super Enterprise - Đột phá quy trình bằng trí tuệ nhân tạo",
-    designCost: "Thiết kế: Gói Cao Cấp (Ví dụ tính: 10.000.000đ)",
-    domainCost: "Tên miền: Quốc gia (Ước tính 750.000đ / năm)",
-    opCost: "Vận hành: Gói Super (950.000đ / tháng)",
+    designCost: "• Thiết kế: Gói Cao Cấp (10.000.000đ - đóng 1 lần)",
+    domainCost: "• Tên miền: Tên miền Quốc gia (Ước tính 750.000đ / năm)",
+    opCost: "• Vận hành: Gói Vận hành Super (950.000đ / tháng = 11.400.000đ / năm)",
     year1Total: "22.150.000đ",
     nextYearTotal: "12.150.000đ / năm",
     target: "Doanh nghiệp cần tự động hóa CRM, CMS AI & trợ lý nhắc lịch VIP."
@@ -1404,16 +1404,16 @@ export function CompanyHome() {
                           let optionDesc = "";
                           if (selectedDesignIdx === 0 && selectedDomainIdx === 0 && selectedOpIdx === 0) {
                             recommendedOption = "Phương án A";
-                            optionDesc = "Thử nghiệm hoàn toàn miễn phí (Chi phí 0đ)";
+                            optionDesc = "Thử nghiệm miễn phí";
                           } else if (selectedDesignIdx === 0 && selectedDomainIdx === 1 && selectedOpIdx === 1) {
                             recommendedOption = "Phương án B";
-                            optionDesc = "Website giới thiệu cơ bản (Khởi nghiệp tiết kiệm)";
-                          } else if (selectedDesignIdx === 2 && selectedDomainIdx === 2 && selectedOpIdx === 2) {
+                            optionDesc = "Website giới thiệu cơ bản";
+                          } else if (selectedDesignIdx === 1 && selectedDomainIdx === 1 && selectedOpIdx === 2) {
                             recommendedOption = "Phương án C";
-                            optionDesc = "Website chuyên nghiệp cho Spa / Phòng khám (Khuyên dùng)";
-                          } else if (selectedDesignIdx === 4 && selectedDomainIdx === 2 && selectedOpIdx === 3) {
+                            optionDesc = "Website Chuyên Nghiệp";
+                          } else if (selectedDesignIdx === 2 && selectedDomainIdx === 1 && selectedOpIdx === 3) {
                             recommendedOption = "Phương án D";
-                            optionDesc = "Giải pháp tự động hóa toàn diện bằng AI (Super Enterprise)";
+                            optionDesc = "Giải pháp Tự động hóa toàn diện";
                           }
 
                           return (

@@ -35,9 +35,10 @@ Truoc khi sua code, doc theo thu tu:
 - Phan Dịch vụ dung bo cuc Tab tuong tac (Interactive Tabs) 2 cot toi gian.
 - Phan Quy trình dung bo cuc The rong xep chong 3D (Double-Bezel long nhau: `.process-step-card-outer` va `.process-step-card-inner`) dat duoi tieu de can giua. Danh sach dau viec bàn giao (deliverables) hien thi dang luoi 3 cot (3-column grid).
 - Phan Footer dung bo cuc da cot cao cap (Premium Multi-Column Footer) ho tro chia cot linh hoat va responsive.
-- Bang gia duy trì cac goi dich vu phai hien thi tren mot dong duy nhat voi ten "Bảng giá duy trì các gói dịch vụ".
-- Thiet ke 4 the bang gia dong bo theo he mau nhan dien cua Taviweb (Basic: Xam lanh, Starter: Xanh bang, Pro: Xanh dai duong voi gia highlight do, Super: Đen Navy/Midnight Blue voi vang nhat). An hoan toan cac feature khong co trong goi thay vi de dau gach/lam mo.
-- Phan domain cua goi Basic mo ta dung chung chung "Đường dẫn con trên tên miền hệ thống" de dam bao linh hoat ve sau.
+- Bang gia su dung he thong 3 Tab tuong tac voi thanh Tab Switcher hinh nhong bo tron kien Apple/Linear (`border-radius: 9999px`) bang nen kinh mo (`backdrop-filter: blur(20px)`), ho tro hover icon va co nhan gợi ý "GỢI Ý" capsule gradient do nhap nhay tren Tab 3.
+- Tab 1 (Bang gia cau phan le): Hien thi thanh cong thuc tinh tong o tren dau va 3 cot chi phi doc lap (Thiet ke, Ten mien, Van hanh) cho phep click de mo overlay modal chi tiet. Tat ca cac option khong mat phi (Giao dien mau, Duong dan con, goi Basic) hien thi duy nhat chu "Miễn phí" dam co mau do.
+- Tab 2 (Tu cau hinh & Tinh gia): Bo tinh toan tu dong thoi gian thuc ho tro cong don cac dải gia dong (Min-Max) cua goi Doanh nghiep va Ten mien rieng, va hien thi badge goi y combo khop voi Phuong an A, B, C, D o goc duoi phia phai.
+- Tab 3 (Cac phuong an tron goi): Danh sach 4 the combo (A, B, C, D) duoc thiet ke dong bo, hien thi thong tin cau phan va gia ban dau & duy tri verbtim tu PDF, su dung ten goi goc cua tung combo.
 - Bo doi nut lien he noi (Zalo & Hotline) o goc duoi phai phai co dang hinh tron 52px doi xung. Nut Hotline co animation song rung mờ nhe nhang (pulse glow) va tu dong truot mo rong chieu ngang (slide width) khi hover de hien thi so dien thoai.
 - Anh trong slider marquee (`DraggableMarquee`) dung anh tuong trung (Symbolic Stock Photos) va anh nguoi dung tu tai len trong `/public/template-previews/` voi `object-position: center`.
 

@@ -2876,56 +2876,115 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  background: #f1f5f9;
-  padding: 8px;
-  border-radius: 20px;
-  max-width: 760px;
-  margin: 0 auto 40px auto;
-  border: 1px solid var(--software-border);
+  gap: 6px;
+  background: rgba(241, 245, 249, 0.75);
+  backdrop-filter: blur(20px);
+  padding: 6px;
+  border-radius: 9999px;
+  max-width: 800px;
+  margin: 0 auto 48px auto;
+  border: 1px solid rgba(7, 59, 142, 0.06);
+  box-shadow: 
+    0 12px 32px rgba(7, 59, 142, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  position: relative;
 }
+
+@media (max-width: 768px) {
+  .company-software .pricing-tabs-wrap {
+    flex-direction: column;
+    border-radius: 24px;
+    padding: 8px;
+    gap: 8px;
+    max-width: 100%;
+  }
+}
+
 .company-software .pricing-tab-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 14px 24px;
+  gap: 10px;
+  padding: 14px 28px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 9999px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   background: transparent;
   color: var(--software-ink-muted);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
   position: relative;
+  letter-spacing: -0.01em;
 }
+
+@media (max-width: 768px) {
+  .company-software .pricing-tab-btn {
+    width: 100%;
+    border-radius: 16px;
+    padding: 12px 20px;
+  }
+}
+
 .company-software .pricing-tab-btn:hover {
   color: var(--software-blue);
   background: rgba(7, 59, 142, 0.04);
 }
+
+.company-software .pricing-tab-btn:hover .tab-icon {
+  transform: scale(1.15) translateY(-1px);
+}
+
 .company-software .pricing-tab-btn.is-active {
-  background: #ffffff;
-  color: var(--software-blue);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: var(--software-blue);
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 20px rgba(7, 59, 142, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
 }
+
+.company-software .pricing-tab-btn.is-active:hover {
+  background: var(--software-blue);
+}
+
+.company-software .pricing-tab-btn.is-active .tab-icon {
+  transform: scale(1.1);
+}
+
 .company-software .tab-icon {
-  font-size: 16px;
+  font-size: 18px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .company-software .tab-badge-text {
   position: absolute;
-  top: -6px;
-  right: 4px;
-  background: var(--software-red);
+  top: -8px;
+  right: 12px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: #ffffff;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 6px;
+  padding: 3px 8px;
+  border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 0 2px 6px rgba(226, 11, 18, 0.2);
+  letter-spacing: 0.08em;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+  animation: badge-pulse-scale 2s infinite ease-in-out;
+}
+
+@keyframes badge-pulse-scale {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5);
+  }
 }
 
 /* Animations */
