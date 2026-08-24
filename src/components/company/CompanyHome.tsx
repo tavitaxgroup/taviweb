@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { industryCatalog } from "@/lib/templates/templateCatalog";
-import { Check, CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap, Phone } from "lucide-react";
+import { Check, CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap, Phone, ChevronDown, ChevronUp, X } from "lucide-react";
 
 const phoneNumber = "0337367643";
 const displayPhone = "0337.367.643";
@@ -331,65 +331,197 @@ const processSteps = [
   }
 ];
 
+const designPackages = [
+  {
+    title: "Giao Diện Mẫu",
+    englishTitle: "Quick-Launch Template",
+    price: "0đ",
+    priceNum: 0,
+    desc: "Sử dụng kho giao diện mẫu sẵn có của hệ thống",
+    items: [
+      "Kho 15 mẫu giao diện chuẩn hóa",
+      "Thay thế thông tin liên hệ & bảng giá thô",
+      "Phù hợp triển khai nhanh, tối ưu chi phí"
+    ]
+  },
+  {
+    title: "Gói Tiêu Chuẩn",
+    englishTitle: "Standard Custom",
+    price: "3.000.000đ",
+    priceNum: 3000000,
+    desc: "Thiết kế riêng theo kho mẫu cao cấp (Khoảng 3tr - 5tr tùy trang con)",
+    items: [
+      "Giao diện tối ưu chuẩn SEO Google",
+      "Bố cục chuẩn UX/UI tăng tỷ lệ chuyển đổi",
+      "Hỗ trợ tặng tên miền riêng"
+    ]
+  },
+  {
+    title: "Gói Cao Cấp",
+    englishTitle: "Premium Custom",
+    price: "8.000.000đ",
+    priceNum: 8000000,
+    desc: "Thiết kế độc quyền & Trải nghiệm CX chuyên sâu (Khoảng 8tr - 10tr)",
+    items: [
+      "Thiết kế giao diện độc quyền cao cấp",
+      "Hiệu ứng chuyển động (motion) mượt mà",
+      "Tối ưu tốc độ tải trang cực hạn & CRO"
+    ]
+  },
+  {
+    title: "Gói Doanh Nghiệp",
+    englishTitle: "Enterprise Custom",
+    price: "15.000.000đ - 20.000.000đ",
+    priceNum: 15000000,
+    desc: "Thiết kế độc quyền & Lập trình tính năng theo yêu cầu riêng",
+    items: [
+      "Lập trình luồng nghiệp vụ phức tạp",
+      "Tích hợp API nội bộ / bên thứ ba",
+      "Đặc thù vận hành của từng doanh nghiệp"
+    ]
+  }
+];
+
+const domainOptions = [
+  {
+    title: "Đường dẫn con hệ thống",
+    desc: "ten-mien-he-thong.com/ten-doanh-nghiep",
+    price: "Miễn phí (0đ)",
+    priceNum: 0
+  },
+  {
+    title: "Tên miền Quốc tế riêng (Ví dụ)",
+    desc: ".com, .net, .org, .info...",
+    price: "400.000đ / năm",
+    priceNum: 400000
+  },
+  {
+    title: "Tên miền Quốc gia riêng (Ví dụ)",
+    desc: ".vn, .com.vn...",
+    price: "750.000đ / năm",
+    priceNum: 750000
+  },
+  {
+    title: "Tên miền riêng mức cao",
+    desc: "Khung cao thị trường hoặc tên miền đặc biệt",
+    price: "1.000.000đ / năm",
+    priceNum: 1000000
+  }
+];
+
 const pricing = [
   {
     title: "Basic",
     price: "Miễn phí",
-    desc: "Lựa chọn thử nghiệm ban đầu",
+    priceNum: 0,
+    desc: "Trải nghiệm ban đầu",
     items: [
-      "Đường dẫn con miễn phí (ten-mien-he-thong.com/ten-cua-ban)",
-      "Sử dụng kho giao diện mẫu sẵn có",
-      "Hỗ trợ thay đổi thông tin cơ bản",
-      "Lựa chọn hoàn hảo để trải nghiệm dịch vụ"
+      "Đường dẫn con miễn phí hệ thống",
+      "Sử dụng kho 15 mẫu giao diện chuẩn hóa",
+      "Quản trị thô sơ, CRM liên hệ cơ bản",
+      "Thử nghiệm dịch vụ hoàn toàn miễn phí"
     ],
     popular: false
   },
   {
     title: "Starter",
     price: "250k / tháng",
-    desc: "Website cơ bản & CRM nhỏ",
+    priceNum: 250000,
+    desc: "Tăng trưởng & Kết nối",
     items: [
-      "Hỗ trợ kết nối tên miền riêng của bạn",
-      "Thiết kế giao diện Website cơ bản, chuẩn SEO",
-      "Hệ quản trị khách hàng CRM (10 tài khoản)",
-      "Hệ thống đặt lịch hẹn trực tuyến (Booking)",
-      "Bảng điều khiển báo cáo (Dashboard) cơ bản",
-      "Chatbot AI trả lời tự động (500 hội thoại/tháng)"
+      "Kết nối tên miền riêng",
+      "CRM quản lý khách hàng: Tối đa 10 tài khoản",
+      "CMS cập nhật bài viết: Không hỗ trợ",
+      "Hệ thống đặt lịch Booking: Có hỗ trợ",
+      "Dashboard báo cáo: Báo cáo cơ bản",
+      "Chatbot AI: 500 cuộc / tháng (Kịch bản chuẩn)"
     ],
     popular: false
   },
   {
     title: "Pro",
     price: "550k / tháng",
-    desc: "Giải pháp toàn diện & AI Booking",
+    priceNum: 550000,
+    desc: "Chuyên nghiệp & RAG AI",
     items: [
-      "Hỗ trợ kết nối tên miền riêng của bạn",
-      "Thiết kế giao diện Website nâng cao, tối ưu UX",
-      "Hệ quản trị khách hàng CRM (100 tài khoản)",
-      "CMS quản lý bài viết doanh nghiệp",
-      "AI đặt lịch hẹn thông minh (AI Booking)",
-      "Bảng điều khiển báo cáo (Dashboard) nâng cao",
-      "Chatbot AI trả lời tự động (2.000 hội thoại/tháng)",
-      "Huấn luyện AI chuyên sâu theo tài liệu DN"
+      "Kết nối tên miền riêng",
+      "CRM quản lý khách hàng: Tối đa 100 tài khoản",
+      "CMS cập nhật bài viết: Đăng bài thủ công",
+      "AI Booking: Tự xếp lịch, tránh quá tải",
+      "Dashboard báo cáo: Doanh số, leads, hiệu suất AI",
+      "Chatbot AI: 2.000 cuộc / tháng (Train theo tài liệu DN)"
     ],
     popular: true
   },
   {
     title: "Super",
     price: "950k / tháng",
-    desc: "Tự động hóa tối đa & CMS AI",
+    priceNum: 950000,
+    desc: "Tự động hóa toàn diện",
     items: [
-      "Hỗ trợ kết nối tên miền riêng của bạn",
-      "Thiết kế giao diện Website nâng cao chuyên sâu",
-      "CRM tự động hóa quy trình (1.000+ tài khoản)",
-      "AI tự động biên soạn nội dung & đăng bài (CMS AI)",
-      "AI Booking & Nhắc lịch hẹn tin nhắn tự động",
-      "Dashboard tùy biến linh hoạt theo yêu cầu",
-      "Chatbot AI trả lời tự động (5.000 hội thoại/tháng)",
-      "Huấn luyện AI chuyên sâu theo tài liệu DN"
+      "Kết nối tên miền riêng",
+      "CRM quản lý khách hàng: 1.000+ tài khoản & Tự động hóa",
+      "CMS AI: AI viết & đăng bài chuẩn SEO",
+      "AI Booking + Tự động gửi SMS nhắc lịch trước 2h",
+      "Dashboard báo cáo: Tùy biến linh hoạt theo yêu cầu",
+      "Chatbot AI: 5.000 cuộc / tháng (Train theo DB lớn)"
     ],
     popular: false
   }
+];
+
+const pricingCombos = [
+  {
+    name: "Phương án A: Thử nghiệm miễn phí",
+    tagline: "Khởi tạo nhanh chóng, trải nghiệm không rủi ro",
+    designCost: "Thiết kế: Giao Diện Mẫu (0đ)",
+    domainCost: "Tên miền: Đường dẫn con hệ thống (0đ)",
+    opCost: "Vận hành: Gói Basic (Miễn phí)",
+    year1Total: "0đ",
+    nextYearTotal: "0đ / năm",
+    target: "Doanh nghiệp muốn chạy thử nghiệm, tự quản trị thô sơ."
+  },
+  {
+    name: "Phương án B: Website giới thiệu cơ bản",
+    tagline: "Khởi nghiệp tiết kiệm, đầy đủ tính năng kết nối",
+    designCost: "Thiết kế: Giao Diện Mẫu (0đ)",
+    domainCost: "Tên miền: Quốc tế (Ước tính 400.000đ / năm)",
+    opCost: "Vận hành: Gói Starter (250.000đ / tháng)",
+    year1Total: "3.400.000đ",
+    nextYearTotal: "3.400.000đ / năm",
+    target: "Shop nhỏ, cá nhân mới bắt đầu kinh doanh online."
+  },
+  {
+    name: "Phương án C: Website Chuyên Nghiệp",
+    tagline: "Giải pháp tối ưu cho Spa, Phòng khám, Dịch vụ (Khuyên dùng)",
+    designCost: "Thiết kế: Gói Tiêu Chuẩn (Ví dụ tính: 5.000.000đ)",
+    domainCost: "Tên miền: Quốc gia (Ước tính 750.000đ / năm)",
+    opCost: "Vận hành: Gói Pro (550.000đ / tháng)",
+    year1Total: "12.350.000đ",
+    nextYearTotal: "7.350.000đ / năm",
+    target: "Doanh nghiệp cần giao diện cao cấp, đặt lịch AI & train Chatbot AI.",
+    popular: true
+  },
+  {
+    name: "Phương án D: Giải pháp Tự động hóa toàn diện",
+    tagline: "Super Enterprise - Đột phá quy trình bằng trí tuệ nhân tạo",
+    designCost: "Thiết kế: Gói Cao Cấp (Ví dụ tính: 10.000.000đ)",
+    domainCost: "Tên miền: Quốc gia (Ước tính 750.000đ / năm)",
+    opCost: "Vận hành: Gói Super (950.000đ / tháng)",
+    year1Total: "22.150.000đ",
+    nextYearTotal: "12.150.000đ / năm",
+    target: "Doanh nghiệp cần tự động hóa CRM, CMS AI & trợ lý nhắc lịch VIP."
+  }
+];const calcDesignOptions = [
+  { title: "Giao Diện Mẫu (Quick-Launch Template)", price: "0đ", valMin: 0, valMax: 0 },
+  { title: "Gói Tiêu Chuẩn (Standard Custom)", price: "3.000.000đ", valMin: 3000000, valMax: 3000000 },
+  { title: "Gói Cao Cấp (Premium Custom)", price: "8.000.000đ", valMin: 8000000, valMax: 8000000 },
+  { title: "Gói Doanh Nghiệp (Enterprise Custom)", price: "15.000.000đ - 20.000.000đ", valMin: 15000000, valMax: 20000000 }
+];
+
+const calcDomainOptions = [
+  { title: "Đường dẫn con trên tên miền chung của hệ thống", price: "Miễn phí (0đ)", valMin: 0, valMax: 0 },
+  { title: "Tên miền riêng mang thương hiệu cá nhân", price: "500.000đ - 1.000.000đ / năm", valMin: 500000, valMax: 1000000 }
 ];
 
 export function CompanyHome() {
@@ -399,6 +531,19 @@ export function CompanyHome() {
   const [isConsultSubmitting, setIsConsultSubmitting] = useState(false);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [activeServiceId, setActiveServiceId] = useState("01");
+
+  // States for Pricing Calculator
+  const [selectedDesignIdx, setSelectedDesignIdx] = useState(0);
+  const [selectedDomainIdx, setSelectedDomainIdx] = useState(0);
+  const [selectedOpIdx, setSelectedOpIdx] = useState(0);
+  const [isYearlyCycle, setIsYearlyCycle] = useState(true);
+  const [pricingViewMode, setPricingViewMode] = useState<"raw" | "custom" | "combos">("raw");
+
+  // Active pricing details modal view state
+  const [activeModal, setActiveModal] = useState<"design" | "domain" | "operation" | null>(null);
+
+  // Controlled input for contact form's service field
+  const [clientService, setClientService] = useState("");
 
   async function submitConsult(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -803,173 +948,622 @@ export function CompanyHome() {
         <section className="section pricing-section" id="pricing" aria-labelledby="pricing-title">
           <div className="section-heading narrow">
             <p className="eyebrow">Bảng giá</p>
-            <h2 id="pricing-title">Gói thiết kế linh hoạt</h2>
-            <p>Chi phí được chốt sau khi TAVIWEB nắm rõ phạm vi, nội dung và tính năng.</p>
+            <h2 id="pricing-title">Cơ cấu chi phí linh hoạt & chuyên nghiệp</h2>
+            <p>Bảng giá được tổ chức thông minh giúp bạn dễ dàng chọn cấu phần lẻ, tự tính giá hoặc chọn các phương án combo trọn gói.</p>
           </div>
 
-          <div className="pricing-structure-section">
-            <div className="section-heading center">
-              <h3 style={{ marginTop: "32px" }}>Chi phí sở hữu Website</h3>
-            </div>
-
-            <div className="pricing-structure-grid">
-              <div className="cost-card-outer">
-                <div className="cost-card-inner">
-                  <span className="cost-tag tag-red">Chi trả 1 lần</span>
-                  <h4>Thiết kế & Khởi tạo</h4>
-                  <p className="cost-value">0đ <span className="cost-value-divider">—</span> 5-20tr</p>
-                  <ul className="cost-details">
-                    <li><strong>Giao diện mẫu (Template):</strong> Miễn phí hoàn toàn phí thiết lập & khởi tạo ban đầu.</li>
-                    <li><strong>May đo theo yêu cầu:</strong> Từ 5.000.000đ cho giao diện thiết kế mỹ thuật độc quyền, chuẩn SEO, tối ưu UX, lập trình tính năng riêng biệt.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="cost-card-outer">
-                <div className="cost-card-inner">
-                  <span className="cost-tag tag-blue">Hàng tháng</span>
-                  <h4>Duy trì & Vận hành</h4>
-                  <p className="cost-value">0đ <span className="cost-value-divider">—</span> 950k <span className="cost-period">/ tháng</span></p>
-                  <ul className="cost-details">
-                    <li><strong>Hạ tầng lưu trữ (Hosting):</strong> Đã bao gồm Hosting SSD tốc độ cao, chứng chỉ bảo mật SSL, băng thông rộng không giới hạn.</li>
-                    <li><strong>Hệ quản trị & Công nghệ AI:</strong> Bảng quản trị khách hàng CRM, CMS đăng bài, trợ lý đặt lịch hẹn AI và Chatbot tự động phản hồi.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="cost-card-outer">
-                <div className="cost-card-inner">
-                  <span className="cost-tag tag-green">Hàng năm</span>
-                  <h4>Tên miền / Domain</h4>
-                  <p className="cost-value">0đ <span className="cost-value-divider">—</span> 1.000k <span className="cost-period">/ năm</span></p>
-                  <ul className="cost-details">
-                    <li><strong>Đường dẫn con hệ thống:</strong> Tặng kèm đường dẫn con miễn phí trọn đời (dạng <code>ten-mien-he-thong.com/ten-doanh-nghiep</code>).</li>
-                    <li><strong>Tên miền riêng:</strong> Hỗ trợ đăng ký và cấu hình tự động tên miền thương mại (.com, .net, .vn...) từ 400.000đ / năm.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+          {/* TABS SWITCHER */}
+          <div className="pricing-tabs-wrap">
+            <button
+              type="button"
+              className={`pricing-tab-btn ${pricingViewMode === "raw" ? "is-active" : ""}`}
+              onClick={() => setPricingViewMode("raw")}
+            >
+              <span className="tab-icon">🔍</span>
+              <span className="tab-label">1. Bảng giá cấu phần lẻ</span>
+            </button>
+            <button
+              type="button"
+              className={`pricing-tab-btn ${pricingViewMode === "custom" ? "is-active" : ""}`}
+              onClick={() => setPricingViewMode("custom")}
+            >
+              <span className="tab-icon">🎛</span>
+              <span className="tab-label">2. Tự cấu hình & Tính giá</span>
+            </button>
+            <button
+              type="button"
+              className={`pricing-tab-btn ${pricingViewMode === "combos" ? "is-active" : ""}`}
+              onClick={() => setPricingViewMode("combos")}
+            >
+              <span className="tab-icon">💼</span>
+              <span className="tab-label">3. Các phương án trọn gói</span>
+              <span className="tab-badge-text">Gợi ý</span>
+            </button>
           </div>
 
-          <div className="section-heading center" style={{ marginTop: "64px" }}>
-            <h3>Bảng giá duy trì các gói dịch vụ</h3>
-          </div>
+          {/* DYNAMIC CONTENT RENDERING BASED ON TABS */}
+          <div className="pricing-tab-content-wrap">
+            {pricingViewMode === "raw" && (
+              <div className="pricing-tab-pane animate-fade-in">
+                <div className="subsection-heading">
+                  <span className="step-badge">I</span>
+                  <h3>Bảng giá cấu phần chi tiết</h3>
+                  <p>Bấm chọn từng cột chi phí dưới đây để xem thông tin chi tiết và tính năng đi kèm.</p>
+                </div>
 
-          <div className="pricing-grid">
-            {pricing.map((plan) => (
-              <div className={`price-card-outer price-card-${plan.title.toLowerCase()}`} key={plan.title}>
-                <article className="price-card-inner">
-                  <div className="price-card-header">
-                    <span className="price-card-title">{plan.title}</span>
-                    <h4 className="price-card-desc">{plan.desc}</h4>
-                    <p className="price">
-                      {plan.price === "Miễn phí" ? (
-                        <span className="price-number">Miễn phí</span>
-                      ) : (
-                        <>
-                          <span className="price-number">{plan.price.split(" / ")[0]}</span>
-                          <span className="price-period">/ tháng</span>
-                        </>
-                      )}
-                    </p>
+                <div className="formula-banner">
+                  <div className="formula-box">
+                    <span className="formula-part">Thiết kế & Khởi tạo (1 lần)</span>
+                    <span className="formula-sign">+</span>
+                    <span className="formula-part">Tên miền (Hàng năm)</span>
+                    <span className="formula-sign">+</span>
+                    <span className="formula-part">Vận hành (Tháng / Năm)</span>
+                    <span className="formula-sign">=</span>
+                    <span className="formula-result">Tổng chi phí Website</span>
                   </div>
-                  <ul>
-                    {plan.items.map((item) => (
-                      <li key={item}>
-                        <Check size={16} className="price-check-icon" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              </div>
-            ))}
-          </div>
+                </div>
 
-          <details className="pricing-comparison">
-            <summary className="pricing-comparison-summary">
-              <span>Xem bảng so sánh chi tiết tính năng</span>
-              <span className="pricing-comparison-arrow">▼</span>
-            </summary>
-            <div className="pricing-comparison-table-wrap">
-              <table className="pricing-comparison-table">
-                <thead>
-                  <tr>
-                    <th>Tính năng / Dịch vụ</th>
-                    <th>Basic</th>
-                    <th>Starter</th>
-                    <th className="highlight-col">Pro (Khuyên dùng)</th>
-                    <th>Super</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Giá gói vận hành</strong></td>
-                    <td className="price-val">Miễn phí</td>
-                    <td className="price-val">250k / tháng</td>
-                    <td className="price-val highlight-col">550k / tháng</td>
-                    <td className="price-val">950k / tháng</td>
-                  </tr>
-                  <tr>
-                    <td>Tên miền (Domain)</td>
-                    <td>Đường dẫn con trên tên miền hệ thống</td>
-                    <td>Tên miền riêng của khách</td>
-                    <td className="highlight-col">Tên miền riêng của khách</td>
-                    <td>Tên miền riêng của khách</td>
-                  </tr>
-                  <tr>
-                    <td>Thiết kế Web</td>
-                    <td>Giao diện Template (có cập nhật tên, địa chỉ, sđt)</td>
-                    <td>Web thiết kế cơ bản</td>
-                    <td className="highlight-col">Web thiết kế nâng cao</td>
-                    <td>Web thiết kế nâng cao</td>
-                  </tr>
-                  <tr>
-                    <td>CRM (Số tài khoản)</td>
-                    <td>—</td>
-                    <td>Tối đa 10 tài khoản</td>
-                    <td className="highlight-col">Tối đa 100 tài khoản</td>
-                    <td>1000 + automation</td>
-                  </tr>
-                  <tr>
-                    <td>CMS quản lý nội dung</td>
-                    <td>—</td>
-                    <td>—</td>
-                    <td className="highlight-col">Đăng bài thủ công</td>
-                    <td>AI tự tạo tin tức đăng bài</td>
-                  </tr>
-                  <tr>
-                    <td>Hệ thống Booking</td>
-                    <td>—</td>
-                    <td>Có hỗ trợ</td>
-                    <td className="highlight-col">Tính năng AI</td>
-                    <td>Tính năng AI + nhắc lịch</td>
-                  </tr>
-                  <tr>
-                    <td>Dashboard</td>
-                    <td>—</td>
-                    <td>Cơ bản</td>
-                    <td className="highlight-col">Nâng cao</td>
-                    <td>Nâng cao + chỉnh sửa được</td>
-                  </tr>
-                  <tr>
-                    <td>Chatbot AI (Số hội thoại)</td>
-                    <td>—</td>
-                    <td>500 hội thoại / tháng</td>
-                    <td className="highlight-col">2000 hội thoại / tháng</td>
-                    <td>5000 hội thoại / tháng</td>
-                  </tr>
-                  <tr>
-                    <td>Huấn luyện kịch bản Chatbot</td>
-                    <td>—</td>
-                    <td>—</td>
-                    <td className="highlight-col">Train theo tài liệu, kịch bản DN</td>
-                    <td>Train theo tài liệu, kịch bản DN</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </details>
+                <div className="pricing-raw-grid">
+                  {/* Cột 1: Thiết kế */}
+                  <div
+                    className="raw-cost-col clickable-col"
+                    onClick={() => setActiveModal("design")}
+                  >
+                    <div className="raw-cost-header header-red">
+                      <h4>CHI PHÍ THIẾT KẾ & KHỞI TẠO</h4>
+                      <span className="raw-badge">Chi trả 1 lần</span>
+                    </div>
+                    <div className="raw-cost-body">
+                      <div className="raw-item">
+                        <span className="item-name">Giao Diện Mẫu (Template)</span>
+                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Tiêu Chuẩn (Custom)</span>
+                        <span className="item-price">3.000.000đ</span>
+                        <small>Dao động 3tr - 5tr tùy số trang con</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Cao Cấp (Premium)</span>
+                        <span className="item-price">8.000.000đ</span>
+                        <small>Dao động 8tr - 10tr tùy mức độ hiệu ứng</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Doanh Nghiệp (Enterprise)</span>
+                        <span className="item-price">15.000.000đ - 20.000.000đ</span>
+                        <small>Lập trình chức năng đặc thù riêng biệt</small>
+                      </div>
+                    </div>
+                    <div className="col-click-indicator">
+                      Xem chi tiết cấu phần ➔
+                    </div>
+                  </div>
+
+                  {/* Cột 2: Tên miền */}
+                  <div
+                    className="raw-cost-col clickable-col"
+                    onClick={() => setActiveModal("domain")}
+                  >
+                    <div className="raw-cost-header header-green">
+                      <h4>CHI PHÍ TÊN MIỀN / DOMAIN</h4>
+                      <span className="raw-badge">Duy trì hàng năm</span>
+                    </div>
+                    <div className="raw-cost-body">
+                      <div className="raw-item">
+                        <span className="item-name">Đường dẫn con hệ thống</span>
+                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Tên miền riêng thị trường</span>
+                        <span className="item-price">500.000đ - 1.000.000đ / năm</span>
+                        <small>Ví dụ: .com, .net, .vn, .com.vn...</small>
+                      </div>
+                    </div>
+                    <div className="col-click-indicator">
+                      Xem chi tiết cấu phần ➔
+                    </div>
+                  </div>
+
+                  {/* Cột 3: Vận hành */}
+                  <div
+                    className="raw-cost-col clickable-col"
+                    onClick={() => setActiveModal("operation")}
+                  >
+                    <div className="raw-cost-header header-blue">
+                      <h4>CHI PHÍ DUY TRÌ & VẬN HÀNH HỆ THỐNG</h4>
+                      <span className="raw-badge">Hàng tháng / Đóng theo năm</span>
+                    </div>
+                    <div className="raw-cost-body">
+                      <div className="raw-item">
+                        <span className="item-name">Gói Basic (Trải nghiệm)</span>
+                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
+                        <small>CRM cơ bản, không AI Chatbot</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Starter (Tăng trưởng)</span>
+                        <span className="item-price">250.000đ / tháng</span>
+                        <small>Tên miền riêng, Booking, 500 cuộc AI</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Pro (Khuyên dùng)</span>
+                        <span className="item-price">550.000đ / tháng</span>
+                        <small>AI Booking, train AI theo tài liệu riêng</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Super (Tự động hóa)</span>
+                        <span className="item-price">950.000đ / tháng</span>
+                        <small>CMS AI tự động viết bài, SMS nhắc hẹn</small>
+                      </div>
+                    </div>
+                    <div className="col-click-indicator">
+                      Xem chi tiết cấu phần ➔
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* MODAL CHI TIẾT CHI PHÍ */}
+            {activeModal && (
+              <div className="pricing-modal-overlay animate-fade-in" onClick={() => setActiveModal(null)}>
+                <div className="pricing-modal-container animate-slide-up" onClick={(e) => e.stopPropagation()}>
+                  <button className="pricing-modal-close" onClick={() => setActiveModal(null)} aria-label="Đóng">
+                    <X size={20} />
+                  </button>
+
+                  {activeModal === "design" && (
+                    <div className="pricing-modal-content">
+                      <div className="panel-inner-heading">
+                        <span className="panel-tag tag-red">Chi tiết cấu phần</span>
+                        <h3>1. CHI PHÍ THIẾT KẾ & KHỞI TẠO (Chi trả 1 lần duy nhất)</h3>
+                        <p className="modal-lead-text">Đây là chi phí xây dựng bộ khung website, thiết lập cơ sở dữ liệu và bàn giao hệ thống quản trị. Quý khách chỉ thanh toán một lần duy nhất và chưa bao gồm phí tên miền.</p>
+                      </div>
+                      
+                      <div className="pricing-comparison-table-wrap" style={{ display: "block", marginTop: "20px" }}>
+                        <table className="pricing-comparison-table design-modal-table">
+                          <thead>
+                            <tr>
+                              <th style={{ width: "25%" }}>Gói Thiết Kế</th>
+                              <th style={{ width: "20%" }}>Đơn giá (VND)</th>
+                              <th>Mô Tả Nghiệp Vụ Chi Tiết</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td className="design-pkg-cell">
+                                <strong>Giao Diện Mẫu</strong>
+                                <span className="sub-eng">(Quick-Launch Template)</span>
+                              </td>
+                              <td className="price-val">0đ</td>
+                              <td>
+                                Sử dụng kho giao diện mẫu sẵn có của hệ thống. Taviweb hỗ trợ thay thế thông tin cơ bản ban đầu ( thông tin liên hệ, bảng giá dịch vụ thô).
+                                <br />
+                                <span className="target-text">Phù hợp cho doanh nghiệp muốn triển khai nhanh, tối ưu chi phí.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="design-pkg-cell">
+                                <strong>Gói Tiêu Chuẩn</strong>
+                                <span className="sub-eng">(Standard Custom)</span>
+                              </td>
+                              <td className="price-val">3.000.000đ</td>
+                              <td>
+                                Thiết kế giao diện riêng của doanh nghiệp theo kho giao diện mẫu cao cấp. Tối ưu hóa cấu trúc chuẩn SEO Google, bố cục chuẩn UX/UI giúp tăng tỷ lệ tương tác.
+                                <br />
+                                <span className="target-text">Phù hợp cho các cơ sở kinh doanh, phòng khám dịch vụ tầm trung. Tặng tên miền theo thương hiệu khách hàng.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="design-pkg-cell">
+                                <strong>Gói Cao Cấp</strong>
+                                <span className="sub-eng">(Premium Custom)</span>
+                              </td>
+                              <td className="price-val">8.000.000đ</td>
+                              <td>
+                                Thiết kế giao diện độc quyền, xây dựng trải nghiệm khách hàng (CX) chuyên sâu. Tích hợp các hiệu ứng chuyển động mượt mà, tối ưu hóa tốc độ tải trang cực hạn và nâng cấp tỷ lệ chuyển đổi khách hàng (CRO).
+                                <br />
+                                <span className="target-text">Phù hợp xây dựng thương hiệu uy tín, Tặng tên miền theo thương hiệu khách hàng.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="design-pkg-cell">
+                                <strong>Gói Doanh Nghiệp</strong>
+                                <span className="sub-eng">(Enterprise Custom)</span>
+                              </td>
+                              <td className="price-val">15.000.000đ - 20.000.000đ</td>
+                              <td>
+                                Thiết kế độc quyền cao cấp, phân tích và lập trình các tính năng riêng biệt. Xây dựng luồng nghiệp vụ phức tạp, tích hợp API nội bộ hoặc hệ thống bên thứ ba theo đặc thù vận hành của doanh nghiệp.
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeModal === "domain" && (
+                    <div className="pricing-modal-content">
+                      <div className="panel-inner-heading">
+                        <span className="panel-tag tag-green">Chi tiết cấu phần</span>
+                        <h3>2. CHI PHÍ TÊN MIỀN / DOMAIN (Duy trì hàng năm)</h3>
+                        <p className="modal-lead-text">Chi phí tên miền khi thiết kế website tại Taviweb dao động từ 0 đồng đến 1 triệu đồng một năm tuỳ vào tên miền mà khách chọn.</p>
+                      </div>
+                      
+                      <div className="domain-modal-list">
+                        <div className="domain-modal-item">
+                          <div className="domain-bullet-icon green-bullet"></div>
+                          <p className="domain-bullet-desc">
+                            Với tên miền thuộc <strong>đường dẫn con trên tên miền chung của hệ thống</strong>, khách hàng sẽ được <strong>miễn phí giá tên miền với giá 0đ</strong>.
+                          </p>
+                        </div>
+                        <div className="domain-modal-item">
+                          <div className="domain-bullet-icon blue-bullet"></div>
+                          <p className="domain-bullet-desc">
+                            Với các <strong>tên miền riêng mang thương hiệu cá nhân</strong> giá tên miền sẽ dao động theo giá thị trường mà khách chọn khoảng từ <strong>500.000 đồng đến 1.000.000 đồng</strong>.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeModal === "operation" && (
+                    <div className="pricing-modal-content">
+                      <div className="panel-inner-heading">
+                        <span className="panel-tag tag-blue">Chi tiết cấu phần</span>
+                        <h3>3. CHI PHÍ DUY TRÌ & VẬN HÀNH HỆ THỐNG (Hàng tháng / Đóng theo năm)</h3>
+                        <p className="modal-lead-text">Chi phí này chi trả cho nâng cấp hệ quản trị CRM, hệ thống đặt lịch tự động và hạn mức hội thoại của trợ lý ảo AI Chatbot.</p>
+                      </div>
+
+                      <div className="pricing-comparison-table-wrap" style={{ display: "block", marginTop: "20px" }}>
+                        <table className="pricing-comparison-table">
+                          <thead>
+                            <tr>
+                              <th>Hạng Mục Vận Hành</th>
+                              <th>Basic<br /><span className="sub-eng">(Trải Nghiệm)</span></th>
+                              <th>Starter<br /><span className="sub-eng">(Tăng Trưởng)</span></th>
+                              <th className="highlight-col">Pro</th>
+                              <th>Super<br /><span className="sub-eng">(Tự Động Hóa)</span></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td><strong>Giá vận hành</strong></td>
+                              <td className="price-val">Miễn phí</td>
+                              <td className="price-val">250k / tháng</td>
+                              <td className="price-val highlight-col">550k / tháng</td>
+                              <td className="price-val">950k / tháng</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Tên miền(Domain)</strong></td>
+                              <td>Đường dẫn con trên hệ thống</td>
+                              <td>Hỗ trợ kết nối</td>
+                              <td className="highlight-col">Hỗ trợ kết nối</td>
+                              <td>Hỗ trợ kết nối</td>
+                            </tr>
+                            <tr>
+                              <td><strong>CRM quản lý khách hàng</strong></td>
+                              <td>—</td>
+                              <td>Tối đa 10 tài khoản quản lý</td>
+                              <td className="highlight-col">Tối đa 100 tài khoản quản lý</td>
+                              <td>1.000+ tài khoản & Tự động hóa (CRM Automation)</td>
+                            </tr>
+                            <tr>
+                              <td><strong>CMS cập nhật bài viết</strong></td>
+                              <td>—</td>
+                              <td>—</td>
+                              <td className="highlight-col">Đăng bài thủ công</td>
+                              <td>CMS AI: Trí tuệ nhân tạo tự động viết & đăng bài chuẩn SEO</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Hệ thống đặt lịch Booking</strong></td>
+                              <td>—</td>
+                              <td>Có hỗ trợ</td>
+                              <td className="highlight-col">AI Booking: AI xếp lịch, tự động gợi ý điều phối tránh quá tải</td>
+                              <td>AI Booking + nhắc lịch hẹn tự động trước 2 tiếng cho khách</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Dashboard báo cáo</strong></td>
+                              <td>—</td>
+                              <td>Báo cáo cơ bản</td>
+                              <td className="highlight-col">Báo cáo nâng cao (doanh số, leads, hiệu suất AI)</td>
+                              <td>Dashboard tùy biến linh hoạt theo yêu cầu DN</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Chatbot AI (Hội thoại/tháng)</strong></td>
+                              <td>—</td>
+                              <td>500 cuộc / tháng</td>
+                              <td className="highlight-col">2.000 cuộc / tháng</td>
+                              <td>5.000 cuộc / tháng</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Huấn luyện trí tuệ nhân tạo</strong></td>
+                              <td>—</td>
+                              <td>Kịch bản chuẩn AI trả lời khách hàng, không theo tài liệu/kịch bản DN</td>
+                              <td className="highlight-col">Train trợ lý ảo AI theo tài liệu, kịch bản DN</td>
+                              <td>Train trợ lý ảo AI cao cấp theo cơ sở dữ liệu lớn của DN</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {pricingViewMode === "custom" && (
+              <div className="pricing-tab-pane animate-fade-in">
+                <div className="subsection-heading">
+                  <span className="step-badge">II</span>
+                  <h3>Bộ tính toán chi phí Website tự chọn</h3>
+                  <p>Tự thiết lập các cấu phần để xem tổng tiền động và các gợi ý tối ưu.</p>
+                </div>
+
+                <div className="pricing-calculator-wrap">
+                  <div className="calculator-body">
+                    <div className="calculator-options">
+                      {/* Chọn Thiết Kế */}
+                      <div className="calc-group">
+                        <h4>1. Chọn Gói Thiết Kế & Khởi tạo (1 lần)</h4>
+                        <div className="calc-buttons-grid">
+                          {calcDesignOptions.map((pkg, idx) => (
+                            <button
+                              key={pkg.title}
+                              type="button"
+                              className={`calc-opt-btn ${selectedDesignIdx === idx ? "is-selected" : ""}`}
+                              onClick={() => setSelectedDesignIdx(idx)}
+                            >
+                              <span className="calc-opt-title">{pkg.title}</span>
+                              <span className="calc-opt-price">{pkg.price}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Chọn Tên Miền */}
+                      <div className="calc-group">
+                        <h4>2. Chọn Tên Miền / Domain (Hàng năm)</h4>
+                        <div className="calc-buttons-grid">
+                          {calcDomainOptions.map((opt, idx) => (
+                            <button
+                              key={opt.title}
+                              type="button"
+                              className={`calc-opt-btn ${selectedDomainIdx === idx ? "is-selected" : ""}`}
+                              onClick={() => setSelectedDomainIdx(idx)}
+                            >
+                              <span className="calc-opt-title">{opt.title}</span>
+                              <span className="calc-opt-price">{opt.price}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Chọn Gói Vận Hành */}
+                      <div className="calc-group">
+                        <h4>3. Chọn Gói Duy trì & Vận hành (Hàng tháng)</h4>
+                        <div className="calc-buttons-grid">
+                          {pricing.map((plan, idx) => (
+                            <button
+                              key={plan.title}
+                              type="button"
+                              className={`calc-opt-btn ${selectedOpIdx === idx ? "is-selected" : ""}`}
+                              onClick={() => setSelectedOpIdx(idx)}
+                            >
+                              <span className="calc-opt-title">{plan.title}</span>
+                              <span className="calc-opt-price">{plan.price}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Chọn Chu Kỳ Vận Hành */}
+                      <div className="calc-group">
+                        <h4>4. Chu kỳ thanh toán vận hành</h4>
+                        <div className="calc-toggle-wrap">
+                          <button
+                            type="button"
+                            className={`calc-toggle-btn ${isYearlyCycle ? "is-active" : ""}`}
+                            onClick={() => setIsYearlyCycle(true)}
+                          >
+                            Đóng theo năm (Khuyên dùng - Tiết kiệm thời gian)
+                          </button>
+                          <button
+                            type="button"
+                            className={`calc-toggle-btn ${!isYearlyCycle ? "is-active" : ""}`}
+                            onClick={() => setIsYearlyCycle(false)}
+                          >
+                            Đóng hàng tháng
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Calculator Summary */}
+                    <div className="calculator-summary">
+                      <div className="summary-card">
+                        <h4>Ngân sách Dự kiến của bạn</h4>
+                        
+                        {(() => {
+                          const designObj = calcDesignOptions[selectedDesignIdx] || calcDesignOptions[0];
+                          const domainObj = calcDomainOptions[selectedDomainIdx] || calcDomainOptions[0];
+                          const opObj = pricing[selectedOpIdx] || pricing[0];
+                          
+                          const designMin = designObj.valMin;
+                          const designMax = designObj.valMax;
+                          const domainMin = domainObj.valMin;
+                          const domainMax = domainObj.valMax;
+                          const opRate = opObj.priceNum;
+                          
+                          const year1Min = designMin + domainMin + (opRate * 12);
+                          const year1Max = designMax + domainMax + (opRate * 12);
+                          
+                          const recurringMin = domainMin + (opRate * 12);
+                          const recurringMax = domainMax + (opRate * 12);
+                          
+                          let recommendedOption = "";
+                          let optionDesc = "";
+                          if (selectedDesignIdx === 0 && selectedDomainIdx === 0 && selectedOpIdx === 0) {
+                            recommendedOption = "Phương án A";
+                            optionDesc = "Thử nghiệm hoàn toàn miễn phí (Chi phí 0đ)";
+                          } else if (selectedDesignIdx === 0 && selectedDomainIdx === 1 && selectedOpIdx === 1) {
+                            recommendedOption = "Phương án B";
+                            optionDesc = "Website giới thiệu cơ bản (Khởi nghiệp tiết kiệm)";
+                          } else if (selectedDesignIdx === 2 && selectedDomainIdx === 2 && selectedOpIdx === 2) {
+                            recommendedOption = "Phương án C";
+                            optionDesc = "Website chuyên nghiệp cho Spa / Phòng khám (Khuyên dùng)";
+                          } else if (selectedDesignIdx === 4 && selectedDomainIdx === 2 && selectedOpIdx === 3) {
+                            recommendedOption = "Phương án D";
+                            optionDesc = "Giải pháp tự động hóa toàn diện bằng AI (Super Enterprise)";
+                          }
+
+                          return (
+                            <>
+                              <div className="summary-details">
+                                <div className="summary-line">
+                                  <span>Thiết kế & Khởi tạo:</span>
+                                  <strong>{designObj.price}</strong>
+                                </div>
+                                <div className="summary-line">
+                                  <span>Chi phí Tên miền:</span>
+                                  <strong>{domainObj.price}</strong>
+                                </div>
+                                <div className="summary-line">
+                                  <span>Phí Vận hành ({isYearlyCycle ? "Hàng năm" : "Hàng tháng"}):</span>
+                                  <strong>
+                                    {selectedOpIdx === 0 
+                                      ? "Miễn phí" 
+                                      : `${(opRate * (isYearlyCycle ? 12 : 1)).toLocaleString("vi-VN")}đ`
+                                    }
+                                  </strong>
+                                </div>
+                              </div>
+
+                              <hr className="summary-divider" />
+
+                              <div className="summary-totals">
+                                <div className="total-box">
+                                  <span className="total-label">Chi phí năm đầu tiên:</span>
+                                  <span className="total-value">
+                                    {year1Min === 0 && year1Max === 0 
+                                      ? "0đ" 
+                                      : year1Min === year1Max 
+                                        ? `${year1Min.toLocaleString("vi-VN")}đ` 
+                                        : `${year1Min.toLocaleString("vi-VN")}đ - ${year1Max.toLocaleString("vi-VN")}đ`
+                                    }
+                                  </span>
+                                </div>
+                                <div className="total-box">
+                                  <span className="total-label">Duy trì các năm tiếp theo:</span>
+                                  <span className="total-value">
+                                    {recurringMin === 0 && recurringMax === 0 
+                                      ? "0đ" 
+                                      : recurringMin === recurringMax 
+                                        ? `${recurringMin.toLocaleString("vi-VN")}đ / năm` 
+                                        : `${recurringMin.toLocaleString("vi-VN")}đ - ${recurringMax.toLocaleString("vi-VN")}đ / năm`
+                                    }
+                                  </span>
+                                </div>
+                              </div>
+
+                              {recommendedOption && (
+                                <div className="recommended-badge-alert animate-fade-in">
+                                  <strong>✨ Khớp với {recommendedOption}</strong>
+                                  <p>{optionDesc}</p>
+                                </div>
+                              )}
+
+                              <button 
+                                type="button" 
+                                className="button button-primary calc-apply-btn"
+                                onClick={() => {
+                                  setClientService(`Tư vấn cấu hình tự chọn: ${designObj.title} + ${domainObj.title} + Vận hành ${opObj.title} (${isYearlyCycle ? "Đóng theo năm" : "Đóng hàng tháng"})`);
+                                  const contactSec = document.getElementById("contact");
+                                  if (contactSec) {
+                                    contactSec.scrollIntoView({ behavior: "smooth" });
+                                    const input = contactSec.querySelector("input[name='service']") as HTMLInputElement;
+                                    if (input) {
+                                      setTimeout(() => input.focus(), 500);
+                                    }
+                                  }
+                                }}
+                              >
+                                Đăng ký tư vấn cấu hình này
+                              </button>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {pricingViewMode === "combos" && (
+              <div className="pricing-tab-pane animate-fade-in">
+                <div className="subsection-heading">
+                  <span className="step-badge">III</span>
+                  <h3>Các phương án trọn gói thông dụng</h3>
+                  <p>Các phương án tích hợp sẵn hạ tầng giúp website hoạt động tối ưu tức thì.</p>
+                </div>
+
+                <div className="combos-grid">
+                  {pricingCombos.map((combo) => (
+                    <div className={`combo-card-outer ${combo.popular ? "is-popular" : ""}`} key={combo.name}>
+                      <div className="combo-card-inner">
+                        {combo.popular && <span className="popular-badge">Khuyên dùng</span>}
+                        <div className="combo-card-header">
+                          <h4>{combo.name}</h4>
+                          <p className="combo-tagline">{combo.tagline}</p>
+                        </div>
+                        
+                        <div className="combo-components">
+                          <p className="component-line">✔ {combo.designCost}</p>
+                          <p className="component-line">✔ {combo.domainCost}</p>
+                          <p className="component-line">✔ {combo.opCost}</p>
+                        </div>
+
+                        <hr />
+
+                        <div className="combo-pricing">
+                          <div className="pricing-box">
+                            <span className="pricing-lbl">Chi phí năm đầu:</span>
+                            <span className="pricing-val-big">{combo.year1Total}</span>
+                          </div>
+                          <div className="pricing-box">
+                            <span className="pricing-lbl">Duy trì năm tiếp theo:</span>
+                            <span className="pricing-val-sub">{combo.nextYearTotal}</span>
+                          </div>
+                        </div>
+
+                        <p className="combo-target">
+                          <strong>Đối tượng:</strong> {combo.target}
+                        </p>
+
+                        <button 
+                          type="button" 
+                          className="button button-primary combo-apply-btn"
+                          onClick={() => {
+                            setClientService(`Tư vấn trọn gói theo ${combo.name}`);
+                            const contactSec = document.getElementById("contact");
+                            if (contactSec) {
+                              contactSec.scrollIntoView({ behavior: "smooth" });
+                              const input = contactSec.querySelector("input[name='service']") as HTMLInputElement;
+                              if (input) {
+                                setTimeout(() => input.focus(), 500);
+                              }
+                            }
+                          }}
+                        >
+                          Đăng ký tư vấn Combo này
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </section>
 
         <section className="contact-section" id="contact" aria-labelledby="contact-title">
@@ -997,6 +1591,8 @@ export function CompanyHome() {
                 name="service"
                 placeholder="Ví dụ: Website spa, landing page bất động sản..."
                 autoComplete="off"
+                value={clientService}
+                onChange={(e) => setClientService(e.target.value)}
               />
             </label>
             <button className="button button-primary" type="submit" disabled={isContactSubmitting}>
