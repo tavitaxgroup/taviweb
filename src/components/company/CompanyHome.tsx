@@ -512,15 +512,15 @@ const pricingCombos = [
     nextYearTotal: "12.150.000đ / năm",
     target: "Doanh nghiệp cần tự động hóa CRM, CMS AI & trợ lý nhắc lịch VIP."
   }
-];const calcDesignOptions = [
-  { title: "Giao Diện Mẫu (Quick-Launch Template)", price: "0đ", valMin: 0, valMax: 0 },
+]; const calcDesignOptions = [
+  { title: "Giao Diện Mẫu (Quick-Launch Template)", price: "Miễn Phí", valMin: 0, valMax: 0 },
   { title: "Gói Tiêu Chuẩn (Standard Custom)", price: "3.000.000đ", valMin: 3000000, valMax: 3000000 },
   { title: "Gói Cao Cấp (Premium Custom)", price: "8.000.000đ", valMin: 8000000, valMax: 8000000 },
   { title: "Gói Doanh Nghiệp (Enterprise Custom)", price: "15.000.000đ - 20.000.000đ", valMin: 15000000, valMax: 20000000 }
 ];
 
 const calcDomainOptions = [
-  { title: "Đường dẫn con trên tên miền chung của hệ thống", price: "Miễn phí (0đ)", valMin: 0, valMax: 0 },
+  { title: "Đường dẫn con trên tên miền chung của hệ thống", price: "Miễn phí", valMin: 0, valMax: 0 },
   { title: "Tên miền riêng mang thương hiệu cá nhân", price: "500.000đ - 1.000.000đ / năm", valMin: 500000, valMax: 1000000 }
 ];
 
@@ -993,84 +993,24 @@ export function CompanyHome() {
 
                 <div className="formula-banner">
                   <div className="formula-box">
+                    <span className="formula-part">Tính năng (Tháng / Năm)</span>
+                    <span className="formula-sign">+</span>
                     <span className="formula-part">Thiết kế & Khởi tạo (1 lần)</span>
                     <span className="formula-sign">+</span>
                     <span className="formula-part">Tên miền (Hàng năm)</span>
-                    <span className="formula-sign">+</span>
-                    <span className="formula-part">Vận hành (Tháng / Năm)</span>
                     <span className="formula-sign">=</span>
                     <span className="formula-result">Tổng chi phí Website</span>
                   </div>
                 </div>
 
                 <div className="pricing-raw-grid">
-                  {/* Cột 1: Thiết kế */}
-                  <div
-                    className="raw-cost-col clickable-col"
-                    onClick={() => setActiveModal("design")}
-                  >
-                    <div className="raw-cost-header header-red">
-                      <h4>CHI PHÍ THIẾT KẾ & KHỞI TẠO</h4>
-                      <span className="raw-badge">Chi trả 1 lần</span>
-                    </div>
-                    <div className="raw-cost-body">
-                      <div className="raw-item">
-                        <span className="item-name">Giao Diện Mẫu (Template)</span>
-                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
-                      </div>
-                      <div className="raw-item">
-                        <span className="item-name">Gói Tiêu Chuẩn (Custom)</span>
-                        <span className="item-price">3.000.000đ</span>
-                        <small>Dao động 3tr - 5tr tùy số trang con</small>
-                      </div>
-                      <div className="raw-item">
-                        <span className="item-name">Gói Cao Cấp (Premium)</span>
-                        <span className="item-price">8.000.000đ</span>
-                        <small>Dao động 8tr - 10tr tùy mức độ hiệu ứng</small>
-                      </div>
-                      <div className="raw-item">
-                        <span className="item-name">Gói Doanh Nghiệp (Enterprise)</span>
-                        <span className="item-price">15.000.000đ - 20.000.000đ</span>
-                        <small>Lập trình chức năng đặc thù riêng biệt</small>
-                      </div>
-                    </div>
-                    <div className="col-click-indicator">
-                      Xem chi tiết cấu phần ➔
-                    </div>
-                  </div>
-
-                  {/* Cột 2: Tên miền */}
-                  <div
-                    className="raw-cost-col clickable-col"
-                    onClick={() => setActiveModal("domain")}
-                  >
-                    <div className="raw-cost-header header-green">
-                      <h4>CHI PHÍ TÊN MIỀN / DOMAIN</h4>
-                      <span className="raw-badge">Duy trì hàng năm</span>
-                    </div>
-                    <div className="raw-cost-body">
-                      <div className="raw-item">
-                        <span className="item-name">Đường dẫn con hệ thống</span>
-                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
-                      </div>
-                      <div className="raw-item">
-                        <span className="item-name">Tên miền riêng thị trường</span>
-                        <span className="item-price">500.000đ - 1.000.000đ / năm</span>
-                        <small>Ví dụ: .com, .net, .vn, .com.vn...</small>
-                      </div>
-                    </div>
-                    <div className="col-click-indicator">
-                      Xem chi tiết cấu phần ➔
-                    </div>
-                  </div>
-
-                  {/* Cột 3: Vận hành */}
+                  {/* Cột 1: Tính Năng */}
                   <div
                     className="raw-cost-col clickable-col"
                     onClick={() => setActiveModal("operation")}
                   >
                     <div className="raw-cost-header header-blue">
-                      <h4>CHI PHÍ DUY TRÌ & VẬN HÀNH HỆ THỐNG</h4>
+                      <h4>TÍNH NĂNG HỆ THỐNG</h4>
                       <span className="raw-badge">Hàng tháng / Đóng theo năm</span>
                     </div>
                     <div className="raw-cost-body">
@@ -1099,6 +1039,67 @@ export function CompanyHome() {
                       Xem chi tiết cấu phần ➔
                     </div>
                   </div>
+                  {/* Cột 2: Thiết kế */}
+                  <div
+                    className="raw-cost-col clickable-col"
+                    onClick={() => setActiveModal("design")}
+                  >
+                    <div className="raw-cost-header header-red">
+                      <h4>THIẾT KẾ WEBSITE</h4>
+                      <span className="raw-badge">Chi trả 1 lần</span>
+                    </div>
+                    <div className="raw-cost-body">
+                      <div className="raw-item">
+                        <span className="item-name">Giao Diện Mẫu (Template)</span>
+                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Tiêu Chuẩn (Custom)</span>
+                        <span className="item-price">5.000.000đ</span>
+                        <small>Dao động 5tr - 8tr tùy số trang con</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Cao Cấp (Premium)</span>
+                        <span className="item-price">10.000.000đ</span>
+                        <small>Dao động 8tr - 10tr tùy mức độ hiệu ứng</small>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Gói Doanh Nghiệp (Enterprise)</span>
+                        <span className="item-price">15.000.000đ - 20.000.000đ</span>
+                        <small>Lập trình chức năng đặc thù riêng biệt</small>
+                      </div>
+                    </div>
+                    <div className="col-click-indicator">
+                      Xem chi tiết cấu phần ➔
+                    </div>
+                  </div>
+
+                  {/* Cột 3: Tên miền */}
+                  <div
+                    className="raw-cost-col clickable-col"
+                    onClick={() => setActiveModal("domain")}
+                  >
+                    <div className="raw-cost-header header-green">
+                      <h4>TÊN MIỀN / DOMAIN</h4>
+                      <span className="raw-badge">Duy trì hàng năm</span>
+                    </div>
+                    <div className="raw-cost-body">
+                      <div className="raw-item">
+                        <span className="item-name">Đường dẫn con hệ thống</span>
+                        <span className="item-price" style={{ color: "#dc2626", fontWeight: "600" }}>Miễn phí</span>
+                      </div>
+                      <div className="raw-item">
+                        <span className="item-name">Tên miền riêng thị trường</span>
+                        <span className="item-price">500.000đ - 1.000.000đ / năm</span>
+                        <small>Ví dụ: .com, .net, .vn, .com.vn...</small>
+                      </div>
+                    </div>
+                    <div className="col-click-indicator">
+                      Xem chi tiết cấu phần ➔
+                    </div>
+                  </div>
+
+
                 </div>
               </div>
             )}
@@ -1118,7 +1119,7 @@ export function CompanyHome() {
                         <h3>1. CHI PHÍ THIẾT KẾ & KHỞI TẠO (Chi trả 1 lần duy nhất)</h3>
                         <p className="modal-lead-text">Đây là chi phí xây dựng bộ khung website, thiết lập cơ sở dữ liệu và bàn giao hệ thống quản trị. Quý khách chỉ thanh toán một lần duy nhất và chưa bao gồm phí tên miền.</p>
                       </div>
-                      
+
                       <div className="pricing-comparison-table-wrap" style={{ display: "block", marginTop: "20px" }}>
                         <table className="pricing-comparison-table design-modal-table">
                           <thead>
@@ -1146,9 +1147,9 @@ export function CompanyHome() {
                                 <strong>Gói Tiêu Chuẩn</strong>
                                 <span className="sub-eng">(Standard Custom)</span>
                               </td>
-                              <td className="price-val">3.000.000đ</td>
+                              <td className="price-val">5.000.000đ</td>
                               <td>
-                                Thiết kế giao diện riêng của doanh nghiệp theo kho giao diện mẫu cao cấp. Tối ưu hóa cấu trúc chuẩn SEO Google, bố cục chuẩn UX/UI giúp tăng tỷ lệ tương tác.
+                                Thiết kế giao diện riêng của doanh nghiệp theo kho giao diện mẫu cao cấp. Tối ưu hóa cấu trúc chuẩn SEO Google, bố cục chuẩn UX/UI giúp tăng tỷ lệ tương tác. Tặng tên miền theo thương hiệu khách hàng.
                                 <br />
                                 <span className="target-text">Phù hợp cho các cơ sở kinh doanh, phòng khám dịch vụ tầm trung. Tặng tên miền theo thương hiệu khách hàng.</span>
                               </td>
@@ -1158,9 +1159,9 @@ export function CompanyHome() {
                                 <strong>Gói Cao Cấp</strong>
                                 <span className="sub-eng">(Premium Custom)</span>
                               </td>
-                              <td className="price-val">8.000.000đ</td>
+                              <td className="price-val">10.000.000đ</td>
                               <td>
-                                Thiết kế giao diện độc quyền, xây dựng trải nghiệm khách hàng (CX) chuyên sâu. Tích hợp các hiệu ứng chuyển động mượt mà, tối ưu hóa tốc độ tải trang cực hạn và nâng cấp tỷ lệ chuyển đổi khách hàng (CRO).
+                                Thiết kế giao diện độc quyền, xây dựng trải nghiệm khách hàng (CX) chuyên sâu. Tích hợp các hiệu ứng chuyển động mượt mà, tối ưu hóa tốc độ tải trang cực hạn và nâng cấp tỷ lệ chuyển đổi khách hàng (CRO). Tặng tên miền theo thương hiệu khách hàng.
                                 <br />
                                 <span className="target-text">Phù hợp xây dựng thương hiệu uy tín, Tặng tên miền theo thương hiệu khách hàng.</span>
                               </td>
@@ -1188,7 +1189,7 @@ export function CompanyHome() {
                         <h3>2. CHI PHÍ TÊN MIỀN / DOMAIN (Duy trì hàng năm)</h3>
                         <p className="modal-lead-text">Chi phí tên miền khi thiết kế website tại Taviweb dao động từ 0 đồng đến 1 triệu đồng một năm tuỳ vào tên miền mà khách chọn.</p>
                       </div>
-                      
+
                       <div className="domain-modal-list">
                         <div className="domain-modal-item">
                           <div className="domain-bullet-icon green-bullet"></div>
@@ -1302,9 +1303,27 @@ export function CompanyHome() {
                 <div className="pricing-calculator-wrap">
                   <div className="calculator-body">
                     <div className="calculator-options">
+                      {/* Chọn Gói Tính Năng */}
+                      <div className="calc-group">
+                        <h4>1. Chọn Gói Tính Năng (Hàng tháng)</h4>
+                        <div className="calc-buttons-grid">
+                          {pricing.map((plan, idx) => (
+                            <button
+                              key={plan.title}
+                              type="button"
+                              className={`calc-opt-btn ${selectedOpIdx === idx ? "is-selected" : ""}`}
+                              onClick={() => setSelectedOpIdx(idx)}
+                            >
+                              <span className="calc-opt-title">{plan.title}</span>
+                              <span className="calc-opt-price">{plan.price}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                       {/* Chọn Thiết Kế */}
                       <div className="calc-group">
-                        <h4>1. Chọn Gói Thiết Kế & Khởi tạo (1 lần)</h4>
+                        <h4>2. Chọn Gói Thiết Kế Website (1 lần)</h4>
                         <div className="calc-buttons-grid">
                           {calcDesignOptions.map((pkg, idx) => (
                             <button
@@ -1322,7 +1341,7 @@ export function CompanyHome() {
 
                       {/* Chọn Tên Miền */}
                       <div className="calc-group">
-                        <h4>2. Chọn Tên Miền / Domain (Hàng năm)</h4>
+                        <h4>3. Chọn Tên Miền / Domain (Hàng năm)</h4>
                         <div className="calc-buttons-grid">
                           {calcDomainOptions.map((opt, idx) => (
                             <button
@@ -1338,23 +1357,6 @@ export function CompanyHome() {
                         </div>
                       </div>
 
-                      {/* Chọn Gói Vận Hành */}
-                      <div className="calc-group">
-                        <h4>3. Chọn Gói Duy trì & Vận hành (Hàng tháng)</h4>
-                        <div className="calc-buttons-grid">
-                          {pricing.map((plan, idx) => (
-                            <button
-                              key={plan.title}
-                              type="button"
-                              className={`calc-opt-btn ${selectedOpIdx === idx ? "is-selected" : ""}`}
-                              onClick={() => setSelectedOpIdx(idx)}
-                            >
-                              <span className="calc-opt-title">{plan.title}</span>
-                              <span className="calc-opt-price">{plan.price}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
 
                       {/* Chọn Chu Kỳ Vận Hành */}
                       <div className="calc-group">
@@ -1382,24 +1384,24 @@ export function CompanyHome() {
                     <div className="calculator-summary">
                       <div className="summary-card">
                         <h4>Ngân sách Dự kiến của bạn</h4>
-                        
+
                         {(() => {
                           const designObj = calcDesignOptions[selectedDesignIdx] || calcDesignOptions[0];
                           const domainObj = calcDomainOptions[selectedDomainIdx] || calcDomainOptions[0];
                           const opObj = pricing[selectedOpIdx] || pricing[0];
-                          
+
                           const designMin = designObj.valMin;
                           const designMax = designObj.valMax;
                           const domainMin = domainObj.valMin;
                           const domainMax = domainObj.valMax;
                           const opRate = opObj.priceNum;
-                          
+
                           const year1Min = designMin + domainMin + (opRate * 12);
                           const year1Max = designMax + domainMax + (opRate * 12);
-                          
+
                           const recurringMin = domainMin + (opRate * 12);
                           const recurringMax = domainMax + (opRate * 12);
-                          
+
                           let recommendedOption = "";
                           let optionDesc = "";
                           if (selectedDesignIdx === 0 && selectedDomainIdx === 0 && selectedOpIdx === 0) {
@@ -1430,8 +1432,8 @@ export function CompanyHome() {
                                 <div className="summary-line">
                                   <span>Phí Vận hành ({isYearlyCycle ? "Hàng năm" : "Hàng tháng"}):</span>
                                   <strong>
-                                    {selectedOpIdx === 0 
-                                      ? "Miễn phí" 
+                                    {selectedOpIdx === 0
+                                      ? "Miễn phí"
                                       : `${(opRate * (isYearlyCycle ? 12 : 1)).toLocaleString("vi-VN")}đ`
                                     }
                                   </strong>
@@ -1444,10 +1446,10 @@ export function CompanyHome() {
                                 <div className="total-box">
                                   <span className="total-label">Chi phí năm đầu tiên:</span>
                                   <span className="total-value">
-                                    {year1Min === 0 && year1Max === 0 
-                                      ? "0đ" 
-                                      : year1Min === year1Max 
-                                        ? `${year1Min.toLocaleString("vi-VN")}đ` 
+                                    {year1Min === 0 && year1Max === 0
+                                      ? "0đ"
+                                      : year1Min === year1Max
+                                        ? `${year1Min.toLocaleString("vi-VN")}đ`
                                         : `${year1Min.toLocaleString("vi-VN")}đ - ${year1Max.toLocaleString("vi-VN")}đ`
                                     }
                                   </span>
@@ -1455,10 +1457,10 @@ export function CompanyHome() {
                                 <div className="total-box">
                                   <span className="total-label">Duy trì các năm tiếp theo:</span>
                                   <span className="total-value">
-                                    {recurringMin === 0 && recurringMax === 0 
-                                      ? "0đ" 
-                                      : recurringMin === recurringMax 
-                                        ? `${recurringMin.toLocaleString("vi-VN")}đ / năm` 
+                                    {recurringMin === 0 && recurringMax === 0
+                                      ? "0đ"
+                                      : recurringMin === recurringMax
+                                        ? `${recurringMin.toLocaleString("vi-VN")}đ / năm`
                                         : `${recurringMin.toLocaleString("vi-VN")}đ - ${recurringMax.toLocaleString("vi-VN")}đ / năm`
                                     }
                                   </span>
@@ -1472,8 +1474,8 @@ export function CompanyHome() {
                                 </div>
                               )}
 
-                              <button 
-                                type="button" 
+                              <button
+                                type="button"
                                 className="button button-primary calc-apply-btn"
                                 onClick={() => {
                                   setClientService(`Tư vấn cấu hình tự chọn: ${designObj.title} + ${domainObj.title} + Vận hành ${opObj.title} (${isYearlyCycle ? "Đóng theo năm" : "Đóng hàng tháng"})`);
@@ -1516,7 +1518,7 @@ export function CompanyHome() {
                           <h4>{combo.name}</h4>
                           <p className="combo-tagline">{combo.tagline}</p>
                         </div>
-                        
+
                         <div className="combo-components">
                           <p className="component-line">✔ {combo.designCost}</p>
                           <p className="component-line">✔ {combo.domainCost}</p>
@@ -1540,8 +1542,8 @@ export function CompanyHome() {
                           <strong>Đối tượng:</strong> {combo.target}
                         </p>
 
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           className="button button-primary combo-apply-btn"
                           onClick={() => {
                             setClientService(`Tư vấn trọn gói theo ${combo.name}`);
@@ -1642,7 +1644,7 @@ export function CompanyHome() {
               <p>Hotline: 0337.367.666</p>
             </div>
           </div>
-          
+
           <div className="footer-links-grid">
             <div className="footer-col">
               <h4>Giải pháp</h4>
@@ -1653,7 +1655,7 @@ export function CompanyHome() {
                 <li><Link href="#services">Bảo trì & Nâng cấp</Link></li>
               </ul>
             </div>
-            
+
             <div className="footer-col">
               <h4>Quy trình & Báo giá</h4>
               <ul>
@@ -1662,7 +1664,7 @@ export function CompanyHome() {
                 <li><Link href="#faq">Câu hỏi thường gặp</Link></li>
               </ul>
             </div>
-            
+
             <div className="footer-col">
               <h4>Hỗ trợ & Liên hệ</h4>
               <ul>
@@ -1673,7 +1675,7 @@ export function CompanyHome() {
             </div>
           </div>
         </div>
-        
+
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} TAVIWEB. Tất cả các quyền được bảo lưu.</p>
           <a href="#main" className="scroll-top-link">Lên đầu trang ↑</a>
