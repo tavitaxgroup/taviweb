@@ -45,7 +45,7 @@
 }
 
 :root {
-  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: var(--font-be-vietnam-pro), "Be Vietnam Pro", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --text: #111827;
   --muted: #667085;
   --border: #e5e7eb;
@@ -1115,25 +1115,25 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: var(--gallery-blue);
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
 .gallery-page .gallery-brand::before {
-  display: grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  color: #ffffff;
-  background:
-    radial-gradient(circle at 72% 30%, var(--gallery-red) 0 18%, transparent 19%),
-    var(--gallery-blue);
-  border-radius: 15px;
-  content: "T";
-  font-size: 22px;
-  font-weight: 900;
+  display: none !important;
+}
+
+.gallery-page .gallery-brand-logo {
+  display: block;
+  height: 54px;
+  width: auto;
+  max-width: 210px;
+  object-fit: contain;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.gallery-page .gallery-brand:hover .gallery-brand-logo {
+  transform: scale(1.02);
+  opacity: 0.95;
 }
 
 .gallery-page .gallery-header nav {
@@ -1499,7 +1499,7 @@ img {
 }
 
 .company-software {
-  --software-font: "Be Vietnam Pro", Arial, sans-serif;
+  --software-font: var(--font-be-vietnam-pro), "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   --software-ink: #061b46;
   --software-ink-soft: #24436f;
   --software-ink-muted: #5a6a84;
@@ -1574,6 +1574,20 @@ img {
   align-items: center;
   gap: 12px;
   text-decoration: none;
+}
+
+.company-software .brand-logo-img {
+  display: block;
+  height: 58px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.company-software .brand:hover .brand-logo-img {
+  transform: scale(1.02);
+  opacity: 0.95;
 }
 
 .company-software .brand-symbol {
@@ -3949,17 +3963,22 @@ img {
 }
 
 .company-software .site-footer .footer-logo {
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--software-blue);
-  letter-spacing: -0.03em;
-  text-decoration: none;
   display: inline-block;
-  transition: color 200ms ease;
+  text-decoration: none;
 }
 
-.company-software .site-footer .footer-logo:hover {
-  color: var(--software-red);
+.company-software .site-footer .footer-logo-img {
+  display: block;
+  height: 66px;
+  width: auto;
+  max-width: 250px;
+  object-fit: contain;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.company-software .site-footer .footer-logo:hover .footer-logo-img {
+  transform: scale(1.02);
+  opacity: 0.95;
 }
 
 .company-software .site-footer .footer-tagline {
@@ -4153,18 +4172,14 @@ img {
     width: min(100% - 24px, var(--software-container));
   }
 
-  .company-software .brand-symbol {
-    width: 46px;
-    height: 46px;
-    border-radius: 15px;
+  .company-software .brand-logo-img {
+    height: 44px;
+    max-width: 165px;
   }
 
-  .company-software .brand-copy strong {
-    font-size: 17px;
-  }
-
-  .company-software .brand-copy small {
-    display: none;
+  .gallery-page .gallery-brand-logo {
+    height: 44px;
+    max-width: 165px;
   }
 
   .company-software .hero-inner {

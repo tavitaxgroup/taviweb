@@ -35,8 +35,14 @@ export default async function IndustryTemplatePage({ params }: PageProps) {
   return (
     <main className="gallery-page">
       <header className="gallery-header">
-        <Link href="/" className="gallery-brand">
-          TAVIWEB
+        <Link href="/" className="gallery-brand" aria-label="TAVIWEB">
+          <img
+            src="/assets/logo.png"
+            alt="TAVIWEB"
+            className="gallery-brand-logo"
+            width={150}
+            height={60}
+          />
         </Link>
         <nav aria-label="Điều hướng kho giao diện">
           <Link href="/kho-giao-dien/noi_that">Kho giao diện</Link>

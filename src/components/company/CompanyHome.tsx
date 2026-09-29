@@ -636,13 +636,13 @@ export function CompanyHome() {
       <header className="site-header">
         <nav className="nav-shell" aria-label="Điều hướng chính">
           <Link className="brand" href="#main" aria-label="TAVIWEB" onClick={closeMenu}>
-            <span className="brand-symbol" aria-hidden="true">
-              T
-            </span>
-            <span className="brand-copy">
-              <strong>TAVIWEB</strong>
-              <small>Website & Automation</small>
-            </span>
+            <img
+              src="/assets/logo.png"
+              alt="TAVIWEB - Website & Automation"
+              className="brand-logo-img"
+              width={160}
+              height={64}
+            />
           </Link>
 
           <button
@@ -1635,7 +1635,15 @@ export function CompanyHome() {
       <footer className="site-footer">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link href="/" className="footer-logo">TAVIWEB</Link>
+            <Link href="/" className="footer-logo" aria-label="TAVIWEB">
+              <img
+                src="/assets/logo.png"
+                alt="TAVIWEB - Website & Automation"
+                className="footer-logo-img"
+                width={175}
+                height={70}
+              />
+            </Link>
             <p className="footer-tagline">
               Nền tảng thiết kế website thông minh & demo tự động dành cho doanh nghiệp Việt.
             </p>
