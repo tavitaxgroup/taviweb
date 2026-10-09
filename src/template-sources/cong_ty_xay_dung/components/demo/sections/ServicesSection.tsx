@@ -33,8 +33,8 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               <div className="h-64 sm:h-80 relative overflow-hidden shrink-0">
                 <img 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  src={popularService.image.src} 
-                  alt={popularService.image.alt}
+                  src={(popularService?.image as any)?.src ?? (popularService as any)?.src ?? "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80"} 
+                  alt={(popularService?.image as any)?.alt ?? popularService?.title ?? "Dịch vụ"}
                 />
                 <div className="absolute top-4 right-4 bg-slate-900 text-amber-500 text-[10px] font-extrabold px-3 py-1.5 uppercase tracking-wider rounded-sm">
                   Phổ biến nhất
@@ -71,8 +71,8 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               <div className="h-48 sm:h-56 relative overflow-hidden shrink-0">
                 <img 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  src={otherServices[0].image.src} 
-                  alt={otherServices[0].image.alt}
+                  src={(otherServices[0]?.image as any)?.src ?? (otherServices[0] as any)?.src ?? "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80"} 
+                  alt={(otherServices[0]?.image as any)?.alt ?? otherServices[0]?.title ?? "Dịch vụ"}
                 />
               </div>
               <div className="p-8 flex-1">
@@ -92,8 +92,8 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               <div className="h-48 sm:h-56 relative overflow-hidden shrink-0">
                 <img 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  src={otherServices[1].image.src} 
-                  alt={otherServices[1].image.alt}
+                  src={(otherServices[1]?.image as any)?.src ?? (otherServices[1] as any)?.src ?? "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"} 
+                  alt={(otherServices[1]?.image as any)?.alt ?? otherServices[1]?.title ?? "Dịch vụ"}
                 />
               </div>
               <div className="p-8 flex-1">
@@ -113,8 +113,8 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               <div className="h-48 sm:h-56 relative overflow-hidden shrink-0">
                 <img 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  src={otherServices[2].image.src} 
-                  alt={otherServices[2].image.alt}
+                  src={(otherServices[2]?.image as any)?.src ?? (otherServices[2] as any)?.src ?? "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"} 
+                  alt={(otherServices[2]?.image as any)?.alt ?? otherServices[2]?.title ?? "Dịch vụ"}
                 />
               </div>
               <div className="p-8 flex-1">

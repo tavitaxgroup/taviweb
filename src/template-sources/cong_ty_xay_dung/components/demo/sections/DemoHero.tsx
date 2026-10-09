@@ -14,7 +14,7 @@ export function DemoHero({ hero }: DemoHeroProps) {
       <div className="absolute inset-0 z-0">
         <div 
           className="w-full h-full bg-cover bg-center opacity-40 grayscale-[20%]" 
-          style={{ backgroundImage: `url('${hero.image.src}')` }}
+          style={{ backgroundImage: `url('${hero.image?.src ?? (typeof hero.image === "string" ? hero.image : "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=1400&q=80")}')` }}
         />
         {/* Soft, professional gradient overlay to ensure text is fully legible and looks premium */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />

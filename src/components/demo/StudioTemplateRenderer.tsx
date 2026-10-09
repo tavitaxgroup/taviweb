@@ -454,12 +454,27 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
   }
 
   if (Array.isArray(baseData.services)) {
-    baseData.services = baseData.services.map((service: Record<string, any>, index: number) => ({
-      ...service,
-      id: service.id ?? `service-${index}`,
-      icon: service.icon ?? service.iconName ?? "Sparkles",
-      iconName: service.iconName ?? service.icon ?? "Sparkles"
-    }));
+    const defaultServiceImages = [
+      "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"
+    ];
+    baseData.services = baseData.services.map((service: Record<string, any>, index: number) => {
+      const fallbackSrc = defaultServiceImages[index % defaultServiceImages.length];
+      const imgSrc = service.image?.src ?? service.image_url ?? service.img ?? fallbackSrc;
+      const imgAlt = service.image?.alt ?? service.title ?? service.name ?? `Dịch vụ ${index + 1}`;
+      return {
+        ...service,
+        id: service.id ?? `service-${index}`,
+        title: service.title ?? service.name ?? `Dịch vụ ${index + 1}`,
+        name: service.name ?? service.title ?? `Dịch vụ ${index + 1}`,
+        description: service.description ?? "",
+        icon: service.icon ?? service.iconName ?? "Sparkles",
+        iconName: service.iconName ?? service.icon ?? "Sparkles",
+        image: typeof service.image === "object" && service.image?.src ? service.image : { src: imgSrc, alt: imgAlt }
+      };
+    });
   }
 
   if (Array.isArray(baseData.gallery)) {
@@ -768,19 +783,13 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
   // Assign resolved slideshow array back to the hero structure
   if (baseData.hero) {
     baseData.hero.images = heroImages;
-    if (baseData.hero.image) {
-      baseData.hero.image.src = heroImages[0].src;
-    } else {
-      baseData.hero.image = heroImages[0];
-    }
-    if (baseData.hero.bgImage) {
-      baseData.hero.bgImage.src = heroImages[0].src;
-    } else {
-      baseData.hero.bgImage = heroImages[0];
-    }
-    if (baseData.hero.backgroundImage) {
-      baseData.hero.backgroundImage = heroImages[0].src;
-    }
+    const heroFirst = (heroImages && heroImages.length > 0)
+      ? (typeof heroImages[0] === "string" ? { src: heroImages[0], alt: "Hero", source: "fallback" as const } : heroImages[0])
+      : { src: "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=1400&q=80", alt: "Hero", source: "fallback" as const };
+
+    baseData.hero.image = heroFirst;
+    baseData.hero.bgImage = heroFirst;
+    baseData.hero.backgroundImage = heroFirst.src;
   }
 }
 

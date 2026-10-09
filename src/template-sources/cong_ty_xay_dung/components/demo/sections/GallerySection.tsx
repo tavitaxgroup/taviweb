@@ -61,8 +61,8 @@ export function GallerySection({ gallery }: GallerySectionProps) {
                 {/* Project Render Image */}
                 <img 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-70" 
-                  src={project.image.src} 
-                  alt={project.image.alt}
+                  src={(project.image as any)?.src ?? (project as any).src ?? (typeof project.image === 'string' ? project.image : "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80")} 
+                  alt={(project.image as any)?.alt ?? project.title ?? "Dự án"}
                 />
                 
                 {/* Semi-transparent Overlay showing details on hover */}
