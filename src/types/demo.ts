@@ -35,6 +35,10 @@ export type BusinessLead = {
   id: string;
   place_id: string;
   industry: string | null;
+  template_name?: string | null;
+  tax_code?: string | null;
+  raw_industry?: string | null;
+  representative?: string | null;
   status?: string | null;
   name: string | null;
   formatted_address?: string | null;
