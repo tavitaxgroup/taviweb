@@ -16,7 +16,7 @@ export default function TrustBar({ trust }: TrustBarProps) {
             className="text-base md:text-lg font-bold text-[#121315]"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            {trust.rating}
+            {typeof trust.rating === "object" ? (trust.rating as any).score : trust.rating}
           </span>
         </div>
 
@@ -30,7 +30,7 @@ export default function TrustBar({ trust }: TrustBarProps) {
             className="text-base md:text-lg font-bold text-[#121315]"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            {trust.followers}
+            {typeof trust.followers === "object" ? (trust.followers as any).count : trust.followers}
           </span>
         </div>
 

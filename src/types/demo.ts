@@ -51,6 +51,9 @@ export type BusinessLead = {
   demo_url?: string | null;
   demo_status?: DemoStatus | string | null;
   outreach_status?: OutreachStatus | string | null;
+  logo_url?: string | null;
+  about_image_url?: string | null;
+  gallery_urls?: string[] | null;
   notes?: string | null;
   template_data?: any;
 };

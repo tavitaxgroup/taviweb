@@ -709,37 +709,6 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
     }
   }
 
-  // Normalize and protect Trust fields (rating, reviewCount, followers) to prevent crashes and ensure consistency
-  if (baseData.trust) {
-    const rawRating = custom["trust.rating"] ?? custom.trust?.rating;
-    if (rawRating !== undefined && rawRating !== null) {
-      if (typeof rawRating === "number" || typeof rawRating === "string") {
-        baseData.trust.rating = {
-          score: typeof rawRating === "number" ? `${rawRating}/5` : rawRating,
-          label: baseData.trust.rating?.label ?? "Đánh giá uy tín"
-        };
-        baseData.trust.ratingText = typeof rawRating === "number" ? `${rawRating}` : rawRating;
-      }
-    }
-
-    const rawReviewCount = custom["trust.reviewCount"] ?? custom.trust?.reviewCount;
-    if (rawReviewCount !== undefined && rawReviewCount !== null) {
-      baseData.trust.reviewCount = rawReviewCount;
-      baseData.trust.reviewCountText = `${rawReviewCount}+ đánh giá`;
-    }
-
-    const rawFollowers = custom["trust.followers"] ?? custom.trust?.followers;
-    if (rawFollowers !== undefined && rawFollowers !== null) {
-      if (typeof rawFollowers === "number" || typeof rawFollowers === "string") {
-        baseData.trust.followers = {
-          count: typeof rawFollowers === "number" ? rawFollowers.toLocaleString() + "+" : rawFollowers,
-          label: baseData.trust.followers?.label ?? "Người theo dõi"
-        };
-        baseData.trust.followersCount = typeof rawFollowers === "number" ? rawFollowers.toLocaleString() + "+" : rawFollowers;
-      }
-    }
-  }
-
   // 4. Resolve hero.images slideshow array (dynamic support)
   let heroImages: any[] = [];
   const customHeroImages = custom.hero_images ?? custom["hero.images"] ?? custom.hero?.images ?? custom.hero_image;
@@ -793,11 +762,171 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
   }
 }
 
+function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPageData): Record<string, any> {
+  const templateKey = baseData.template?.key || leadData.template?.key;
+  const custom = leadData.template?.customData || {};
+
+  // 1. Trust Rating & Stats (Safe for all 15 templates)
+  const rawRating = custom["trust.rating"] ?? custom.trust?.rating ?? leadData.trust?.rating ?? baseData.business?.rating ?? baseData.trust?.rating ?? 4.9;
+  const numRating = typeof rawRating === "number" ? rawRating : (parseFloat(rawRating) || 4.9);
+  
+  const rawReviews = custom["trust.reviewCount"] ?? custom.trust?.reviewCount ?? leadData.trust?.reviewCount ?? baseData.business?.reviewCount ?? baseData.trust?.reviewCount ?? 168;
+  const numReviews = typeof rawReviews === "number" ? rawReviews : (parseInt(rawReviews, 10) || 168);
+
+  const rawFollowers = custom["trust.followers"] ?? custom.trust?.followers ?? leadData.trust?.followers ?? baseData.business?.followers ?? baseData.trust?.followers ?? 1250;
+  const numFollowers = typeof rawFollowers === "number" ? rawFollowers : (parseInt(rawFollowers, 10) || 1250);
+  const strFollowers = typeof rawFollowers === "number" ? `${rawFollowers.toLocaleString("vi-VN")}+` : String(rawFollowers);
+
+  if (!baseData.trust) baseData.trust = {};
+
+  if (templateKey === "spa") {
+    baseData.trust.rating = {
+      score: `${numRating}/5`,
+      label: "Đánh giá uy tín"
+    };
+    baseData.trust.followers = {
+      count: strFollowers,
+      label: "Người theo dõi"
+    };
+  } else {
+    baseData.trust.rating = numRating;
+    baseData.trust.followers = strFollowers;
+  }
+
+  baseData.trust.ratingText = `${numRating}`;
+  baseData.trust.ratingValue = numRating;
+  baseData.trust.reviewCount = numReviews;
+  baseData.trust.reviewsCount = numReviews;
+  baseData.trust.ratingCount = numReviews;
+  baseData.trust.reviewCountText = `${numReviews}+ đánh giá`;
+  baseData.trust.followersCount = strFollowers;
+  baseData.trust.facebookFollowers = strFollowers;
+
+  if (baseData.business) {
+    baseData.business.rating = numRating;
+    baseData.business.reviewCount = numReviews;
+    baseData.business.reviewsCount = numReviews;
+    baseData.business.ratingCount = numReviews;
+    baseData.business.followers = numFollowers;
+    baseData.business.followersCount = strFollowers;
+  }
+
+  // 2. Services Images & Fallbacks
+  const restaurantDishImages = [
+    "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
+  ];
+  const clinicImages = [
+    "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80"
+  ];
+  const defaultImages = templateKey === "nha_hang" 
+    ? restaurantDishImages 
+    : (templateKey === "phong_kham" ? clinicImages : [
+        "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"
+      ]);
+
+  if (Array.isArray(baseData.services)) {
+    baseData.services = baseData.services.map((service: Record<string, any>, index: number) => {
+      const fallbackSrc = defaultImages[index % defaultImages.length];
+      const rawSrc = service.image?.src ?? (typeof service.image === "string" ? service.image : null) ?? service.image_url ?? service.img ?? fallbackSrc;
+      const imgSrc = (typeof rawSrc === "string" && rawSrc.trim()) ? rawSrc.trim() : fallbackSrc;
+      const imgAlt = service.image?.alt ?? service.title ?? service.name ?? `Dịch vụ ${index + 1}`;
+      
+      const safeImage = Object.assign(new String(imgSrc), { src: imgSrc, alt: imgAlt });
+
+      return {
+        ...service,
+        id: service.id ?? `service-${index}`,
+        title: service.title ?? service.name ?? `Dịch vụ ${index + 1}`,
+        name: service.name ?? service.title ?? `Dịch vụ ${index + 1}`,
+        description: service.description ?? "",
+        icon: service.icon ?? service.iconName ?? "Sparkles",
+        iconName: service.iconName ?? service.icon ?? "Sparkles",
+        href: service.href || "#contact",
+        image: safeImage
+      };
+    });
+  }
+
+  // 3. Gallery Images
+  if (Array.isArray(baseData.gallery)) {
+    baseData.gallery = baseData.gallery.map((item: Record<string, any>, index: number) => {
+      const fallbackSrc = defaultImages[index % defaultImages.length];
+      const rawSrc = item.src ?? item.image?.src ?? (typeof item.image === "string" ? item.image : null) ?? fallbackSrc;
+      const src = (typeof rawSrc === "string" && rawSrc.trim()) ? rawSrc.trim() : fallbackSrc;
+      const alt = item.alt ?? item.image?.alt ?? item.title ?? `Gallery ${index + 1}`;
+      const safeImage = Object.assign(new String(src), { src, alt });
+
+      return {
+        ...item,
+        id: item.id ?? `gallery-${index}`,
+        src,
+        alt,
+        image: safeImage,
+        title: item.title ?? item.caption ?? alt,
+        category: item.category ?? item.caption ?? alt
+      };
+    });
+  }
+
+  // 4. About Image & Content
+  if (baseData.about) {
+    const rawAboutImg = baseData.about.image?.src ?? (typeof baseData.about.image === "string" ? baseData.about.image : null) ?? custom.about_image ?? leadData.business.aboutImageUrl ?? defaultImages[0];
+    const aboutSrc = (typeof rawAboutImg === "string" && rawAboutImg.trim()) ? rawAboutImg.trim() : defaultImages[0];
+    const safeAboutImage = Object.assign(new String(aboutSrc), { src: aboutSrc, alt: baseData.about.title || "Về chúng tôi" });
+    baseData.about.image = safeAboutImage;
+    if (baseData.about.bgImage) baseData.about.bgImage = safeAboutImage;
+
+    // Guarantee content is always a non-empty string for templates using .split("\n\n")
+    const aboutText = custom["about.body"] ?? custom["about.description"] ?? leadData.about?.body ?? baseData.about.description ?? baseData.about.content ?? "Dịch vụ uy tín, chuyên nghiệp và tận tâm đồng hành cùng khách hàng.";
+    baseData.about.content = aboutText;
+    baseData.about.description = aboutText;
+    baseData.about.body = aboutText;
+  }
+
+  // 5. Reviews Avatars & Safety
+  if (Array.isArray(baseData.reviews)) {
+    const defaultAvatars = [
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
+    ];
+    baseData.reviews = baseData.reviews.map((review: Record<string, any>, index: number) => {
+      const author = review.authorName ?? review.author ?? "Khách hàng";
+      const text = review.text ?? review.content ?? review.quote ?? "Ý kiến đánh giá rất hài lòng về dịch vụ.";
+      const avatarSrc = review.avatarSrc ?? review.avatar ?? defaultAvatars[index % defaultAvatars.length];
+      const numReviewRating = Math.min(5, Math.max(1, Math.round(Number(review.rating) || 5)));
+      return {
+        ...review,
+        id: review.id ?? `review-${index}`,
+        author,
+        authorName: author,
+        text,
+        content: text,
+        quote: text,
+        avatarSrc,
+        avatarAlt: author,
+        rating: numReviewRating
+      };
+    });
+  }
+
+  return baseData;
+}
+
 function toStudioTemplateData(data: DemoPageData) {
   const originalTemplateData = getOriginalStudioData(data.template.key);
   const replaced = applyLeadIdentity(originalTemplateData, data);
   mergeCustomTemplateData(replaced, data.template.customData);
-  return replaced;
+  return postProcessStudioData(replaced, data);
 }
 
 function getTemplateThemeStyle(templateKey: IndustryKey): CSSProperties {

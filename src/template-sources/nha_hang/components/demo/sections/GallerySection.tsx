@@ -60,7 +60,7 @@ export default function GallerySection({ gallery }: GalleryProps) {
                   <img
                     alt={gallery[0].title}
                     className="w-full h-[85%] object-cover mb-3"
-                    src={gallery[0].image}
+                    src={(gallery[0]?.image as any)?.src ?? (gallery[0] as any)?.src ?? (typeof gallery[0]?.image === "string" ? gallery[0].image : "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80")}
                   />
                   <div className="text-center">
                     <h4 className="font-serif text-sm font-semibold text-[#1c1c19]">
@@ -89,7 +89,7 @@ export default function GallerySection({ gallery }: GalleryProps) {
                   <img
                     alt={gallery[1].title}
                     className="w-full h-[85%] object-cover mb-3"
-                    src={gallery[1].image}
+                    src={(gallery[1]?.image as any)?.src ?? (gallery[1] as any)?.src ?? (typeof gallery[1]?.image === "string" ? gallery[1].image : "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80")}
                   />
                   <div className="text-center">
                     <h4 className="font-serif text-sm font-semibold text-[#1c1c19]">

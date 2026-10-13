@@ -16,7 +16,9 @@ export function TrustBar({ trust }: TrustBarProps) {
           <div className="flex items-center gap-2 bg-white/40 py-2 px-4 rounded-full border border-white/60 shadow-sm">
             <Star size={18} className="text-primary fill-primary" />
             <span className="font-sans text-xs md:text-sm font-medium tracking-wide">
-              <span className="font-bold text-primary">{trust.rating.score}</span> {trust.rating.label}
+              <span className="font-bold text-primary">
+                {typeof trust.rating === "object" ? (trust.rating as any).score : `${trust.rating}/5`}
+              </span> {typeof trust.rating === "object" ? (trust.rating as any).label : "Đánh giá uy tín"}
             </span>
           </div>
         )}
@@ -25,7 +27,9 @@ export function TrustBar({ trust }: TrustBarProps) {
           <div className="flex items-center gap-2 bg-white/40 py-2 px-4 rounded-full border border-white/60 shadow-sm">
             <Heart size={18} className="text-primary fill-primary animate-pulse" />
             <span className="font-sans text-xs md:text-sm font-medium tracking-wide">
-              <span className="font-bold text-primary">{trust.followers.count}</span> {trust.followers.label}
+              <span className="font-bold text-primary">
+                {typeof trust.followers === "object" ? (trust.followers as any).count : trust.followers}
+              </span> {typeof trust.followers === "object" ? (trust.followers as any).label : "Người theo dõi"}
             </span>
           </div>
         )}

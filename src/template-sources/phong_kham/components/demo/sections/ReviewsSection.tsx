@@ -40,15 +40,15 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
                 <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200">
                   <img
                     className="w-full h-full object-cover"
-                    src={review.avatarSrc}
-                    alt={review.avatarAlt}
+                    src={review.avatarSrc || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"}
+                    alt={review.avatarAlt || review.author || "Khách hàng"}
                     referrerPolicy="no-referrer"
                   />
                 </div>
                 <div>
                   <div className="font-display font-extrabold text-slate-800 text-sm">{review.author}</div>
                   <div className="flex text-amber-400 mt-1">
-                    {Array.from({ length: review.rating }).map((_, i) => (
+                    {Array.from({ length: Math.min(5, Math.max(1, Math.round(Number(review.rating) || 5))) }).map((_, i) => (
                       <Star key={i} className="w-3.5 h-3.5 fill-current" />
                     ))}
                   </div>

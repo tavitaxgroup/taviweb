@@ -20,9 +20,9 @@ export default function TrustBar({ trust }: TrustBarProps) {
               <Star className="w-5 h-5 fill-current text-amber-400" />
             </div>
             <span className="font-display text-lg font-bold text-slate-800">
-              {trust.rating}/5{' '}
+              {typeof trust.rating === "object" ? (trust.rating as any).score : `${trust.rating}/5`}{' '}
               <span className="text-sm font-normal text-slate-500">
-                ({trust.reviewCount}+ đánh giá)
+                ({trust.reviewCount ?? (trust as any).reviewsCount ?? 200}+ đánh giá)
               </span>
             </span>
           </div>
@@ -32,12 +32,12 @@ export default function TrustBar({ trust }: TrustBarProps) {
 
           {/* Right Side: Achievements */}
           <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 opacity-75">
-            {trust.achievements.map((achievement, index) => (
+            {(trust.achievements || (trust as any).badges || []).map((achievement: any, index: number) => (
               <span
                 key={index}
                 className="font-display text-sm font-bold text-slate-600 border border-slate-200/60 rounded-full px-4 py-1 bg-white shadow-xs"
               >
-                {achievement}
+                {typeof achievement === "object" ? (achievement.label || achievement.title || "Uy tín") : achievement}
               </span>
             ))}
           </div>

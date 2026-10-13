@@ -42,7 +42,7 @@ export default function ServicesSection({ services }: ServicesProps) {
                 <img
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   alt={service.title}
-                  src={service.image}
+                  src={(service.image as any)?.src ?? (typeof service.image === "string" ? service.image : "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80")}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-300"></div>
               </div>
@@ -59,7 +59,7 @@ export default function ServicesSection({ services }: ServicesProps) {
                 </p>
 
                 <a 
-                  href={service.href} 
+                  href={service.href || "#contact-section"} 
                   className="text-[#f2cf8a] hover:text-white font-semibold text-xs md:text-sm uppercase flex items-center gap-2 group/link tracking-wider drop-shadow-sm"
                 >
                   Tìm hiểu thêm 

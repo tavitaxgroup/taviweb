@@ -38,8 +38,8 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
               <div className="overflow-hidden rounded-2xl shadow-md border border-slate-100 relative">
                 <img
                   className="h-[280px] w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  src={item.src}
-                  alt={item.alt}
+                  src={item.src ?? ((item as any).image as any)?.src ?? (typeof (item as any).image === "string" ? (item as any).image : "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80")}
+                  alt={item.alt || item.title || "Hình ảnh phòng khám"}
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">

@@ -32,7 +32,7 @@ export default function AboutSection({ about }: AboutProps) {
                 <img
                   className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
                   alt="Portrait of master chef plating meticulously"
-                  src={about.image}
+                  src={(about.image as any)?.src ?? (typeof about.image === "string" ? about.image : "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80")}
                 />
               </motion.div>
               
@@ -69,7 +69,7 @@ export default function AboutSection({ about }: AboutProps) {
             </h2>
 
             <div className="space-y-6 font-sans text-sm md:text-base text-[#574240] leading-relaxed">
-              {about.content.split("\n\n").map((para, idx) => (
+              {(about.content || (about as any).description || "").split("\n\n").filter(Boolean).map((para: string, idx: number) => (
                 <p key={idx} className="whitespace-pre-line">
                   {para}
                 </p>
