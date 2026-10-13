@@ -32,7 +32,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
             <div>
               {/* Star Rating Icons */}
               <div className="flex gap-1 text-[#fd761a] mb-5">
-                {[...Array(review.rating || 5)].map((_, i) => (
+                {Array.from({ length: Math.min(5, Math.max(1, Math.round(Number(review.rating) || 5))) }).map((_, i) => (
                   <Star key={i} className="w-5 h-5 fill-current" />
                 ))}
               </div>

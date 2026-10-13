@@ -361,9 +361,10 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
       leadData.hero.secondaryCta ??
       leadData.contact.secondaryAction;
 
+    const heroImgSrc = (typeof baseData.hero.image === "string" ? baseData.hero.image : baseData.hero.image?.src) ?? (typeof firstImage === "string" ? firstImage : firstImage?.src);
     baseData.hero.bgImage ??= baseData.hero.image ?? firstImage;
     baseData.hero.backgroundImage ??=
-      leadData.template.key === "quan_cafe" ? baseData.hero.image ?? firstImage : baseData.hero.image?.src ?? firstImage?.src;
+      leadData.template.key === "quan_cafe" ? baseData.hero.image ?? firstImage : (heroImgSrc || "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80");
     baseData.hero.primaryAction = {
       label: primaryAction?.label || leadData.contact.primaryAction.label,
       href: primaryAction?.href || leadData.contact.primaryAction.href
@@ -404,17 +405,11 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
   if (baseData.about) {
     baseData.about.stats ??= statValues;
     if (leadData.business.aboutImageUrl) {
-      if (baseData.about.image) {
-        baseData.about.image.src = leadData.business.aboutImageUrl;
-      } else {
-        baseData.about.image = {
-          src: leadData.business.aboutImageUrl,
-          alt: `Hình ảnh giới thiệu của ${leadData.business.name}`
-        };
-      }
-      if (baseData.about.bgImage) {
-        baseData.about.bgImage.src = leadData.business.aboutImageUrl;
-      }
+      baseData.about.image = {
+        src: leadData.business.aboutImageUrl,
+        alt: `Hình ảnh giới thiệu của ${leadData.business.name}`
+      };
+      baseData.about.bgImage = baseData.about.image;
     }
     if (leadData.about.highlights && leadData.about.highlights.length > 0) {
       if (leadData.template.key === "trung_tam_tieng_anh") {
@@ -532,7 +527,17 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
     baseData.contact.features ??= leadData.about.highlights;
     baseData.contact.location ??= baseData.contact.address ?? getDisplayName(leadData.business.name);
     baseData.contact.hours ??= ["Thứ 2 - Thứ 6: 8:00 - 17:00", "Thứ 7: 8:00 - 11:30", "Chủ nhật: Nghỉ"];
-    baseData.contact.mapImage ??= leadData.template.key === "garage_oto" ? firstImage : firstImage?.src;
+    baseData.contact.workingHours ??= baseData.contact.hours;
+    if (Array.isArray(baseData.contact.workingHours)) {
+      baseData.contact.workingHours = baseData.contact.workingHours.join(" | ");
+    }
+    const firstImgSrc = (typeof firstImage === "string" ? firstImage : firstImage?.src) || "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80";
+    baseData.contact.mapImage ??= leadData.template.key === "garage_oto" ? firstImage : firstImgSrc;
+    baseData.contact.socialLinks = {
+      website: facebookHref || normalizeExternalHref(leadData.business.website),
+      email: baseData.contact.email || leadData.business.email,
+      MessageCircle: facebookHref || baseData.contact.facebookUrl || leadData.business.facebookUrl
+    };
     baseData.contact.primaryAction = {
       label: primaryAction?.label || leadData.contact.primaryAction.label,
       href: primaryAction?.href || leadData.contact.primaryAction.href
@@ -640,20 +645,14 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
   }
 
   if (custom.about_image && baseData.about) {
-    if (baseData.about.image) {
-      baseData.about.image.src = custom.about_image;
-    } else {
-      baseData.about.image = { src: custom.about_image, alt: "Về chúng tôi" };
-    }
-    if (baseData.about.bgImage) {
-      baseData.about.bgImage.src = custom.about_image;
-    }
+    baseData.about.image = { src: custom.about_image, alt: "Về chúng tôi" };
+    baseData.about.bgImage = baseData.about.image;
   }
 
   if (custom.hero_image && baseData.hero) {
-    if (baseData.hero.image) baseData.hero.image.src = custom.hero_image;
-    if (baseData.hero.bgImage) baseData.hero.bgImage.src = custom.hero_image;
-    if (baseData.hero.backgroundImage) baseData.hero.backgroundImage = custom.hero_image;
+    baseData.hero.image = { src: custom.hero_image, alt: "Hero" };
+    baseData.hero.bgImage = baseData.hero.image;
+    baseData.hero.backgroundImage = custom.hero_image;
   }
 
   // 2. Allow deep dot-notation overrides, e.g. "about.title": "New Title"
@@ -839,8 +838,7 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
       const rawSrc = service.image?.src ?? (typeof service.image === "string" ? service.image : null) ?? service.image_url ?? service.img ?? fallbackSrc;
       const imgSrc = (typeof rawSrc === "string" && rawSrc.trim()) ? rawSrc.trim() : fallbackSrc;
       const imgAlt = service.image?.alt ?? service.title ?? service.name ?? `Dịch vụ ${index + 1}`;
-      
-      const safeImage = Object.assign(new String(imgSrc), { src: imgSrc, alt: imgAlt });
+      const safeImage = { src: imgSrc, alt: imgAlt };
 
       return {
         ...service,
@@ -863,7 +861,7 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
       const rawSrc = item.src ?? item.image?.src ?? (typeof item.image === "string" ? item.image : null) ?? fallbackSrc;
       const src = (typeof rawSrc === "string" && rawSrc.trim()) ? rawSrc.trim() : fallbackSrc;
       const alt = item.alt ?? item.image?.alt ?? item.title ?? `Gallery ${index + 1}`;
-      const safeImage = Object.assign(new String(src), { src, alt });
+      const safeImage = { src, alt };
 
       return {
         ...item,
@@ -881,7 +879,7 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
   if (baseData.about) {
     const rawAboutImg = baseData.about.image?.src ?? (typeof baseData.about.image === "string" ? baseData.about.image : null) ?? custom.about_image ?? leadData.business.aboutImageUrl ?? defaultImages[0];
     const aboutSrc = (typeof rawAboutImg === "string" && rawAboutImg.trim()) ? rawAboutImg.trim() : defaultImages[0];
-    const safeAboutImage = Object.assign(new String(aboutSrc), { src: aboutSrc, alt: baseData.about.title || "Về chúng tôi" });
+    const safeAboutImage = { src: aboutSrc, alt: baseData.about.title || "Về chúng tôi" };
     baseData.about.image = safeAboutImage;
     if (baseData.about.bgImage) baseData.about.bgImage = safeAboutImage;
 

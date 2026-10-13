@@ -30,7 +30,7 @@ export default function ReviewsSection({ data }: ReviewsSectionProps) {
               <div>
                 {/* Yellow Stars */}
                 <div className="flex text-yellow-500 mb-5" id={`review-stars-${review.id}`}>
-                  {[...Array(review.rating || 5)].map((_, i) => (
+                  {Array.from({ length: Math.min(5, Math.max(1, Math.round(Number(review.rating) || 5))) }).map((_, i) => (
                     <Star key={i} className="h-5 w-5 fill-current text-yellow-400" />
                   ))}
                 </div>

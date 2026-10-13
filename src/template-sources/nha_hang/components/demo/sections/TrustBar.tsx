@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Star, Utensils, Calendar, Award, Leaf } from "lucide-react";
 import { TrustData } from "../../../types/demo";
@@ -57,10 +59,10 @@ export default function TrustBar({ trust }: TrustBarProps) {
           {(trust.badges || []).map((badge, idx) => (
             <div key={idx} className="flex flex-col items-center gap-3" id={`trust-badge-${idx}`}>
               <div className="p-3 bg-[#f0ede9] rounded-full flex items-center justify-center">
-                {renderIcon(badge.icon)}
+                {renderIcon(typeof badge === "object" ? badge.icon : "restaurant")}
               </div>
               <span className="text-xs font-semibold tracking-wider text-[#1c1c19] uppercase text-center">
-                {badge.label}
+                {typeof badge === "object" ? badge.label : String(badge)}
               </span>
             </div>
           ))}

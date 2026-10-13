@@ -28,7 +28,7 @@ export default function AboutSection({ about }: AboutSectionProps) {
             className="aspect-[4/5] bg-gray-100 relative overflow-hidden group rounded-sm z-10 shadow-sm"
           >
             <img 
-              src={about.image} 
+              src={(about.image as any)?.src ?? (typeof about.image === "string" ? about.image : "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80")} 
               alt={about.title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               referrerPolicy="no-referrer"

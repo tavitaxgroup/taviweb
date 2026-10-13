@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Star, Quote } from "lucide-react";
 import { ReviewItem } from "../../../types/demo";
@@ -26,7 +28,7 @@ export default function ReviewsSection({ reviews }: ReviewsProps) {
 
         {/* Reviews Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.map((review, index) => (
+          {(reviews || []).map((review, index) => (
             <div
               key={index}
               className="bg-white border border-[#dec0bd]/20 p-8 shadow-sm relative hover:shadow-md transition-shadow duration-300 flex flex-col justify-between"
@@ -40,7 +42,7 @@ export default function ReviewsSection({ reviews }: ReviewsProps) {
               <div>
                 {/* Stars */}
                 <div className="flex text-[#7c580f] mb-6">
-                  {[...Array(review.rating)].map((_, i) => (
+                  {Array.from({ length: Math.min(5, Math.max(1, Math.round(Number(review.rating) || 5))) }).map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-current" />
                   ))}
                 </div>

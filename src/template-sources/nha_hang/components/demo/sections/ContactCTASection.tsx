@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Phone, MapPin, Clock, Mail, Share2, Globe, CheckCircle } from "lucide-react";
@@ -30,6 +32,8 @@ export default function ContactCTASection({ contact }: ContactProps) {
     setBookingCode(randomCode);
     setIsSubmitted(true);
   };
+
+  const mapImageUrl = (contact?.mapImage as any)?.src ?? (typeof contact?.mapImage === "string" ? contact.mapImage : "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80");
 
   return (
     <section 
@@ -89,7 +93,7 @@ export default function ContactCTASection({ contact }: ContactProps) {
                         Giờ mở cửa
                       </h4>
                       <p className="text-sm md:text-base text-[#1c1c19] font-medium">
-                        {contact.workingHours}
+                        {Array.isArray(contact.workingHours) ? contact.workingHours.join(" | ") : (typeof contact.workingHours === "string" ? contact.workingHours : "11:00 - 22:00 hằng ngày")}
                       </p>
                     </div>
                   </div>
@@ -273,7 +277,7 @@ export default function ContactCTASection({ contact }: ContactProps) {
           <div className="h-[450px] lg:h-auto min-h-[500px] bg-[#f0ede9] relative overflow-hidden border border-[#dec0bd]/30 shadow-md">
             <div 
               className="w-full h-full bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-1000"
-              style={{ backgroundImage: `url(${contact.mapImage})` }}
+              style={{ backgroundImage: `url(${mapImageUrl})` }}
             ></div>
             <div className="absolute inset-0 bg-[#5f030a]/5 pointer-events-none"></div>
             

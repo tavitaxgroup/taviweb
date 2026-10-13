@@ -33,7 +33,7 @@ export default function TrustBar({ data }: TrustBarProps) {
         {data.trust.ratingText && (
           <div className="flex items-center gap-3" id="trust-rating">
             <div className="flex items-center text-[#e1c292]" id="stars-row">
-              {Array.from({ length: data.trust.ratingValue || 5 }).map((_, i) => (
+              {Array.from({ length: Math.min(5, Math.max(1, Math.round(Number(data.trust.ratingValue) || 5))) }).map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
             </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "motion/react";
 import { AboutData } from "../../../types/demo";
@@ -69,7 +71,7 @@ export default function AboutSection({ about }: AboutProps) {
             </h2>
 
             <div className="space-y-6 font-sans text-sm md:text-base text-[#574240] leading-relaxed">
-              {(about.content || (about as any).description || "").split("\n\n").filter(Boolean).map((para: string, idx: number) => (
+              {String(about?.content || (about as any)?.description || "").split("\n\n").filter(Boolean).map((para: string, idx: number) => (
                 <p key={idx} className="whitespace-pre-line">
                   {para}
                 </p>

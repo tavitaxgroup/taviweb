@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "motion/react";
 import { HeroData } from "../../../types/demo";
@@ -10,6 +12,8 @@ export default function DemoHero({ hero }: HeroProps) {
   const handleScrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const bgImg = (hero.backgroundImage as any)?.src ?? (typeof hero.backgroundImage === "string" ? hero.backgroundImage : "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80");
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden" id="hero-section">
@@ -25,7 +29,7 @@ export default function DemoHero({ hero }: HeroProps) {
           }}
           alt="Không gian nhà hàng sang trọng"
           className="w-full h-full object-cover"
-          src={hero.backgroundImage}
+          src={bgImg}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/58 to-black/82" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.36)_72%)]" />

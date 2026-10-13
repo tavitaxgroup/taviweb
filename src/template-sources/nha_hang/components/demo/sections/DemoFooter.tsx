@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Send, Check } from "lucide-react";
 import { BusinessData } from "../../../types/demo";
