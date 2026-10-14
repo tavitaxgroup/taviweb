@@ -25,12 +25,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const overrides: WebsiteOverrides = await request.json();
+    const body = await request.json();
+    const { _template_key, ...overrides } = body as WebsiteOverrides & { _template_key?: string };
 
     // Fetch existing theme_config
     const { data: tenant, error: fetchError } = await adminSupabase
       .from('tenants')
-      .select('theme_config')
+      .select('theme_config, template_key')
       .eq('id', tenantId)
       .single();
 
@@ -56,16 +57,21 @@ export async function POST(request: Request) {
       }
     };
 
+    const updatePayload: Record<string, any> = { theme_config: newThemeConfig };
+    if (_template_key) {
+      updatePayload.template_key = _template_key;
+    }
+
     const { error: updateError } = await adminSupabase
       .from('tenants')
-      .update({ theme_config: newThemeConfig })
+      .update(updatePayload)
       .eq('id', tenantId);
 
     if (updateError) {
       return NextResponse.json({ error: 'Failed to update website settings' }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, theme_config: newThemeConfig });
+    return NextResponse.json({ success: true, theme_config: newThemeConfig, template_key: _template_key || tenant.template_key });
   } catch (error) {
     console.error('Error in POST /api/admin/settings/website:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -81,7 +87,7 @@ export async function GET(request: Request) {
 
     const { data: tenant, error: fetchError } = await adminSupabase
       .from('tenants')
-      .select('theme_config, slug, custom_domain')
+      .select('theme_config, slug, custom_domain, template_key')
       .eq('id', tenantId)
       .single();
 
@@ -94,7 +100,8 @@ export async function GET(request: Request) {
     return NextResponse.json({
       ...websiteOverrides,
       _slug: tenant.slug,
-      _custom_domain: tenant.custom_domain
+      _custom_domain: tenant.custom_domain,
+      _template_key: tenant.template_key || 'nha_khoa'
     });
   } catch (error) {
     console.error('Error in GET /api/admin/settings/website:', error);

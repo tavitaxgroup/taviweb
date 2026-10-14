@@ -94,7 +94,7 @@ export default function DealDetailModal({ deal, stages = [], onClose, onDelete, 
       let content = newNote.trim();
       if (activityType === 'reminder') {
         const d = new Date(reminderDate);
-        content = `⏰ NHẮC LỊCH: \${d.toLocaleString('vi-VN')} - \${content}`;
+        content = `⏰ NHẮC LỊCH: ${d.toLocaleString('vi-VN')} - ${content}`;
       }
       
       await CRMService.createActivity(user.tenant_id, {

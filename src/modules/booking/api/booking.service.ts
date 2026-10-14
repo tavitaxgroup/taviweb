@@ -69,6 +69,11 @@ export const BookingService = {
     if (error) throw error;
   },
 
+  async deleteAppointment(tenantId: string, id: string): Promise<void> {
+    const { error } = await supabase.from('booking_appointments').delete().eq('id', id).eq('tenant_id', tenantId);
+    if (error) throw error;
+  },
+
   async updateAppointment(tenantId: string, id: string, updates: Partial<BookingAppointment>, client = supabase): Promise<void> {
     const { error } = await client
       .from('booking_appointments')

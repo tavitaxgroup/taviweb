@@ -34,6 +34,7 @@ export default function ServiceManagement({ template }: { template: string }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: '', price: '', duration: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,6 +89,10 @@ export default function ServiceManagement({ template }: { template: string }) {
     }
   };
 
+  const filteredServices = services.filter((svc) =>
+    searchQuery ? svc.name.toLowerCase().includes(searchQuery.toLowerCase()) : true
+  );
+
   return (
     <div className="bg-white rounded-3xl shadow-sm border border-slate-200 flex flex-col h-full animate-in fade-in duration-500 relative">
       <div className="bg-slate-50 border-b border-slate-200 px-6 py-5 flex items-center justify-between rounded-t-3xl">
@@ -105,18 +110,27 @@ export default function ServiceManagement({ template }: { template: string }) {
         </button>
       </div>
 
-      <div className="px-6 py-4 flex items-center border-b border-slate-100">
+      <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
         <div className="relative w-full max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input type="text" placeholder="Tìm kiếm dịch vụ..." className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tìm kiếm dịch vụ..."
+            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+          />
+        </div>
+        <div className="text-xs font-bold text-slate-400">
+          Tổng: {filteredServices.length} dịch vụ
         </div>
       </div>
 
       <div className="flex-1 overflow-auto">
         {loading ? (
            <div className="p-8 text-center text-slate-500 font-medium">Đang tải dữ liệu...</div>
-        ) : services.length === 0 ? (
-           <div className="p-8 text-center text-slate-500 font-medium">Chưa có dịch vụ nào.</div>
+        ) : filteredServices.length === 0 ? (
+           <div className="p-8 text-center text-slate-500 font-medium">Không tìm thấy dịch vụ nào.</div>
         ) : (
           <table className="w-full text-left border-collapse">
             <thead>
@@ -128,7 +142,7 @@ export default function ServiceManagement({ template }: { template: string }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {services.map(svc => (
+              {filteredServices.map(svc => (
                 <tr key={svc.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4 font-bold text-slate-800">{svc.name}</td>
                   <td className="px-6 py-4 text-sm font-medium text-slate-600">{svc.duration_minutes} Phút</td>

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, Users, User, Scissors, Utensils, ChevronLeft, ChevronRight, Plus, CheckCircle2, XCircle, Trash2, RefreshCcw, LayoutGrid, CalendarDays } from 'lucide-react';
 import { useAuth } from '@/modules/crm/contexts/AuthContext';
 import { BookingService } from '../api/booking.service';
-import { BookingResource, BookingAppointment } from '../types';
+import { BookingResource, BookingAppointment, BookingServiceItem } from '../types';
 import { getBookingConfig } from '../utils/templateConfig';
+import toast from 'react-hot-toast';
 
 const TIME_SLOTS = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
 
@@ -13,6 +14,7 @@ export default function BookingAdmin({ template }: { template: string }) {
 
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [resources, setResources] = useState<BookingResource[]>([]);
+  const [services, setServices] = useState<BookingServiceItem[]>([]);
   const [bookings, setBookings] = useState<BookingAppointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({ opening_time: '08:00', closing_time: '21:00' });
@@ -34,8 +36,9 @@ export default function BookingAdmin({ template }: { template: string }) {
     }
     
     try {
-      const [res, apps, config] = await Promise.all([
+      const [res, svcs, apps, cfg] = await Promise.all([
         BookingService.getResources(user.tenant_id),
+        BookingService.getServices(user.tenant_id),
         BookingService.getAppointments(
           user.tenant_id, 
           new Date(new Date(selectedDate).setHours(0, 0, 0, 0)).toISOString(), 
@@ -44,13 +47,14 @@ export default function BookingAdmin({ template }: { template: string }) {
         BookingService.getSettings(user.tenant_id)
       ]);
       setResources(res.filter(r => r.status === 'active'));
+      setServices(svcs);
       setBookings(apps);
-      setSettings(config);
+      setSettings(cfg);
 
       // Generate time slots based on settings
       const slots = [];
-      const startHour = parseInt(config.opening_time.split(':')[0], 10);
-      const endHour = parseInt(config.closing_time.split(':')[0], 10);
+      const startHour = parseInt(cfg.opening_time.split(':')[0], 10);
+      const endHour = parseInt(cfg.closing_time.split(':')[0], 10);
       for (let i = startHour; i <= endHour; i++) {
         slots.push(`${i.toString().padStart(2, '0')}:00`);
       }
@@ -89,7 +93,14 @@ export default function BookingAdmin({ template }: { template: string }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
-  const [formData, setFormData] = useState({ customerName: '', resourceId: '', time: '09:00' });
+  const [formData, setFormData] = useState({
+    customerName: '',
+    customerPhone: '',
+    resourceId: '',
+    serviceId: '',
+    time: '09:00',
+    notes: '',
+  });
   const [submitting, setSubmitting] = useState(false);
   
   const [selectedAppointment, setSelectedAppointment] = useState<BookingAppointment | null>(null);
@@ -102,25 +113,31 @@ export default function BookingAdmin({ template }: { template: string }) {
     setSubmitting(true);
     try {
       const res = resources.find(r => r.id === formData.resourceId) || resources[0];
+      const svc = services.find(s => s.id === formData.serviceId);
       const start = new Date(selectedDate);
       const [h, m] = formData.time.split(':');
       start.setHours(parseInt(h || '9', 10), parseInt(m || '0', 10), 0, 0);
 
-      const end = new Date(start);
-      end.setHours(start.getHours() + 1); // default 1 hour
+      const durationMinutes = svc?.duration_minutes || 60;
+      const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
 
       await BookingService.createAppointment(user.tenant_id, {
-        resource_id: res.id,
+        resource_id: res?.id,
+        service_id: svc?.id,
+        service_name: svc?.name || 'Dịch vụ tiêu chuẩn',
         customer_name: formData.customerName,
+        customer_phone: formData.customerPhone,
+        notes: formData.notes,
         start_time: start.toISOString(),
         end_time: end.toISOString(),
-        status: 'pending' // Default new booking via Admin might be pending or confirmed
+        status: 'confirmed'
       });
+      toast.success('Đã tạo lịch hẹn thành công!');
       setIsModalOpen(false);
-      setFormData({ customerName: '', resourceId: '', time: '09:00' });
+      setFormData({ customerName: '', customerPhone: '', resourceId: '', serviceId: '', time: '09:00', notes: '' });
       loadData(false);
     } catch (error) {
-      alert('Lỗi tạo lịch hẹn');
+      toast.error('Lỗi tạo lịch hẹn');
     } finally {
       setSubmitting(false);
     }
@@ -130,12 +147,25 @@ export default function BookingAdmin({ template }: { template: string }) {
     if (!user?.tenant_id) return;
     try {
       await BookingService.updateAppointmentStatus(user.tenant_id, appointmentId, newStatus);
-      // Reload and close modal
+      toast.success('Đã cập nhật trạng thái lịch hẹn');
       loadData(false);
       setSelectedAppointment(null);
     } catch (error) {
       console.error(error);
-      alert('Không thể cập nhật trạng thái');
+      toast.error('Không thể cập nhật trạng thái');
+    }
+  };
+
+  const handleDeleteAppointment = async (appointmentId: string) => {
+    if (!user?.tenant_id) return;
+    if (!window.confirm('Bạn có chắc muốn xóa vĩnh viễn lịch hẹn này?')) return;
+    try {
+      await BookingService.deleteAppointment(user.tenant_id, appointmentId);
+      toast.success('Đã xóa lịch hẹn');
+      loadData(false);
+      setSelectedAppointment(null);
+    } catch (error) {
+      toast.error('Không thể xóa lịch hẹn');
     }
   };
 
@@ -499,32 +529,54 @@ export default function BookingAdmin({ template }: { template: string }) {
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h3 className="font-bold text-slate-800 text-lg">Đặt lịch mới</h3>
               <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                 <Trash2 className="w-5 h-5 hidden" />
                  <span className="text-2xl leading-none">&times;</span>
               </button>
             </div>
             <form onSubmit={handleAddAppointment} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Tên khách hàng <span className="text-red-500">*</span></label>
-                <input required autoFocus type="text" value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value})} className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder={`VD: Nguyễn Văn A`} />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Tên khách hàng <span className="text-red-500">*</span></label>
+                  <input required autoFocus type="text" value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value})} className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder="Nguyễn Văn A" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Số điện thoại</label>
+                  <input type="text" value={formData.customerPhone} onChange={e => setFormData({...formData, customerPhone: e.target.value})} className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder="0901234567" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">{config.resourceTitle} <span className="text-red-500">*</span></label>
+                  <select required value={formData.resourceId} onChange={e => setFormData({...formData, resourceId: e.target.value})} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm bg-white">
+                    <option value="">-- Chọn {config.resourceLabel} --</option>
+                    {resources.map(r => (
+                      <option key={r.id} value={r.id}>{r.name} ({r.role_or_capacity || '-'})</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Giờ hẹn <span className="text-red-500">*</span></label>
+                  <input required type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" />
+                </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">{config.resourceTitle} <span className="text-red-500">*</span></label>
-                <select required value={formData.resourceId} onChange={e => setFormData({...formData, resourceId: e.target.value})} className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm bg-white">
-                  <option value="">-- Chọn {config.resourceLabel} --</option>
-                  {resources.map(r => (
-                    <option key={r.id} value={r.id}>{r.name} ({r.role_or_capacity || '-'})</option>
+                <label className="block text-sm font-bold text-slate-700 mb-1">{config.serviceLabel}</label>
+                <select value={formData.serviceId} onChange={e => setFormData({...formData, serviceId: e.target.value})} className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm bg-white">
+                  <option value="">-- Dịch vụ mặc định (60 phút) --</option>
+                  {services.map(s => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} ({s.duration_minutes}p - {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(s.price)})
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Thời gian bắt đầu (Giờ:Phút) <span className="text-red-500">*</span></label>
-                <input required type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" />
+                <label className="block text-sm font-bold text-slate-700 mb-1">Ghi chú</label>
+                <input type="text" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder="Yêu cầu đặc biệt của khách..." />
               </div>
-              <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">Hủy</button>
-                <button type="submit" disabled={submitting} className="flex-1 px-4 py-2 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50">
-                  {submitting ? 'Đang lưu...' : 'Lưu lại'}
+              <div className="pt-3 flex gap-3">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">Hủy</button>
+                <button type="submit" disabled={submitting} className="flex-1 px-4 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50">
+                  {submitting ? 'Đang lưu...' : 'Tạo lịch hẹn'}
                 </button>
               </div>
             </form>
@@ -538,9 +590,18 @@ export default function BookingAdmin({ template }: { template: string }) {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h3 className="font-bold text-slate-800 text-lg">Chi tiết Lịch hẹn</h3>
-              <button onClick={() => setSelectedAppointment(null)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                 <span className="text-2xl leading-none">&times;</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleDeleteAppointment(selectedAppointment.id)}
+                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                  title="Xóa lịch hẹn này"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <button onClick={() => setSelectedAppointment(null)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                   <span className="text-2xl leading-none">&times;</span>
+                </button>
+              </div>
             </div>
             
             <div className="p-6 space-y-4">
@@ -581,7 +642,7 @@ export default function BookingAdmin({ template }: { template: string }) {
                                await BookingService.updateAppointmentResource(user!.tenant_id!, selectedAppointment.id, e.target.value);
                                loadData(false);
                                setSelectedAppointment(null);
-                             } catch (err) { alert('Lỗi xếp chỗ!'); }
+                             } catch (err) { toast.error('Lỗi xếp chỗ!'); }
                           }}
                        >
                           <option value="">-- Chọn chỗ / nhân sự --</option>

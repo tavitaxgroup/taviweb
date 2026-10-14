@@ -2,14 +2,18 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { WebsiteOverrides } from '@/types/demo';
-import { Save, Image as ImageIcon, Loader2, Upload, MessageCircle, Phone, Mail, MapPin, Grid, Star, LayoutTemplate, PanelLeftClose, PanelLeftOpen, ExternalLink, Globe } from 'lucide-react';
+import { Save, Image as ImageIcon, Loader2, Upload, MessageCircle, Phone, Mail, MapPin, Grid, Star, LayoutTemplate, PanelLeftClose, PanelLeftOpen, ExternalLink, Globe, ShoppingBag, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
+import { industryCatalog } from '@/lib/templates/templateCatalog';
 import { ServicesEditor, ReviewsEditor, GalleryEditor, HighlightsEditor } from './WebsiteArrayEditors';
 
 export function WebsiteSettingsView() {
   const [overrides, setOverrides] = useState<WebsiteOverrides>({});
   const [slug, setSlug] = useState<string>('');
   const [customDomain, setCustomDomain] = useState<string>('');
+  const [templateKey, setTemplateKey] = useState<string>('nha_khoa');
+  const [previewNonce, setPreviewNonce] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savingDomain, setSavingDomain] = useState(false);
@@ -33,9 +37,10 @@ export function WebsiteSettingsView() {
       const res = await fetch('/api/admin/settings/website');
       if (res.ok) {
         const data = await res.json();
-        const { _slug, _custom_domain, ...restOverrides } = data;
+        const { _slug, _custom_domain, _template_key, ...restOverrides } = data;
         setSlug(_slug);
         setCustomDomain(_custom_domain || '');
+        if (_template_key) setTemplateKey(_template_key);
         setOverrides(restOverrides);
       }
     } catch (error) {
@@ -76,11 +81,12 @@ export function WebsiteSettingsView() {
       const res = await fetch('/api/admin/settings/website', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(overrides),
+        body: JSON.stringify({ ...overrides, _template_key: templateKey }),
       });
 
       if (res.ok) {
         toast.success('Đã lưu cài đặt website thành công!');
+        setPreviewNonce((n) => n + 1);
       } else {
         toast.error('Lưu cài đặt thất bại');
       }
@@ -148,52 +154,87 @@ export function WebsiteSettingsView() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center p-12 h-[calc(100vh-100px)]"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+    return <div className="flex items-center justify-center p-12 h-[calc(100vh-4rem)]"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
   }
 
   return (
-    <div className="flex h-[calc(100vh-120px)] -mx-6 -my-6 bg-slate-50 transition-all duration-300 overflow-hidden">
+    <div className="flex h-[calc(100vh-4rem)] bg-slate-50 transition-all duration-300 overflow-hidden">
       
-      {/* Left Column: Form Editor (40%) */}
-      <div className={`${showSidebar ? 'w-[40%] min-w-[400px]' : 'w-0 opacity-0 overflow-hidden'} transition-all duration-300 border-r border-slate-200 bg-white flex flex-col h-full relative z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)]`}>
+      {/* Left Column: Form Editor (42%) */}
+      <div className={`${showSidebar ? 'w-[42%] min-w-[400px]' : 'w-0 opacity-0 overflow-hidden'} transition-all duration-300 border-r border-slate-200 bg-white flex flex-col h-full relative z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)]`}>
         <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
-          <h2 className="text-lg font-bold text-slate-800">Tùy Chỉnh Giao Diện</h2>
+          <div>
+            <h2 className="text-base font-extrabold text-slate-900">Tùy Chỉnh Giao Diện Website</h2>
+            <p className="text-xs text-slate-400">Chỉnh sửa trực quan & xem trước thời gian thực</p>
+          </div>
           <div className="flex items-center gap-2">
             {slug && (
               <a
                 href={`/${slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm border border-slate-300"
+                className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold transition-colors text-xs border border-slate-200"
               >
-                <ExternalLink className="w-4 h-4" />
-                <span>Xem Website</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Mở Web</span>
               </a>
             )}
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-70 text-sm"
+              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-bold transition-colors disabled:opacity-70 text-xs shadow-sm shadow-indigo-200"
             >
-              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              <span>{saving ? 'Đang lưu...' : 'Lưu'}</span>
+              {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+              <span>{saving ? 'Đang lưu...' : 'Lưu Thay Đổi'}</span>
             </button>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-10 custom-scrollbar pb-24">
-          
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar pb-24">
+          {/* Quick E-commerce & Template Switcher */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <LayoutTemplate className="w-5 h-5 text-indigo-600" />
+                <h3 className="text-sm font-bold text-slate-800">Giao Diện Ngành Nghề & Cửa Hàng</h3>
+              </div>
+              <Link
+                href="/admin/ecommerce"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-lg transition-colors"
+              >
+                <ShoppingBag className="w-3.5 h-3.5" /> Quản lý Sản phẩm & VietQR →
+              </Link>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Mẫu giao diện (Template) đang áp dụng</label>
+              <select
+                value={templateKey}
+                onChange={(e) => setTemplateKey(e.target.value)}
+                className="w-full px-3 py-2.5 text-sm font-semibold border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50"
+              >
+                {industryCatalog.map((ind) => (
+                  <option key={ind.key} value={ind.key}>
+                    {ind.name} ({ind.key})
+                  </option>
+                ))}
+              </select>
+              <p className="text-[11px] text-slate-400 mt-1">
+                Sau khi đổi mẫu giao diện, bấm <b>Lưu Thay Đổi</b> ở góc trên để cập nhật bản xem trước.
+              </p>
+            </div>
+          </section>
+
           {/* Domain Section */}
           <section className="space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
               <Globe className="w-5 h-5 text-teal-500" />
-              <h3 className="text-base font-semibold text-slate-800">Tên miền riêng (Custom Domain)</h3>
+              <h3 className="text-sm font-bold text-slate-800">Tên miền riêng (Custom Domain)</h3>
             </div>
-            <div className="p-4 bg-teal-50 border border-teal-100 rounded-lg text-sm text-teal-800">
-              <p className="font-semibold mb-1">Hướng dẫn kết nối tên miền:</p>
-              <ul className="list-disc ml-5 space-y-1">
+            <div className="p-3.5 bg-teal-50 border border-teal-100 rounded-xl text-xs text-teal-800">
+              <p className="font-bold mb-1">Hướng dẫn kết nối tên miền:</p>
+              <ul className="list-disc ml-4 space-y-1">
                 <li>Nhập tên miền của bạn (VD: <code className="bg-teal-100 px-1 rounded">spa-cua-toi.com</code>) và bấm Lưu.</li>
-                <li>Vào trang quản lý tên miền (TenTen, MatBao, GoDaddy, v.v.) trỏ bản ghi <b>A</b> về IP: <code className="font-mono bg-teal-100 px-1 rounded font-bold">76.76.21.21</code></li>
+                <li>Trỏ bản ghi <b>A</b> về IP: <code className="font-mono bg-teal-100 px-1 rounded font-bold">76.76.21.21</code></li>
               </ul>
             </div>
             <div className="flex gap-2 items-end">
@@ -210,7 +251,7 @@ export function WebsiteSettingsView() {
               <button
                 onClick={handleSaveDomain}
                 disabled={savingDomain}
-                className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-70 text-sm h-[38px] flex items-center justify-center min-w-[100px]"
+                className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-bold transition-colors disabled:opacity-70 text-xs h-[38px] flex items-center justify-center min-w-[100px]"
               >
                 {savingDomain ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Lưu Tên Miền'}
               </button>
@@ -434,7 +475,7 @@ export function WebsiteSettingsView() {
         </div>
       </div>
 
-      {/* Right Column: Live Preview Iframe (60%) */}
+      {/* Right Column: Live Preview Iframe (58%) */}
       <div className="flex-1 bg-slate-100 flex flex-col relative transition-all duration-300">
         <div className="absolute top-0 inset-x-0 h-10 bg-slate-800 flex items-center justify-between px-4 rounded-t-lg mx-4 mt-4 shadow-sm text-slate-300 text-xs font-medium z-20">
           <div className="flex items-center">
@@ -443,23 +484,33 @@ export function WebsiteSettingsView() {
               <div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
               <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
             </div>
-            Live Preview: /{slug}
+            <span>Live Preview: /{slug}</span>
           </div>
-          <button 
-            onClick={() => setShowSidebar(!showSidebar)}
-            className="p-1.5 hover:bg-slate-700 rounded text-slate-300 transition-colors"
-            title={showSidebar ? "Ẩn sidebar" : "Hiện sidebar"}
-          >
-            {showSidebar ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setPreviewNonce((n) => n + 1)}
+              className="p-1.5 hover:bg-slate-700 rounded text-slate-300 transition-colors"
+              title="Làm mới khung xem trước"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+            </button>
+            <button 
+              onClick={() => setShowSidebar(!showSidebar)}
+              className="p-1.5 hover:bg-slate-700 rounded text-slate-300 transition-colors"
+              title={showSidebar ? "Mở rộng bản xem trước" : "Hiện bảng chỉnh sửa"}
+            >
+              {showSidebar ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
         
         <div className="flex-1 p-4 pt-14 pb-4">
           <div className="w-full h-full bg-white rounded-b-lg shadow-xl overflow-hidden border border-slate-200">
             {slug ? (
               <iframe
+                key={previewNonce}
                 ref={iframeRef}
-                src={`/${slug}?preview=true`}
+                src={`/${slug}?preview=true&v=${previewNonce}`}
                 className="w-full h-full border-0"
                 title="Website Preview"
               />

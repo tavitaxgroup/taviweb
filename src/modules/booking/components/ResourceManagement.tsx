@@ -35,6 +35,8 @@ export default function ResourceManagement({ template }: { template: string }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: '', role: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +76,18 @@ export default function ResourceManagement({ template }: { template: string }) {
     setIsModalOpen(true);
   };
 
+  const handleToggleStatus = async (res: BookingResource) => {
+    if (!user?.tenant_id) return;
+    const nextStatus = res.status === 'active' ? 'inactive' : 'active';
+    try {
+      await BookingService.updateResource(user.tenant_id, res.id, { status: nextStatus });
+      toast.success(nextStatus === 'active' ? `Đã kích hoạt ${res.name}` : `Đã chuyển ${res.name} sang tạm nghỉ`);
+      loadData();
+    } catch (err) {
+      toast.error('Không thể đổi trạng thái');
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!user?.tenant_id) return;
     if (!window.confirm('Bạn có chắc muốn xóa tài nguyên này?')) return;
@@ -85,6 +99,18 @@ export default function ResourceManagement({ template }: { template: string }) {
       toast.error('Lỗi khi xóa tài nguyên');
     }
   };
+
+  const filteredResources = resources.filter((r) => {
+    if (statusFilter !== 'all' && r.status !== statusFilter) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return (
+        r.name.toLowerCase().includes(q) ||
+        (r.role_or_capacity || '').toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
 
   return (
     <div className="bg-white rounded-3xl shadow-sm border border-slate-200 flex flex-col h-full animate-in fade-in duration-500 relative">
@@ -103,41 +129,63 @@ export default function ResourceManagement({ template }: { template: string }) {
         </button>
       </div>
 
-      <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
+      <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100 gap-4">
         <div className="relative">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input type="text" placeholder={`Tìm kiếm ${config.resourceLabel}...`} className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-64" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={`Tìm kiếm ${config.resourceLabel}...`}
+            className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-64"
+          />
         </div>
-        <button className="flex items-center gap-2 text-sm font-bold text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:bg-slate-50">
-          <Filter className="w-4 h-4" /> Lọc theo loại
-        </button>
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-slate-400" />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as any)}
+            className="text-sm font-bold text-slate-600 border border-slate-200 px-3 py-2 rounded-lg bg-white outline-none focus:ring-2 focus:ring-indigo-500/20"
+          >
+            <option value="all">Tất cả trạng thái ({resources.length})</option>
+            <option value="active">Đang hoạt động</option>
+            <option value="inactive">Tạm nghỉ</option>
+          </select>
+        </div>
       </div>
 
       <div className="flex-1 overflow-auto">
         {loading ? (
            <div className="p-8 text-center text-slate-500 font-medium">Đang tải dữ liệu...</div>
-        ) : resources.length === 0 ? (
-           <div className="p-8 text-center text-slate-500 font-medium">Chưa có tài nguyên nào.</div>
+        ) : filteredResources.length === 0 ? (
+           <div className="p-8 text-center text-slate-500 font-medium">Không tìm thấy tài nguyên nào.</div>
         ) : (
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
                 <th className="px-6 py-4 font-bold border-b border-slate-200">Tên Tài Nguyên</th>
                 <th className="px-6 py-4 font-bold border-b border-slate-200">Loại / Sức chứa</th>
-                <th className="px-6 py-4 font-bold border-b border-slate-200">Trạng thái</th>
+                <th className="px-6 py-4 font-bold border-b border-slate-200">Trạng thái (Bấm để đổi)</th>
                 <th className="px-6 py-4 font-bold border-b border-slate-200 text-right">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {resources.map(res => (
+              {filteredResources.map(res => (
                 <tr key={res.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4 font-bold text-slate-800">{res.name}</td>
                   <td className="px-6 py-4 text-sm font-medium text-slate-600">{res.role_or_capacity || '-'}</td>
                   <td className="px-6 py-4">
-                    <span className={`flex items-center gap-1.5 text-sm font-bold ${res.status === 'active' ? 'text-emerald-600' : 'text-slate-400'}`}>
-                      <div className={`w-2 h-2 rounded-full ${res.status === 'active' ? 'bg-emerald-500' : 'bg-slate-300'}`}></div>
+                    <button
+                      onClick={() => handleToggleStatus(res)}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold transition-colors ${
+                        res.status === 'active'
+                          ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                          : 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
+                      }`}
+                    >
+                      <div className={`w-2 h-2 rounded-full ${res.status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}`}></div>
                       {res.status === 'active' ? 'Hoạt động' : 'Tạm nghỉ'}
-                    </span>
+                    </button>
                   </td>
                   <td className="px-6 py-4 text-right space-x-2">
                     <button onClick={() => handleEdit(res)} className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><Edit2 className="w-4 h-4" /></button>

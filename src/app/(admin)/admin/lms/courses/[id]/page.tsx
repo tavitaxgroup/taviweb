@@ -1,14 +1,17 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Loader2, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Image as ImageIcon, UploadCloud } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase/client';
 import CurriculumBuilder from '@/components/lms/CurriculumBuilder';
+import { useAuth } from '@/modules/crm/contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function CourseEditor({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
+  const { user } = useAuth();
   const { id } = use(params);
   const isNew = id === 'new';
   
@@ -20,7 +23,9 @@ export default function CourseEditor({ params }: { params: Promise<{ id: string 
   const [status, setStatus] = useState('draft');
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState<'info'|'curriculum'>('info');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
     if (!isNew) {
@@ -31,7 +36,7 @@ export default function CourseEditor({ params }: { params: Promise<{ id: string 
   const loadCourse = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('courses')
         .select('*')
         .eq('id', id)
@@ -64,18 +69,38 @@ export default function CourseEditor({ params }: { params: Promise<{ id: string 
     }
   };
 
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setThumbnailUrl(data.url);
+        toast.success('Đã tải ảnh bìa lên!');
+      } else {
+        toast.error(data.error || 'Lỗi tải ảnh');
+      }
+    } catch (err) {
+      toast.error('Lỗi kết nối khi tải ảnh');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   const handleSave = async () => {
     if (!title || !slug) {
-      alert('Vui lòng nhập Tên khóa học và Slug hợp lệ!');
+      toast.error('Vui lòng nhập Tên khóa học và Slug hợp lệ!');
       return;
     }
     
     setIsSaving(true);
     try {
-      const token = document.cookie.split('; ').find(row => row.startsWith('crm_token='))?.split('=')[1];
-      if (!token) throw new Error('Not authenticated');
-      
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (!user?.tenant_id) throw new Error('Phiên đăng nhập hết hạn');
       
       const courseData = {
         title,
@@ -84,24 +109,22 @@ export default function CourseEditor({ params }: { params: Promise<{ id: string 
         thumbnail_url: thumbnailUrl,
         price: parseFloat(price) || 0,
         status,
-        tenant_id: payload.tenant_id
+        tenant_id: user.tenant_id
       };
       
       if (isNew) {
         const { data, error } = await supabase.from('courses').insert([courseData]).select().single();
         if (error) throw error;
-        
-        // Redirect to edit page to build curriculum
+        toast.success('Đã tạo khóa học mới! Hãy thêm chương trình học.');
         router.push(`/admin/lms/courses/${data.id}`);
       } else {
         const { error } = await supabase.from('courses').update(courseData).eq('id', id);
         if (error) throw error;
-        alert('Đã lưu thành công!');
+        toast.success('Đã lưu thông tin khóa học!');
       }
-      
     } catch (e: any) {
       console.error(e);
-      alert('Lỗi khi lưu khóa học: ' + e.message);
+      toast.error('Lỗi khi lưu khóa học: ' + e.message);
     } finally {
       setIsSaving(false);
     }
@@ -224,13 +247,31 @@ export default function CourseEditor({ params }: { params: Promise<{ id: string 
                   <span className="text-sm text-slate-400">Chưa có ảnh bìa</span>
                 </div>
               )}
-              <input 
-                type="text" 
-                value={thumbnailUrl}
-                onChange={(e) => setThumbnailUrl(e.target.value)}
-                placeholder="Dán URL hình ảnh vào đây..."
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 text-sm"
-              />
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={thumbnailUrl}
+                  onChange={(e) => setThumbnailUrl(e.target.value)}
+                  placeholder="Dán URL hình ảnh..."
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 text-sm"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleThumbnailUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="shrink-0 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center justify-center"
+                  title="Tải ảnh lên từ máy tính"
+                >
+                  {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
           </div>
         </div>

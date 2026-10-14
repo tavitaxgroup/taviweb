@@ -5,17 +5,18 @@ import { CRMStage } from '../types';
 
 interface CreateDealModalProps {
   stages: CRMStage[];
+  initialStageId?: string;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-export default function CreateDealModal({ stages, onClose, onSuccess }: CreateDealModalProps) {
+export default function CreateDealModal({ stages, initialStageId, onClose, onSuccess }: CreateDealModalProps) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     value: '',
-    stage_id: stages[0]?.id || '',
+    stage_id: initialStageId || stages[0]?.id || '',
     contact_name: '',
     contact_phone: '',
     contact_email: ''

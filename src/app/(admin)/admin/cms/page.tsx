@@ -39,31 +39,67 @@ export default async function CMSPage() {
     console.error('Error loading posts:', e);
   }
 
+  const publishedCount = posts.filter((p) => p.status === 'published').length;
+  const draftCount = posts.length - publishedCount;
+
   return (
-    <div className="p-8 max-w-7xl mx-auto animate-in fade-in zoom-in-95 duration-500">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto animate-in fade-in duration-300 space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 flex items-center gap-2">
-            <FileText className="w-8 h-8 text-indigo-600" />
-            Quản lý Bài viết (CMS)
+          <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2.5">
+            <FileText className="w-7 h-7 text-indigo-600" />
+            Quản lý Bài viết & Tin tức (AI CMS)
           </h1>
-          <p className="text-slate-500 mt-2 font-medium">Tạo và quản lý các bài viết trên website của bạn.</p>
+          <p className="text-slate-500 text-sm mt-1">
+            Soạn thảo nội dung chuẩn SEO hoặc dùng Trợ lý AI viết bài tự động cho website.
+          </p>
         </div>
         <Link 
           href="/admin/cms/editor/new"
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm shadow-indigo-200"
+          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors shadow-sm shadow-indigo-200 shrink-0"
         >
-          <Plus className="w-5 h-5" />
-          Bài viết mới
+          <Plus className="w-4 h-4" />
+          Viết bài mới
         </Link>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-200/60 overflow-hidden">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tổng bài viết</p>
+            <p className="text-2xl font-extrabold text-slate-900 mt-1">{posts.length}</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <FileText className="w-5 h-5" />
+          </div>
+        </div>
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Đã xuất bản</p>
+            <p className="text-2xl font-extrabold text-emerald-600 mt-1">{publishedCount}</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
+            ✓
+          </div>
+        </div>
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Bản nháp</p>
+            <p className="text-2xl font-extrabold text-amber-600 mt-1">{draftCount}</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
+            ✎
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-sm font-semibold uppercase tracking-wider">
-                <th className="p-4 pl-6">Tiêu đề</th>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                <th className="p-4 pl-6">Bài viết</th>
                 <th className="p-4">Đường dẫn (Slug)</th>
                 <th className="p-4">Trạng thái</th>
                 <th className="p-4">Ngày tạo</th>
@@ -73,9 +109,25 @@ export default async function CMSPage() {
             <tbody className="divide-y divide-slate-100">
               {posts.length > 0 ? (
                 posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-slate-50/50 transition-colors group">
-                    <td className="p-4 pl-6 font-medium text-slate-900">{post.title}</td>
-                    <td className="p-4 text-slate-500">{post.slug}</td>
+                  <tr key={post.id} className="hover:bg-slate-50/60 transition-colors group">
+                    <td className="p-4 pl-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-10 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+                          {post.thumbnail_url ? (
+                            <img src={post.thumbnail_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <FileText className="w-4 h-4 text-slate-400" />
+                          )}
+                        </div>
+                        <Link
+                          href={`/admin/cms/editor/${post.id}`}
+                          className="font-bold text-slate-900 hover:text-indigo-600 transition-colors line-clamp-1"
+                        >
+                          {post.title}
+                        </Link>
+                      </div>
+                    </td>
+                    <td className="p-4 text-slate-500 text-xs font-mono">/{post.slug}</td>
                     <td className="p-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
                         post.status === 'published' 
@@ -89,7 +141,12 @@ export default async function CMSPage() {
                       {new Date(post.created_at).toLocaleDateString('vi-VN')}
                     </td>
                     <td className="p-4 pr-6 text-right">
-                      <PostActions postId={post.id} tenantSlug={tenantSlug} postSlug={post.slug} />
+                      <PostActions
+                        postId={post.id}
+                        tenantSlug={tenantSlug}
+                        postSlug={post.slug}
+                        currentStatus={post.status || 'draft'}
+                      />
                     </td>
                   </tr>
                 ))
@@ -97,8 +154,8 @@ export default async function CMSPage() {
                 <tr>
                   <td colSpan={5} className="p-12 text-center text-slate-400">
                     <FileText className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-                    <p className="font-medium text-slate-500">Chưa có bài viết nào.</p>
-                    <p className="text-sm mt-1">Hãy tạo bài viết đầu tiên cho website của bạn.</p>
+                    <p className="font-bold text-slate-600">Chưa có bài viết nào.</p>
+                    <p className="text-sm mt-1">Hãy bấm &quot;Viết bài mới&quot; hoặc dùng AI để tạo bài viết đầu tiên.</p>
                   </td>
                 </tr>
               )}
