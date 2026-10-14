@@ -1,3 +1,4 @@
+﻿"use client";
 import React from "react";
 import { HeroData } from "../../../types/demo";
 
@@ -75,3 +76,4 @@ export function DemoHero({ hero }: DemoHeroProps) {
     </section>
   );
 }
+

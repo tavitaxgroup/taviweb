@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { BusinessInfo } from '../../../types/demo';
@@ -34,16 +35,16 @@ export const DemoNavbar: React.FC<DemoNavbarProps> = ({ business }) => {
         {/* Desktop Links */}
         <div className="hidden shrink-0 md:flex items-center gap-8">
           <a href="#khoa-hoc" className="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">
-            Khóa học
+            KhÃ³a há»c
           </a>
           <a href="#lo-trinh" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
-            Lộ trình
+            Lá»™ trÃ¬nh
           </a>
           <a href="#giao-vien" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
-            Giáo viên
+            GiÃ¡o viÃªn
           </a>
           <a href="#tu-van" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
-            Liên hệ
+            LiÃªn há»‡
           </a>
         </div>
 
@@ -53,7 +54,7 @@ export const DemoNavbar: React.FC<DemoNavbarProps> = ({ business }) => {
             href="#tu-van"
             className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 active:scale-95 transition-all shadow-md hover:shadow-lg"
           >
-            Đăng ký tư vấn
+            ÄÄƒng kÃ½ tÆ° váº¥n
           </a>
         </div>
 
@@ -76,35 +77,35 @@ export const DemoNavbar: React.FC<DemoNavbarProps> = ({ business }) => {
               onClick={() => setIsOpen(false)}
               className="text-base font-semibold text-blue-600 py-2 border-b border-slate-50"
             >
-              Khóa học
+              KhÃ³a há»c
             </a>
             <a
               href="#lo-trinh"
               onClick={() => setIsOpen(false)}
               className="text-base font-medium text-slate-600 hover:text-blue-600 py-2 border-b border-slate-50"
             >
-              Lộ trình
+              Lá»™ trÃ¬nh
             </a>
             <a
               href="#giao-vien"
               onClick={() => setIsOpen(false)}
               className="text-base font-medium text-slate-600 hover:text-blue-600 py-2 border-b border-slate-50"
             >
-              Giáo viên
+              GiÃ¡o viÃªn
             </a>
             <a
               href="#tu-van"
               onClick={() => setIsOpen(false)}
               className="text-base font-medium text-slate-600 hover:text-blue-600 py-2"
             >
-              Liên hệ
+              LiÃªn há»‡
             </a>
             <a
               href="#tu-van"
               onClick={() => setIsOpen(false)}
               className="w-full inline-flex items-center justify-center px-6 py-3 rounded-xl text-base font-semibold bg-blue-600 text-white hover:bg-blue-700 active:scale-95 transition-all shadow-md"
             >
-              Đăng ký tư vấn
+              ÄÄƒng kÃ½ tÆ° váº¥n
             </a>
           </div>
         </div>
@@ -112,3 +113,4 @@ export const DemoNavbar: React.FC<DemoNavbarProps> = ({ business }) => {
     </nav>
   );
 };
+

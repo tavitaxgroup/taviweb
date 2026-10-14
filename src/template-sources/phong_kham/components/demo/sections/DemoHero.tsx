@@ -1,3 +1,4 @@
+﻿"use client";
 import React from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Info, ShieldCheck, Award } from 'lucide-react';
@@ -139,3 +140,4 @@ export default function DemoHero({ hero }: DemoHeroProps) {
     </section>
   );
 }
+

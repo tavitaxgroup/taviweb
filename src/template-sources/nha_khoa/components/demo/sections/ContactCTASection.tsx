@@ -1,3 +1,4 @@
+﻿"use client";
 import { ContactInfo } from '../../../types/demo';
 import { motion } from 'motion/react';
 import { Phone, MapPin, Globe, ArrowRight } from 'lucide-react';
@@ -12,8 +13,8 @@ export default function ContactCTASection({ contact }: ContactCTASectionProps) {
     ? `tel:${cleanPhone}`
     : contact.primaryAction?.href || '#contact';
   const primaryLabel =
-    contact.primaryAction?.label?.trim() || (contact.phone ? 'Gọi ngay' : 'Liên hệ ngay');
-  const secondaryLabel = contact.secondaryAction?.label?.trim() || 'Xem bản đồ';
+    contact.primaryAction?.label?.trim() || (contact.phone ? 'Gá»i ngay' : 'LiÃªn há»‡ ngay');
+  const secondaryLabel = contact.secondaryAction?.label?.trim() || 'Xem báº£n Ä‘á»“';
   const messageCircle = contact.MessageCircle?.trim();
   const shouldShowMessageCircle =
     Boolean(messageCircle) && !/^https?:\/\/facebook\.com\/?$/i.test(messageCircle || '');
@@ -111,3 +112,4 @@ export default function ContactCTASection({ contact }: ContactCTASectionProps) {
     </section>
   );
 }
+

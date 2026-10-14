@@ -76,15 +76,24 @@ export type DemoCTA = {
 
 export type DemoService = {
   title: string;
+  name?: string;
   description: string;
+  category?: string;
   iconKey?: string;
+  iconName?: string;
+  icon?: string;
+  [key: string]: any;
 };
 
 export type DemoReview = {
   author: string;
+  role?: string;
   content: string;
+  text?: string;
+  quote?: string;
   rating: number;
-  source: "google" | "facebook" | "fallback";
+  source: "google" | "facebook" | "fallback" | string;
+  [key: string]: any;
 };
 
 export type DemoPageData = {
@@ -177,4 +186,43 @@ export type TemplateDefaults = {
   primaryCtaLabel: string;
   secondaryCtaLabel: string;
   palette: TemplatePalette;
+};
+
+export type WebsiteOverrides = {
+  hero?: {
+    title?: string;
+    subtitle?: string;
+    eyebrow?: string;
+    badge?: string;
+    image?: DemoImage;
+  };
+  hero_images?: string[];
+  about?: {
+    title?: string;
+    body?: string;
+    description?: string;
+    highlights?: string[];
+    image?: DemoImage;
+  };
+  about_image?: string;
+  services?: any[];
+  gallery?: any[];
+  gallery_urls?: string[];
+  reviews?: any[];
+  trust?: {
+    badges?: string[];
+    rating?: number;
+    reviewCount?: number;
+    followers?: number;
+  };
+  contact?: {
+    phone?: string;
+    email?: string;
+    address?: string;
+    mapQuery?: string;
+    facebookUrl?: string;
+    MessageCircle?: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
 };

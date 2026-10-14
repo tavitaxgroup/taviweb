@@ -1,3 +1,4 @@
+﻿"use client";
 import { ServiceInfo } from '../../../types/demo';
 import { motion } from 'motion/react';
 import * as Icons from 'lucide-react';
@@ -20,10 +21,10 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
         {/* Title Block */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-sans">
-            Dịch Vụ Chuyên Nghiệp
+            Dá»‹ch Vá»¥ ChuyÃªn Nghiá»‡p
           </h2>
           <p className="mt-4 text-base text-gray-600 font-sans">
-            Giải pháp chăm sóc răng miệng toàn diện, chất lượng cao dành cho mọi thành viên trong gia đình bạn.
+            Giáº£i phÃ¡p chÄƒm sÃ³c rÄƒng miá»‡ng toÃ n diá»‡n, cháº¥t lÆ°á»£ng cao dÃ nh cho má»i thÃ nh viÃªn trong gia Ä‘Ã¬nh báº¡n.
           </p>
         </div>
 
@@ -60,3 +61,4 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
     </section>
   );
 }
+

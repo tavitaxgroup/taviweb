@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useEffect } from "react";
 import { DemoPageData } from "../../../types/demo";
 import { DemoNavbar } from "../sections/DemoNavbar";
@@ -64,3 +65,4 @@ export function SpaTemplate({ data }: SpaTemplateProps) {
   );
 }
 export default SpaTemplate;
+

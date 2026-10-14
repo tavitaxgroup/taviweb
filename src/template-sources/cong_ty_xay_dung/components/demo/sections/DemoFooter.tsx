@@ -1,3 +1,4 @@
+﻿"use client";
 import React from "react";
 import { MapPin, Phone, Mail, MessageCircle, Share2 } from "lucide-react";
 import { BusinessInfo } from "../../../types/demo";
@@ -27,7 +28,7 @@ export function DemoFooter({ business }: DemoFooterProps) {
             {business.name}
           </a>
           <p className="text-slate-400 text-sm leading-relaxed">
-            Đơn vị tư vấn thiết kế và thi công xây dựng chuyên nghiệp, mang đến giải pháp bền vững cho mọi công trình của bạn.
+            ÄÆ¡n vá»‹ tÆ° váº¥n thiáº¿t káº¿ vÃ  thi cÃ´ng xÃ¢y dá»±ng chuyÃªn nghiá»‡p, mang Ä‘áº¿n giáº£i phÃ¡p bá»n vá»¯ng cho má»i cÃ´ng trÃ¬nh cá»§a báº¡n.
           </p>
           <div className="flex space-x-3">
             <a 
@@ -50,32 +51,32 @@ export function DemoFooter({ business }: DemoFooterProps) {
         {/* Services Links Column */}
         <div>
           <h4 className="font-sans text-xs font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-800 pb-3">
-            Dịch vụ
+            Dá»‹ch vá»¥
           </h4>
           <ul className="space-y-3.5 text-sm">
             <li>
               <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Xây nhà trọn gói
+                XÃ¢y nhÃ  trá»n gÃ³i
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Sửa chữa cải tạo
+                Sá»­a chá»¯a cáº£i táº¡o
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Thi công phần thô
+                Thi cÃ´ng pháº§n thÃ´
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Hoàn thiện nội thất
+                HoÃ n thiá»‡n ná»™i tháº¥t
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Tư vấn dự toán công trình
+                TÆ° váº¥n dá»± toÃ¡n cÃ´ng trÃ¬nh
               </button>
             </li>
           </ul>
@@ -84,32 +85,32 @@ export function DemoFooter({ business }: DemoFooterProps) {
         {/* Company Links Column */}
         <div>
           <h4 className="font-sans text-xs font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-800 pb-3">
-            Công ty
+            CÃ´ng ty
           </h4>
           <ul className="space-y-3.5 text-sm">
             <li>
               <button onClick={() => handleScrollTo("about")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Về chúng tôi
+                Vá» chÃºng tÃ´i
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("gallery")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Dự án đã thực hiện
+                Dá»± Ã¡n Ä‘Ã£ thá»±c hiá»‡n
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("why-choose-us")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Quy trình làm việc
+                Quy trÃ¬nh lÃ m viá»‡c
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("why-choose-us")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Sự khác biệt
+                Sá»± khÃ¡c biá»‡t
               </button>
             </li>
             <li>
               <button onClick={() => handleScrollTo("contact")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
-                Liên hệ tư vấn
+                LiÃªn há»‡ tÆ° váº¥n
               </button>
             </li>
           </ul>
@@ -118,7 +119,7 @@ export function DemoFooter({ business }: DemoFooterProps) {
         {/* Contact Info Column */}
         <div className="flex flex-col space-y-5">
           <h4 className="font-sans text-xs font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-800 pb-3">
-            Liên hệ
+            LiÃªn há»‡
           </h4>
           <ul className="space-y-4 text-sm">
             {business.address && (
@@ -149,8 +150,9 @@ export function DemoFooter({ business }: DemoFooterProps) {
 
       {/* Footer Bottom copyright area */}
       <div className="border-t border-slate-800/80 py-8 px-4 md:px-12 text-center text-xs text-slate-500">
-        <p>© {new Date().getFullYear()} {business.name}. Mọi quyền được bảo lưu.</p>
+        <p>Â© {new Date().getFullYear()} {business.name}. Má»i quyá»n Ä‘Æ°á»£c báº£o lÆ°u.</p>
       </div>
     </footer>
   );
 }
+

@@ -9,3 +9,5 @@ node_modules/
 tsconfig.tsbuildinfo
 
 *.zip
+scraper/data/leads/*.json
+scraper/config/*progress.json

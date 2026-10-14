@@ -1,3 +1,4 @@
+﻿"use client";
 import { motion } from 'motion/react';
 import * as Lucide from 'lucide-react';
 
@@ -9,8 +10,8 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
   const items = features && features.length > 0
     ? features.map((feat, index) => {
         const parts = feat.split(/[:\-]/);
-        const title = parts[0]?.trim() || "Thế mạnh";
-        const description = parts.slice(1).join("-")?.trim() || "Chăm sóc sức khỏe toàn diện với công nghệ y khoa hiện đại.";
+        const title = parts[0]?.trim() || "Tháº¿ máº¡nh";
+        const description = parts.slice(1).join("-")?.trim() || "ChÄƒm sÃ³c sá»©c khá»e toÃ n diá»‡n vá»›i cÃ´ng nghá»‡ y khoa hiá»‡n Ä‘áº¡i.";
         const iconNames = ["Cpu", "Users", "Heart"];
         const iconName = iconNames[index % iconNames.length];
         
@@ -22,18 +23,18 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
       })
     : [
         {
-          title: 'Công Nghệ Mới',
-          description: 'Trang thiết bị chẩn đoán hình ảnh và xét nghiệm đạt chuẩn quốc tế.',
+          title: 'CÃ´ng Nghá»‡ Má»›i',
+          description: 'Trang thiáº¿t bá»‹ cháº©n Ä‘oÃ¡n hÃ¬nh áº£nh vÃ  xÃ©t nghiá»‡m Ä‘áº¡t chuáº©n quá»‘c táº¿.',
           iconName: "Cpu"
         },
         {
-          title: 'Bác Sĩ Đầu Ngành',
-          description: 'Đội ngũ y bác sĩ có trình độ chuyên môn cao, nhiều năm tu nghiệp nước ngoài.',
+          title: 'BÃ¡c SÄ© Äáº§u NgÃ nh',
+          description: 'Äá»™i ngÅ© y bÃ¡c sÄ© cÃ³ trÃ¬nh Ä‘á»™ chuyÃªn mÃ´n cao, nhiá»u nÄƒm tu nghiá»‡p nÆ°á»›c ngoÃ i.',
           iconName: "Users"
         },
         {
-          title: 'Thân Thiện',
-          description: 'Môi trường phòng khám ấm cúng, phù hợp cho cả trẻ nhỏ và người cao tuổi.',
+          title: 'ThÃ¢n Thiá»‡n',
+          description: 'MÃ´i trÆ°á»ng phÃ²ng khÃ¡m áº¥m cÃºng, phÃ¹ há»£p cho cáº£ tráº» nhá» vÃ  ngÆ°á»i cao tuá»•i.',
           iconName: "Heart"
         }
       ];
@@ -50,10 +51,10 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
             className="space-y-4"
           >
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
-              Tại Sao Chọn Chúng Tôi?
+              Táº¡i Sao Chá»n ChÃºng TÃ´i?
             </h2>
             <p className="text-blue-100 font-sans text-base leading-relaxed">
-              Chúng tôi cam kết kết hợp công nghệ hiện đại bậc nhất với sự thấu cảm, chu đáo trong từng dịch vụ chăm sóc.
+              ChÃºng tÃ´i cam káº¿t káº¿t há»£p cÃ´ng nghá»‡ hiá»‡n Ä‘áº¡i báº­c nháº¥t vá»›i sá»± tháº¥u cáº£m, chu Ä‘Ã¡o trong tá»«ng dá»‹ch vá»¥ chÄƒm sÃ³c.
             </p>
           </motion.div>
  
@@ -88,3 +89,4 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
     </section>
   );
 }
+

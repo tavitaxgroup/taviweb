@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useEffect } from 'react';
 import { DemoPageData } from '../../../types/demo';
 import { updateSeoMetadata } from '../../../lib/demo/seo';
@@ -68,3 +69,4 @@ export const EnglishCenterTemplate: React.FC<EnglishCenterTemplateProps> = ({ da
   );
 };
 export default EnglishCenterTemplate;
+

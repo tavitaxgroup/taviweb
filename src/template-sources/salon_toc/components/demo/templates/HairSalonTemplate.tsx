@@ -1,3 +1,4 @@
+﻿"use client";
 import { useEffect } from 'react';
 import { DemoPageData } from '../../../types/demo';
 import DemoNavbar from '../sections/DemoNavbar';
@@ -65,3 +66,4 @@ export default function HairSalonTemplate({ data }: HairSalonTemplateProps) {
     </div>
   );
 }
+

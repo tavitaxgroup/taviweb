@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState } from 'react';
 import { Phone, CheckCircle, X, Calendar, MessageSquare, MapPin, Mail } from 'lucide-react';
 import { DemoPageData } from '../../../types/demo';
@@ -11,7 +12,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
   const [formData, setFormData] = useState({ name: '', phone: '', date: '', notes: '' });
   const [submitted, setSubmitted] = useState(false);
   const secondaryActionLabel =
-    data.contact.secondaryAction?.label?.replace(/MessageCircle/g, 'Facebook') || 'LIÊN HỆ FACEBOOK';
+    data.contact.secondaryAction?.label?.replace(/MessageCircle/g, 'Facebook') || 'LIÃŠN Há»† FACEBOOK';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
       setShowModal(false);
       setSubmitted(false);
       setFormData({ name: '', phone: '', date: '', notes: '' });
-      alert('Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Chúng tôi sẽ liên hệ trong vòng 30 phút.');
+      alert('Cáº£m Æ¡n báº¡n! YÃªu cáº§u tÆ° váº¥n Ä‘Ã£ Ä‘Æ°á»£c gá»­i thÃ nh cÃ´ng. ChÃºng tÃ´i sáº½ liÃªn há»‡ trong vÃ²ng 30 phÃºt.');
     }, 1500);
   };
 
@@ -77,7 +78,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
               id="cta-phone-btn"
             >
               <Phone className="w-4 h-4 text-white" />
-              <span className="text-white">Gọi studio</span>
+              <span className="text-white">Gá»i studio</span>
             </a>
           )}
 
@@ -104,20 +105,20 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
                   <CheckCircle className="w-16 h-16 animate-bounce" />
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#201a1c]">
-                  Gửi Thành Công!
+                  Gá»­i ThÃ nh CÃ´ng!
                 </h3>
                 <p className="font-sans text-[#6c5962] text-sm">
-                  Cảm ơn bạn đã lựa chọn {data.business.name}. Chuyên viên tư vấn sẽ liên hệ lại với bạn ngay lập tức.
+                  Cáº£m Æ¡n báº¡n Ä‘Ã£ lá»±a chá»n {data.business.name}. ChuyÃªn viÃªn tÆ° váº¥n sáº½ liÃªn há»‡ láº¡i vá»›i báº¡n ngay láº­p tá»©c.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="text-center space-y-2 mb-4">
                   <h3 className="font-serif text-2xl font-semibold text-[#201a1c]">
-                    Đặt Lịch Tư Vấn
+                    Äáº·t Lá»‹ch TÆ° Váº¥n
                   </h3>
                   <p className="font-sans text-[#6c5962] text-xs uppercase tracking-widest">
-                    Chuyên viên sẽ liên hệ thiết kế concept riêng
+                    ChuyÃªn viÃªn sáº½ liÃªn há»‡ thiáº¿t káº¿ concept riÃªng
                   </p>
                 </div>
 
@@ -125,21 +126,21 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-[11px] font-sans uppercase tracking-widest text-[#6c5962] mb-1">
-                      Tên của bạn *
+                      TÃªn cá»§a báº¡n *
                     </label>
                     <input 
                       type="text" 
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Nguyễn Văn A"
+                      placeholder="Nguyá»…n VÄƒn A"
                       className="w-full bg-white border border-[#e1c292]/40 rounded-sm px-4 py-3 text-[#201a1c] font-sans text-sm focus:outline-none focus:border-[#834767] transition-all"
                     />
                   </div>
 
                   <div>
                     <label className="block text-[11px] font-sans uppercase tracking-widest text-[#6c5962] mb-1">
-                      Số điện thoại *
+                      Sá»‘ Ä‘iá»‡n thoáº¡i *
                     </label>
                     <input 
                       type="tel" 
@@ -153,7 +154,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
 
                   <div>
                     <label className="block text-[11px] font-sans uppercase tracking-widest text-[#6c5962] mb-1">
-                      Ngày dự kiến chụp (không bắt buộc)
+                      NgÃ y dá»± kiáº¿n chá»¥p (khÃ´ng báº¯t buá»™c)
                     </label>
                     <input 
                       type="date" 
@@ -165,13 +166,13 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
 
                   <div>
                     <label className="block text-[11px] font-sans uppercase tracking-widest text-[#6c5962] mb-1">
-                      Yêu cầu đặc biệt
+                      YÃªu cáº§u Ä‘áº·c biá»‡t
                     </label>
                     <textarea 
                       rows={3}
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      placeholder="Concept mong muốn, địa điểm..."
+                      placeholder="Concept mong muá»‘n, Ä‘á»‹a Ä‘iá»ƒm..."
                       className="w-full bg-white border border-[#e1c292]/40 rounded-sm px-4 py-3 text-[#201a1c] font-sans text-sm focus:outline-none focus:border-[#834767] transition-all resize-none"
                     />
                   </div>
@@ -182,7 +183,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
                   type="submit"
                   className="w-full bg-[#834767] hover:bg-[#834767]/90 text-white font-sans text-xs uppercase tracking-widest font-semibold py-4 rounded-sm shadow-md transition-all"
                 >
-                  Xác nhận đăng ký
+                  XÃ¡c nháº­n Ä‘Äƒng kÃ½
                 </button>
               </form>
             )}
@@ -194,3 +195,4 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
     </section>
   );
 }
+

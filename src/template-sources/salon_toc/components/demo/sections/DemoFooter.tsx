@@ -1,3 +1,4 @@
+﻿"use client";
 import { MessageCircle, Camera, Play } from 'lucide-react';
 import { BusinessData } from '../../../types/demo';
 
@@ -31,7 +32,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
             className="text-sm text-gray-600 max-w-sm mb-8 leading-relaxed font-normal"
             style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
           >
-            Nâng tầm phong cách cá nhân với những trải nghiệm chăm sóc tóc chuyên nghiệp nhất tại không gian làm đẹp cao cấp của chúng tôi.
+            NÃ¢ng táº§m phong cÃ¡ch cÃ¡ nhÃ¢n vá»›i nhá»¯ng tráº£i nghiá»‡m chÄƒm sÃ³c tÃ³c chuyÃªn nghiá»‡p nháº¥t táº¡i khÃ´ng gian lÃ m Ä‘áº¹p cao cáº¥p cá»§a chÃºng tÃ´i.
           </p>
           <div className="flex gap-4">
             {business.facebookUrl && (
@@ -81,7 +82,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Dịch vụ
+                Dá»‹ch vá»¥
               </button>
             </li>
             <li>
@@ -90,7 +91,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Bộ sưu tập
+                Bá»™ sÆ°u táº­p
               </button>
             </li>
             <li>
@@ -99,7 +100,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Giới thiệu
+                Giá»›i thiá»‡u
               </button>
             </li>
             <li>
@@ -108,7 +109,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Đánh giá khách hàng
+                ÄÃ¡nh giÃ¡ khÃ¡ch hÃ ng
               </button>
             </li>
           </ul>
@@ -129,7 +130,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="hover:text-[#855316] transition-colors duration-200 block"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Chính sách bảo mật
+                ChÃ­nh sÃ¡ch báº£o máº­t
               </a>
             </li>
             <li>
@@ -138,7 +139,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="hover:text-[#855316] transition-colors duration-200 block"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Điều khoản dịch vụ
+                Äiá»u khoáº£n dá»‹ch vá»¥
               </a>
             </li>
             <li>
@@ -146,7 +147,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 className="text-gray-400 cursor-default"
                 style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
-                Địa chỉ: {business.address}
+                Äá»‹a chá»‰: {business.address}
               </span>
             </li>
           </ul>
@@ -159,7 +160,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
           className="text-xs text-gray-500 uppercase tracking-wider font-semibold"
           style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
         >
-          © {currentYear} {business.name}. ALL RIGHTS RESERVED.
+          Â© {currentYear} {business.name}. ALL RIGHTS RESERVED.
         </p>
         <p 
           className="text-xs text-gray-500 uppercase tracking-wider font-semibold"
@@ -171,3 +172,4 @@ export default function DemoFooter({ business }: DemoFooterProps) {
     </footer>
   );
 }
+

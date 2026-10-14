@@ -1,3 +1,4 @@
+﻿"use client";
 import { useState } from "react";
 import { Menu, X, Scale } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -28,25 +29,25 @@ export default function DemoNavbar({ data }: SectionProps) {
             href="#services"
             className="font-sans font-medium text-gray-600 hover:text-blue-900 transition-colors text-sm"
           >
-            Dịch vụ
+            Dá»‹ch vá»¥
           </a>
           <a
             href="#about"
             className="font-sans font-medium text-gray-600 hover:text-blue-900 transition-colors text-sm"
           >
-            Về chúng tôi
+            Vá» chÃºng tÃ´i
           </a>
           <a
             href="#gallery"
             className="font-sans font-medium text-gray-600 hover:text-blue-900 transition-colors text-sm"
           >
-            Thư viện
+            ThÆ° viá»‡n
           </a>
           <a
             href="#contact"
             className="font-sans font-medium text-gray-600 hover:text-blue-900 transition-colors text-sm"
           >
-            Liên hệ
+            LiÃªn há»‡
           </a>
         </div>
 
@@ -56,7 +57,7 @@ export default function DemoNavbar({ data }: SectionProps) {
             href="#contact"
             className="inline-flex justify-center items-center bg-amber-700 hover:bg-amber-800 text-white font-sans font-semibold text-sm px-6 py-3 rounded-lg shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
           >
-            Đặt lịch tư vấn
+            Äáº·t lá»‹ch tÆ° váº¥n
           </a>
         </div>
 
@@ -79,28 +80,28 @@ export default function DemoNavbar({ data }: SectionProps) {
               onClick={() => setIsOpen(false)}
               className="font-sans font-medium text-gray-700 hover:text-blue-900 transition-colors text-base py-1"
             >
-              Dịch vụ
+              Dá»‹ch vá»¥
             </a>
             <a
               href="#about"
               onClick={() => setIsOpen(false)}
               className="font-sans font-medium text-gray-700 hover:text-blue-900 transition-colors text-base py-1"
             >
-              Về chúng tôi
+              Vá» chÃºng tÃ´i
             </a>
             <a
               href="#gallery"
               onClick={() => setIsOpen(false)}
               className="font-sans font-medium text-gray-700 hover:text-blue-900 transition-colors text-base py-1"
             >
-              Thư viện
+              ThÆ° viá»‡n
             </a>
             <a
               href="#contact"
               onClick={() => setIsOpen(false)}
               className="font-sans font-medium text-gray-700 hover:text-blue-900 transition-colors text-base py-1"
             >
-              Liên hệ
+              LiÃªn há»‡
             </a>
             <div className="pt-4 border-t border-gray-100">
               <a
@@ -108,7 +109,7 @@ export default function DemoNavbar({ data }: SectionProps) {
                 onClick={() => setIsOpen(false)}
                 className="w-full inline-flex justify-center items-center bg-amber-700 hover:bg-amber-800 text-white font-sans font-semibold px-5 py-3.5 rounded-lg shadow-sm transition-all text-center"
               >
-                Đặt lịch tư vấn
+                Äáº·t lá»‹ch tÆ° váº¥n
               </a>
             </div>
           </div>
@@ -117,3 +118,4 @@ export default function DemoNavbar({ data }: SectionProps) {
     </nav>
   );
 }
+

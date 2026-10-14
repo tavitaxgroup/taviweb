@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { DemoPageData } from "../../types/demo";
 import { ConstructionCompanyTemplate } from "./templates/ConstructionCompanyTemplate";
 
@@ -18,3 +18,6 @@ export function DemoTemplateRenderer({ data }: DemoTemplateRendererProps) {
       return <ConstructionCompanyTemplate data={data} />;
   }
 }
+
+export default DemoTemplateRenderer;
+

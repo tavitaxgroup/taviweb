@@ -1,3 +1,4 @@
+﻿"use client";
 import { AboutInfo } from '../../../types/demo';
 import { motion } from 'motion/react';
 import { Check } from 'lucide-react';
@@ -81,3 +82,4 @@ export default function AboutSection({ about }: AboutSectionProps) {
     </section>
   );
 }
+

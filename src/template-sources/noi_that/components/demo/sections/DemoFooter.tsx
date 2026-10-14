@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState } from 'react';
 import { ArrowRight, Share2, Check, Copy } from 'lucide-react';
 import { BusinessInfo } from '../../../types/demo';
@@ -39,7 +40,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
               {business.name || business.logoText || 'STUDIO'}
             </div>
             <p className="font-sans text-sm text-brand-primary/70 leading-relaxed max-w-sm mb-8">
-              Đơn vị thiết kế và thi công nội thất cao cấp hàng đầu, kiến tạo những không gian sống đầy cảm hứng và mang đậm dấu ấn cá nhân.
+              ÄÆ¡n vá»‹ thiáº¿t káº¿ vÃ  thi cÃ´ng ná»™i tháº¥t cao cáº¥p hÃ ng Ä‘áº§u, kiáº¿n táº¡o nhá»¯ng khÃ´ng gian sá»‘ng Ä‘áº§y cáº£m há»©ng vÃ  mang Ä‘áº­m dáº¥u áº¥n cÃ¡ nhÃ¢n.
             </p>
             
             {/* Share action */}
@@ -60,27 +61,27 @@ export default function DemoFooter({ business }: DemoFooterProps) {
           {/* Col 2 - Services */}
           <div className="md:col-span-2">
             <h5 className="font-sans text-[11px] font-bold text-brand-primary tracking-widest uppercase mb-6">
-              Dịch vụ
+              Dá»‹ch vá»¥
             </h5>
             <ul className="space-y-4 font-sans text-sm text-brand-primary/70">
               <li>
                 <a href="#services" className="hover:text-brand-secondary transition-colors">
-                  Căn hộ
+                  CÄƒn há»™
                 </a>
               </li>
               <li>
                 <a href="#services" className="hover:text-brand-secondary transition-colors">
-                  Nhà phố
+                  NhÃ  phá»‘
                 </a>
               </li>
               <li>
                 <a href="#services" className="hover:text-brand-secondary transition-colors">
-                  Văn phòng
+                  VÄƒn phÃ²ng
                 </a>
               </li>
               <li>
                 <a href="#services" className="hover:text-brand-secondary transition-colors">
-                  Biệt thự
+                  Biá»‡t thá»±
                 </a>
               </li>
             </ul>
@@ -89,27 +90,27 @@ export default function DemoFooter({ business }: DemoFooterProps) {
           {/* Col 3 - Company Links */}
           <div className="md:col-span-2">
             <h5 className="font-sans text-[11px] font-bold text-brand-primary tracking-widest uppercase mb-6">
-              Về chúng tôi
+              Vá» chÃºng tÃ´i
             </h5>
             <ul className="space-y-4 font-sans text-sm text-brand-primary/70">
               <li>
                 <a href="#about" className="hover:text-brand-secondary transition-colors">
-                  Triết lý
+                  Triáº¿t lÃ½
                 </a>
               </li>
               <li>
                 <a href="#why-choose-us" className="hover:text-brand-secondary transition-colors">
-                  Giá trị cốt lõi
+                  GiÃ¡ trá»‹ cá»‘t lÃµi
                 </a>
               </li>
               <li>
                 <a href="#contact" className="hover:text-brand-secondary transition-colors">
-                  Báo giá
+                  BÃ¡o giÃ¡
                 </a>
               </li>
               <li>
                 <a href="#contact" className="hover:text-brand-secondary transition-colors">
-                  Liên hệ
+                  LiÃªn há»‡
                 </a>
               </li>
             </ul>
@@ -121,7 +122,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
               Newsletter
             </h5>
             <p className="font-sans text-sm text-brand-primary/70 mb-6">
-              Đăng ký để nhận những cảm hứng thiết kế và phong cách sống mới nhất.
+              ÄÄƒng kÃ½ Ä‘á»ƒ nháº­n nhá»¯ng cáº£m há»©ng thiáº¿t káº¿ vÃ  phong cÃ¡ch sá»‘ng má»›i nháº¥t.
             </p>
 
             <form onSubmit={handleSubscribe} className="flex border-b border-brand-secondary/40 pb-2 relative">
@@ -130,7 +131,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={subscribed ? "Cảm ơn bạn đã đăng ký!" : "Email của bạn"}
+                placeholder={subscribed ? "Cáº£m Æ¡n báº¡n Ä‘Ã£ Ä‘Äƒng kÃ½!" : "Email cá»§a báº¡n"}
                 disabled={subscribed}
                 className="bg-transparent border-none focus:outline-none focus:ring-0 w-full placeholder:text-brand-primary/45 text-brand-primary font-sans text-sm pr-10"
               />
@@ -149,7 +150,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-brand-secondary/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-brand-primary/60 font-sans tracking-widest">
           <div>
-            © {new Date().getFullYear()} {business.name}. All rights reserved.
+            Â© {new Date().getFullYear()} {business.name}. All rights reserved.
           </div>
           <div className="flex gap-8">
             <a href="#" className="hover:text-brand-primary transition-colors">
@@ -165,3 +166,4 @@ export default function DemoFooter({ business }: DemoFooterProps) {
     </footer>
   );
 }
+

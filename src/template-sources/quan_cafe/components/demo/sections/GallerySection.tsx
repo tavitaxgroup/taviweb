@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState } from 'react';
 import { Eye } from 'lucide-react';
 import { DemoPageData } from '../../../types/demo';
@@ -19,11 +20,11 @@ export default function GallerySection({ data }: SectionProps) {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#553722] mb-4">
-            Nhịp thở tại Quán
+            Nhá»‹p thá»Ÿ táº¡i QuÃ¡n
           </h2>
           <div className="w-16 h-1 bg-[#553722] mx-auto mb-6"></div>
           <p className="max-w-xl mx-auto text-[#50453e] text-base sm:text-lg">
-            Lưu giữ những khoảnh khắc đời thường, những góc nhỏ bình yên và nghệ thuật pha chế tại {data.business.name}.
+            LÆ°u giá»¯ nhá»¯ng khoáº£nh kháº¯c Ä‘á»i thÆ°á»ng, nhá»¯ng gÃ³c nhá» bÃ¬nh yÃªn vÃ  nghá»‡ thuáº­t pha cháº¿ táº¡i {data.business.name}.
           </p>
         </div>
 
@@ -46,10 +47,10 @@ export default function GallerySection({ data }: SectionProps) {
                   <Eye className="w-5 h-5" />
                 </div>
                 <h4 className="text-white text-xl sm:text-2xl font-bold mb-1">
-                  {items[0].title || 'Góc bình yên'}
+                  {items[0].title || 'GÃ³c bÃ¬nh yÃªn'}
                 </h4>
                 <p className="text-white/80 text-sm font-medium">
-                  {items[0].subtitle || 'Chiêm ngưỡng không gian mộc mạc.'}
+                  {items[0].subtitle || 'ChiÃªm ngÆ°á»¡ng khÃ´ng gian má»™c máº¡c.'}
                 </p>
               </div>
             </div>
@@ -112,10 +113,10 @@ export default function GallerySection({ data }: SectionProps) {
                     <Eye className="w-5 h-5" />
                   </div>
                   <h4 className="text-white text-lg font-bold mb-1">
-                    {items[3].title || 'Khoảnh khắc trọn vẹn'}
+                    {items[3].title || 'Khoáº£nh kháº¯c trá»n váº¹n'}
                   </h4>
                   <p className="text-white/80 text-sm font-medium">
-                    {items[3].subtitle || 'Chia sẻ những câu chuyện ấm lòng.'}
+                    {items[3].subtitle || 'Chia sáº» nhá»¯ng cÃ¢u chuyá»‡n áº¥m lÃ²ng.'}
                   </p>
                 </div>
               </div>
@@ -166,3 +167,4 @@ export default function GallerySection({ data }: SectionProps) {
     </section>
   );
 }
+
