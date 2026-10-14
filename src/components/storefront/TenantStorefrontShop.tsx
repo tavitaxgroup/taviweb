@@ -75,6 +75,19 @@ export default function TenantStorefrontShop({
   };
 
   const addToCart = (product: StoreProduct, openDrawer = false) => {
+    const currentProductQtyInCart = cart
+      .filter(item => item.product_id === product.id)
+      .reduce((sum, item) => sum + item.quantity, 0);
+
+    if (currentProductQtyInCart + 1 > product.stock) {
+      showNotice(
+        product.stock <= 0
+          ? `Sản phẩm "${product.name}" đã hết hàng!`
+          : `Kho chỉ còn tối đa ${product.stock} sản phẩm "${product.name}" (bạn đã có ${currentProductQtyInCart} trong giỏ)!`
+      );
+      return;
+    }
+
     const chosenVariant =
       selectedVariants[product.id] ||
       (product.variants && product.variants.length > 0 ? product.variants[0].name : '');
@@ -113,6 +126,21 @@ export default function TenantStorefrontShop({
   };
 
   const updateQty = (idx: number, delta: number) => {
+    const targetItem = cart[idx];
+    if (!targetItem) return;
+
+    if (delta > 0 && targetItem.product_id) {
+      const prod = products.find(p => p.id === targetItem.product_id);
+      const totalInCartForProd = cart
+        .filter(item => item.product_id === targetItem.product_id)
+        .reduce((sum, item) => sum + item.quantity, 0);
+
+      if (prod && totalInCartForProd + delta > prod.stock) {
+        showNotice(`Kho chỉ còn tối đa ${prod.stock} sản phẩm "${prod.name}"!`);
+        return;
+      }
+    }
+
     const next = cart
       .map((item, i) => (i === idx ? { ...item, quantity: item.quantity + delta } : item))
       .filter(item => item.quantity > 0);
@@ -150,7 +178,21 @@ export default function TenantStorefrontShop({
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Đặt hàng thất bại');
+      if (!res.ok) {
+        // Handle Race Condition / Out of stock (HTTP 409)
+        if (res.status === 409 && data.product_id) {
+          const avail = Number(data.available_stock ?? 0);
+          if (avail <= 0) {
+            saveCart(cart.filter(i => i.product_id !== data.product_id));
+          } else {
+            saveCart(
+              cart.map(i => (i.product_id === data.product_id ? { ...i, quantity: avail } : i))
+            );
+          }
+          setCheckoutStep('cart');
+        }
+        throw new Error(data.error || 'Đặt hàng thất bại');
+      }
 
       setCreatedOrder(data.order);
       setStoreBank(data.store_bank);

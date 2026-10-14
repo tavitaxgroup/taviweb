@@ -2,7 +2,7 @@ import { Pool } from 'pg';
 
 let pool: Pool | null = null;
 
-function getPool(): Pool {
+export function getPool(): Pool {
   if (!pool) {
     const conn = process.env.DIRECT_URL || process.env.DATABASE_URL;
     if (!conn) {

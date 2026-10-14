@@ -223,9 +223,16 @@ export default function EcommerceDashboard() {
       if (selectedOrder?.id === orderId) {
         setSelectedOrder(prev => (prev ? { ...prev, status } : null));
       }
-      toast.success('Đã cập nhật trạng thái đơn hàng');
-    } catch (err) {
-      toast.error('Lỗi cập nhật đơn hàng');
+      // Refresh products so any restocked/deducted inventory is reflected immediately
+      const freshProducts = await EcommerceService.getProducts(tenantId);
+      setProducts(freshProducts);
+      toast.success(
+        status === 'cancelled'
+          ? 'Đã hủy đơn & tự động hoàn trả tồn kho!'
+          : 'Đã cập nhật trạng thái đơn hàng'
+      );
+    } catch (err: any) {
+      toast.error(err?.message || 'Lỗi cập nhật đơn hàng');
     }
   };
 

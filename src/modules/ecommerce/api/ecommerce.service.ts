@@ -113,16 +113,20 @@ export const EcommerceService = {
     orderId: string,
     updates: Partial<Pick<StoreOrder, 'status' | 'payment_status' | 'notes'>>
   ): Promise<StoreOrder> {
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', orderId)
-      .eq('tenant_id', tenantId)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
+    const res = await fetch('/api/store/orders', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tenant_id: tenantId,
+        order_id: orderId,
+        ...updates,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Lỗi cập nhật đơn hàng');
+    }
+    return data.order;
   },
 
   async getStoreSettings(tenantId: string): Promise<StoreSettings> {
