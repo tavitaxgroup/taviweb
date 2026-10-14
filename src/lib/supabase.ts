@@ -1,26 +1,52 @@
 import { createClient } from '@supabase/supabase-js';
 
-let supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://llposvgrqjsrqktahrtw.supabase.co";
-if (supabaseUrl.includes('placeholder.supabase.co')) {
-  supabaseUrl = "https://llposvgrqjsrqktahrtw.supabase.co";
-}
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  'https://afykilitmywbbgvwcsby.supabase.co';
 
-const fallbackKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxscG9zdmdycWpzcnFrdGFocnR3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MzQwNDM3NywiZXhwIjoyMDk4OTgwMzc3fQ.3ESmqkafBVkIe5nnh2egk8Mr4iOI2332KmdH312aS-A";
+const fallbackKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmeWtpbGl0bXl3YmJndndjc2J5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MzQwNDM3NywiZXhwIjoyMDk4OTgwMzc3fQ.direct-pg-bridge';
 
-let supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || fallbackKey;
-if (supabaseKey.includes('your-anon-key-here')) {
-  supabaseKey = fallbackKey;
-}
+const effectiveKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  fallbackKey;
 
-const isServer = typeof window === 'undefined';
-// CẢNH BÁO: Vì CRM này dùng custom Auth (JWT riêng) chứ không dùng Supabase Auth,
-// nên Supabase client trên trình duyệt không có session và bị RLS chặn.
-// Do đó, ta TẠM THỜI phải dùng Service Role Key (fallbackKey) trên client để bypass RLS.
-// (Vercel tự động inject NEXT_PUBLIC_SUPABASE_ANON_KEY làm hỏng app vì RLS).
-const effectiveKey = fallbackKey;
+/**
+ * Custom fetch adapter that routes Supabase PostgREST (/rest/v1/*) requests
+ * through the local PostgreSQL PostgREST engine (/api/pg-rest/*) backed by DIRECT_URL.
+ */
+export const customPgRestFetch: typeof fetch = async (input, init) => {
+  const urlStr =
+    typeof input === 'string'
+      ? input
+      : input instanceof URL
+      ? input.toString()
+      : input.url;
 
-export const supabase = createClient(supabaseUrl, effectiveKey);
+  const restMarker = '/rest/v1/';
+  const restIdx = urlStr.indexOf(restMarker);
 
-// Dành cho các Server API Routes cần quyền cao nhất (Bypass RLS) - Giữ lại để tương thích ngược
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey || 'dummy-server-key';
-export const adminSupabase = createClient(supabaseUrl, serviceRoleKey);
+  if (restIdx !== -1) {
+    const suffix = urlStr.slice(restIdx + restMarker.length);
+    const baseUrl =
+      typeof window !== 'undefined'
+        ? ''
+        : process.env.NEXT_PUBLIC_SITE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const rewrittenUrl = `${baseUrl}/api/pg-rest/${suffix}`;
+    return fetch(rewrittenUrl, init);
+  }
+
+  return fetch(input, init);
+};
+
+export const supabase = createClient(supabaseUrl, effectiveKey, {
+  auth: { persistSession: false },
+  global: { fetch: customPgRestFetch },
+});
+
+export const adminSupabase = createClient(supabaseUrl, effectiveKey, {
+  auth: { persistSession: false },
+  global: { fetch: customPgRestFetch },
+});

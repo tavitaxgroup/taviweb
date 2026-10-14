@@ -3,15 +3,9 @@ import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 import { getTenantStatus } from './lib/redis/tenantCache';
 import { globalRateLimiter } from './lib/redis/rateLimiter';
-import { createClient } from '@supabase/supabase-js';
+import { adminSupabase as supabase } from './lib/supabase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123';
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-const supabase = createClient(supabaseUrl!, supabaseKey!, {
-  auth: { persistSession: false },
-});
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,11 +15,12 @@ export async function proxy(request: NextRequest) {
     .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
     .replace('localhost:3000', process.env.NEXT_PUBLIC_ROOT_DOMAIN || '');
 
-  // 1. Bypass public static assets and auth routes
+  // 1. Bypass public static assets, internal pg-rest bridge, and auth routes
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/assets') ||
     pathname.startsWith('/favicon.ico') ||
+    pathname.startsWith('/api/pg-rest') ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/webhooks') ||
     pathname.startsWith('/api/cron')
@@ -59,17 +54,21 @@ export async function proxy(request: NextRequest) {
 
   // 2. Global Rate Limiting for public API endpoints
   if (pathname.startsWith('/api/')) {
-    const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1';
-    const { success, limit, reset, remaining } = await globalRateLimiter.limit(ip);
-    if (!success) {
-      return new NextResponse('Too Many Requests', {
-        status: 429,
-        headers: {
-          'X-RateLimit-Limit': limit.toString(),
-          'X-RateLimit-Remaining': remaining.toString(),
-          'X-RateLimit-Reset': reset.toString(),
-        },
-      });
+    try {
+      const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1';
+      const { success, limit, reset, remaining } = await globalRateLimiter.limit(ip);
+      if (!success) {
+        return new NextResponse('Too Many Requests', {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': limit.toString(),
+            'X-RateLimit-Remaining': remaining.toString(),
+            'X-RateLimit-Reset': reset.toString(),
+          },
+        });
+      }
+    } catch (err) {
+      // Gracefully continue if Redis rate limiter is unreachable
     }
   }
 

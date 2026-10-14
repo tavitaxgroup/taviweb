@@ -1,11 +1,5 @@
-import { redis } from './client'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseKey || 'placeholder', {
-  auth: { persistSession: false }
-})
+import { redis } from './client';
+import { adminSupabase } from '../supabase';
 
 export type CachedTenant = {
   id: string;
@@ -16,30 +10,36 @@ export type CachedTenant = {
   ai_used: number;
   active_modules: string[];
   isExpired: boolean;
-}
+};
 
 export async function getTenantStatus(tenantId: string): Promise<CachedTenant | null> {
   const cacheKey = `tenant:${tenantId}`;
-  
-  // 1. Try get from Redis
-  const cached = await redis.get<CachedTenant>(cacheKey);
-  if (cached) {
-    return cached;
+
+  // 1. Try get from Redis (gracefully fallback if Redis is unavailable)
+  try {
+    const cached = await redis.get<CachedTenant>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+  } catch (err) {
+    console.warn('Redis get error in getTenantStatus, falling back to DB:', err);
   }
-  
-  // 2. Fetch from Supabase
-  const { data: tenant, error } = await supabase
+
+  // 2. Fetch from Database
+  const { data: tenant, error } = await adminSupabase
     .from('tenants')
     .select('id, name, slug, package_id, ai_quota, ai_used, active_modules, package_expires_at')
     .eq('id', tenantId)
     .single();
-    
+
   if (error || !tenant) {
     return null;
   }
-  
-  const isExpired = tenant.package_expires_at ? new Date(tenant.package_expires_at) < new Date() : true;
-  
+
+  const isExpired = tenant.package_expires_at
+    ? new Date(tenant.package_expires_at) < new Date()
+    : false;
+
   const payload: CachedTenant = {
     id: tenant.id,
     name: tenant.name,
@@ -47,12 +47,16 @@ export async function getTenantStatus(tenantId: string): Promise<CachedTenant | 
     package_id: tenant.package_id,
     ai_quota: tenant.ai_quota,
     ai_used: tenant.ai_used,
-    active_modules: tenant.active_modules,
-    isExpired
+    active_modules: tenant.active_modules || [],
+    isExpired,
   };
-  
+
   // 3. Cache in Redis (TTL 60s)
-  await redis.setex(cacheKey, 60, JSON.stringify(payload));
-  
+  try {
+    await redis.setex(cacheKey, 60, JSON.stringify(payload));
+  } catch (err) {
+    console.warn('Redis setex error in getTenantStatus:', err);
+  }
+
   return payload;
 }
