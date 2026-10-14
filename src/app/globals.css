@@ -1,28 +1,94 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --text: #0f172a;
+  --muted: #667085;
+  --border: #e5e7eb;
+  --surface: #ffffff;
+  color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-be-vietnam-pro), "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Industry template custom palette tokens */
+  --color-brand-primary: #60233f;
+  --color-brand-secondary: #6f595e;
+  --color-brand-accent: #4a3602;
+  --color-brand-accent-light: #ffdf9e;
+  --color-brand-bg: #fff8fa;
+  --color-brand-bg-card: #ffffff;
+  --color-brand-bg-container: #f3ecee;
+  --color-brand-bg-low: #f9f2f4;
+  --color-brand-outline: #d6c1c7;
+  --color-primary: #9a3b54;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #b9536c;
+  --color-on-primary-container: #fffbff;
+  --color-secondary: #6f5a4c;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f7dac8;
+  --color-on-secondary-container: #745e50;
+  --color-tertiary: #4a624c;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #637b64;
+  --color-on-tertiary-container: #f7fff3;
+  --color-on-background: #1c1c19;
+  --color-surface: #fdf9f5;
+  --color-on-surface: #1c1c19;
+  --color-surface-container-low: #f7f3ef;
+  --color-surface-container: #f1ede9;
+  --color-surface-container-high: #ebe7e4;
+  --color-surface-container-highest: #e5e2de;
+  --color-surface-container-lowest: #ffffff;
+  --color-outline: #887275;
+  --color-outline-variant: #dac0c4;
+  --color-gray-150: #eef2f4;
+  --color-gray-550: #667085;
+  --color-gray-650: #4b5563;
+  --color-gray-850: #1f2933;
+  --color-teal-150: #ccfbf1;
+  --color-teal-650: #0f9488;
+  --color-teal-750: #0f766e;
+  --color-teal-850: #134e4a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    box-sizing: border-box;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  /* font-family removed so Tailwind font-sans applies via html tag */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  input,
+  select,
+  textarea {
+    color: #0f172a;
+  }
 }
 
 /* Custom Scrollbar */
@@ -94,29 +160,6 @@ body {
 }
 
 /* TAVIWEB CLASSES */
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  color: var(--text);
-  background: var(--background);
-}
-
-a {
-  color: inherit;
-}
-
-img {
-  max-width: 100%;
-}
 
 .template-render-root {
   max-width: 100%;

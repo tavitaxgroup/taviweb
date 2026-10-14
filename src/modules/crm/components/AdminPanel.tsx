@@ -300,7 +300,7 @@ export default function AdminPanel() {
                     </div>
                     <p className="text-xs text-slate-500">{p.description}</p>
                     <div className="mt-3 flex gap-2">
-                       <button onClick={() => openProductModal(p)} className="text-xs bg-slate-100 px-3 py-1.5 rounded font-semibold hover:bg-slate-200">Sửa</button>
+                       <button onClick={() => openProductModal(p)} className="text-xs bg-slate-100 text-slate-700 px-3 py-1.5 rounded font-semibold hover:bg-slate-200">Sửa</button>
                        <button onClick={() => handleDeleteProduct(p)} className="text-xs bg-red-50 text-red-600 px-3 py-1.5 rounded font-semibold hover:bg-red-100">Xóa</button>
                     </div>
                   </div>

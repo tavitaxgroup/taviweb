@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { 
   Scissors, Utensils, Stethoscope, Dumbbell, Camera, SprayCan, Wrench, Briefcase, Coffee, Building, Paintbrush, Calendar, Sparkles
 } from 'lucide-react';
@@ -19,6 +19,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Stethoscope className="w-6 h-6" />,
         smallIcon: <Stethoscope className="w-4 h-4" />,
         color: 'bg-emerald-100 border-emerald-200 text-emerald-600',
+        avatarBg: 'bg-emerald-600',
         iconColor: 'text-emerald-500'
       };
     case 'spa':
@@ -35,6 +36,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Sparkles className="w-6 h-6" />,
         smallIcon: <Sparkles className="w-4 h-4" />,
         color: 'bg-pink-100 border-pink-200 text-pink-600',
+        avatarBg: 'bg-pink-600',
         iconColor: 'text-pink-500'
       };
     case 'salon_toc':
@@ -50,6 +52,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Scissors className="w-6 h-6" />,
         smallIcon: <Scissors className="w-4 h-4" />,
         color: 'bg-rose-100 border-rose-200 text-rose-600',
+        avatarBg: 'bg-rose-600',
         iconColor: 'text-rose-500'
       };
     case 'phong_gym':
@@ -65,6 +68,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Dumbbell className="w-6 h-6" />,
         smallIcon: <Dumbbell className="w-4 h-4" />,
         color: 'bg-zinc-100 border-zinc-200 text-zinc-600',
+        avatarBg: 'bg-zinc-700',
         iconColor: 'text-zinc-500'
       };
     case 'studio_chup_anh':
@@ -80,6 +84,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Camera className="w-6 h-6" />,
         smallIcon: <Camera className="w-4 h-4" />,
         color: 'bg-purple-100 border-purple-200 text-purple-600',
+        avatarBg: 'bg-purple-600',
         iconColor: 'text-purple-500'
       };
     case 'dich_vu_ve_sinh':
@@ -95,6 +100,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <SprayCan className="w-6 h-6" />,
         smallIcon: <SprayCan className="w-4 h-4" />,
         color: 'bg-cyan-100 border-cyan-200 text-cyan-600',
+        avatarBg: 'bg-cyan-600',
         iconColor: 'text-cyan-500'
       };
     case 'garage_oto':
@@ -110,6 +116,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Wrench className="w-6 h-6" />,
         smallIcon: <Wrench className="w-4 h-4" />,
         color: 'bg-slate-100 border-slate-200 text-slate-600',
+        avatarBg: 'bg-slate-700',
         iconColor: 'text-slate-500'
       };
     case 'nha_hang':
@@ -127,6 +134,7 @@ export function getBookingConfig(templateKey: string) {
         icon: isRestaurant ? <Utensils className="w-6 h-6" /> : <Coffee className="w-6 h-6" />,
         smallIcon: isRestaurant ? <Utensils className="w-4 h-4" /> : <Coffee className="w-4 h-4" />,
         color: 'bg-orange-100 border-orange-200 text-orange-600',
+        avatarBg: 'bg-orange-600',
         iconColor: 'text-orange-500'
       };
     case 'luat_su':
@@ -142,6 +150,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Briefcase className="w-6 h-6" />,
         smallIcon: <Briefcase className="w-4 h-4" />,
         color: 'bg-blue-100 border-blue-200 text-blue-600',
+        avatarBg: 'bg-blue-600',
         iconColor: 'text-blue-500'
       };
     case 'noi_that':
@@ -159,6 +168,7 @@ export function getBookingConfig(templateKey: string) {
         icon: isInterior ? <Paintbrush className="w-6 h-6" /> : <Building className="w-6 h-6" />,
         smallIcon: isInterior ? <Paintbrush className="w-4 h-4" /> : <Building className="w-4 h-4" />,
         color: 'bg-yellow-100 border-yellow-200 text-yellow-600',
+        avatarBg: 'bg-amber-600',
         iconColor: 'text-yellow-500'
       };
     default:
@@ -174,6 +184,7 @@ export function getBookingConfig(templateKey: string) {
         icon: <Calendar className="w-6 h-6" />,
         smallIcon: <Calendar className="w-4 h-4" />,
         color: 'bg-indigo-100 border-indigo-200 text-indigo-600',
+        avatarBg: 'bg-indigo-600',
         iconColor: 'text-indigo-500'
       };
   }

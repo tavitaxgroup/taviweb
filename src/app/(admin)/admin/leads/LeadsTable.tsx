@@ -448,14 +448,14 @@ export default function LeadsTable({ initialLeads, isSuperAdmin, salesUsers }: {
             <button 
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 rounded-md text-sm font-bold border border-slate-300 disabled:opacity-50 hover:bg-slate-200"
+              className="px-3 py-1 rounded-md text-sm font-bold bg-white text-slate-700 border border-slate-300 disabled:opacity-50 hover:bg-slate-200 transition-colors"
             >
               Trang trước
             </button>
             <button 
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded-md text-sm font-bold border border-slate-300 disabled:opacity-50 hover:bg-slate-200"
+              className="px-3 py-1 rounded-md text-sm font-bold bg-white text-slate-700 border border-slate-300 disabled:opacity-50 hover:bg-slate-200 transition-colors"
             >
               Trang sau
             </button>

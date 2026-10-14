@@ -275,7 +275,7 @@ export default function BookingAdmin({ template }: { template: string }) {
                   
                   {/* Resource Card */}
                   <div className="w-48 shrink-0 border-r border-slate-200 bg-white p-4 sticky left-0 z-10 flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm ${config.color.replace('text-', 'bg-').replace('100', '500').replace('200', '600')}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm ${config.avatarBg || 'bg-indigo-600'}`}>
                       {res.name.charAt(0)}
                     </div>
                     <div>

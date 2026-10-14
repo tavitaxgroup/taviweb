@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Serif:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Serif:wght@400;500;600;700;800&display=swap");
 
 @theme {
   --color-brand-primary: #60233f;
@@ -52,27 +52,29 @@
   --background: #f8fafc;
 }
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  color: var(--text);
-  background: var(--background);
-}
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--text);
+    background: var(--background);
+  }
 
-a {
-  color: inherit;
-}
+  a {
+    color: inherit;
+  }
 
-img {
-  max-width: 100%;
+  img {
+    max-width: 100%;
+  }
 }
 
 .template-render-root {
@@ -719,7 +721,7 @@ img {
 .company-header-cta,
 .company-button-primary,
 .gallery-primary-link,
-.gallery-template-actions a:last-child {
+.gallery-template-actions a:first-child {
   color: #ffffff;
   background: #0b3b8f;
   box-shadow: 0 12px 28px rgba(11, 59, 143, 0.2);
@@ -727,7 +729,7 @@ img {
 
 .company-button-secondary,
 .gallery-secondary-link,
-.gallery-template-actions a:first-child {
+.gallery-template-actions a:nth-child(2) {
   color: #0b3b8f;
   border: 1px solid #bfdbfe;
   background: #ffffff;
@@ -1437,11 +1439,13 @@ img {
   min-height: 54px;
   padding-inline: 28px;
   border-radius: 999px;
+  color: #ffffff;
   background: var(--gallery-red);
 }
 
 .gallery-template-actions a:hover,
 .gallery-primary-link:hover {
+  color: #ffffff;
   background: var(--gallery-red-dark);
   transform: translateY(-1px);
 }
@@ -1522,7 +1526,7 @@ img {
   line-height: 1.6;
 }
 
-.company-software a {
+.company-software :where(a:not([class*="text-"]):not(.button)) {
   color: inherit;
 }
 
@@ -3430,6 +3434,19 @@ img {
   display: flex;
   flex-direction: column;
   position: relative;
+}
+.company-software .popular-badge {
+  display: inline-block;
+  align-self: flex-start;
+  background: var(--software-blue);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
 }
 .company-software .combo-card-header h4 {
   font-size: 16px;
