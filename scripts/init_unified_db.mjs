@@ -485,7 +485,59 @@ async function main() {
       UNIQUE(session_id, contact_id)
     );
 
-    -- 14. RPC FUNCTIONS
+    -- 14. E-COMMERCE TABLES (PRODUCTS & ORDERS FOR TENANT WEBSITES)
+    CREATE TABLE IF NOT EXISTS public.products (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      tenant_id UUID NOT NULL DEFAULT '${DEFAULT_TENANT_ID}' REFERENCES public.tenants(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL,
+      sku TEXT,
+      category TEXT DEFAULT 'Sản phẩm nổi bật',
+      description TEXT DEFAULT '',
+      price NUMERIC(12, 2) NOT NULL DEFAULT 0,
+      compare_price NUMERIC(12, 2) DEFAULT 0,
+      stock INTEGER NOT NULL DEFAULT 0,
+      images JSONB DEFAULT '[]'::jsonb,
+      variants JSONB DEFAULT '[]'::jsonb,
+      is_featured BOOLEAN DEFAULT FALSE,
+      status TEXT NOT NULL DEFAULT 'active',
+      created_at TIMESTAMPTZ DEFAULT now(),
+      updated_at TIMESTAMPTZ DEFAULT now(),
+      UNIQUE(tenant_id, slug)
+    );
+
+    CREATE TABLE IF NOT EXISTS public.orders (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      tenant_id UUID NOT NULL DEFAULT '${DEFAULT_TENANT_ID}' REFERENCES public.tenants(id) ON DELETE CASCADE,
+      order_code TEXT NOT NULL,
+      customer_name TEXT NOT NULL,
+      customer_phone TEXT NOT NULL,
+      customer_email TEXT,
+      customer_address TEXT,
+      items JSONB NOT NULL DEFAULT '[]'::jsonb,
+      subtotal_amount NUMERIC(12, 2) NOT NULL DEFAULT 0,
+      shipping_fee NUMERIC(12, 2) NOT NULL DEFAULT 0,
+      total_amount NUMERIC(12, 2) NOT NULL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'pending',
+      payment_method TEXT NOT NULL DEFAULT 'cod',
+      payment_status TEXT NOT NULL DEFAULT 'unpaid',
+      crm_contact_id UUID REFERENCES public.crm_contacts(id) ON DELETE SET NULL,
+      crm_deal_id UUID REFERENCES public.crm_deals(id) ON DELETE SET NULL,
+      notes TEXT,
+      created_at TIMESTAMPTZ DEFAULT now(),
+      updated_at TIMESTAMPTZ DEFAULT now(),
+      UNIQUE(tenant_id, order_code)
+    );
+
+    -- 15. PERFORMANCE INDEXES ACROSS TENANT TABLES
+    CREATE INDEX IF NOT EXISTS idx_crm_deals_tenant ON public.crm_deals(tenant_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_crm_contacts_tenant_phone ON public.crm_contacts(tenant_id, phone);
+    CREATE INDEX IF NOT EXISTS idx_products_tenant_status ON public.products(tenant_id, status);
+    CREATE INDEX IF NOT EXISTS idx_orders_tenant_created ON public.orders(tenant_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_posts_tenant_slug ON public.posts(tenant_id, slug);
+    CREATE INDEX IF NOT EXISTS idx_booking_appointments_tenant_time ON public.booking_appointments(tenant_id, start_time);
+
+    -- 16. RPC FUNCTIONS
     CREATE OR REPLACE FUNCTION increment_ai_used(tenant_id uuid, amount int)
     RETURNS void AS $$
     BEGIN
@@ -555,28 +607,29 @@ async function main() {
     await client.query(`
       INSERT INTO public.packages (name, tier, added_quota, price_prod, price_test, features, is_recommended) VALUES
       ('Gói Cơ Bản', 1, 100000, 199000, 2000, '{"1 Website chuyên nghiệp", "Hỗ trợ chuẩn SEO", "100.000 Token AI"}', false),
-      ('Gói Tiêu Chuẩn', 2, 500000, 499000, 5000, '{"Tất cả tính năng Gói Cơ Bản", "Hỗ trợ đa ngôn ngữ", "Hỗ trợ kỹ thuật 24/7", "500.000 Token AI"}', true),
-      ('Gói Nâng Cao', 3, 2000000, 999000, 10000, '{"Tất cả tính năng Gói Tiêu Chuẩn", "Bảo mật nâng cao", "Cấu hình Server riêng", "2.000.000 Token AI"}', false),
+      ('Gói Tiêu Chuẩn', 2, 500000, 499000, 5000, '{"Tất cả tính năng Gói Cơ Bản", "Module Bán Hàng & Giỏ Hàng", "Hỗ trợ kỹ thuật 24/7", "500.000 Token AI"}', true),
+      ('Gói Nâng Cao', 3, 2000000, 999000, 10000, '{"Tất cả tính năng Gói Tiêu Chuẩn", "CRM + Booking + E-commerce", "Cấu hình Tên miền riêng", "2.000.000 Token AI"}', false),
       ('Gói Enterprise', 4, 10000000, 4999000, 50000, '{"Tất cả tính năng Gói Nâng Cao", "Thiết kế giao diện độc quyền", "Đội ngũ support riêng biệt", "Không giới hạn Token AI"}', false);
     `);
     console.log('Seeded packages.');
   }
 
-  // Seed Default Tenant + Sample Tenants
+  // Seed Default Tenant + Store Settings
   await client.query(`
-    INSERT INTO public.tenants (id, name, slug, template_key, active_modules, ai_quota, package_name, system_prompt)
+    INSERT INTO public.tenants (id, name, slug, template_key, active_modules, ai_quota, package_name, system_prompt, theme_config)
     VALUES (
       '${DEFAULT_TENANT_ID}',
       'TAVI SaaS',
       'tavi',
-      'nha_khoa',
-      '["crm", "booking", "leads", "cms", "lms", "edu", "chatbot"]'::jsonb,
+      'fashion',
+      '["crm", "ecommerce", "booking", "leads", "cms", "lms", "edu", "chatbot"]'::jsonb,
       5000000,
       'Gói Enterprise',
-      'Bạn là trợ lý ảo chăm sóc khách hàng và tư vấn dịch vụ của TaviWeb.'
+      'Bạn là trợ lý ảo chăm sóc khách hàng và tư vấn bán hàng thông minh của cửa hàng.',
+      '{"store_settings": {"bank_bin": "MB", "bank_name": "MBBank", "bank_account": "0901234567", "bank_owner": "TAVI STORE DEMO", "shipping_fee": 30000, "free_shipping_threshold": 500000, "currency": "VND"}}'::jsonb
     )
     ON CONFLICT (slug) DO UPDATE SET
-      active_modules = '["crm", "booking", "leads", "cms", "lms", "edu", "chatbot"]'::jsonb,
+      active_modules = '["crm", "ecommerce", "booking", "leads", "cms", "lms", "edu", "chatbot"]'::jsonb,
       ai_quota = GREATEST(public.tenants.ai_quota, 5000000);
   `);
 
@@ -686,6 +739,53 @@ async function main() {
       [DEFAULT_TENANT_ID]
     );
     console.log('Seeded booking services and resources.');
+  }
+
+  // Ensure E-commerce columns exist if tables were created previously
+  await client.query(`
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'Sản phẩm nổi bật';
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS compare_price NUMERIC(12, 2) DEFAULT 0;
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock INTEGER NOT NULL DEFAULT 0;
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]'::jsonb;
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS variants JSONB DEFAULT '[]'::jsonb;
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT FALSE;
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active';
+    ALTER TABLE public.products ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS order_code TEXT;
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS items JSONB NOT NULL DEFAULT '[]'::jsonb;
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS subtotal_amount NUMERIC(12, 2) NOT NULL DEFAULT 0;
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS shipping_fee NUMERIC(12, 2) NOT NULL DEFAULT 0;
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS crm_contact_id UUID;
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS crm_deal_id UUID;
+    ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+  `);
+
+  // Seed Default E-commerce Products & Orders for Storefront Demo
+  const { rowCount: storeProdCount } = await client.query('SELECT 1 FROM public.products WHERE tenant_id = $1 LIMIT 1', [DEFAULT_TENANT_ID]);
+  if (!storeProdCount) {
+    await client.query(
+      `INSERT INTO public.products (tenant_id, name, slug, sku, category, description, price, compare_price, stock, images, variants, is_featured, status) VALUES
+       ($1, 'Áo Blazer Linen Cao Cấp TAVI', 'ao-blazer-linen-cao-cap', 'BLZ-001', 'Thời trang Nữ', 'Chất liệu Linen tự nhiên thoáng mát, phom dáng Hàn Quốc thanh lịch phù hợp công sở và dạo phố.', 890000, 1150000, 28, '["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop&q=80"]'::jsonb, '[{"name": "Size S - Kem"}, {"name": "Size M - Kem"}, {"name": "Size L - Đen"}]'::jsonb, true, 'active'),
+       ($1, 'Đầm Lụa Satin Dự Tiệc', 'dam-lua-satin-du-tiec', 'DRS-002', 'Đầm Dự Tiệc', 'Thiết kế chiết eo tôn dáng, chất lụa Satin bóng nhẹ sang trọng.', 1250000, 1590000, 15, '["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=80"]'::jsonb, '[{"name": "Size S - Đỏ Rượu"}, {"name": "Size M - Champagne"}]'::jsonb, true, 'active'),
+       ($1, 'Áo Sơ Mi Lụa Tơ Tằm Classic', 'ao-so-mi-lua-to-tam', 'SHT-003', 'Thời trang Công sở', 'Mềm mịn, chống nhăn, dễ phối cùng chân váy hoặc quần âu.', 550000, 690000, 42, '["https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&auto=format&fit=crop&q=80"]'::jsonb, '[{"name": "Size S - Trắng"}, {"name": "Size M - Trắng"}, {"name": "Size L - Xanh Pastel"}]'::jsonb, false, 'active'),
+       ($1, 'Túi Xách Da Thật Minimalist', 'tui-xach-da-that-minimalist', 'BAG-004', 'Phụ kiện', 'Da bò nguyên tấm 100%, khóa mạ vàng chống gỉ, bảo hành 24 tháng.', 1490000, 1890000, 9, '["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80"]'::jsonb, '[{"name": "Đen Classic"}, {"name": "Nâu Caramel"}]'::jsonb, true, 'active'),
+       ($1, 'Set Quần Âu & Áo Gile Thiết Kế', 'set-quan-au-ao-gile-thiet-ke', 'SET-005', 'Thời trang Công sở', 'Set đồ chuẩn quý cô hiện đại, đường may tỉ mỉ sắc nét.', 980000, 1250000, 4, '["https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80"]'::jsonb, '[{"name": "Size S"}, {"name": "Size M"}]'::jsonb, false, 'active'),
+       ($1, 'Kính Mát Phân Cực Vintage', 'kinh-mat-phan-cuc-vintage', 'GLS-006', 'Phụ kiện', 'Chống tia UV400 bảo vệ mắt, gọng titan siêu nhẹ.', 450000, 600000, 35, '["https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&auto=format&fit=crop&q=80"]'::jsonb, '[{"name": "Đen Khói"}, {"name": "Nâu Trà"}]'::jsonb, false, 'active')`,
+      [DEFAULT_TENANT_ID]
+    );
+    console.log('Seeded store products.');
+  }
+
+  const { rowCount: storeOrdCount } = await client.query('SELECT 1 FROM public.orders WHERE tenant_id = $1 LIMIT 1', [DEFAULT_TENANT_ID]);
+  if (!storeOrdCount) {
+    await client.query(
+      `INSERT INTO public.orders (tenant_id, order_code, customer_name, customer_phone, customer_email, customer_address, items, subtotal_amount, shipping_fee, total_amount, status, payment_method, payment_status, notes) VALUES
+       ($1, 'DH8801', 'Nguyễn Minh Thư', '0912345678', 'minhthu@gmail.com', '128 Nguyễn Huệ, Quận 1, TP.HCM', '[{"name": "Áo Blazer Linen Cao Cấp TAVI", "sku": "BLZ-001", "price": 890000, "quantity": 1, "variant": "Size M - Kem"}, {"name": "Áo Sơ Mi Lụa Tơ Tằm Classic", "sku": "SHT-003", "price": 550000, "quantity": 1, "variant": "Size M - Trắng"}]'::jsonb, 1440000, 0, 1440000, 'confirmed', 'bank_transfer', 'paid', 'Giao giờ hành chính'),
+       ($1, 'DH8802', 'Trần Hoàng Nam', '0987654321', 'hoangnam@gmail.com', '45 Lê Lợi, Quận Hải Châu, Đà Nẵng', '[{"name": "Túi Xách Da Thật Minimalist", "sku": "BAG-004", "price": 1490000, "quantity": 1, "variant": "Đen Classic"}]'::jsonb, 1490000, 0, 1490000, 'pending', 'cod', 'unpaid', 'Gọi trước khi giao 30 phút')`,
+      [DEFAULT_TENANT_ID]
+    );
+    console.log('Seeded store orders.');
   }
 
   // Seed AI Keys providers

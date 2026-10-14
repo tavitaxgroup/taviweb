@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { industryCatalog } from '@/lib/templates/templateCatalog';
-import { Copy, CheckCircle2, Factory, Globe, LayoutTemplate, Zap, Building2, ExternalLink, Calendar as CalendarIcon, Users, Search, Plus, Edit2, Trash2, X, FileText, BookOpen, MessageSquare } from 'lucide-react';
+import { Copy, CheckCircle2, Factory, Globe, LayoutTemplate, Zap, Building2, ExternalLink, Calendar as CalendarIcon, Users, Search, Plus, Edit2, Trash2, X, FileText, BookOpen, MessageSquare, ShoppingBag, GraduationCap } from 'lucide-react';
 
 export default function WorkspacesPage() {
   const [tenants, setTenants] = useState<any[]>([]);
@@ -310,6 +310,11 @@ export default function WorkspacesPage() {
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-1.5 flex-wrap">
+                        {t.active_modules?.includes('ecommerce') && (
+                          <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200" title="Bán hàng (E-commerce)">
+                            <ShoppingBag className="w-4 h-4" />
+                          </div>
+                        )}
                         {t.active_modules?.includes('crm') && (
                           <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100" title="CRM Module">
                             <Users className="w-4 h-4" />
@@ -330,6 +335,11 @@ export default function WorkspacesPage() {
                             <BookOpen className="w-4 h-4" />
                           </div>
                         )}
+                        {t.active_modules?.includes('edu') && (
+                          <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center border border-teal-100" title="Đào tạo (Edu)">
+                            <GraduationCap className="w-4 h-4" />
+                          </div>
+                        )}
                         {t.active_modules?.includes('chatbot') && (
                           <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100" title="Chatbot Module">
                             <MessageSquare className="w-4 h-4" />
@@ -339,7 +349,7 @@ export default function WorkspacesPage() {
                     </td>
                     <td className="p-4">
                       {(() => {
-                        const percent = Math.min(100, Math.round((t.ai_used / t.ai_total) * 100));
+                        const percent = Math.min(100, Math.round((t.ai_used / (t.ai_total || 1)) * 100));
                         const isWarning = percent > 85;
                         return (
                           <div className="w-full min-w-[150px]">
@@ -525,6 +535,11 @@ export default function WorkspacesPage() {
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Modules kích hoạt</label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <label className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${modules.includes('ecommerce') ? 'bg-amber-50 border-amber-300 text-amber-800' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                      <input type="checkbox" checked={modules.includes('ecommerce')} onChange={() => toggleModule('ecommerce')} className="w-5 h-5 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+                      <ShoppingBag className="w-5 h-5" />
+                      <span className="font-bold text-sm">Web Bán Hàng (Shop)</span>
+                    </label>
                     <label className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${modules.includes('crm') ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                       <input type="checkbox" checked={modules.includes('crm')} onChange={() => toggleModule('crm')} className="w-5 h-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
                       <Users className="w-5 h-5" />
@@ -533,7 +548,7 @@ export default function WorkspacesPage() {
                     <label className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${modules.includes('booking') ? 'bg-purple-50 border-purple-200 text-purple-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                       <input type="checkbox" checked={modules.includes('booking')} onChange={() => toggleModule('booking')} className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500" />
                       <CalendarIcon className="w-5 h-5" />
-                      <span className="font-bold text-sm">Booking</span>
+                      <span className="font-bold text-sm">Booking (Lịch hẹn)</span>
                     </label>
                     <label className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${modules.includes('cms') ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                       <input type="checkbox" checked={modules.includes('cms')} onChange={() => toggleModule('cms')} className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
@@ -544,6 +559,11 @@ export default function WorkspacesPage() {
                       <input type="checkbox" checked={modules.includes('lms')} onChange={() => toggleModule('lms')} className="w-5 h-5 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
                       <BookOpen className="w-5 h-5" />
                       <span className="font-bold text-sm">LMS (Khóa học)</span>
+                    </label>
+                    <label className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${modules.includes('edu') ? 'bg-teal-50 border-teal-200 text-teal-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                      <input type="checkbox" checked={modules.includes('edu')} onChange={() => toggleModule('edu')} className="w-5 h-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
+                      <GraduationCap className="w-5 h-5" />
+                      <span className="font-bold text-sm">Quản lý Đào tạo</span>
                     </label>
                     <label className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${modules.includes('chatbot') ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                       <input type="checkbox" checked={modules.includes('chatbot')} onChange={() => toggleModule('chatbot')} className="w-5 h-5 rounded border-slate-300 text-rose-600 focus:ring-rose-500" />

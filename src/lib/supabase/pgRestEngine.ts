@@ -35,7 +35,7 @@ type RelationSpec = {
   nestedLessons?: boolean;
 };
 
-const PG_TEXT_ARRAY_COLUMNS = new Set(['active_modules', 'benefits']);
+const PG_TEXT_ARRAY_COLUMNS = new Set(['features', 'benefits']);
 
 function parseSelect(table: string, selectRaw: string): { columnsSql: string; relations: RelationSpec[] } {
   const relations: RelationSpec[] = [];
@@ -72,7 +72,9 @@ function parseSelect(table: string, selectRaw: string): { columnsSql: string; re
       const targetOrFk = relMatch[2];
       const inner = relMatch[3].trim();
 
-      if (targetOrFk === 'crm_roles') {
+      if (targetOrFk === 'tenants' || targetOrFk === 'tenant_id') {
+        relations.push({ alias, targetTable: 'tenants', fkColumn: 'tenant_id', targetColumn: 'id' });
+      } else if (targetOrFk === 'crm_roles') {
         relations.push({ alias, targetTable: 'crm_roles', fkColumn: 'role_id', targetColumn: 'id' });
       } else if (targetOrFk === 'crm_contacts' || targetOrFk === 'contact_id') {
         relations.push({ alias, targetTable: 'crm_contacts', fkColumn: 'contact_id', targetColumn: 'id' });
@@ -110,6 +112,14 @@ function parseSelect(table: string, selectRaw: string): { columnsSql: string; re
           targetTable: 'crm_enrollments',
           fkColumn: 'id',
           targetColumn: 'class_id',
+          isCount: true,
+        });
+      } else if (targetOrFk === 'enrollments' && inner === 'count') {
+        relations.push({
+          alias,
+          targetTable: 'enrollments',
+          fkColumn: 'id',
+          targetColumn: 'course_id',
           isCount: true,
         });
       } else if (targetOrFk === 'modules') {

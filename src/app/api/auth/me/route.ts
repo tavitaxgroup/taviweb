@@ -4,8 +4,9 @@ import jwt from 'jsonwebtoken';
 import { supabase } from '@/lib/supabase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123';
+export const DEFAULT_SYSTEM_TENANT_ID = '00000000-0000-0000-0000-000000000000';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('crm_token')?.value;
@@ -14,29 +15,31 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Không tìm thấy phiên đăng nhập' }, { status: 401 });
     }
 
-    // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as any;
-    
-    // Lấy thông tin user TƯƠI từ Database kèm theo quyền (để lỡ đổi quyền thì cập nhật luôn)
+
     const { data: user, error } = await supabase
       .from('crm_users')
-      .select('id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(slug, template_key, active_modules)')
+      .select('id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(id, name, slug, template_key, active_modules, package_name)')
       .eq('id', decoded.id)
       .single();
 
     if (error || !user) {
-       return NextResponse.json({ error: 'Tài khoản không tồn tại' }, { status: 401 });
+      return NextResponse.json({ error: 'Tài khoản không tồn tại' }, { status: 401 });
     }
 
-    // Handle role_data which might be an array or object depending on Supabase mapping
     const roleData = Array.isArray(user.role_data) ? user.role_data[0] : user.role_data;
+    const tenantData = Array.isArray(user.tenant) ? user.tenant[0] : user.tenant;
 
-    // Gắn permissions vào object user trả về cho client
     const userData = {
-       ...user,
-       tenant_id: user.tenant_id || '6064025b-7fe4-4840-a27f-2d5da65e15fa',
-       permissions: roleData?.permissions || [],
-       role_data: roleData
+      ...user,
+      tenant_id: user.tenant_id || DEFAULT_SYSTEM_TENANT_ID,
+      permissions: roleData?.permissions || [],
+      role_data: roleData,
+      tenant: tenantData || {
+        slug: 'tavi',
+        template_key: 'fashion',
+        active_modules: ['crm', 'ecommerce', 'booking', 'leads', 'cms', 'lms', 'edu', 'chatbot'],
+      },
     };
 
     return NextResponse.json({ user: userData });

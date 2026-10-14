@@ -3,6 +3,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
+export const SYSTEM_TENANT_IDS = new Set([
+  '00000000-0000-0000-0000-000000000000',
+  '6064025b-7fe4-4840-a27f-2d5da65e15fa',
+]);
+
 export interface User {
   id: string;
   name: string;
@@ -12,26 +17,41 @@ export interface User {
   tenant_id?: string;
   permissions?: string[];
   tenant?: {
+    id?: string;
+    name?: string;
     slug: string;
     template_key: string;
     active_modules?: string[];
+    package_name?: string;
   };
+}
+
+export function isSystemSuperAdminUser(user: User | null | undefined): boolean {
+  if (!user) return false;
+  if (user.role === 'superadmin') return true;
+  if (user.tenant_id && SYSTEM_TENANT_IDS.has(user.tenant_id)) return true;
+  if (user.tenant?.slug === 'tavi' || user.tenant?.slug === 'tavi-admin') return true;
+  return false;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isSuperAdmin: boolean;
   login: (user: User) => void;
   logout: () => void;
   hasPermission: (perm: string) => boolean;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  isSuperAdmin: false,
   login: () => {},
   logout: () => {},
   hasPermission: () => false,
+  refreshUser: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -46,20 +66,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/auth/me');
+      const res = await fetch('/api/auth/me', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
       } else {
         if (process.env.NODE_ENV === 'development') {
-          // Bỏ qua đăng nhập ở dev mode để dễ test Booking & CRM
           setUser({
-            id: 'mock-dev-id',
-            name: 'Dev Admin',
-            email: 'admin@dev.local',
+            id: '00000000-0000-0000-0000-000000000000',
+            name: 'Super Admin',
+            email: 'admin',
             role: 'admin',
-            tenant_id: '6064025b-7fe4-4840-a27f-2d5da65e15fa',
-            tenant: { slug: 'tavi-admin', template_key: 'nha_khoa', active_modules: ['crm', 'booking', 'cms', 'lms', 'chatbot'] }
+            tenant_id: '00000000-0000-0000-0000-000000000000',
+            tenant: {
+              name: 'TAVI SaaS',
+              slug: 'tavi',
+              template_key: 'fashion',
+              active_modules: ['crm', 'ecommerce', 'booking', 'leads', 'cms', 'lms', 'edu', 'chatbot'],
+            },
           });
         } else {
           setUser(null);
@@ -69,18 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        setUser({
-          id: 'mock-dev-id',
-          name: 'Dev Admin',
-          email: 'admin@dev.local',
-          role: 'admin',
-          tenant_id: '6064025b-7fe4-4840-a27f-2d5da65e15fa',
-          tenant: { slug: 'tavi-admin', template_key: 'nha_khoa', active_modules: ['crm', 'booking', 'cms', 'lms', 'chatbot'] }
-        });
-      } else {
-        setUser(null);
-      }
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -88,7 +101,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = (userData: User) => {
     setUser(userData);
-    window.location.href = '/admin/crm';
+    window.location.href = '/admin';
   };
 
   const logout = async () => {
@@ -99,20 +112,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const hasPermission = (perm: string) => {
     if (!user) return false;
-    
-    // Nếu user có role_id (tức là đã dùng hệ thống RBAC mới)
+    if (user.role === 'admin' || user.role === 'superadmin') return true;
     if (user.role_id) {
       return user.permissions?.includes(perm) || false;
     }
-    
-    // Fallback cho legacy user (chưa có role_id)
-    if (user.role === 'admin') return true;
-    
     return false;
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, hasPermission }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isSuperAdmin: isSystemSuperAdminUser(user),
+        login,
+        logout,
+        hasPermission,
+        refreshUser: checkAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

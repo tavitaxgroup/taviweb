@@ -6,17 +6,19 @@ import jwt from 'jsonwebtoken';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+const SYSTEM_TENANT_IDS = new Set([
+  '00000000-0000-0000-0000-000000000000',
+  '6064025b-7fe4-4840-a27f-2d5da65e15fa',
+]);
+
 export default async function LeadsDashboard() {
   const cookieStore = await cookies();
   const token = cookieStore.get('crm_token')?.value;
-  
-  console.log("=== DEBUG ADMIN/LEADS COOKIES ===", cookieStore.getAll());
-  
+
   if (!token) {
     return (
       <div className="p-8">
         <h2>Chưa đăng nhập. Vui lòng quay lại trang đăng nhập.</h2>
-        <pre>{JSON.stringify(cookieStore.getAll(), null, 2)}</pre>
       </div>
     );
   }
@@ -25,17 +27,17 @@ export default async function LeadsDashboard() {
   try {
     user = jwt.verify(token, process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123');
   } catch (err) {
-    return <div>Phiên đăng nhập không hợp lệ.</div>;
+    return <div className="p-8">Phiên đăng nhập không hợp lệ.</div>;
   }
 
   if (!user?.tenant_id) {
-    return <div>Không tìm thấy thông tin tenant.</div>;
+    return <div className="p-8">Không tìm thấy thông tin tenant.</div>;
   }
 
-  const isSuperAdmin = user.role === 'superadmin' || (user.role === 'admin' && user.tenant_id === '6064025b-7fe4-4840-a27f-2d5da65e15fa');
+  const isSuperAdmin =
+    user.role === 'superadmin' ||
+    (user.role === 'admin' && SYSTEM_TENANT_IDS.has(user.tenant_id));
   const isSale = user.role === 'sale';
-  
-  console.log("=== DEBUG LEADS PAGE ===", { userId: user.id, role: user.role, isSuperAdmin, isSale });
 
   if (!isSuperAdmin && !isSale) {
     return (
@@ -46,7 +48,6 @@ export default async function LeadsDashboard() {
   }
 
   const leads = await getAllLeads(user.tenant_id, isSuperAdmin, isSale ? user.id : undefined);
-  console.log("=== DEBUG LEADS PAGE: Fetched Leads ===", leads.length);
 
   let salesUsers: any[] = [];
   if (isSuperAdmin) {
@@ -56,11 +57,17 @@ export default async function LeadsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 p-6 md:p-8 font-sans text-slate-900">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Trung Tâm Dữ Liệu Khách Hàng</h1>
-          <p className="text-slate-500 text-lg">Quản lý và theo dõi danh sách khách hàng tiềm năng được cào tự động.</p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              Kho Dữ Liệu Khách Hàng Tiềm Năng (Leads)
+            </h1>
+            <p className="text-slate-500 mt-1 text-sm font-medium">
+              Quản lý, lọc website/fanpage, tạo link Demo tự động và phân bổ cho đội ngũ Sale.
+            </p>
+          </div>
         </div>
 
         <LeadsClientView leads={leads} isSuperAdmin={isSuperAdmin} salesUsers={salesUsers} />

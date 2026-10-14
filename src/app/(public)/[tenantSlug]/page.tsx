@@ -5,6 +5,8 @@ import { supabase } from "@/lib/supabase";
 import { getTemplateComponent } from "@/lib/templates/templateRegistry";
 import { CompanyHome } from "@/components/company/CompanyHome";
 import ChatbotWidget from "@/components/ChatbotWidget";
+import { LivePreviewWrapper } from "@/components/LivePreviewWrapper";
+import TenantStorefrontShop from "@/components/storefront/TenantStorefrontShop";
 
 type Props = {
   params: Promise<{ tenantSlug: string }>;
@@ -25,8 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-import { LivePreviewWrapper } from "@/components/LivePreviewWrapper";
-
 export default async function TenantHomePage({ params }: Props) {
   const resolvedParams = await params;
   const { data: tenant } = await supabase
@@ -38,21 +38,42 @@ export default async function TenantHomePage({ params }: Props) {
   if (!tenant) {
     notFound();
   }
-  
-  const hasChatbot = tenant.active_modules?.includes('chatbot');
 
-  // If the tenant has a template_key, render the specific template
+  const hasChatbot = tenant.active_modules?.includes('chatbot');
+  const hasEcommerce = tenant.active_modules?.includes('ecommerce');
+
+  // Fetch tenant's active products if ecommerce module is enabled
+  let storeProducts: any[] = [];
+  if (hasEcommerce) {
+    const { data: prods } = await supabase
+      .from('products')
+      .select('*')
+      .eq('tenant_id', tenant.id)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
+    if (prods) {
+      storeProducts = prods.map((p: any) => ({
+        ...p,
+        price: Number(p.price || 0),
+        compare_price: Number(p.compare_price || 0),
+        stock: Number(p.stock || 0),
+        images: Array.isArray(p.images) ? p.images : [],
+        variants: Array.isArray(p.variants) ? p.variants : [],
+      }));
+    }
+  }
+
+  const storeSettings = tenant.theme_config?.store_settings || {};
+
+  // If the tenant has a template_key, render the specific template + Storefront Shop
   if (tenant.template_key) {
     const TemplateComponent = getTemplateComponent(tenant.template_key);
-    
+
     if (TemplateComponent) {
-      // Lazy load the data builder to avoid circular dependencies if any
       const { getTemplateDataBuilder } = await import("@/lib/templates/templateDataRegistry");
       const buildData = getTemplateDataBuilder(tenant.template_key);
 
       if (buildData) {
-        // Build proper DemoPageData expected by the templates
-        // We pass the tenant details as `partialData` so it overrides the mock data
         const overrides = tenant.theme_config?.website_overrides || {};
         const partialData: any = {
           business: {
@@ -63,14 +84,23 @@ export default async function TenantHomePage({ params }: Props) {
             phone: tenant.contact_info?.phone || "0901234567",
             email: tenant.contact_info?.email || undefined,
           },
-          ...overrides
+          ...overrides,
         };
 
         const data = buildData(tenant.id, partialData);
-        
+
         return (
           <>
             <LivePreviewWrapper initialData={data} templateKey={tenant.template_key} />
+            {hasEcommerce && (
+              <TenantStorefrontShop
+                tenantId={tenant.id}
+                tenantName={tenant.name}
+                tenantSlug={tenant.slug}
+                products={storeProducts}
+                storeSettings={storeSettings}
+              />
+            )}
             {hasChatbot && <ChatbotWidget tenantId={tenant.id} />}
           </>
         );
@@ -78,11 +108,20 @@ export default async function TenantHomePage({ params }: Props) {
     }
   }
 
-  // Fallback to the default CompanyHome for the 'tavi' main site
+  // Fallback to CompanyHome for the 'tavi' main site
   if (tenant.slug === 'tavi') {
     return (
       <>
         <CompanyHome />
+        {hasEcommerce && (
+          <TenantStorefrontShop
+            tenantId={tenant.id}
+            tenantName={tenant.name}
+            tenantSlug={tenant.slug}
+            products={storeProducts}
+            storeSettings={storeSettings}
+          />
+        )}
         {hasChatbot && <ChatbotWidget tenantId={tenant.id} />}
       </>
     );
@@ -90,12 +129,22 @@ export default async function TenantHomePage({ params }: Props) {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center p-8 bg-white rounded-xl shadow-sm border border-gray-100 max-w-md">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">{tenant.name}</h1>
-          <p className="text-gray-500">Website đang trong quá trình xây dựng.</p>
+      {hasEcommerce && storeProducts.length > 0 ? (
+        <TenantStorefrontShop
+          tenantId={tenant.id}
+          tenantName={tenant.name}
+          tenantSlug={tenant.slug}
+          products={storeProducts}
+          storeSettings={storeSettings}
+        />
+      ) : (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center p-8 bg-white rounded-xl shadow-sm border border-gray-100 max-w-md">
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">{tenant.name}</h1>
+            <p className="text-gray-500">Website đang trong quá trình xây dựng.</p>
+          </div>
         </div>
-      </div>
+      )}
       {hasChatbot && <ChatbotWidget tenantId={tenant.id} />}
     </>
   );
