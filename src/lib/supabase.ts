@@ -14,8 +14,9 @@ const effectiveKey =
   fallbackKey;
 
 /**
- * Custom fetch adapter that routes Supabase PostgREST (/rest/v1/*) requests
- * through the local PostgreSQL PostgREST engine (/api/pg-rest/*) backed by DIRECT_URL.
+ * Custom fetch adapter that routes Supabase PostgREST (/rest/v1/*) requests:
+ * - On the server (Node.js): directly invokes globalThis.__pgRestExecute in-memory (zero HTTP roundtrip).
+ * - On the browser client: routes through /api/pg-rest/* on the current origin.
  */
 export const customPgRestFetch: typeof fetch = async (input, init) => {
   const urlStr =
@@ -30,10 +31,37 @@ export const customPgRestFetch: typeof fetch = async (input, init) => {
 
   if (restIdx !== -1) {
     const suffix = urlStr.slice(restIdx + restMarker.length);
+
+    if (typeof window === 'undefined' && typeof (globalThis as any).__pgRestExecute === 'function') {
+      const parsed = new URL(urlStr);
+      const markerInPath = parsed.pathname.indexOf(restMarker);
+      const pathAfterRestV1 =
+        markerInPath !== -1 ? parsed.pathname.slice(markerInPath + restMarker.length) : suffix.split('?')[0];
+      const headers = new Headers(init?.headers as HeadersInit | undefined);
+      const bodyText =
+        init?.body !== undefined && init?.body !== null ? String(init.body) : null;
+      const result = await (globalThis as any).__pgRestExecute(
+        init?.method || 'GET',
+        pathAfterRestV1,
+        parsed.searchParams,
+        headers,
+        bodyText
+      );
+      return new Response(result.body, {
+        status: result.status,
+        headers: result.headers,
+      });
+    }
+
+    const localBase = `http://127.0.0.1:${process.env.PORT || 3000}`;
     const baseUrl =
       typeof window !== 'undefined'
         ? ''
-        : process.env.NEXT_PUBLIC_SITE_URL || `http://localhost:${process.env.PORT || 3000}`;
+        : process.env.NODE_ENV === 'development'
+        ? localBase
+        : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NEXT_PUBLIC_SITE_URL || localBase;
     const rewrittenUrl = `${baseUrl}/api/pg-rest/${suffix}`;
     return fetch(rewrittenUrl, init);
   }

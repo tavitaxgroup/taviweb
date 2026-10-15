@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import '@/lib/supabase/pgRestEngine';
 import { adminSupabase } from '@/lib/supabase';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';

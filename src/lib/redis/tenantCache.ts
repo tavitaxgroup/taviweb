@@ -1,4 +1,5 @@
 import { redis } from './client';
+import '../supabase/pgRestEngine';
 import { adminSupabase } from '../supabase';
 
 export type CachedTenant = {

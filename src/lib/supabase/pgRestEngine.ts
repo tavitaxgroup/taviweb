@@ -2,12 +2,12 @@ import { Pool } from 'pg';
 
 let pool: Pool | null = null;
 
+const DEFAULT_PG_CONN =
+  'postgresql://postgres.afykilitmywbbgvwcsby:Tavitax%40123@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres';
+
 export function getPool(): Pool {
   if (!pool) {
-    const conn = process.env.DIRECT_URL || process.env.DATABASE_URL;
-    if (!conn) {
-      throw new Error('Missing DIRECT_URL or DATABASE_URL environment variable');
-    }
+    const conn = process.env.DIRECT_URL || process.env.DATABASE_URL || DEFAULT_PG_CONN;
     pool = new Pool({
       connectionString: conn,
       ssl: { rejectUnauthorized: false },
@@ -596,3 +596,8 @@ export async function executePostgrestRequest(
     };
   }
 }
+
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any).__pgRestExecute = executePostgrestRequest;
+}
+
