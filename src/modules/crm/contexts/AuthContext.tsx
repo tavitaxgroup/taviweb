@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             role: 'admin',
             tenant_id: '00000000-0000-0000-0000-000000000000',
             tenant: {
-              name: 'TAVI SaaS',
+              name: 'TAVIWEB',
               slug: 'tavi',
               template_key: 'fashion',
               active_modules: ['crm', 'ecommerce', 'booking', 'leads', 'cms', 'lms', 'edu', 'chatbot'],

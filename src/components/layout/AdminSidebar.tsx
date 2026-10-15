@@ -77,7 +77,7 @@ export function AdminSidebar() {
   ];
 
   const tenantSlug = user?.tenant?.slug || 'tavi';
-  const tenantName = user?.tenant?.name || 'TAVI SaaS';
+  const tenantName = user?.tenant?.name || 'TAVIWEB';
 
   const renderNavItem = (item: NavItem) => {
     if (item.superAdminOnly && !isSuperAdmin) return null;

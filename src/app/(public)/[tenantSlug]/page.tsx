@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!tenant) return { title: 'Not Found' };
 
   return {
-    title: `${tenant.name} - Powered by TAVI SaaS`,
+    title: `${tenant.name} - Powered by TAVIWEB`,
   };
 }
 

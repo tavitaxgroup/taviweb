@@ -1,18 +1,16 @@
 import {
   Target,
-  Users,
   CalendarDays,
-  TrendingUp,
   ShoppingBag,
   Package,
-  Building2,
   Globe,
   FileText,
   GraduationCap,
   Bot,
   ArrowUpRight,
+  LayoutTemplate,
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { adminSupabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import Link from 'next/link';
@@ -27,7 +25,9 @@ export default async function DashboardHome() {
   let totalRevenue = 0;
   let storeRevenue = 0;
   let userName = 'Quản trị viên';
+  let tenantName = 'TAVIWEB';
   let tenantSlug = 'tavi';
+  let activeModules: string[] = ['crm', 'ecommerce', 'booking', 'cms', 'lms', 'edu', 'chatbot'];
   let canViewAll = false;
   let recentDeals: any[] = [];
   let recentOrders: any[] = [];
@@ -40,9 +40,9 @@ export default async function DashboardHome() {
       const decoded = jwt.verify(token, JWT_SECRET) as any;
       const tenantId = decoded.tenant_id || '00000000-0000-0000-0000-000000000000';
 
-      const { data: user } = await supabase
+      const { data: user } = await adminSupabase
         .from('crm_users')
-        .select('id, name, role, role_id, role_data:crm_roles(*), tenant:tenants(slug)')
+        .select('id, name, role, role_id, role_data:crm_roles(*), tenant:tenants(name, slug, active_modules)')
         .eq('id', decoded.id)
         .single();
 
@@ -50,13 +50,17 @@ export default async function DashboardHome() {
         userName = user.name;
         const tData = Array.isArray(user.tenant) ? user.tenant[0] : user.tenant;
         if (tData?.slug) tenantSlug = tData.slug;
+        if (tData?.name) tenantName = tData.name;
+        if (Array.isArray(tData?.active_modules) && tData.active_modules.length > 0) {
+          activeModules = tData.active_modules;
+        }
 
         const roleData = Array.isArray(user.role_data) ? user.role_data[0] : user.role_data;
         const permissions = roleData?.permissions || [];
         canViewAll = user.role_id ? permissions.includes('view_all_deals') : user.role === 'admin';
 
         // 1. Deals CRM
-        let dealsQuery = supabase
+        let dealsQuery = adminSupabase
           .from('crm_deals')
           .select('id, value, stage_id, created_at, title')
           .eq('tenant_id', tenantId);
@@ -66,7 +70,7 @@ export default async function DashboardHome() {
         const { data: allDeals } = await dealsQuery;
         if (allDeals && allDeals.length > 0) {
           dealsCount = allDeals.length;
-          allDeals.forEach(d => {
+          allDeals.forEach((d) => {
             totalRevenue += Number(d.value || 0);
           });
           recentDeals = [...allDeals]
@@ -76,12 +80,12 @@ export default async function DashboardHome() {
 
         // 2. Store Orders & Products
         const [{ data: allOrders }, { data: allProducts }] = await Promise.all([
-          supabase
+          adminSupabase
             .from('orders')
             .select('id, order_code, customer_name, total_amount, status, payment_status, created_at')
             .eq('tenant_id', tenantId)
             .order('created_at', { ascending: false }),
-          supabase
+          adminSupabase
             .from('products')
             .select('id')
             .eq('tenant_id', tenantId)
@@ -91,8 +95,8 @@ export default async function DashboardHome() {
         if (allOrders) {
           ordersCount = allOrders.length;
           allOrders
-            .filter(o => o.status !== 'cancelled')
-            .forEach(o => {
+            .filter((o) => o.status !== 'cancelled')
+            .forEach((o) => {
               storeRevenue += Number(o.total_amount || 0);
             });
           recentOrders = allOrders.slice(0, 5);
@@ -149,8 +153,18 @@ export default async function DashboardHome() {
     },
   ];
 
-  const quickModules = [
+  const allQuickModules = [
     {
+      key: 'website',
+      title: 'Tùy chỉnh Giao diện & Tên miền',
+      desc: 'Đổi mẫu giao diện 15 ngành nghề, cập nhật nội dung, hình ảnh và kết nối tên miền riêng.',
+      href: '/admin/settings/website',
+      icon: LayoutTemplate,
+      badge: 'Website Builder',
+      color: 'from-blue-600 to-indigo-600',
+    },
+    {
+      key: 'ecommerce',
       title: 'Bán hàng & Quản lý Kho',
       desc: 'Đăng sản phẩm, quản lý đơn hàng, cấu hình VietQR nhận tiền cho Shop.',
       href: '/admin/ecommerce',
@@ -159,14 +173,16 @@ export default async function DashboardHome() {
       color: 'from-amber-500 to-orange-600',
     },
     {
+      key: 'crm',
       title: 'CRM & Pipeline Kanban',
       desc: 'Quản lý khách hàng, theo dõi tiến độ chốt sale và báo cáo KPI.',
       href: '/admin/crm',
       icon: Target,
       badge: 'Sales CRM',
-      color: 'from-indigo-500 to-blue-600',
+      color: 'from-indigo-500 to-purple-600',
     },
     {
+      key: 'booking',
       title: 'Lịch hẹn (Booking)',
       desc: 'Quản lý đặt lịch dịch vụ cho Nha khoa, Spa, Salon, Nhà hàng.',
       href: '/admin/booking/admin',
@@ -175,6 +191,7 @@ export default async function DashboardHome() {
       color: 'from-purple-500 to-pink-600',
     },
     {
+      key: 'cms',
       title: 'AI CMS & Blog SEO',
       desc: 'Tạo bài viết tự động bằng AI, tối ưu hóa SEO kéo khách vào web.',
       href: '/admin/cms',
@@ -183,6 +200,7 @@ export default async function DashboardHome() {
       color: 'from-emerald-500 to-teal-600',
     },
     {
+      key: 'edu',
       title: 'Đào tạo & Khóa học (LMS/Edu)',
       desc: 'Quản lý khóa học video, lớp học, điểm danh và học phí học viên.',
       href: '/admin/edu',
@@ -191,6 +209,7 @@ export default async function DashboardHome() {
       color: 'from-sky-500 to-cyan-600',
     },
     {
+      key: 'chatbot',
       title: 'Trợ lý AI Chatbot RAG',
       desc: 'Huấn luyện AI tư vấn sản phẩm & trả lời khách hàng 24/7 trên web.',
       href: '/admin/settings/chatbot',
@@ -200,22 +219,37 @@ export default async function DashboardHome() {
     },
   ];
 
+  const quickModules = allQuickModules.filter(
+    (m) => m.key === 'website' || activeModules.includes(m.key) || (m.key === 'edu' && activeModules.includes('lms'))
+  );
+
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8 font-sans">
       {/* Welcome Banner */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
         <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-extrabold mb-2">
+            <Globe className="w-3.5 h-3.5" />
+            <span>TAVIWEB PORTAL — {tenantName}</span>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             👋 Xin chào, {userName}!
           </h1>
           <p className="text-slate-500 mt-1 text-sm font-medium">
-            Trung tâm điều hành hợp nhất Website Bán hàng, CRM, Booking, Đào tạo và Trợ lý AI.
+            Trung tâm điều hành hợp nhất Website, Bán hàng, CRM, Đặt lịch và Trợ lý AI của doanh nghiệp.
           </p>
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            href="/admin/settings/website"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm transition-colors"
+          >
+            <LayoutTemplate className="w-4 h-4" />
+            <span>Tùy chỉnh Giao diện Web</span>
+          </Link>
           <Link
             href="/admin/ecommerce"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold shadow-sm transition-colors"
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Quản lý Bán hàng</span>
@@ -255,10 +289,10 @@ export default async function DashboardHome() {
       {/* Quick Modules Grid */}
       <div>
         <h2 className="text-base font-extrabold text-slate-800 mb-4 uppercase tracking-wider">
-          Phân hệ Nghiệp vụ Đang hoạt động
+          Phân hệ Quản trị Website & Nghiệp vụ
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {quickModules.map(mod => (
+          {quickModules.map((mod) => (
             <Link
               key={mod.href}
               href={mod.href}
@@ -302,7 +336,7 @@ export default async function DashboardHome() {
             {recentOrders.length === 0 ? (
               <p className="text-xs text-slate-400 py-6 text-center">Chưa có đơn hàng nào.</p>
             ) : (
-              recentOrders.map(ord => (
+              recentOrders.map((ord) => (
                 <div key={ord.id} className="py-3 flex items-center justify-between text-sm">
                   <div>
                     <div className="font-bold text-slate-900">
@@ -346,7 +380,7 @@ export default async function DashboardHome() {
             {recentDeals.length === 0 ? (
               <p className="text-xs text-slate-400 py-6 text-center">Chưa có Deal nào.</p>
             ) : (
-              recentDeals.map(deal => (
+              recentDeals.map((deal) => (
                 <div key={deal.id} className="py-3 flex items-center justify-between text-sm">
                   <div className="min-w-0 pr-3">
                     <div className="font-bold text-slate-900 truncate">{deal.title}</div>

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
-import { supabase } from '@/lib/supabase';
+import { adminSupabase } from '@/lib/supabase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123';
 export const DEFAULT_SYSTEM_TENANT_ID = '00000000-0000-0000-0000-000000000000';
@@ -17,7 +17,7 @@ export async function GET() {
 
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-    const { data: user, error } = await supabase
+    const { data: user, error } = await adminSupabase
       .from('crm_users')
       .select('id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(id, name, slug, template_key, active_modules, package_name)')
       .eq('id', decoded.id)
@@ -36,6 +36,7 @@ export async function GET() {
       permissions: roleData?.permissions || [],
       role_data: roleData,
       tenant: tenantData || {
+        name: 'TAVIWEB',
         slug: 'tavi',
         template_key: 'fashion',
         active_modules: ['crm', 'ecommerce', 'booking', 'leads', 'cms', 'lms', 'edu', 'chatbot'],

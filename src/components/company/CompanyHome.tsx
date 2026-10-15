@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { industryCatalog } from "@/lib/templates/templateCatalog";
-import { Check, CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap, Phone, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Check, CheckCircle2, Heart, Sparkles, Scissors, Activity, Scale, Home, Construction, Utensils, Brush, GraduationCap, Phone, ChevronDown, ChevronUp, X, User } from "lucide-react";
+import { TaviAuthModal } from "./TaviAuthModal";
 
 const phoneNumber = "0337367643";
 const displayPhone = "0337.367.643";
@@ -541,6 +542,7 @@ export function CompanyHome() {
 
   // Active pricing details modal view state
   const [activeModal, setActiveModal] = useState<"design" | "domain" | "operation" | null>(null);
+  const [authModalOpen, setAuthModalOpen] = useState<"login" | "register" | null>(null);
 
   // Controlled input for contact form's service field
   const [clientService, setClientService] = useState("");
@@ -681,6 +683,17 @@ export function CompanyHome() {
             <Link href="#pricing" onClick={closeMenu}>
               Bảng giá
             </Link>
+            <button
+              type="button"
+              className="nav-auth-btn"
+              onClick={() => {
+                closeMenu();
+                setAuthModalOpen("login");
+              }}
+            >
+              <User size={16} strokeWidth={2.5} />
+              <span>Đăng nhập / Đăng ký</span>
+            </button>
             <Link className="nav-contact" href="#contact" onClick={closeMenu}>
               Liên hệ
             </Link>
@@ -1678,6 +1691,15 @@ export function CompanyHome() {
               <ul>
                 <li><Link href="#contact">Tư vấn thiết kế</Link></li>
                 <li><Link href="/kho-giao-dien">Kho giao diện mẫu</Link></li>
+                <li>
+                  <button
+                    type="button"
+                    className="footer-auth-link"
+                    onClick={() => setAuthModalOpen("login")}
+                  >
+                    Đăng nhập Quản trị (Portal)
+                  </button>
+                </li>
                 <li><a href="https://zalo.me/0337367666" target="_blank" rel="noopener noreferrer">Liên hệ qua Zalo</a></li>
               </ul>
             </div>
@@ -1689,6 +1711,12 @@ export function CompanyHome() {
           <a href="#main" className="scroll-top-link">Lên đầu trang ↑</a>
         </div>
       </footer>
+
+      <TaviAuthModal
+        isOpen={authModalOpen !== null}
+        initialMode={authModalOpen || "login"}
+        onClose={() => setAuthModalOpen(null)}
+      />
     </div>
   );
 }
