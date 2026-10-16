@@ -30,6 +30,32 @@ export const mockLeads: BusinessLead[] = INDUSTRY_KEYS.map((industry, index) =>
   lead(industry, index + 1)
 );
 
+const SLUG_ALIASES: Record<string, IndustryKey> = {
+  "corporate-profile": "corporate_profile",
+  "b2b-product-showcase": "b2b_product",
+  "lead-generation": "lead_generation",
+  "thuong-mai-selavyn-viet-nam": "b2b_product"
+};
+
 export function getMockLeadByPlaceId(placeId: string): BusinessLead | null {
+  if (placeId === "thuong-mai-selavyn-viet-nam") {
+    const aliasLead = lead("b2b_product", 1);
+    aliasLead.place_id = placeId;
+    aliasLead.id = placeId;
+    aliasLead.name = "SELAVYN VIỆT NAM // THIẾT BỊ CƠ KHÍ & THƯƠNG MẠI";
+    aliasLead.formatted_address = "Tầng 5, Tòa nhà Selavyn, 128 Nguyễn Thị Minh Khai, Quận 3, TP. Hồ Chí Minh";
+    aliasLead.formatted_phone_number = "028 3829 8888";
+    aliasLead.facebook_email = "contact@selavyn.vn";
+    aliasLead.demo_url = `/demo/${placeId}`;
+    return aliasLead;
+  }
+  const aliasIndustry = SLUG_ALIASES[placeId];
+  if (aliasIndustry) {
+    const aliasLead = lead(aliasIndustry, 1);
+    aliasLead.place_id = placeId;
+    aliasLead.id = placeId;
+    aliasLead.demo_url = `/demo/${placeId}`;
+    return aliasLead;
+  }
   return mockLeads.find((item) => item.place_id === placeId) ?? null;
 }

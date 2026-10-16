@@ -41,9 +41,15 @@ function createPrimaryAction(lead: BusinessLead, defaults: ReturnType<typeof get
   return { label: defaults.secondaryCtaLabel, href: mapHref(query), variant: "primary" };
 }
 
-function businessImage(lead: BusinessLead, fallback: DemoImage): DemoImage {
+function businessImage(lead: BusinessLead, fallback: DemoImage, templateKey?: IndustryKey): DemoImage {
   const src = clean(lead.image_url);
   if (!src) return fallback;
+
+  const isB2B = templateKey === "corporate_profile" || templateKey === "b2b_product" || templateKey === "lead_generation";
+  if (isB2B && /photo-1505751172876|photo-1580281657527|photo-1576091160550|photo-1519494026892/i.test(src)) {
+    return fallback;
+  }
+
   return {
     src,
     alt: `Hình ảnh của ${clean(lead.name) || "doanh nghiệp"}`,
@@ -55,6 +61,8 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
   const templateKey = forcedTemplateKey ?? routeTemplateByIndustry(lead.industry);
   const defaults = getTemplateDefaults(templateKey);
 
+  const isB2B = templateKey === "corporate_profile" || templateKey === "b2b_product" || templateKey === "lead_generation";
+
   // Safely parse template_data JSON
   let customData: Record<string, any> | undefined = undefined;
   if (lead.template_data) {
@@ -62,6 +70,22 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
       customData = typeof lead.template_data === "string" 
         ? JSON.parse(lead.template_data) 
         : lead.template_data;
+
+      if (isB2B && customData) {
+        const isLegacyMismatched = (val: unknown): boolean => {
+          if (typeof val === "string") {
+            return /(y tế|bác sĩ|đăng ký khám|thăm khám|sức khỏe|chăm sóc|nha khoa|răng|spa|massage|móng|tóc|salon|công trình xây dựng|xây nhà|nội trú|ngoại trú|xét nghiệm|tiêm chủng|photo-1576091160550|photo-1505751172876|photo-1580281657527|photo-1519494026892|photo-1516549655169|photo-1541888946425|photo-1503387762-592deb58ef4e)/i.test(val);
+          }
+          if (Array.isArray(val)) return val.some(isLegacyMismatched);
+          if (val && typeof val === "object") return Object.values(val).some(isLegacyMismatched);
+          return false;
+        };
+        for (const [k, v] of Object.entries(customData)) {
+          if (isLegacyMismatched(v) || isLegacyMismatched(k)) {
+            delete customData[k];
+          }
+        }
+      }
     } catch (e) {
       console.error("Failed to parse template_data JSON:", e);
     }
@@ -77,7 +101,7 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
   const facebookUrl = isMockPreview ? "https://[contact.MessageCircle]" : (website ?? externalHref(lead.facebook_url));
   const heroImage = isMockPreview
     ? { src: `https://placehold.co/1200x600/073b8e/ffffff?text=[hero_image]`, alt: "[hero_image]", source: "fallback" as const }
-    : businessImage(lead, defaults.fallbackImages[0]);
+    : businessImage(lead, defaults.fallbackImages[0], templateKey);
   const mapQuery = address || name;
   const primaryAction = createPrimaryAction(lead, defaults);
   const secondaryAction: DemoCTA = {
@@ -86,7 +110,11 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
     variant: "secondary"
   };
 
-  const dbGalleryUrls = Array.isArray((lead as any).gallery_urls) ? (lead as any).gallery_urls : [];
+  const rawGalleryUrls = Array.isArray((lead as any).gallery_urls) ? (lead as any).gallery_urls : [];
+  const dbGalleryUrls = isB2B 
+    ? rawGalleryUrls.filter((url: string) => !/photo-1576091160550|photo-1505751172876|photo-1580281657527|photo-1519494026892|photo-1516549655169|photo-1541888946425|photo-1503387762-592deb58ef4e/i.test(url))
+    : rawGalleryUrls;
+
   const gallery = isMockPreview
     ? [
         { src: `https://placehold.co/600x400/073b8e/ffffff?text=[gallery_urls[0]]`, alt: "[gallery_urls[0]]", source: "fallback" as const },
@@ -119,9 +147,16 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
   const hd3 = clean((lead as any).highlight_desc_3);
   if (ht3) dbHighlights.push(`${ht3}${hd3 ? `: ${hd3}` : ""}`);
 
-  const finalHighlights = dbHighlights.length > 0 
-    ? dbHighlights 
-    : (Array.isArray((lead as any).highlights) ? (lead as any).highlights : defaults.highlights);
+  const fallbackHighlights = Array.isArray((lead as any).highlights) ? (lead as any).highlights : defaults.highlights;
+  const rawHighlights = dbHighlights.length > 0 ? dbHighlights : fallbackHighlights;
+  const finalHighlights = (isB2B && rawHighlights.some((h: string) => /y tế|khám|bác sĩ|sức khỏe/i.test(h)))
+    ? defaults.highlights
+    : rawHighlights;
+
+  const rawAboutImage = clean((lead as any).about_image_url);
+  const safeAboutImageUrl = (isB2B && rawAboutImage && /photo-1576091160550|photo-1505751172876|photo-1580281657527|photo-1519494026892|photo-1516549655169|photo-1541888946425/i.test(rawAboutImage))
+    ? undefined
+    : rawAboutImage;
 
   return {
     business: {
@@ -139,7 +174,7 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
         : clean((lead as any).logo_url),
       aboutImageUrl: isMockPreview 
         ? `https://placehold.co/600x400/073b8e/ffffff?text=[about_image]` 
-        : clean((lead as any).about_image_url)
+        : safeAboutImageUrl
     },
     template: {
       key: defaults.key,

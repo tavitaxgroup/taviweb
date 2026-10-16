@@ -14,7 +14,7 @@ export default function DemoFooter({ data }: DemoFooterProps) {
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Brand column */}
         <div className="space-y-6">
-          <div className="font-serif text-2xl font-bold tracking-widest text-brand-primary uppercase">
+          <div className="font-serif text-2xl font-bold tracking-normal text-brand-primary uppercase">
             {data.business.name}
           </div>
           <p className="font-sans text-sm text-brand-secondary/90 leading-relaxed">
@@ -55,7 +55,7 @@ export default function DemoFooter({ data }: DemoFooterProps) {
 
         {/* Services column */}
         <div className="space-y-6">
-          <p className="font-sans font-semibold text-xs text-brand-primary tracking-widest uppercase">
+          <p className="font-sans font-semibold text-xs text-brand-primary tracking-wider uppercase">
             Dịch vụ
           </p>
           <ul className="space-y-3 font-sans text-sm text-brand-secondary/90">

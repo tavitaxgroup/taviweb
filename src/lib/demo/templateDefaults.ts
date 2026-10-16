@@ -351,6 +351,75 @@ export const templateDefaults: Record<IndustryKey, TemplateDefaults> = {
     primaryCtaLabel: "Đăng ký tư vấn",
     secondaryCtaLabel: "Xem phòng tập",
     palette: { background: "#0f1115", surface: "#181b21", text: "#f7f8fa", muted: "#c1c7d0", primary: "#b6f000", secondary: "#242a31", accent: "#ff6b35", border: "#2e343d" }
+  },
+  corporate_profile: {
+    key: "corporate_profile",
+    label: "Hồ Sơ Năng Lực Doanh Nghiệp & Tập Đoàn B2B",
+    shortLabel: "Hồ sơ năng lực",
+    heroTitle: "Hồ Sơ Năng Lực Doanh Nghiệp & Nền Tảng Kỹ Thuật Chuẩn Quốc Tế",
+    heroSubtitle: "Tập đoàn tiên phong cung cấp giải pháp kỹ thuật, hạ tầng và đầu tư chiến lược, kiến tạo giá trị bền vững cho các đối tác tổ chức.",
+    aboutTitle: "Đối Tác Chiến Lược Của Các Doanh Nghiệp & Tổ Chức Hàng Đầu",
+    aboutBody: "Với năng lực tổng thầu kỹ thuật và hạ tầng quy mô lớn, chúng tôi cam kết mang lại hiệu quả vượt trội, đồng hành lâu dài cùng đối tác.",
+    services: [
+      { title: "Tư Vấn & Đầu Tư Chiến Lược", description: "Quy hoạch và tối ưu hóa nguồn lực kỹ thuật, quản trị rủi ro cho các dự án quy mô lớn.", iconKey: "target" },
+      { title: "Tổng Thầu Kỹ Thuật & Hạ Tầng", description: "Năng lực triển khai tổng thể từ thiết kế, giám sát đến chuyển giao công nghệ cao.", iconKey: "building" },
+      { title: "Quản Trị Vận Hành & Chuỗi Cung Ứng", description: "Tối ưu hóa quy trình vận hành và hệ thống kiểm soát chất lượng tiêu chuẩn quốc tế.", iconKey: "shield" }
+    ],
+    highlights: ["Hồ sơ năng lực chuẩn kiểm toán quốc tế", "Năng lực tổng thầu dự án cấp 1", "Mạng lưới đối tác toàn diện"],
+    badges: ["Chuẩn ISO 9001:2015", "Hồ sơ đấu thầu hạng A", "Đối tác chiến lược B2B"],
+    fallbackImages: [
+      image("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=80", "Tòa nhà tập đoàn tài chính và kỹ thuật"),
+      image("https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80", "Không gian làm việc điều hành tập đoàn")
+    ],
+    primaryCtaLabel: "Tải Hồ Sơ Năng Lực",
+    secondaryCtaLabel: "Liên Hệ Hợp Tác",
+    palette: { background: "#0A0F1D", surface: "#111827", text: "#F9FAFB", muted: "#94A3B8", primary: "#D97706", secondary: "#1E293B", accent: "#F59E0B", border: "#334155" }
+  },
+  b2b_product: {
+    key: "b2b_product",
+    label: "Showroom Sản Phẩm & Thiết Bị Kỹ Thuật B2B",
+    shortLabel: "Thiết bị B2B",
+    heroTitle: "Hệ thống thiết bị kỹ thuật & Nguồn cung ứng B2B chuẩn quốc tế",
+    heroSubtitle: "Cung cấp máy móc, vật tư và thiết bị chuyên dụng với đầy đủ chứng nhận CO/CQ, chính sách chiết khấu đại lý và bảo hành 24 tháng.",
+    aboutTitle: "Năng lực sản xuất, kiểm định và cung ứng chuỗi thiết bị toàn diện",
+    aboutBody: "Chúng tôi trực tiếp nhập khẩu, phân phối và cung ứng các dòng máy móc phân tích, thiết bị đo lường và vật tư kỹ thuật cao cho nhà máy và viện nghiên cứu.",
+    services: [
+      { title: "Thiết Bị Phân Tích & Đo Lường Chính Xác", description: "Hệ thống máy phân tích phòng lab, cảm biến và quang phổ độ nhạy cao chuẩn quốc tế.", iconKey: "cpu" },
+      { title: "Máy Móc Tự Động Hóa Công Nghiệp", description: "Giải pháp dây chuyền tự động hóa, điều khiển và hệ thống giám sát SCADA công nghiệp.", iconKey: "tool" },
+      { title: "Vật Tư & Linh Kiện Thay Thế Chính Hãng", description: "Nguồn cung ứng linh phụ kiện tiêu hao, bảo hành 24 tháng và bảo dưỡng định kỳ tận nơi.", iconKey: "wrench" }
+    ],
+    highlights: ["Chứng từ CO/CQ nhập khẩu đầy đủ", "Bảo hành 24 tháng & kỹ sư hỗ trợ tận nơi", "Sẵn hàng tại kho TP.HCM & Hà Nội"],
+    badges: ["Đạt chuẩn ISO/CE", "Chứng nhận CO/CQ", "Bảo hành 24 tháng"],
+    fallbackImages: [
+      image("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1400&q=80", "Dây chuyền thiết bị kỹ thuật hiện đại"),
+      image("https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80", "Kỹ sư kiểm tra thiết bị công nghệ")
+    ],
+    primaryCtaLabel: "Yêu Cầu Báo Giá (RFQ)",
+    secondaryCtaLabel: "Xem Danh Mục Thiết Bị",
+    palette: { background: "#090D16", surface: "#0F172A", text: "#F8FAFC", muted: "#94A3B8", primary: "#06B6D4", secondary: "#1E293B", accent: "#14B8A6", border: "#1E293B" }
+  },
+  lead_generation: {
+    key: "lead_generation",
+    label: "Giải Pháp B2B Chuyển Đổi & Tư Vấn Doanh Nghiệp",
+    shortLabel: "Giải pháp B2B",
+    heroTitle: "Hệ thống giải pháp tăng trưởng & Tối ưu hiệu quả doanh nghiệp",
+    heroSubtitle: "Hệ thống giải pháp tư vấn quản trị và công nghệ chuyên sâu, giúp doanh nghiệp cắt giảm chi phí vận hành và tăng tốc doanh thu bền vững.",
+    aboutTitle: "Giải Pháp Đã Được Kiểm Chứng Qua Hàng Trăm Doanh Nghiệp",
+    aboutBody: "Chúng tôi kết hợp chuyên môn sâu rộng về tối ưu vận hành, dữ liệu kinh doanh và chuyển đổi số để xây dựng lộ trình tăng trưởng tùy chỉnh.",
+    services: [
+      { title: "Tư Vấn Tăng Trưởng & Tối Ưu Doanh Thu", description: "Tái cấu trúc kênh phân phối, chuẩn hóa quy trình bán hàng B2B và đào tạo đội ngũ chuyên sâu.", iconKey: "target" },
+      { title: "Tự Động Hóa Vận Hành Doanh Nghiệp", description: "Triển khai phần mềm quản trị ERP/CRM, đồng bộ hóa chuỗi cung ứng và cắt giảm thời gian xử lý.", iconKey: "bolt" },
+      { title: "Phân Tích Dữ Liệu & Quản Trị Rủi Ro", description: "Dashboard thông minh thời gian thực giúp ban lãnh đạo ra quyết định dựa trên dữ liệu chính xác.", iconKey: "shield" }
+    ],
+    highlights: ["Cam kết ROI tối thiểu 3.2x trong 6 tháng", "Đội ngũ chuyên gia trên 10 năm kinh nghiệm", "Bảo mật thông tin NDA tuyệt đối"],
+    badges: ["Cam kết ROI 3.2x", "500+ Khách hàng tin dùng", "Triển khai trong 14 ngày"],
+    fallbackImages: [
+      image("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80", "Biểu đồ phân tích tăng trưởng doanh nghiệp"),
+      image("https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80", "Đội ngũ tư vấn chiến lược chuyên nghiệp")
+    ],
+    primaryCtaLabel: "Đăng Ký Tư Vấn Chiến Lược",
+    secondaryCtaLabel: "Tính Toán Hiệu Quả ROI",
+    palette: { background: "#090A0F", surface: "#111422", text: "#F8FAFC", muted: "#94A3B8", primary: "#10B981", secondary: "#1E2235", accent: "#34D399", border: "#1E2235" }
   }
 };
 

@@ -35,23 +35,23 @@ export default function DemoFooter({ business }: DemoFooterProps) {
           
           {/* Col 1 - Bio */}
           <div className="md:col-span-4">
-            <div className="font-serif text-2xl font-bold tracking-tight text-brand-primary mb-6">
-              {business.name || business.logoText || 'STUDIO'}
+            <div className="text-2xl sm:text-3xl font-bold tracking-normal text-brand-primary mb-6 leading-tight">
+              {business.name || business.logoText || 'STUDIO NỘI THẤT'}
             </div>
-            <p className="font-sans text-sm text-brand-primary/70 leading-relaxed max-w-sm mb-8">
+            <p className="text-sm text-brand-primary/75 leading-relaxed max-w-sm mb-8 font-normal">
               Đơn vị thiết kế và thi công nội thất cao cấp hàng đầu, kiến tạo những không gian sống đầy cảm hứng và mang đậm dấu ấn cá nhân.
             </p>
             
             {/* Share action */}
             <button
               onClick={handleShare}
-              className="w-10 h-10 rounded-none border border-brand-secondary/20 flex items-center justify-center text-brand-secondary hover:bg-brand-secondary hover:text-white transition-all duration-300 relative"
-              title="Copy link to clipboard"
+              className="w-10 h-10 rounded-none border border-brand-secondary/20 flex items-center justify-center text-brand-secondary hover:bg-brand-secondary hover:text-white transition-all duration-300 relative cursor-pointer"
+              title="Sao chép liên kết"
             >
               {copied ? <Check size={16} /> : <Share2 size={16} />}
               {copied && (
-                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-brand-primary text-white text-[10px] px-2 py-1 uppercase tracking-widest whitespace-nowrap animate-[fadeIn_0.2s_ease]">
-                  Copied!
+                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-brand-primary text-white text-[10px] px-2 py-1 uppercase tracking-wider whitespace-nowrap animate-[fadeIn_0.2s_ease]">
+                  Đã sao chép!
                 </span>
               )}
             </button>
@@ -59,10 +59,10 @@ export default function DemoFooter({ business }: DemoFooterProps) {
 
           {/* Col 2 - Services */}
           <div className="md:col-span-2">
-            <h5 className="font-sans text-[11px] font-bold text-brand-primary tracking-widest uppercase mb-6">
+            <h5 className="text-xs font-bold text-brand-primary tracking-wider uppercase mb-6">
               Dịch vụ
             </h5>
-            <ul className="space-y-4 font-sans text-sm text-brand-primary/70">
+            <ul className="space-y-4 text-sm text-brand-primary/70">
               <li>
                 <a href="#services" className="hover:text-brand-secondary transition-colors">
                   Căn hộ
@@ -88,10 +88,10 @@ export default function DemoFooter({ business }: DemoFooterProps) {
 
           {/* Col 3 - Company Links */}
           <div className="md:col-span-2">
-            <h5 className="font-sans text-[11px] font-bold text-brand-primary tracking-widest uppercase mb-6">
+            <h5 className="text-xs font-bold text-brand-primary tracking-wider uppercase mb-6">
               Về chúng tôi
             </h5>
-            <ul className="space-y-4 font-sans text-sm text-brand-primary/70">
+            <ul className="space-y-4 text-sm text-brand-primary/70">
               <li>
                 <a href="#about" className="hover:text-brand-secondary transition-colors">
                   Triết lý
@@ -117,10 +117,10 @@ export default function DemoFooter({ business }: DemoFooterProps) {
 
           {/* Col 4 - Newsletter */}
           <div className="md:col-span-4">
-            <h5 className="font-sans text-[11px] font-bold text-brand-primary tracking-widest uppercase mb-6">
-              Newsletter
+            <h5 className="text-xs font-bold text-brand-primary tracking-wider uppercase mb-6">
+              Bản tin
             </h5>
-            <p className="font-sans text-sm text-brand-primary/70 mb-6">
+            <p className="text-sm text-brand-primary/70 mb-6 leading-relaxed">
               Đăng ký để nhận những cảm hứng thiết kế và phong cách sống mới nhất.
             </p>
 
@@ -132,11 +132,12 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={subscribed ? "Cảm ơn bạn đã đăng ký!" : "Email của bạn"}
                 disabled={subscribed}
-                className="bg-transparent border-none focus:outline-none focus:ring-0 w-full placeholder:text-brand-primary/45 text-brand-primary font-sans text-sm pr-10"
+                className="bg-transparent border-none focus:outline-none focus:ring-0 w-full placeholder:text-brand-primary/45 text-brand-primary text-sm pr-10"
               />
               <button
                 type="submit"
                 disabled={subscribed}
+                aria-label="Đăng ký nhận tin"
                 className="absolute right-0 text-brand-secondary hover:text-brand-primary transition-colors cursor-pointer"
               >
                 {subscribed ? <Check size={18} className="text-brand-accent" /> : <ArrowRight size={18} />}
@@ -147,16 +148,16 @@ export default function DemoFooter({ business }: DemoFooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-brand-secondary/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-brand-primary/60 font-sans tracking-widest">
+        <div className="mt-16 pt-8 border-t border-brand-secondary/15 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-primary/70 tracking-normal">
           <div>
-            © {new Date().getFullYear()} {business.name}. All rights reserved.
+            © {new Date().getFullYear()} {business.name}. Mọi quyền được bảo lưu.
           </div>
           <div className="flex gap-8">
-            <a href="#" className="hover:text-brand-primary transition-colors">
-              PRIVACY POLICY
+            <a href="#" className="hover:text-brand-primary transition-colors tracking-wider text-xs font-medium uppercase">
+              Chính sách bảo mật
             </a>
-            <a href="#" className="hover:text-brand-primary transition-colors">
-              TERMS OF SERVICE
+            <a href="#" className="hover:text-brand-primary transition-colors tracking-wider text-xs font-medium uppercase">
+              Điều khoản dịch vụ
             </a>
           </div>
         </div>

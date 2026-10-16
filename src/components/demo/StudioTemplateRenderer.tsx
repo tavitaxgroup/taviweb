@@ -18,7 +18,13 @@ import InteriorDesignTemplate from "@/template-sources/noi_that/components/demo/
 import LawFirmTemplate from "@/template-sources/luat_su/components/demo/templates/LawFirmTemplate";
 import SpaTemplate from "@/template-sources/spa/components/demo/templates/SpaTemplate";
 import WeddingStudioTemplate from "@/template-sources/studio_chup_anh/components/demo/templates/WeddingStudioTemplate";
+import CorporateProfileTemplate from "@/template-sources/corporate_profile/components/demo/templates/CorporateProfileTemplate";
+import B2BProductTemplate from "@/template-sources/b2b_product/components/demo/templates/B2BProductTemplate";
+import LeadGenerationTemplate from "@/template-sources/lead_generation/components/demo/templates/LeadGenerationTemplate";
 
+import { buildDemoPageData as buildCorporateBase } from "@/template-sources/corporate_profile/lib/demo/buildDemoPageData";
+import { buildDemoPageData as buildB2BProductBase } from "@/template-sources/b2b_product/lib/demo/buildDemoPageData";
+import { buildDemoPageData as buildLeadGenBase } from "@/template-sources/lead_generation/lib/demo/buildDemoPageData";
 import { buildDemoPageData as buildConstructionBase } from "@/template-sources/cong_ty_xay_dung/lib/demo/buildDemoPageData";
 import { buildDemoPageData as buildCleaningBase } from "@/template-sources/dich_vu_ve_sinh/lib/demo/buildDemoPageData";
 import { buildDemoPageData as buildGarageBase } from "@/template-sources/garage_oto/lib/demo/buildDemoPageData";
@@ -42,6 +48,9 @@ type StudioTemplateProps = {
 };
 
 const studioTemplateRegistry: Record<IndustryKey, ComponentType<StudioTemplateProps>> = {
+  corporate_profile: CorporateProfileTemplate as ComponentType<StudioTemplateProps>,
+  b2b_product: B2BProductTemplate as ComponentType<StudioTemplateProps>,
+  lead_generation: LeadGenerationTemplate as ComponentType<StudioTemplateProps>,
   phong_kham: GeneralClinicTemplate as ComponentType<StudioTemplateProps>,
   quan_cafe: CafeTemplate as ComponentType<StudioTemplateProps>,
   garage_oto: AutoGarageTemplate as ComponentType<StudioTemplateProps>,
@@ -137,6 +146,12 @@ function getOriginalStudioData(templateKey: IndustryKey): Record<string, any> {
   const fallbackPlaceId = "__template_preview__";
 
   switch (templateKey) {
+    case "corporate_profile":
+      return clone(buildCorporateBase() as unknown as Record<string, any>);
+    case "b2b_product":
+      return clone(buildB2BProductBase() as unknown as Record<string, any>);
+    case "lead_generation":
+      return clone(buildLeadGenBase() as unknown as Record<string, any>);
     case "phong_kham":
       return clone(buildClinicBase(fallbackPlaceId) as unknown as Record<string, any>);
     case "quan_cafe":
@@ -402,9 +417,16 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
     baseData.trust.achievements ??= leadData.trust.badges;
   }
 
+  const isB2B = ["corporate_profile", "b2b_product", "lead_generation"].includes(leadData.template.key);
+
+  const isMedicalOrConstructionImage = (src?: string) => {
+    if (!src) return false;
+    return /photo-1576091160550|photo-1505751172876|photo-1580281657527|photo-1519494026892|photo-1516549655169|photo-1541888946425|photo-1503387762-592deb58ef4e/i.test(src);
+  };
+
   if (baseData.about) {
     baseData.about.stats ??= statValues;
-    if (leadData.business.aboutImageUrl) {
+    if (leadData.business.aboutImageUrl && (!isB2B || !isMedicalOrConstructionImage(leadData.business.aboutImageUrl))) {
       baseData.about.image = {
         src: leadData.business.aboutImageUrl,
         alt: `Hình ảnh giới thiệu của ${leadData.business.name}`
@@ -438,10 +460,10 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
   }
 
   const isMock = leadData.business.placeId?.startsWith("mock-");
-  if (isMock || (leadData.template.customData && leadData.template.customData.services)) {
+  if (!isB2B && (isMock || (leadData.template.customData && leadData.template.customData.services))) {
     baseData.services = leadData.services;
   }
-  if (isMock || (leadData.template.customData && (leadData.template.customData.gallery_urls || leadData.template.customData.gallery))) {
+  if (!isB2B && (isMock || (leadData.template.customData && (leadData.template.customData.gallery_urls || leadData.template.customData.gallery)))) {
     baseData.gallery = leadData.gallery;
   }
   if (isMock || (leadData.template.customData && leadData.template.customData.reviews)) {
@@ -634,8 +656,22 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
   return baseData;
 }
 
-function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Record<string, any>) {
+function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Record<string, any>, templateKey?: string) {
   const custom = customData || {};
+  const isB2B = ["corporate_profile", "b2b_product", "lead_generation"].includes(templateKey || baseData.template?.key || "");
+
+  const isLegacyMismatched = (val: unknown): boolean => {
+    if (typeof val === "string") {
+      return /(y tế|bác sĩ|đăng ký khám|thăm khám|sức khỏe|chăm sóc|nha khoa|răng|spa|massage|móng|tóc|salon|công trình xây dựng|xây nhà|nội trú|ngoại trú|xét nghiệm|tiêm chủng|photo-1576091160550|photo-1505751172876|photo-1580281657527|photo-1519494026892|photo-1516549655169|photo-1541888946425|photo-1503387762-592deb58ef4e)/i.test(val);
+    }
+    if (Array.isArray(val)) {
+      return val.some((item) => isLegacyMismatched(item));
+    }
+    if (val && typeof val === "object") {
+      return Object.values(val).some((item) => isLegacyMismatched(item));
+    }
+    return false;
+  };
 
   // 1. Standard logo & image mappings (for convenience)
   if (custom.logo_url && baseData.business) {
@@ -644,12 +680,12 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
     baseData.business.logoUrlString = custom.logo_url;
   }
 
-  if (custom.about_image && baseData.about) {
+  if (custom.about_image && baseData.about && (!isB2B || !isLegacyMismatched(custom.about_image))) {
     baseData.about.image = { src: custom.about_image, alt: "Về chúng tôi" };
     baseData.about.bgImage = baseData.about.image;
   }
 
-  if (custom.hero_image && baseData.hero) {
+  if (custom.hero_image && baseData.hero && (!isB2B || !isLegacyMismatched(custom.hero_image))) {
     baseData.hero.image = { src: custom.hero_image, alt: "Hero" };
     baseData.hero.bgImage = baseData.hero.image;
     baseData.hero.backgroundImage = custom.hero_image;
@@ -657,6 +693,10 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
 
   // 2. Allow deep dot-notation overrides, e.g. "about.title": "New Title"
   for (const [key, value] of Object.entries(custom)) {
+    // If it's a B2B template, reject legacy clinic/construction text overrides
+    if (isB2B && isLegacyMismatched(value)) {
+      continue;
+    }
     if (key.includes(".")) {
       const parts = key.split(".");
       let current = baseData;
@@ -678,28 +718,28 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
     }
   }
 
-  // Sinc primaryCta <-> primaryAction and secondaryCta <-> secondaryAction aliases for compatibility
+  // Sync primaryCta <-> primaryAction and secondaryCta <-> secondaryAction aliases for compatibility
   if (baseData.hero) {
-    if (custom["hero.primaryCta.label"] !== undefined) {
+    if (custom["hero.primaryCta.label"] !== undefined && (!isB2B || !isLegacyMismatched(custom["hero.primaryCta.label"]))) {
       baseData.hero.primaryAction = { ...(baseData.hero.primaryAction || {}), label: custom["hero.primaryCta.label"] };
     }
     if (custom["hero.primaryCta.href"] !== undefined) {
       baseData.hero.primaryAction = { ...(baseData.hero.primaryAction || {}), href: custom["hero.primaryCta.href"] };
     }
-    if (custom["hero.secondaryCta.label"] !== undefined) {
+    if (custom["hero.secondaryCta.label"] !== undefined && (!isB2B || !isLegacyMismatched(custom["hero.secondaryCta.label"]))) {
       baseData.hero.secondaryAction = { ...(baseData.hero.secondaryAction || {}), label: custom["hero.secondaryCta.label"] };
     }
     if (custom["hero.secondaryCta.href"] !== undefined) {
       baseData.hero.secondaryAction = { ...(baseData.hero.secondaryAction || {}), href: custom["hero.secondaryCta.href"] };
     }
-    if (custom.hero?.primaryCta) {
+    if (custom.hero?.primaryCta && (!isB2B || !isLegacyMismatched(custom.hero.primaryCta.label))) {
       baseData.hero.primaryAction = { ...(baseData.hero.primaryAction || {}), ...custom.hero.primaryCta };
     }
-    if (custom.hero?.secondaryCta) {
+    if (custom.hero?.secondaryCta && (!isB2B || !isLegacyMismatched(custom.hero.secondaryCta.label))) {
       baseData.hero.secondaryAction = { ...(baseData.hero.secondaryAction || {}), ...custom.hero.secondaryCta };
     }
     // Also support custom.hero_primary_action_label overrides if needed
-    if (custom.hero_primary_action_label && baseData.hero.primaryAction) {
+    if (custom.hero_primary_action_label && (!isB2B || !isLegacyMismatched(custom.hero_primary_action_label)) && baseData.hero.primaryAction) {
       baseData.hero.primaryAction.label = custom.hero_primary_action_label;
     }
     // Sync for Interior Design template which reads primaryActionLabel
@@ -713,7 +753,14 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
   const customHeroImages = custom.hero_images ?? custom["hero.images"] ?? custom.hero?.images ?? custom.hero_image;
 
   if (Array.isArray(customHeroImages)) {
-    const activeImages = customHeroImages.filter(img => img);
+    const activeImages = customHeroImages.filter((img) => {
+      if (!img) return false;
+      const str = typeof img === "string" ? img : img?.src;
+      if (isB2B && /photo-1505751172876|photo-1580281657527|photo-1576091160550|photo-1519494026892/i.test(str || "")) {
+        return false;
+      }
+      return true;
+    });
     heroImages = activeImages.map((src: any, index: number) => {
       if (typeof src === "string") {
         return { src, alt: `Hero Slide ${index + 1}`, source: "fallback" as const };
@@ -725,12 +772,17 @@ function mergeCustomTemplateData(baseData: Record<string, any>, customData?: Rec
       };
     });
   } else if (typeof customHeroImages === "string" && customHeroImages) {
-    heroImages = [{ src: customHeroImages, alt: "Hero Slide 1", source: "fallback" as const }];
+    if (!isB2B || !/photo-1505751172876|photo-1580281657527|photo-1576091160550|photo-1519494026892/i.test(customHeroImages)) {
+      heroImages = [{ src: customHeroImages, alt: "Hero Slide 1", source: "fallback" as const }];
+    }
   }
 
-  // If no custom images are specified, fallback to template default fallbackImages
+  // If no custom images are specified or all were filtered out, fallback to template default fallbackImages
   if (heroImages.length === 0) {
-    if (Array.isArray(baseData.hero?.images) && baseData.hero.images.length > 0) {
+    if (isB2B) {
+      const defaults = getTemplateDefaults((templateKey as any) || baseData.template?.key || "b2b_product");
+      heroImages = defaults.fallbackImages || [];
+    } else if (Array.isArray(baseData.hero?.images) && baseData.hero.images.length > 0) {
       heroImages = baseData.hero.images;
     } else {
       const defaults = getTemplateDefaults(baseData.template?.key);
@@ -823,14 +875,24 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
     "https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80"
   ];
-  const defaultImages = templateKey === "nha_hang" 
-    ? restaurantDishImages 
-    : (templateKey === "phong_kham" ? clinicImages : [
-        "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"
-      ]);
+  const b2bImages = [
+    "/assets/sisbio/cho-maxa5-plus.webp",
+    "/assets/sisbio/signal-direct-imager.webp",
+    "/assets/sisbio/may-quang-pho-thu-nho-4096pixel.jpg",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+  ];
+  const isB2BTemplate = ["corporate_profile", "b2b_product", "lead_generation"].includes(templateKey || "");
+  const defaultImages = isB2BTemplate
+    ? b2bImages
+    : (templateKey === "nha_hang" 
+        ? restaurantDishImages 
+        : (templateKey === "phong_kham" ? clinicImages : [
+            "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"
+          ]));
 
   if (Array.isArray(baseData.services)) {
     baseData.services = baseData.services.map((service: Record<string, any>, index: number) => {
@@ -877,14 +939,31 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
 
   // 4. About Image & Content
   if (baseData.about) {
-    const rawAboutImg = baseData.about.image?.src ?? (typeof baseData.about.image === "string" ? baseData.about.image : null) ?? custom.about_image ?? leadData.business.aboutImageUrl ?? defaultImages[0];
-    const aboutSrc = (typeof rawAboutImg === "string" && rawAboutImg.trim()) ? rawAboutImg.trim() : defaultImages[0];
+    const isLegacyAbout = (txt?: string) => {
+      if (!txt) return false;
+      return /(y tế|bác sĩ|đăng ký khám|thăm khám|sức khỏe|chăm sóc|nha khoa|răng|spa|massage|móng|tóc|salon|công trình xây dựng|xây nhà)/i.test(txt);
+    };
+
+    const isBadImg = (src?: string) => {
+      if (!src) return false;
+      return /photo-1576091160550|photo-1505751172876|photo-1580281657527|photo-1519494026892|photo-1516549655169|photo-1541888946425|photo-1503387762-592deb58ef4e/i.test(src);
+    };
+
+    const existingAboutSrc = baseData.about.image?.src ?? (typeof baseData.about.image === "string" ? baseData.about.image : null);
+    const candidateImg = custom.about_image ?? leadData.business.aboutImageUrl;
+    const aboutSrc = (isB2BTemplate && (isBadImg(candidateImg) || isBadImg(existingAboutSrc)))
+      ? b2bImages[0]
+      : (candidateImg ?? existingAboutSrc ?? defaultImages[0]);
+
     const safeAboutImage = { src: aboutSrc, alt: baseData.about.title || "Về chúng tôi" };
     baseData.about.image = safeAboutImage;
     if (baseData.about.bgImage) baseData.about.bgImage = safeAboutImage;
 
-    // Guarantee content is always a non-empty string for templates using .split("\n\n")
-    const aboutText = custom["about.body"] ?? custom["about.description"] ?? leadData.about?.body ?? baseData.about.description ?? baseData.about.content ?? "Dịch vụ uy tín, chuyên nghiệp và tận tâm đồng hành cùng khách hàng.";
+    const candidateAboutText = custom["about.body"] ?? custom["about.description"];
+    const aboutText = (isB2BTemplate && isLegacyAbout(candidateAboutText))
+      ? (baseData.about.description ?? baseData.about.content ?? baseData.about.body ?? "Hệ thống cung ứng thiết bị và năng lực kỹ thuật tiêu chuẩn quốc tế.")
+      : (candidateAboutText ?? leadData.about?.body ?? baseData.about.description ?? baseData.about.content ?? "Dịch vụ uy tín, chuyên nghiệp và tận tâm đồng hành cùng khách hàng.");
+
     baseData.about.content = aboutText;
     baseData.about.description = aboutText;
     baseData.about.body = aboutText;
@@ -923,7 +1002,7 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
 function toStudioTemplateData(data: DemoPageData) {
   const originalTemplateData = getOriginalStudioData(data.template.key);
   const replaced = applyLeadIdentity(originalTemplateData, data);
-  mergeCustomTemplateData(replaced, data.template.customData);
+  mergeCustomTemplateData(replaced, data.template.customData, data.template.key);
   return postProcessStudioData(replaced, data);
 }
 
@@ -978,6 +1057,10 @@ function getTemplateThemeStyle(templateKey: IndustryKey): CSSProperties {
       "--color-brand-bg-low": "#fff8f8",
       "--color-brand-outline": "#e1c292"
     } as CSSProperties;
+  }
+
+  if (templateKey === "corporate_profile" || templateKey === "b2b_product" || templateKey === "lead_generation" || templateKey === "cong_ty_xay_dung" || templateKey === "luat_su") {
+    return {} as CSSProperties;
   }
 
   if (templateKey === "spa") return sharedSpa;

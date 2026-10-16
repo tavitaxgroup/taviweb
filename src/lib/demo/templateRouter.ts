@@ -1,7 +1,7 @@
 import type { IndustryKey } from "@/types/demo";
 import { templateDefaults } from "./templateDefaults";
 
-export const DEFAULT_TEMPLATE_KEY: IndustryKey = "phong_kham";
+export const DEFAULT_TEMPLATE_KEY: IndustryKey = "corporate_profile";
 
 export const INDUSTRY_KEYS = Object.keys(templateDefaults) as IndustryKey[];
 

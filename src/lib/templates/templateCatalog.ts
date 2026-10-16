@@ -28,6 +28,24 @@ export type TemplateCatalogItem = {
 
 export const industryCatalog: IndustryCatalogItem[] = [
   {
+    key: "corporate_profile",
+    name: "Doanh nghiệp B2B & Tập đoàn",
+    description: "Mẫu website hồ sơ năng lực chuyên nghiệp dành cho công ty dịch vụ, tư vấn, đầu tư, logistics và doanh nghiệp đa ngành.",
+    order: 1
+  },
+  {
+    key: "b2b_product",
+    name: "Showroom Thiết bị & B2B",
+    description: "Mẫu website chuẩn quốc tế dành cho thương mại phân phối, máy móc kỹ thuật, vật tư công nghiệp, nông sản và tìm đại lý.",
+    order: 2
+  },
+  {
+    key: "lead_generation",
+    name: "Tăng trưởng Doanh số",
+    description: "Mẫu landing page chuyển đổi cao, tối ưu tiếp cận khách hàng nóng, truyền thông, đào tạo và dịch vụ nhanh.",
+    order: 3
+  },
+  {
     key: "nha_khoa",
     name: "Nha khoa",
     description: "Mẫu website dành cho phòng khám nha khoa, nha khoa thẩm mỹ và dịch vụ chăm sóc nụ cười.",

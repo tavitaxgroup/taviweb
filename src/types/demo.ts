@@ -1,4 +1,7 @@
 export type IndustryKey =
+  | "corporate_profile"
+  | "b2b_product"
+  | "lead_generation"
   | "phong_kham"
   | "quan_cafe"
   | "garage_oto"

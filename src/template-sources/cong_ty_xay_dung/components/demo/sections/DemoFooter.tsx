@@ -22,11 +22,11 @@ export function DemoFooter({ business }: DemoFooterProps) {
           <a 
             href="#" 
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-            className="font-sans text-2xl font-black text-amber-500 uppercase tracking-tighter"
+            className="text-xl sm:text-2xl font-extrabold text-amber-500 uppercase tracking-normal leading-snug hover:text-amber-400 transition-colors inline-block"
           >
             {business.name}
           </a>
-          <p className="text-slate-400 text-sm leading-relaxed">
+          <p className="text-slate-400 text-sm leading-relaxed font-normal">
             Đơn vị tư vấn thiết kế và thi công xây dựng chuyên nghiệp, mang đến giải pháp bền vững cho mọi công trình của bạn.
           </p>
           <div className="flex space-x-3">
@@ -49,32 +49,32 @@ export function DemoFooter({ business }: DemoFooterProps) {
 
         {/* Services Links Column */}
         <div>
-          <h4 className="font-sans text-xs font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-800 pb-3">
+          <h4 className="text-xs font-bold text-white mb-6 uppercase tracking-wider border-b border-slate-800 pb-3">
             Dịch vụ
           </h4>
           <ul className="space-y-3.5 text-sm">
             <li>
-              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Xây nhà trọn gói
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Sửa chữa cải tạo
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Thi công phần thô
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Hoàn thiện nội thất
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("services")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Tư vấn dự toán công trình
               </button>
             </li>
@@ -83,32 +83,32 @@ export function DemoFooter({ business }: DemoFooterProps) {
 
         {/* Company Links Column */}
         <div>
-          <h4 className="font-sans text-xs font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-800 pb-3">
+          <h4 className="text-xs font-bold text-white mb-6 uppercase tracking-wider border-b border-slate-800 pb-3">
             Công ty
           </h4>
           <ul className="space-y-3.5 text-sm">
             <li>
-              <button onClick={() => handleScrollTo("about")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("about")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Về chúng tôi
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("gallery")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("gallery")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Dự án đã thực hiện
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("why-choose-us")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("why-choose-us")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Quy trình làm việc
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("why-choose-us")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("why-choose-us")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Sự khác biệt
               </button>
             </li>
             <li>
-              <button onClick={() => handleScrollTo("contact")} className="text-slate-400 hover:text-amber-500 transition-colors text-left cursor-pointer">
+              <button onClick={() => handleScrollTo("contact")} className="text-slate-400 hover:text-amber-400 transition-colors text-left cursor-pointer">
                 Liên hệ tư vấn
               </button>
             </li>
@@ -117,7 +117,7 @@ export function DemoFooter({ business }: DemoFooterProps) {
 
         {/* Contact Info Column */}
         <div className="flex flex-col space-y-5">
-          <h4 className="font-sans text-xs font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-800 pb-3">
+          <h4 className="text-xs font-bold text-white mb-6 uppercase tracking-wider border-b border-slate-800 pb-3">
             Liên hệ
           </h4>
           <ul className="space-y-4 text-sm">
@@ -130,7 +130,7 @@ export function DemoFooter({ business }: DemoFooterProps) {
             {business.phone && (
               <li className="flex items-center space-x-3 text-slate-400">
                 <Phone className="w-5 h-5 text-amber-500 shrink-0" />
-                <a href={`tel:${business.phone.replace(/\s+/g, '')}`} className="hover:text-amber-500 transition-colors">
+                <a href={`tel:${business.phone.replace(/\s+/g, '')}`} className="hover:text-amber-400 transition-colors">
                   {business.phone}
                 </a>
               </li>
@@ -138,7 +138,7 @@ export function DemoFooter({ business }: DemoFooterProps) {
             {business.email && (
               <li className="flex items-center space-x-3 text-slate-400">
                 <Mail className="w-5 h-5 text-amber-500 shrink-0" />
-                <a href={`mailto:${business.email}`} className="hover:text-amber-500 transition-colors break-all">
+                <a href={`mailto:${business.email}`} className="hover:text-amber-400 transition-colors break-all">
                   {business.email}
                 </a>
               </li>
@@ -148,8 +148,13 @@ export function DemoFooter({ business }: DemoFooterProps) {
       </div>
 
       {/* Footer Bottom copyright area */}
-      <div className="border-t border-slate-800/80 py-8 px-4 md:px-12 text-center text-xs text-slate-500">
+      <div className="border-t border-slate-800/80 py-8 px-4 md:px-12 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-7xl mx-auto">
         <p>© {new Date().getFullYear()} {business.name}. Mọi quyền được bảo lưu.</p>
+        <div className="flex items-center gap-6 text-xs text-slate-500">
+          <a href="#" className="hover:text-amber-400 transition-colors">Chính sách bảo mật</a>
+          <span>•</span>
+          <a href="#" className="hover:text-amber-400 transition-colors">Điều khoản dịch vụ</a>
+        </div>
       </div>
     </footer>
   );

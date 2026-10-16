@@ -13,20 +13,20 @@ export default function DemoFooter({ data }: DemoFooterProps) {
         
         {/* Left column brand info (Spans 4) */}
         <div className="md:col-span-4 space-y-4">
-          <h3 className="font-serif text-2xl font-bold text-[#834767] tracking-tight">
+          <h3 className="font-serif text-2xl font-bold text-[#834767] tracking-normal">
             {data.business.name}
           </h3>
-          <p className="font-sans text-sm leading-relaxed font-light max-w-sm">
+          <p className="font-sans text-sm leading-relaxed font-normal max-w-sm">
             Nơi tình yêu được tôn vinh qua những góc nhìn nghệ thuật và sự tinh tế trong từng chi tiết.
           </p>
         </div>
 
         {/* Column 2: Studio Links (Spans 2) */}
         <div className="md:col-span-2 space-y-4">
-          <h4 className="font-sans text-xs uppercase tracking-[0.2em] font-semibold text-[#834767]">
+          <h4 className="font-sans text-xs uppercase tracking-wider font-semibold text-[#834767]">
             STUDIO
           </h4>
-          <ul className="space-y-2 text-sm font-sans font-light">
+          <ul className="space-y-2 text-sm font-sans font-normal">
             <li><a href="#about" className="hover:text-[#834767] transition-colors">Về chúng tôi</a></li>
             <li><a href="#gallery" className="hover:text-[#834767] transition-colors">Bộ sưu tập</a></li>
             <li><a href="#services" className="hover:text-[#834767] transition-colors">Báo giá dịch vụ</a></li>
@@ -35,20 +35,20 @@ export default function DemoFooter({ data }: DemoFooterProps) {
 
         {/* Column 3: Support Links (Spans 2) */}
         <div className="md:col-span-2 space-y-4">
-          <h4 className="font-sans text-xs uppercase tracking-[0.2em] font-semibold text-[#834767]">
-            SUPPORT
+          <h4 className="font-sans text-xs uppercase tracking-wider font-semibold text-[#834767]">
+            HỖ TRỢ
           </h4>
-          <ul className="space-y-2 text-sm font-sans font-light">
+          <ul className="space-y-2 text-sm font-sans font-normal">
             <li><a href="#" className="hover:text-[#834767] transition-colors">Quy trình làm việc</a></li>
             <li><a href="#" className="hover:text-[#834767] transition-colors">Chính sách bảo mật</a></li>
-            <li><a href="#" className="hover:text-[#834767] transition-colors">FAQ</a></li>
+            <li><a href="#" className="hover:text-[#834767] transition-colors">Câu hỏi thường gặp</a></li>
           </ul>
         </div>
 
         {/* Column 4: Contact Info (Spans 4) */}
         <div className="md:col-span-4 space-y-4">
-          <h4 className="font-sans text-xs uppercase tracking-[0.2em] font-semibold text-[#834767]">
-            CONTACT
+          <h4 className="font-sans text-xs uppercase tracking-wider font-semibold text-[#834767]">
+            LIÊN HỆ
           </h4>
           <ul className="space-y-3 text-sm font-sans font-light">
             {data.business.address && (

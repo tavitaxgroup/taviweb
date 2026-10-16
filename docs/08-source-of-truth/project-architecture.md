@@ -56,27 +56,30 @@ Y nghia:
 
 Luu y: `src/public/assets` khong phai thu muc serve static cua Next.js. Anh public phai nam trong `public/...`.
 
-## 15 industry key chuan
+## Industry keys chuẩn hệ thống
 
-Field `industry` trong Supabase va `IndustryKey` trong code phai dung cac key sau:
+Field `industry` trong Supabase và `IndustryKey` trong code gồm 3 nhóm B2B cốt lõi và 15 ngành ngách:
 
-| Industry key | Nganh |
-|---|---|
-| `nha_khoa` | Nha khoa |
-| `spa` | Spa |
-| `tham_my_vien` | Tham my vien |
-| `phong_kham` | Phong kham |
-| `salon_toc` | Hair salon |
-| `luat_su` | Luat su |
-| `trung_tam_tieng_anh` | Trung tam tieng Anh |
-| `dich_vu_ve_sinh` | Dich vu ve sinh |
-| `noi_that` | Thiet ke noi that |
-| `cong_ty_xay_dung` | Cong ty xay dung |
-| `nha_hang` | Nha hang |
-| `quan_cafe` | Quan cafe |
-| `studio_chup_anh` | Studio chup anh |
-| `phong_gym` | Gym/Fitness |
-| `garage_oto` | Garage oto |
+| Industry key | Ngành / Loại hình | Vai trò |
+|---|---|---|
+| `corporate_profile` | Doanh nghiệp B2B & Tập đoàn | Mẫu Hồ sơ năng lực B2B đa ngành, tư vấn, đầu tư, logistics |
+| `b2b_product` | Showroom Thiết bị & B2B (SISBIO) | Mẫu trưng bày thiết bị, máy móc, vật tư công nghiệp & tìm đại lý |
+| `lead_generation` | Tăng trưởng Doanh số & Chuyển đổi | Mẫu landing page chuyển đổi cao, tối ưu khách nóng |
+| `nha_khoa` | Nha khoa | Template ngách B2C |
+| `spa` | Spa | Template ngách B2C |
+| `tham_my_vien` | Thẩm mỹ viện | Template ngách B2C |
+| `phong_kham` | Phòng khám | Template ngách B2C |
+| `salon_toc` | Hair salon | Template ngách B2C |
+| `luat_su` | Luật sư | Template ngách B2B |
+| `trung_tam_tieng_anh` | Trung tâm tiếng Anh | Template ngách B2C |
+| `dich_vu_ve_sinh` | Dịch vụ vệ sinh | Template ngách B2B/B2C |
+| `noi_that` | Thiết kế nội thất | Template ngách B2B/B2C |
+| `cong_ty_xay_dung` | Công ty xây dựng | Template ngách B2B |
+| `nha_hang` | Nhà hàng | Template ngách B2C |
+| `quan_cafe` | Quán cafe | Template ngách B2C |
+| `studio_chup_anh` | Studio chụp ảnh | Template ngách B2C |
+| `phong_gym` | Gym/Fitness | Template ngách B2C |
+| `garage_oto` | Garage ô tô | Template ngách B2C |
 
 Neu them/sua industry key, bat buoc cap nhat dong bo:
 

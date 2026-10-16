@@ -28,7 +28,7 @@ export default function DemoFooter({ business }: FooterProps) {
         
         {/* Brand Slogan */}
         <div>
-          <div className="font-serif text-2xl font-bold tracking-widest text-[#5f030a] mb-8 uppercase">
+          <div className="font-serif text-2xl font-bold tracking-normal text-[#5f030a] mb-8 uppercase">
             {business.name || "L'ÉCHELLE"}
           </div>
           <p className="font-sans text-sm text-[#574240] max-w-xs leading-relaxed">
@@ -39,7 +39,7 @@ export default function DemoFooter({ business }: FooterProps) {
         {/* Links Column */}
         <div className="grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-4">
-            <h5 className="text-[10px] tracking-widest uppercase font-bold text-[#5f030a] mb-2">
+            <h5 className="text-xs tracking-wider uppercase font-bold text-[#5f030a] mb-2">
               Thực đơn
             </h5>
             <a href="#services-section" className="text-sm text-[#574240] hover:text-[#5f030a] transition-colors">
@@ -53,7 +53,7 @@ export default function DemoFooter({ business }: FooterProps) {
             </a>
           </div>
           <div className="flex flex-col gap-4">
-            <h5 className="text-[10px] tracking-widest uppercase font-bold text-[#5f030a] mb-2">
+            <h5 className="text-xs tracking-wider uppercase font-bold text-[#5f030a] mb-2">
               Liên kết
             </h5>
             <a href="#about-section" className="text-sm text-[#574240] hover:text-[#5f030a] transition-colors">

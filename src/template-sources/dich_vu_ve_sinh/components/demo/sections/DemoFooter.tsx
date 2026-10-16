@@ -15,7 +15,7 @@ export function DemoFooter({ business, services }: DemoFooterProps) {
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16 grid grid-cols-1 md:grid-cols-12 gap-12">
         {/* Company brief */}
         <div className="md:col-span-5 space-y-6">
-          <h3 className="font-display text-2xl font-bold tracking-tight text-[#7ffc97]">
+          <h3 className="text-2xl font-bold tracking-normal text-[#7ffc97]">
             {business.name}
           </h3>
           <p className="font-sans text-sm text-slate-400 leading-relaxed">

@@ -14,7 +14,7 @@ function getPgPool(): Pool | null {
   if (!pgPool && DATABASE_URL) {
     pgPool = new Pool({
       connectionString: DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
+      ssl: false
     });
   }
   return pgPool;
