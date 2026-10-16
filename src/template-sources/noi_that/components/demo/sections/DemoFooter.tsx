@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { ArrowRight, Share2, Check, Copy } from 'lucide-react';
 import { BusinessInfo } from '../../../types/demo';

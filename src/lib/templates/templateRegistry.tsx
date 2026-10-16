@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -61,6 +63,18 @@ const templates: Record<string, React.ComponentType<any>> = {
 
   garage_oto: dynamic(() => import('@/template-sources/garage_oto/components/demo/DemoTemplateRenderer').catch(() => {
     return function Fallback() { return <div className="p-8 text-center">Template "garage_oto" đang được cập nhật.</div> };
+  }), { ssr: true }),
+
+  corporate_profile: dynamic(() => import('@/template-sources/corporate_profile/components/demo/templates/CorporateProfileTemplate').catch(() => {
+    return function Fallback() { return <div className="p-8 text-center">Template "corporate_profile" đang được cập nhật.</div> };
+  }), { ssr: true }),
+
+  b2b_product: dynamic(() => import('@/template-sources/b2b_product/components/demo/templates/B2BProductTemplate').catch(() => {
+    return function Fallback() { return <div className="p-8 text-center">Template "b2b_product" đang được cập nhật.</div> };
+  }), { ssr: true }),
+
+  lead_generation: dynamic(() => import('@/template-sources/lead_generation/components/demo/templates/LeadGenerationTemplate').catch(() => {
+    return function Fallback() { return <div className="p-8 text-center">Template "lead_generation" đang được cập nhật.</div> };
   }), { ssr: true }),
 };
 

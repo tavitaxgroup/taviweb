@@ -1,3 +1,5 @@
+"use client";
+
 import { DemoPageData } from '../../../types/demo';
 import DemoNavbar from '../sections/DemoNavbar';
 import DemoHero from '../sections/DemoHero';
