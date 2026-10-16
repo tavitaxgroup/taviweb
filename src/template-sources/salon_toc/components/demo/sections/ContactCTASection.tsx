@@ -1,4 +1,3 @@
-﻿"use client";
 import { MessageSquare, Phone, Mail, MapPin } from 'lucide-react';
 import { ContactData, BusinessData } from '../../../types/demo';
 
@@ -71,7 +70,7 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
                 className="text-lg md:text-xl font-bold tracking-tight"
                 style={{ fontFamily: 'Syne, sans-serif' }}
               >
-                Gá»­i Email
+                Gửi Email
               </span>
             </a>
           ) : (
@@ -88,7 +87,7 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
                 className="text-lg md:text-xl font-bold tracking-tight"
                 style={{ fontFamily: 'Syne, sans-serif' }}
               >
-                TÃ¬m Ä‘Æ°á»ng Ä‘i
+                Tìm đường đi
               </span>
             </a>
           )}
@@ -109,4 +108,3 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
     </section>
   );
 }
-

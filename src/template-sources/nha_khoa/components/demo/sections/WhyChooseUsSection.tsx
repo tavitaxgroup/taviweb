@@ -1,4 +1,3 @@
-﻿"use client";
 import { motion } from 'motion/react';
 import * as Lucide from 'lucide-react';
 
@@ -10,8 +9,8 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
   const points = features && features.length > 0
     ? features.map((feat, index) => {
         const parts = feat.split(/[:\-]/);
-        const title = parts[0]?.trim() || "Æ¯u Ä‘iá»ƒm";
-        const desc = parts.slice(1).join("-")?.trim() || "Dá»‹ch vá»¥ nha khoa chuyÃªn nghiá»‡p chuáº©n y khoa.";
+        const title = parts[0]?.trim() || "Ưu điểm";
+        const desc = parts.slice(1).join("-")?.trim() || "Dịch vụ nha khoa chuyên nghiệp chuẩn y khoa.";
         const iconNames = ["MessageSquare", "ShieldAlert", "CheckCircle"];
         const iconName = iconNames[index % iconNames.length];
         
@@ -23,18 +22,18 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
       })
     : [
         {
-          title: "TÆ° váº¥n rÃµ rÃ ng",
-          desc: "Má»i tháº¯c máº¯c vá» lá»™ trÃ¬nh Ä‘iá»u trá»‹, chi phÃ­ hay chÃ­nh sÃ¡ch báº£o hÃ nh Ä‘á»u Ä‘Æ°á»£c tÆ° váº¥n chi tiáº¿t, minh báº¡ch ngay tá»« Ä‘áº§u.",
+          title: "Tư vấn rõ ràng",
+          desc: "Mọi thắc mắc về lộ trình điều trị, chi phí hay chính sách bảo hành đều được tư vấn chi tiết, minh bạch ngay từ đầu.",
           iconName: "MessageSquare"
         },
         {
-          title: "KhÃ´ng gian sáº¡ch",
-          desc: "PhÃ²ng Ä‘iá»u trá»‹ vÃ´ trÃ¹ng khÃ©p kÃ­n nghiÃªm ngáº·t, sá»­ dá»¥ng dá»¥ng cá»¥ riÃªng biá»‡t cho tá»«ng khÃ¡ch hÃ ng Ä‘á»ƒ chá»‘ng lÃ¢y nhiá»…m chÃ©o.",
+          title: "Không gian sạch",
+          desc: "Phòng điều trị vô trùng khép kín nghiêm ngặt, sử dụng dụng cụ riêng biệt cho từng khách hàng để chống lây nhiễm chéo.",
           iconName: "ShieldAlert"
         },
         {
-          title: "Dá»… Ä‘áº·t lá»‹ch",
-          desc: "Há»‡ thá»‘ng tá»•ng Ä‘Ã i vÃ  Ä‘áº·t háº¹n trá»±c tuyáº¿n sáºµn sÃ ng 24/7, giÃºp báº¡n chá»§ Ä‘á»™ng sáº¯p xáº¿p thá»i gian khÃ¡m nhanh gá»n, khÃ´ng chá» Ä‘á»£i.",
+          title: "Dễ đặt lịch",
+          desc: "Hệ thống tổng đài và đặt hẹn trực tuyến sẵn sàng 24/7, giúp bạn chủ động sắp xếp thời gian khám nhanh gọn, không chờ đợi.",
           iconName: "CheckCircle"
         }
       ];
@@ -71,4 +70,3 @@ export default function WhyChooseUsSection({ features }: WhyChooseUsSectionProps
     </section>
   );
 }
-

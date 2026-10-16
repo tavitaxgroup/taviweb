@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useEffect } from 'react';
 import { DemoPageData } from '../../../types/demo';
 import DemoNavbar from '../sections/DemoNavbar';
@@ -59,4 +58,3 @@ export default function CafeTemplate({ data }: TemplateProps) {
     </div>
   );
 }
-

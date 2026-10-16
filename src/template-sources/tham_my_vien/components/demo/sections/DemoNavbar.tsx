@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -11,10 +10,10 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: "Dá»‹ch vá»¥", href: "#services-section" },
-    { label: "Vá» chÃºng tÃ´i", href: "#about-section" },
-    { label: "KhÃ´ng gian", href: "#gallery-section" },
-    { label: "ÄÃ¡nh giÃ¡", href: "#reviews-section" },
+    { label: "Dịch vụ", href: "#services-section" },
+    { label: "Về chúng tôi", href: "#about-section" },
+    { label: "Không gian", href: "#gallery-section" },
+    { label: "Đánh giá", href: "#reviews-section" },
   ];
 
   return (
@@ -86,4 +85,3 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
     </header>
   );
 }
-

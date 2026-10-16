@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { DemoPageData } from '../../../types/demo';
@@ -25,10 +24,10 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
 
         {/* Desktop Menu */}
         <div className="hidden shrink-0 md:flex items-center space-x-10 text-sm font-sans uppercase tracking-widest text-[#6c5962]">
-          <a href="#gallery" className="hover:text-[#834767] transition-colors">Bá»™ áº£nh</a>
-          <a href="#services" className="hover:text-[#834767] transition-colors">Dá»‹ch vá»¥</a>
-          <a href="#reviews" className="hover:text-[#834767] transition-colors">Cáº£m nháº­n</a>
-          <a href="#contact-cta" className="hover:text-[#834767] transition-colors">LiÃªn há»‡</a>
+          <a href="#gallery" className="hover:text-[#834767] transition-colors">Bộ ảnh</a>
+          <a href="#services" className="hover:text-[#834767] transition-colors">Dịch vụ</a>
+          <a href="#reviews" className="hover:text-[#834767] transition-colors">Cảm nhận</a>
+          <a href="#contact-cta" className="hover:text-[#834767] transition-colors">Liên hệ</a>
         </div>
 
         {/* Desktop CTA */}
@@ -63,28 +62,28 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
             onClick={() => setIsOpen(false)}
             className="text-lg font-sans uppercase tracking-widest text-[#6c5962] hover:text-[#834767] transition-colors"
           >
-            Bá»™ áº£nh
+            Bộ ảnh
           </a>
           <a 
             href="#services" 
             onClick={() => setIsOpen(false)}
             className="text-lg font-sans uppercase tracking-widest text-[#6c5962] hover:text-[#834767] transition-colors"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </a>
           <a 
             href="#reviews" 
             onClick={() => setIsOpen(false)}
             className="text-lg font-sans uppercase tracking-widest text-[#6c5962] hover:text-[#834767] transition-colors"
           >
-            Cáº£m nháº­n
+            Cảm nhận
           </a>
           <a 
             href="#contact-cta" 
             onClick={() => setIsOpen(false)}
             className="text-lg font-sans uppercase tracking-widest text-[#6c5962] hover:text-[#834767] transition-colors"
           >
-            LiÃªn há»‡
+            Liên hệ
           </a>
           
           <a
@@ -99,4 +98,3 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
     </nav>
   );
 }
-

@@ -21,10 +21,16 @@ export default function DemoFooter({ business }: DemoFooterProps) {
         
         {/* About Salon Column */}
         <div className="md:col-span-2 text-left">
-          <div className="text-2xl font-black mb-6 tracking-normal text-[#121315]">
+          <div 
+            className="text-2xl font-black mb-6 tracking-tighter"
+            style={{ fontFamily: 'Syne, sans-serif' }}
+          >
             {business.name}
           </div>
-          <p className="text-sm text-gray-600 max-w-sm mb-8 leading-relaxed font-normal">
+          <p 
+            className="text-sm text-gray-600 max-w-sm mb-8 leading-relaxed font-normal"
+            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+          >
             Nâng tầm phong cách cá nhân với những trải nghiệm chăm sóc tóc chuyên nghiệp nhất tại không gian làm đẹp cao cấp của chúng tôi.
           </p>
           <div className="flex gap-4">
@@ -34,22 +40,26 @@ export default function DemoFooter({ business }: DemoFooterProps) {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-[#855316] hover:border-[#855316] transition-colors duration-300"
-                aria-label="Facebook"
+                aria-label="MessageCircle"
               >
                 <MessageCircle size={18} />
               </a>
             )}
             <a 
-              href="#" 
+              href="https://Camera.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
               className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-[#855316] hover:border-[#855316] transition-colors duration-300"
-              aria-label="Instagram"
+              aria-label="Camera"
             >
               <Camera size={18} />
             </a>
             <a 
-              href="#" 
+              href="https://Play.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
               className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-[#855316] hover:border-[#855316] transition-colors duration-300"
-              aria-label="Video"
+              aria-label="Play"
             >
               <Play size={18} />
             </a>
@@ -58,14 +68,18 @@ export default function DemoFooter({ business }: DemoFooterProps) {
 
         {/* Quick Links Column */}
         <div className="text-left">
-          <h4 className="text-xs font-bold text-[#121315] mb-6 uppercase tracking-wider">
-            Liên kết nhanh
+          <h4 
+            className="text-xs font-bold text-[#121315] mb-6 uppercase tracking-widest"
+            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+          >
+            Quick Links
           </h4>
           <ul className="space-y-4">
             <li>
               <button 
                 onClick={() => handleScroll('services')}
-                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left cursor-pointer"
+                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
                 Dịch vụ
               </button>
@@ -73,7 +87,8 @@ export default function DemoFooter({ business }: DemoFooterProps) {
             <li>
               <button 
                 onClick={() => handleScroll('gallery')}
-                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left cursor-pointer"
+                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
                 Bộ sưu tập
               </button>
@@ -81,7 +96,8 @@ export default function DemoFooter({ business }: DemoFooterProps) {
             <li>
               <button 
                 onClick={() => handleScroll('about')}
-                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left cursor-pointer"
+                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
                 Giới thiệu
               </button>
@@ -89,7 +105,8 @@ export default function DemoFooter({ business }: DemoFooterProps) {
             <li>
               <button 
                 onClick={() => handleScroll('reviews')}
-                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left cursor-pointer"
+                className="text-sm text-gray-600 hover:text-[#855316] transition-colors duration-200 block text-left"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
                 Đánh giá khách hàng
               </button>
@@ -99,14 +116,18 @@ export default function DemoFooter({ business }: DemoFooterProps) {
 
         {/* Legal Column */}
         <div className="text-left">
-          <h4 className="text-xs font-bold text-[#121315] mb-6 uppercase tracking-wider">
-            Thông tin
+          <h4 
+            className="text-xs font-bold text-[#121315] mb-6 uppercase tracking-widest"
+            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+          >
+            Legal
           </h4>
           <ul className="space-y-4 text-sm text-gray-600">
             <li>
               <a 
                 href="#" 
                 className="hover:text-[#855316] transition-colors duration-200 block"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
                 Chính sách bảo mật
               </a>
@@ -115,28 +136,36 @@ export default function DemoFooter({ business }: DemoFooterProps) {
               <a 
                 href="#" 
                 className="hover:text-[#855316] transition-colors duration-200 block"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
               >
                 Điều khoản dịch vụ
               </a>
             </li>
-            {business.address && (
-              <li>
-                <span className="text-gray-500 cursor-default leading-relaxed block">
-                  Địa chỉ: {business.address}
-                </span>
-              </li>
-            )}
+            <li>
+              <span 
+                className="text-gray-400 cursor-default"
+                style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              >
+                Địa chỉ: {business.address}
+              </span>
+            </li>
           </ul>
         </div>
       </div>
 
       {/* Bottom Legal & Credits */}
       <div className="max-w-7xl mx-auto px-6 md:px-16 mt-16 pt-8 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
-          © {currentYear} {business.name}. Mọi quyền được bảo lưu.
+        <p 
+          className="text-xs text-gray-500 uppercase tracking-wider font-semibold"
+          style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+        >
+          © {currentYear} {business.name}. ALL RIGHTS RESERVED.
         </p>
-        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-          Dịch vụ tạo mẫu tóc chuyên nghiệp.
+        <p 
+          className="text-xs text-gray-500 uppercase tracking-wider font-semibold"
+          style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+        >
+          Designed for elegance.
         </p>
       </div>
     </footer>

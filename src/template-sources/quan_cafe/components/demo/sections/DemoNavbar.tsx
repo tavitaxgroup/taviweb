@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState, useEffect } from 'react';
 import { Coffee, Phone, Navigation, Menu, X } from 'lucide-react';
 import { DemoPageData } from '../../../types/demo';
@@ -87,7 +86,7 @@ export default function DemoNavbar({ data }: SectionProps) {
                 : 'text-[#50453e] hover:text-[#553722]'
             }`}
           >
-            Trang chá»§
+            Trang chủ
           </button>
           <button
             onClick={() => scrollToSection('services')}
@@ -97,7 +96,7 @@ export default function DemoNavbar({ data }: SectionProps) {
                 : 'text-[#50453e] hover:text-[#553722]'
             }`}
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </button>
           <button
             onClick={() => scrollToSection('gallery')}
@@ -107,7 +106,7 @@ export default function DemoNavbar({ data }: SectionProps) {
                 : 'text-[#50453e] hover:text-[#553722]'
             }`}
           >
-            HÃ¬nh áº£nh
+            Hình ảnh
           </button>
           <button
             onClick={() => scrollToSection('contact')}
@@ -117,7 +116,7 @@ export default function DemoNavbar({ data }: SectionProps) {
                 : 'text-[#50453e] hover:text-[#553722]'
             }`}
           >
-            LiÃªn há»‡
+            Liên hệ
           </button>
         </div>
 
@@ -129,7 +128,7 @@ export default function DemoNavbar({ data }: SectionProps) {
               className="hidden sm:flex items-center gap-2 px-4 py-2 text-[#50453e] hover:text-[#553722] hover:bg-[#efe0cd]/50 rounded-full transition-all duration-300 text-sm font-semibold"
             >
               <Phone className="w-4 h-4" />
-              <span>Gá»i quÃ¡n</span>
+              <span>Gọi quán</span>
             </a>
           )}
           <a
@@ -138,7 +137,7 @@ export default function DemoNavbar({ data }: SectionProps) {
             rel="noreferrer"
             className="bg-[#553722] text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md shadow-[#553722]/10 hover:shadow-lg hover:bg-[#5f402a] active:scale-95 transition-all duration-300"
           >
-            Chá»‰ Ä‘Æ°á»ng
+            Chỉ đường
           </a>
           {/* Mobile Menu Icon */}
           <button
@@ -157,25 +156,25 @@ export default function DemoNavbar({ data }: SectionProps) {
             onClick={() => scrollToSection('home')}
             className="text-left py-2 text-base font-semibold text-[#50453e] hover:text-[#553722]"
           >
-            Trang chá»§
+            Trang chủ
           </button>
           <button
             onClick={() => scrollToSection('services')}
             className="text-left py-2 text-base font-semibold text-[#50453e] hover:text-[#553722]"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </button>
           <button
             onClick={() => scrollToSection('gallery')}
             className="text-left py-2 text-base font-semibold text-[#50453e] hover:text-[#553722]"
           >
-            HÃ¬nh áº£nh
+            Hình ảnh
           </button>
           <button
             onClick={() => scrollToSection('contact')}
             className="text-left py-2 text-base font-semibold text-[#50453e] hover:text-[#553722]"
           >
-            LiÃªn há»‡
+            Liên hệ
           </button>
           {data.business.phone && (
             <a
@@ -183,7 +182,7 @@ export default function DemoNavbar({ data }: SectionProps) {
               className="flex items-center gap-2 py-2 text-base font-semibold text-[#50453e] hover:text-[#553722]"
             >
               <Phone className="w-5 h-5 text-[#553722]" />
-              <span>Gá»i ngay: {data.business.phone}</span>
+              <span>Gọi ngay: {data.business.phone}</span>
             </a>
           )}
         </div>
@@ -191,4 +190,3 @@ export default function DemoNavbar({ data }: SectionProps) {
     </nav>
   );
 }
-

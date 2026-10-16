@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -27,7 +26,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
     <section className="py-20 bg-white" id="gallery">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="font-anton text-4xl md:text-5xl uppercase mb-12 text-center text-black" id="gallery-title">
-          KHÃ”NG GIAN <span className="text-[#446900]">{data.business.name.replace(/GYM|FITNESS/gi, "").trim()}</span>
+          KHÔNG GIAN <span className="text-[#446900]">{data.business.name.replace(/GYM|FITNESS/gi, "").trim()}</span>
         </h2>
 
         {/* Bento Grid layout */}
@@ -83,4 +82,3 @@ export default function GallerySection({ data }: GallerySectionProps) {
     </section>
   );
 }
-

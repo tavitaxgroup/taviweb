@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from 'react';
 import { Phone, Share2, MapPin, CheckCircle } from 'lucide-react';
 import { ContactData } from '../../../types/demo';
@@ -17,7 +16,7 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullname.trim() || !phoneNumber.trim()) {
-      setError('Vui lÃ²ng nháº­p Ä‘áº§y Ä‘á»§ há» tÃªn vÃ  sá»‘ Ä‘iá»‡n thoáº¡i.');
+      setError('Vui lòng nhập đầy đủ họ tên và số điện thoại.');
       return;
     }
     setError('');
@@ -50,7 +49,7 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
                     <Phone size={20} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-blue-200">Äiá»‡n thoáº¡i</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-blue-200">Điện thoại</div>
                     <div className="text-lg md:text-xl font-bold">{data.phone}</div>
                   </div>
                 </div>
@@ -76,7 +75,7 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
                       }}
                     >
                       <Share2 size={16} aria-hidden="true" />
-                      <span>LiÃªn há»‡ Facebook</span>
+                      <span>Liên hệ Facebook</span>
                     </a>
                   </div>
                 </div>
@@ -89,7 +88,7 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
                     <MapPin size={20} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-blue-200">Äá»‹a chá»‰</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-blue-200">Địa chỉ</div>
                     <div className="text-lg font-bold">{data.mapLocation}</div>
                   </div>
                 </div>
@@ -106,7 +105,7 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
                 <div className="aspect-video w-full rounded-xl overflow-hidden relative mb-6 border border-slate-100">
                   <img
                     src={data.mapImageUrl}
-                    alt={data.mapLocation || 'Báº£n Ä‘á»“ trung tÃ¢m'}
+                    alt={data.mapLocation || 'Bản đồ trung tâm'}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.02]"
                     referrerPolicy="no-referrer"
                   />
@@ -125,9 +124,9 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
                   <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle size={36} />
                   </div>
-                  <h3 className="text-2xl font-extrabold text-slate-900 mb-3">ÄÄƒng kÃ½ thÃ nh cÃ´ng!</h3>
+                  <h3 className="text-2xl font-extrabold text-slate-900 mb-3">Đăng ký thành công!</h3>
                   <p className="text-sm text-slate-500 leading-relaxed mb-6">
-                    Cáº£m Æ¡n <strong>{fullname}</strong>. ChuyÃªn viÃªn tÆ° váº¥n cá»§a chÃºng tÃ´i sáº½ liÃªn há»‡ vá»›i báº¡n qua sá»‘ Ä‘iá»‡n thoáº¡i <strong>{phoneNumber}</strong> sá»›m nháº¥t trong vÃ²ng 24h tá»›i!
+                    Cảm ơn <strong>{fullname}</strong>. Chuyên viên tư vấn của chúng tôi sẽ liên hệ với bạn qua số điện thoại <strong>{phoneNumber}</strong> sớm nhất trong vòng 24h tới!
                   </p>
                   <button
                     onClick={() => {
@@ -137,30 +136,30 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
                     }}
                     className="inline-flex items-center justify-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-sm transition-colors shadow"
                   >
-                    ÄÄƒng kÃ½ cho há»c viÃªn khÃ¡c
+                    Đăng ký cho học viên khác
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">ÄÄƒng kÃ½ tÆ° váº¥n lá»™ trÃ¬nh há»c</h3>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Đăng ký tư vấn lộ trình học</h3>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-                        Há» vÃ  tÃªn
+                        Họ và tên
                       </label>
                       <input
                         type="text"
                         value={fullname}
                         onChange={(e) => setFullname(e.target.value)}
-                        placeholder="Nguyá»…n VÄƒn A"
+                        placeholder="Nguyễn Văn A"
                         className="w-full px-4 py-3 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-                        Sá»‘ Ä‘iá»‡n thoáº¡i
+                        Số điện thoại
                       </label>
                       <input
                         type="tel"
@@ -193,4 +192,3 @@ export const ContactCTASection: React.FC<ContactCTASectionProps> = ({ data }) =>
     </section>
   );
 };
-

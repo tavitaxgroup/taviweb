@@ -1,4 +1,3 @@
-﻿"use client";
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { BusinessData } from '../../../types/demo';
@@ -37,25 +36,25 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
             onClick={() => handleScroll('services')}
             className="font-sans text-sm font-bold text-[#855316] uppercase tracking-widest hover:text-[#121315] transition-colors duration-300"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </button>
           <button 
             onClick={() => handleScroll('gallery')}
             className="font-sans text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#855316] transition-colors duration-300"
           >
-            Bá»™ sÆ°u táº­p
+            Bộ sưu tập
           </button>
           <button 
             onClick={() => handleScroll('about')}
             className="font-sans text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#855316] transition-colors duration-300"
           >
-            Giá»›i thiá»‡u
+            Giới thiệu
           </button>
           <button 
             onClick={() => handleScroll('reviews')}
             className="font-sans text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#855316] transition-colors duration-300"
           >
-            ÄÃ¡nh giÃ¡
+            Đánh giá
           </button>
           
           <button 
@@ -63,7 +62,7 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
             className="bg-[#121315] text-white px-7 py-3 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#855316] active:scale-95 transition-all duration-300"
             style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
           >
-            Äáº·t lá»‹ch ngay
+            Đặt lịch ngay
           </button>
         </div>
 
@@ -85,35 +84,34 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
             onClick={() => handleScroll('services')}
             className="font-sans text-base font-bold text-left text-[#121315] uppercase tracking-wider"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </button>
           <button 
             onClick={() => handleScroll('gallery')}
             className="font-sans text-base font-bold text-left text-gray-600 uppercase tracking-wider"
           >
-            Bá»™ sÆ°u táº­p
+            Bộ sưu tập
           </button>
           <button 
             onClick={() => handleScroll('about')}
             className="font-sans text-base font-bold text-left text-gray-600 uppercase tracking-wider"
           >
-            Giá»›i thiá»‡u
+            Giới thiệu
           </button>
           <button 
             onClick={() => handleScroll('reviews')}
             className="font-sans text-base font-bold text-left text-gray-600 uppercase tracking-wider"
           >
-            ÄÃ¡nh giÃ¡
+            Đánh giá
           </button>
           <button 
             onClick={() => handleScroll('contact')}
             className="bg-[#121315] text-white py-4 text-center text-sm font-semibold uppercase tracking-widest rounded-sm hover:bg-[#855316]"
           >
-            Äáº·t lá»‹ch lÃ m tÃ³c
+            Đặt lịch làm tóc
           </button>
         </div>
       )}
     </nav>
   );
 }
-

@@ -15,7 +15,7 @@ export function DemoFooter({ business, contact }: DemoFooterProps) {
       <div className="max-w-7xl mx-auto px-5 md:px-16 grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Brand */}
         <div className="col-span-1 md:col-span-2">
-          <div className="text-2xl md:text-3xl font-bold text-primary mb-5 tracking-normal">
+          <div className="font-display text-2xl md:text-3xl font-semibold text-primary mb-5 tracking-tight">
             {business.name}
           </div>
           <p className="text-on-surface-variant font-sans text-sm max-w-sm mb-6 leading-relaxed">
@@ -35,9 +35,11 @@ export function DemoFooter({ business, contact }: DemoFooterProps) {
               </a>
             )}
             <a
-              href="#"
+              href="https://Camera.com"
+              target="_blank"
+              rel="noreferrer"
               className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary border border-primary/5 shadow-sm hover:bg-primary hover:text-white transition-colors duration-300"
-              aria-label="Instagram"
+              aria-label="Camera"
             >
               <Camera size={18} />
             </a>
@@ -46,8 +48,8 @@ export function DemoFooter({ business, contact }: DemoFooterProps) {
 
         {/* Quick Links */}
         <div>
-          <h6 className="font-sans text-xs font-bold text-primary mb-5 uppercase tracking-wider">
-            Liên kết nhanh
+          <h6 className="font-sans text-xs font-bold text-primary mb-5 uppercase tracking-widest">
+            Quick Links
           </h6>
           <ul className="space-y-3 font-sans text-sm">
             <li>
@@ -75,8 +77,8 @@ export function DemoFooter({ business, contact }: DemoFooterProps) {
 
         {/* Contact Info */}
         <div>
-          <h6 className="font-sans text-xs font-bold text-primary mb-5 uppercase tracking-wider">
-            Liên hệ
+          <h6 className="font-sans text-xs font-bold text-primary mb-5 uppercase tracking-widest">
+            Contact Us
           </h6>
           <ul className="space-y-4 font-sans text-sm text-on-surface-variant">
             <li className="flex items-start gap-2.5">
@@ -100,14 +102,14 @@ export function DemoFooter({ business, contact }: DemoFooterProps) {
       {/* Bottom Legal links */}
       <div className="max-w-7xl mx-auto px-5 md:px-16 mt-16 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-sans text-xs text-on-surface-variant/80">
-          © {currentYear} {business.name}. Mọi quyền được bảo lưu.
+          © {currentYear} {business.name}. All rights reserved.
         </p>
         <div className="flex gap-6 font-sans text-xs">
           <a href="#" className="text-on-surface-variant/80 hover:text-primary transition-colors">
-            Chính sách bảo mật
+            Privacy Policy
           </a>
           <a href="#" className="text-on-surface-variant/80 hover:text-primary transition-colors">
-            Điều khoản dịch vụ
+            Terms of Service
           </a>
         </div>
       </div>

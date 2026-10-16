@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from "react";
 import { Phone, MapPin, CheckCircle } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -13,11 +12,11 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const contactTitle = data.contact.title
-    .replace(/NGAY HÃƒâ€M NAY/g, "NGAY HÃ”M NAY")
-    .replace(/Ã„ÂÃ„â€šNG KÃƒÂ/g, "ÄÄ‚NG KÃ")
-    .replace(/TÃ†Â¯ VÃ¡ÂºÂ¤N/g, "TÆ¯ Váº¤N")
-    .replace(/TÃ¡ÂºÂ¬P THÃ¡Â»Â¬/g, "Táº¬P THá»¬")
-    .replace(/MIÃ¡Â»â€žN PHÃƒÂ/g, "MIá»„N PHÃ");
+    .replace(/NGAY HÃ”M NAY/g, "NGAY HÔM NAY")
+    .replace(/ÄÄ‚NG KÃ/g, "ĐĂNG KÝ")
+    .replace(/TÆ¯ Váº¤N/g, "TƯ VẤN")
+    .replace(/Táº¬P THá»¬/g, "TẬP THỬ")
+    .replace(/MIá»„N PHÃ/g, "MIỄN PHÍ");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,10 +40,10 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
 
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         <h2 className="font-archivo text-4xl md:text-6xl !text-white uppercase mb-6 leading-tight font-black tracking-normal" id="contact-cta-title">
-          {contactTitle.includes("NGAY HÃ”M NAY") ? (
+          {contactTitle.includes("NGAY HÔM NAY") ? (
             <>
-              {contactTitle.replace("NGAY HÃ”M NAY", "")}
-              <span className="!text-[#A3E635] block mt-2">NGAY HÃ”M NAY</span>
+              {contactTitle.replace("NGAY HÔM NAY", "")}
+              <span className="!text-[#A3E635] block mt-2">NGAY HÔM NAY</span>
             </>
           ) : (
             contactTitle
@@ -90,7 +89,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
               id="contact-btn-map"
             >
               <MapPin className="h-5 w-5 text-current" />
-              <span className="text-current">Xem Ä‘Æ°á»ng Ä‘i</span>
+              <span className="text-current">Xem đường đi</span>
             </a>
           )}
         </div>
@@ -109,29 +108,29 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
               className="absolute top-4 right-4 text-zinc-400 hover:text-white"
               aria-label="Close"
             >
-              âœ•
+              ✕
             </button>
 
             {submitted ? (
               <div className="text-center py-8" id="register-success-view">
                 <CheckCircle className="h-16 w-16 text-[#A3E635] mx-auto mb-4" />
-                <h3 className="font-archivo text-2xl text-white uppercase mb-2 font-black">ÄÄƒng KÃ½ ThÃ nh CÃ´ng!</h3>
+                <h3 className="font-archivo text-2xl text-white uppercase mb-2 font-black">Đăng Ký Thành Công!</h3>
                 <p className="font-archivo text-zinc-400 text-sm">
-                  Cáº£m Æ¡n báº¡n. ChuyÃªn viÃªn tÆ° váº¥n sáº½ liÃªn há»‡ láº¡i qua sá»‘ Ä‘iá»‡n thoáº¡i sá»›m nháº¥t!
+                  Cảm ơn bạn. Chuyên viên tư vấn sẽ liên hệ lại qua số điện thoại sớm nhất!
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6" id="register-form">
                 <h3 className="font-archivo text-2xl text-white uppercase border-b border-zinc-800 pb-3 font-black">
-                  ÄÄƒng kÃ½ tÆ° váº¥n miá»…n phÃ­
+                  Đăng ký tư vấn miễn phí
                 </h3>
                 <p className="font-archivo text-zinc-400 text-sm leading-relaxed">
-                  Äá»ƒ láº¡i thÃ´ng tin Ä‘á»ƒ nháº­n buá»•i tÆ° váº¥n chá»‰ sá»‘ InBody vÃ  tráº£i nghiá»‡m táº­p luyá»‡n miá»…n phÃ­.
+                  Để lại thông tin để nhận buổi tư vấn chỉ số InBody và trải nghiệm tập luyện miễn phí.
                 </p>
 
                 <div>
                   <label className="block text-xs font-bold font-archivo text-[#A3E635] uppercase mb-2">
-                    Há» vÃ  tÃªn *
+                    Họ và tên *
                   </label>
                   <input
                     type="text"
@@ -140,13 +139,13 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
                     onChange={(e) => setName(e.target.value)}
                     className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 focus:outline-none focus:border-[#A3E635] text-sm"
                     style={{ borderRadius: "0px" }}
-                    placeholder="Nguyá»…n VÄƒn A"
+                    placeholder="Nguyễn Văn A"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold font-archivo text-[#A3E635] uppercase mb-2">
-                    Sá»‘ Ä‘iá»‡n thoáº¡i *
+                    Số điện thoại *
                   </label>
                   <input
                     type="tel"
@@ -164,7 +163,7 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
                   className="w-full bg-[#A3E635] hover:bg-[#8fd128] text-black font-archivo font-bold uppercase py-4 transition-all"
                   style={{ borderRadius: "0px" }}
                 >
-                  Gá»­i Ä‘Äƒng kÃ½
+                  Gửi đăng ký
                 </button>
               </form>
             )}
@@ -174,4 +173,3 @@ export default function ContactCTASection({ data }: ContactCTASectionProps) {
     </section>
   );
 }
-

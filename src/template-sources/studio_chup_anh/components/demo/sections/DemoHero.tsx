@@ -48,7 +48,7 @@ export default function DemoHero({ data }: DemoHeroProps) {
           className="text-[clamp(2.85rem,6.2vw,5rem)] font-bold tracking-normal text-white mb-6 drop-shadow-sm leading-[1.05] [overflow-wrap:normal] [word-break:keep-all] [text-wrap:normal] [hyphens:none]"
           id="hero-title"
           style={{
-            fontFamily: 'Cambria, "Times New Roman", Georgia, serif',
+            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
             fontKerning: 'normal',
             textRendering: 'geometricPrecision',
           }}

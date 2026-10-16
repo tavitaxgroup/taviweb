@@ -1,4 +1,3 @@
-﻿"use client";
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { AboutData } from '../../../types/demo';
@@ -49,7 +48,7 @@ export default function AboutSection({ about }: AboutSectionProps) {
           >
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#bde7eb] text-[#244d50] rounded-full text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              GIá»šI THIá»†U
+              GIỚI THIỆU
             </div>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight leading-tight">
               {about.title}
@@ -105,4 +104,3 @@ export default function AboutSection({ about }: AboutSectionProps) {
     </section>
   );
 }
-

@@ -1,4 +1,3 @@
-﻿"use client";
 import { motion } from 'motion/react';
 import { Scissors } from 'lucide-react';
 import { ServiceItem } from '../../../types/demo';
@@ -18,13 +17,13 @@ export default function ServicesSection({ services, onBookClick }: ServicesSecti
             className="text-xs font-bold text-[#855316] uppercase tracking-[0.2em] mb-4 block"
             style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
           >
-            Menu dá»‹ch vá»¥
+            Menu dịch vụ
           </span>
           <h2 
             className="text-3xl md:text-4xl font-bold text-[#121315] tracking-tight"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            Tráº£i nghiá»‡m chÄƒm sÃ³c tÃ³c chuyÃªn nghiá»‡p
+            Trải nghiệm chăm sóc tóc chuyên nghiệp
           </h2>
         </div>
 
@@ -80,20 +79,20 @@ export default function ServicesSection({ services, onBookClick }: ServicesSecti
                   className="text-2xl font-bold text-[#121315] mb-4"
                   style={{ fontFamily: 'Syne, sans-serif' }}
                 >
-                  Sáºµn sÃ ng cho má»™t diá»‡n máº¡o má»›i?
+                  Sẵn sàng cho một diện mạo mới?
                 </h4>
                 <p 
                   className="text-sm md:text-base text-gray-700 mb-10 font-normal leading-relaxed"
                   style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
                 >
-                  Äá»«ng bá» lá»¡ cÆ¡ há»™i Ä‘Æ°á»£c tÆ° váº¥n miá»…n phÃ­ bá»Ÿi cÃ¡c chuyÃªn gia táº¡o máº«u tÃ³c hÃ ng Ä‘áº§u táº¡i salon cá»§a chÃºng tÃ´i. HÃ£y Ä‘áº·t lá»‹ch hÃ´m nay!
+                  Đừng bỏ lỡ cơ hội được tư vấn miễn phí bởi các chuyên gia tạo mẫu tóc hàng đầu tại salon của chúng tôi. Hãy đặt lịch hôm nay!
                 </p>
                 <button 
                   onClick={onBookClick}
                   className="bg-[#121315] text-white px-8 py-4 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#855316] transition-all duration-300 active:scale-95 shadow-sm"
                   style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
                 >
-                  Äáº·t lá»‹ch lÃ m tÃ³c
+                  Đặt lịch làm tóc
                 </button>
               </div>
 
@@ -108,4 +107,3 @@ export default function ServicesSection({ services, onBookClick }: ServicesSecti
     </section>
   );
 }
-

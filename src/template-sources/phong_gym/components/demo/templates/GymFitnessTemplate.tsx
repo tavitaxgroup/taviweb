@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useEffect } from "react";
 import { DemoPageData } from "../../../types/demo";
 import { updatePageSEO } from "../../../lib/demo/seo";
@@ -60,4 +59,3 @@ export default function GymFitnessTemplate({ data }: GymFitnessTemplateProps) {
     </div>
   );
 }
-

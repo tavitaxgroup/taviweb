@@ -54,7 +54,7 @@ export default function DemoHero({ hero }: HeroProps) {
           className="text-[clamp(3rem,6.4vw,5.9rem)] text-white font-bold mb-10 leading-[1.04] tracking-normal whitespace-pre-line"
           id="hero-title"
           style={{
-            fontFamily: 'Cambria, "Times New Roman", Georgia, serif',
+            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
             textShadow: "0 4px 24px rgba(0,0,0,0.55)",
           }}
         >

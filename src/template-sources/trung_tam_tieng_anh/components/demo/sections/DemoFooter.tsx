@@ -15,7 +15,7 @@ export const DemoFooter: React.FC<DemoFooterProps> = ({ business }) => {
           
           {/* Logo & Info */}
           <div className="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
-            <span className="text-xl font-bold tracking-normal text-white">
+            <span className="text-xl font-bold tracking-tight text-white">
               {business.name}
             </span>
             <p className="text-xs text-slate-500 max-w-xs">

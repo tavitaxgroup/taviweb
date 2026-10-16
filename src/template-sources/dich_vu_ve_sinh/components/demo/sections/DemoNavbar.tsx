@@ -1,4 +1,3 @@
-﻿"use client";
 import { useState } from "react";
 import { Phone, Menu, X } from "lucide-react";
 import { BusinessInfo } from "../../../types/demo";
@@ -25,19 +24,19 @@ export function DemoNavbar({ business, primaryActionLabel, primaryActionHref }: 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-8">
           <a href="#services" className="font-label text-sm font-semibold text-gray-600 hover:text-[#16a34a] transition-colors">
-            Dá»‹ch vá»¥
+            Dịch vụ
           </a>
           <a href="#about" className="font-label text-sm font-semibold text-gray-600 hover:text-[#16a34a] transition-colors">
-            Vá» chÃºng tÃ´i
+            Về chúng tôi
           </a>
           <a href="#gallery" className="font-label text-sm font-semibold text-gray-600 hover:text-[#16a34a] transition-colors">
-            Dá»± Ã¡n thá»±c táº¿
+            Dự án thực tế
           </a>
           <a href="#reviews" className="font-label text-sm font-semibold text-gray-600 hover:text-[#16a34a] transition-colors">
-            ÄÃ¡nh giÃ¡
+            Đánh giá
           </a>
           <a href="#contact" className="font-label text-sm font-semibold text-gray-600 hover:text-[#16a34a] transition-colors">
-            LiÃªn há»‡
+            Liên hệ
           </a>
         </div>
 
@@ -72,35 +71,35 @@ export function DemoNavbar({ business, primaryActionLabel, primaryActionHref }: 
             onClick={() => setIsOpen(false)}
             className="block font-label text-base font-semibold text-gray-600 hover:text-[#16a34a] py-2 border-b border-gray-50"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </a>
           <a
             href="#about"
             onClick={() => setIsOpen(false)}
             className="block font-label text-base font-semibold text-gray-600 hover:text-[#16a34a] py-2 border-b border-gray-50"
           >
-            Vá» chÃºng tÃ´i
+            Về chúng tôi
           </a>
           <a
             href="#gallery"
             onClick={() => setIsOpen(false)}
             className="block font-label text-base font-semibold text-gray-600 hover:text-[#16a34a] py-2 border-b border-gray-50"
           >
-            Dá»± Ã¡n thá»±c táº¿
+            Dự án thực tế
           </a>
           <a
             href="#reviews"
             onClick={() => setIsOpen(false)}
             className="block font-label text-base font-semibold text-gray-600 hover:text-[#16a34a] py-2 border-b border-gray-50"
           >
-            ÄÃ¡nh giÃ¡
+            Đánh giá
           </a>
           <a
             href="#contact"
             onClick={() => setIsOpen(false)}
             className="block font-label text-base font-semibold text-gray-600 hover:text-[#16a34a] py-2 border-b border-gray-50"
           >
-            LiÃªn há»‡
+            Liên hệ
           </a>
           <div className="pt-2">
             <a
@@ -117,4 +116,3 @@ export function DemoNavbar({ business, primaryActionLabel, primaryActionHref }: 
     </nav>
   );
 }
-

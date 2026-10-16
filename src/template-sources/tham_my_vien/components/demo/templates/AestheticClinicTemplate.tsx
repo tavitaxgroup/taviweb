@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useEffect } from "react";
 import { DemoPageData } from "../../../types/demo";
 import DemoNavbar from "../sections/DemoNavbar";
@@ -42,13 +41,13 @@ export default function AestheticClinicTemplate({ data }: AestheticClinicTemplat
       {/* 5. Services Grid */}
       <ServicesSection data={data} />
 
-      {/* 6. Gallery Section (KhÃ´ng gian & Tiá»‡n nghi) */}
+      {/* 6. Gallery Section (Không gian & Tiện nghi) */}
       <GallerySection data={data} />
 
-      {/* 7. Why Choose Us (CÃ´ng nghá»‡, BÃ¡c sÄ©, Quy trÃ¬nh) */}
+      {/* 7. Why Choose Us (Công nghệ, Bác sĩ, Quy trình) */}
       <WhyChooseUsSection data={data} />
 
-      {/* 8. Reviews (Cáº£m nháº­n khÃ¡ch hÃ ng) */}
+      {/* 8. Reviews (Cảm nhận khách hàng) */}
       <ReviewsSection data={data} />
 
       {/* 9. Contact CTA */}
@@ -59,4 +58,3 @@ export default function AestheticClinicTemplate({ data }: AestheticClinicTemplat
     </div>
   );
 }
-

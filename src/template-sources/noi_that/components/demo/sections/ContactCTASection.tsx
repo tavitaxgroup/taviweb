@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from 'react';
 import { MapPin, Phone, Send, CheckCircle2, Share2 } from 'lucide-react';
 import { ContactData, BusinessInfo } from '../../../types/demo';
@@ -12,7 +11,7 @@ export default function ContactCTASection({ data, business }: ContactCTASectionP
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [projectType, setProjectType] = useState('Chung cÆ° / CÄƒn há»™');
+  const [projectType, setProjectType] = useState('Chung cư / Căn hộ');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const isFacebookAction = /facebook|fb\.com/i.test(`${data.secondaryAction?.label ?? ''} ${data.secondaryAction?.href ?? ''}`);
 
@@ -59,7 +58,7 @@ export default function ContactCTASection({ data, business }: ContactCTASectionP
                   className="px-10 py-5 border border-white/30 text-white font-sans text-xs font-semibold uppercase tracking-[0.2em] hover:bg-white/10 transition-all duration-300 rounded-none flex items-center gap-3"
                 >
                   {isFacebookAction ? <Share2 size={16} /> : <MapPin size={16} />}
-                  {data.secondaryAction.label || 'Xem báº£n Ä‘á»“'}
+                  {data.secondaryAction.label || 'Xem bản đồ'}
                 </a>
               )}
             </div>
@@ -67,13 +66,13 @@ export default function ContactCTASection({ data, business }: ContactCTASectionP
             <div className="bg-white text-brand-primary p-8 sm:p-12 border border-brand-secondary/20 shadow-xl max-w-lg mx-auto text-left animate-[fadeInUp_0.5s_forwards]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-serif text-xl sm:text-2xl font-semibold">
-                  ÄÄƒng kÃ½ nháº­n tÆ° váº¥n miá»…n phÃ­
+                  Đăng ký nhận tư vấn miễn phí
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
                   className="text-brand-primary/50 hover:text-brand-primary text-sm font-sans"
                 >
-                  ÄÃ³ng
+                  Đóng
                 </button>
               </div>
 
@@ -83,56 +82,56 @@ export default function ContactCTASection({ data, business }: ContactCTASectionP
                     <CheckCircle2 size={48} strokeWidth={1.5} />
                   </div>
                   <h4 className="font-serif text-lg font-semibold text-brand-primary">
-                    ÄÄƒng kÃ½ thÃ nh cÃ´ng!
+                    Đăng ký thành công!
                   </h4>
                   <p className="font-sans text-sm text-brand-primary/70">
-                    ChuyÃªn viÃªn thiáº¿t káº¿ cá»§a chÃºng tÃ´i sáº½ liÃªn há»‡ Ä‘áº¿n sá»‘ <strong>{phone}</strong> trong vÃ²ng 15-30 phÃºt.
+                    Chuyên viên thiết kế của chúng tôi sẽ liên hệ đến số <strong>{phone}</strong> trong vòng 15-30 phút.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label className="block font-sans text-[10px] font-semibold tracking-wider text-brand-secondary uppercase mb-2">
-                      Há» vÃ  tÃªn
+                      Họ và tên
                     </label>
                     <input
                       type="text"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Nháº­p há» vÃ  tÃªn cá»§a báº¡n"
+                      placeholder="Nhập họ và tên của bạn"
                       className="w-full px-4 py-3 bg-brand-bg border-b border-brand-secondary/30 focus:border-brand-primary focus:outline-none text-sm transition-colors rounded-none"
                     />
                   </div>
 
                   <div>
                     <label className="block font-sans text-[10px] font-semibold tracking-wider text-brand-secondary uppercase mb-2">
-                      Sá»‘ Ä‘iá»‡n thoáº¡i
+                      Số điện thoại
                     </label>
                     <input
                       type="tel"
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="Nháº­p sá»‘ Ä‘iá»‡n thoáº¡i liÃªn há»‡"
+                      placeholder="Nhập số điện thoại liên hệ"
                       className="w-full px-4 py-3 bg-brand-bg border-b border-brand-secondary/30 focus:border-brand-primary focus:outline-none text-sm transition-colors rounded-none"
                     />
                   </div>
 
                   <div>
                     <label className="block font-sans text-[10px] font-semibold tracking-wider text-brand-secondary uppercase mb-2">
-                      Loáº¡i hÃ¬nh cÃ´ng trÃ¬nh
+                      Loại hình công trình
                     </label>
                     <select
                       value={projectType}
                       onChange={(e) => setProjectType(e.target.value)}
                       className="w-full px-4 py-3 bg-brand-bg border-b border-brand-secondary/30 focus:border-brand-primary focus:outline-none text-sm transition-colors rounded-none appearance-none"
                     >
-                      <option>Chung cÆ° / CÄƒn há»™</option>
-                      <option>NhÃ  phá»‘ / Liá»n ká»</option>
-                      <option>Biá»‡t thá»±</option>
-                      <option>VÄƒn phÃ²ng / Studio</option>
-                      <option>QuÃ¡n Cafe / NhÃ  hÃ ng</option>
+                      <option>Chung cư / Căn hộ</option>
+                      <option>Nhà phố / Liền kề</option>
+                      <option>Biệt thự</option>
+                      <option>Văn phòng / Studio</option>
+                      <option>Quán Cafe / Nhà hàng</option>
                     </select>
                   </div>
 
@@ -141,7 +140,7 @@ export default function ContactCTASection({ data, business }: ContactCTASectionP
                     className="w-full py-4 bg-brand-primary text-white text-xs font-sans font-semibold tracking-[0.2em] uppercase transition-colors hover:bg-brand-secondary rounded-none flex items-center justify-center gap-2"
                   >
                     <Send size={14} />
-                    Gá»­i yÃªu cáº§u thiáº¿t káº¿
+                    Gửi yêu cầu thiết kế
                   </button>
                 </form>
               )}
@@ -153,4 +152,3 @@ export default function ContactCTASection({ data, business }: ContactCTASectionP
     </section>
   );
 }
-

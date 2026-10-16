@@ -1,4 +1,3 @@
-﻿"use client";
 import { ReviewItem } from '../../../types/demo';
 import { motion } from 'motion/react';
 import { Star } from 'lucide-react';
@@ -15,10 +14,10 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
         {/* Title Block */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-sans">
-            Chia Sáº» Tá»« KhÃ¡ch HÃ ng
+            Chia Sẻ Từ Khách Hàng
           </h2>
           <p className="mt-4 text-base text-gray-550 font-sans">
-            HÃ ng ngÃ n ná»¥ cÆ°á»i Ä‘Ã£ Ä‘Æ°á»£c chÄƒm sÃ³c vÃ  kiáº¿n táº¡o thÃ nh cÃ´ng. HÃ£y láº¯ng nghe Ä‘Ã¡nh giÃ¡ chÃ¢n thá»±c tá»« há».
+            Hàng ngàn nụ cười đã được chăm sóc và kiến tạo thành công. Hãy lắng nghe đánh giá chân thực từ họ.
           </p>
         </div>
 
@@ -72,7 +71,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
                   </p>
                   {review.serviceUsed && (
                     <p className="text-xs text-gray-500 font-sans mt-0.5">
-                      ÄÃ£ sá»­ dá»¥ng: {review.serviceUsed}
+                      Đã sử dụng: {review.serviceUsed}
                     </p>
                   )}
                 </div>
@@ -85,4 +84,3 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
     </section>
   );
 }
-

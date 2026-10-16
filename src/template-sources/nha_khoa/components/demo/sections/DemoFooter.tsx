@@ -13,7 +13,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
         
         {/* Clinic info */}
         <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
-          <div className="text-xl font-bold tracking-normal text-white">
+          <div className="text-xl font-bold tracking-tight text-white font-sans">
             {business.name}
           </div>
           <p className="text-sm text-gray-500 font-sans max-w-xs">

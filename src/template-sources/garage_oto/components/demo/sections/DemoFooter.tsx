@@ -20,8 +20,8 @@ export default function DemoFooter({ business }: DemoFooterProps) {
         
         {/* Brand & Socials */}
         <div className="md:col-span-5 space-y-4">
-          <div className="font-sans font-extrabold text-2xl tracking-normal text-white">
-            {business.name || 'Garage Ô Tô Chuyên Nghiệp'}
+          <div className="font-sans font-extrabold text-2xl tracking-tight">
+            Auto<span className="text-[#fd761a]">Garage</span>
           </div>
           
           <p className="text-[#8090a8] text-sm leading-relaxed max-w-sm font-normal">

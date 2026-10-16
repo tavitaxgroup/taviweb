@@ -1,4 +1,3 @@
-﻿"use client";
 import React from 'react';
 import { motion } from 'motion/react';
 import { HeroData } from '../../../types/demo';
@@ -86,4 +85,3 @@ export const DemoHero: React.FC<DemoHeroProps> = ({ data }) => {
     </section>
   );
 };
-

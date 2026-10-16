@@ -1,4 +1,3 @@
-﻿"use client";
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { BusinessInfo } from '../../../types/demo';
@@ -33,7 +32,7 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
         <a
           href="#"
           className="min-w-0 max-w-[360px] whitespace-normal break-words text-lg font-bold leading-tight tracking-[0.02em] transition-colors duration-300 sm:max-w-[440px] md:max-w-[520px] md:text-xl"
-          style={{ color: '#ffffff', fontFamily: 'Cambria, "Times New Roman", Georgia, serif' }}
+          style={{ color: '#ffffff', fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
           title={business.name}
         >
           {business.name || business.logoText || 'STUDIO'}
@@ -41,16 +40,16 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
 
         <nav className="hidden shrink-0 md:flex items-center gap-8 lg:gap-10">
           <a href="#services" className={navLinkClass} style={navLinkStyle}>
-            Dá»‹ch vá»¥
+            Dịch vụ
           </a>
           <a href="#gallery" className={navLinkClass} style={navLinkStyle}>
-            Dá»± Ã¡n
+            Dự án
           </a>
           <a href="#why-choose-us" className={navLinkClass} style={navLinkStyle}>
-            Vá» chÃºng tÃ´i
+            Về chúng tôi
           </a>
           <a href="#contact" className={navLinkClass} style={navLinkStyle}>
-            LiÃªn há»‡
+            Liên hệ
           </a>
         </nav>
 
@@ -60,7 +59,7 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
             className="inline-block px-6 py-3 bg-[#f6e5c8] text-[#0a1422] text-[11px] font-sans font-bold tracking-[0.2em] uppercase transition-transform duration-200 hover:bg-white active:scale-95"
             style={{ color: '#0a1422' }}
           >
-            Nháº­n tÆ° váº¥n thiáº¿t káº¿
+            Nhận tư vấn thiết kế
           </a>
         </div>
 
@@ -77,27 +76,26 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-[#0a1422]/96 border-b border-white/10 py-6 px-8 flex flex-col gap-5 animate-[fadeIn_0.3s_ease]">
           <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="font-sans text-sm font-medium tracking-wide" style={navLinkStyle}>
-            Dá»‹ch vá»¥ cá»§a chÃºng tÃ´i
+            Dịch vụ của chúng tôi
           </a>
           <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="font-sans text-sm font-medium tracking-wide" style={navLinkStyle}>
-            Dá»± Ã¡n tiÃªu biá»ƒu
+            Dự án tiêu biểu
           </a>
           <a href="#why-choose-us" onClick={() => setIsMobileMenuOpen(false)} className="font-sans text-sm font-medium tracking-wide" style={navLinkStyle}>
-            Vá» chÃºng tÃ´i
+            Về chúng tôi
           </a>
           <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="font-sans text-sm font-medium tracking-wide" style={navLinkStyle}>
-            LiÃªn há»‡ & tÆ° váº¥n
+            Liên hệ & tư vấn
           </a>
           <a
             href="#contact"
             onClick={() => setIsMobileMenuOpen(false)}
             className="block text-center py-3 bg-[#f6e5c8] text-[#0a1422] text-xs font-sans font-bold tracking-widest uppercase"
           >
-            Nháº­n tÆ° váº¥n thiáº¿t káº¿
+            Nhận tư vấn thiết kế
           </a>
         </div>
       )}
     </header>
   );
 }
-

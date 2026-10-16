@@ -1,4 +1,3 @@
-﻿"use client";
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -86,4 +85,3 @@ export default function DemoHero({ data }: SectionProps) {
     </section>
   );
 }
-

@@ -1,4 +1,4 @@
-﻿import { DemoPageData } from "../../types/demo";
+import { DemoPageData } from "../../types/demo";
 import { CleaningServiceTemplate } from "./templates/CleaningServiceTemplate";
 
 interface DemoTemplateRendererProps {
@@ -18,4 +18,3 @@ export function DemoTemplateRenderer({ data }: DemoTemplateRendererProps) {
 }
 
 export default DemoTemplateRenderer;
-

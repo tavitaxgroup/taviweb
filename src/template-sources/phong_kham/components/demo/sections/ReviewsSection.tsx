@@ -1,4 +1,3 @@
-﻿"use client";
 import { motion } from 'motion/react';
 import { Star, MessageSquare } from 'lucide-react';
 import { ReviewItem } from '../../../types/demo';
@@ -15,10 +14,10 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
         <div className="text-center mb-16 space-y-4">
           <div className="inline-flex items-center gap-1 px-3 py-1 bg-teal-100 text-[#244d50] rounded-full text-xs font-bold uppercase tracking-wider">
             <MessageSquare className="w-3.5 h-3.5" />
-            ÄÃNH GIÃ
+            ĐÁNH GIÁ
           </div>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 text-center tracking-tight">
-            KhÃ¡ch HÃ ng NÃ³i GÃ¬ Vá» ChÃºng TÃ´i
+            Khách Hàng Nói Gì Về Chúng Tôi
           </h2>
         </div>
 
@@ -42,7 +41,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
                   <img
                     className="w-full h-full object-cover"
                     src={review.avatarSrc || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"}
-                    alt={review.avatarAlt || review.author || "KhÃ¡ch hÃ ng"}
+                    alt={review.avatarAlt || review.author || "Khách hàng"}
                     referrerPolicy="no-referrer"
                   />
                 </div>
@@ -62,4 +61,3 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
     </section>
   );
 }
-

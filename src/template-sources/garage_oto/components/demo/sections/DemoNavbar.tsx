@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState } from 'react';
 import { Phone, Menu, X } from 'lucide-react';
 import { BusinessInfo } from '../../../types/demo';
@@ -8,18 +7,18 @@ interface DemoNavbarProps {
   ctaLabel?: string;
 }
 
-export default function DemoNavbar({ business, ctaLabel = 'Gá»i kiá»ƒm tra xe' }: DemoNavbarProps) {
+export default function DemoNavbar({ business, ctaLabel = 'Gọi kiểm tra xe' }: DemoNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const formattedPhone = business.phone ? business.phone.replace(/\s+/g, '') : '';
   const ctaHref = formattedPhone ? `tel:${formattedPhone}` : '#contact';
 
   const menuItems = [
-    { label: 'Dá»‹ch vá»¥', href: '#services' },
-    { label: 'Giá»›i thiá»‡u', href: '#about' },
-    { label: 'HÃ¬nh áº£nh', href: '#gallery' },
-    { label: 'ÄÃ¡nh giÃ¡', href: '#reviews' },
-    { label: 'LiÃªn há»‡', href: '#contact' },
+    { label: 'Dịch vụ', href: '#services' },
+    { label: 'Giới thiệu', href: '#about' },
+    { label: 'Hình ảnh', href: '#gallery' },
+    { label: 'Đánh giá', href: '#reviews' },
+    { label: 'Liên hệ', href: '#contact' },
   ];
 
   return (
@@ -56,7 +55,7 @@ export default function DemoNavbar({ business, ctaLabel = 'Gá»i kiá»ƒm tr
           >
             <Phone className="w-4 h-4" />
             <span className="hidden sm:inline">{ctaLabel}</span>
-            <span className="inline sm:hidden">Gá»i ngay</span>
+            <span className="inline sm:hidden">Gọi ngay</span>
           </a>
 
           <button
@@ -83,9 +82,9 @@ export default function DemoNavbar({ business, ctaLabel = 'Gá»i kiá»ƒm tr
             </a>
           ))}
           <div className="pt-2 flex flex-col gap-1">
-            <span className="text-[10px] font-mono text-[#44474c]">HOTLINE Há»– TRá»¢</span>
+            <span className="text-[10px] font-mono text-[#44474c]">HOTLINE HỖ TRỢ</span>
             <a href={`tel:${formattedPhone}`} className="text-[#fd761a] font-bold text-lg">
-              {business.phone || 'Äang cáº­p nháº­t'}
+              {business.phone || 'Đang cập nhật'}
             </a>
           </div>
         </div>
@@ -93,4 +92,3 @@ export default function DemoNavbar({ business, ctaLabel = 'Gá»i kiá»ƒm tr
     </nav>
   );
 }
-

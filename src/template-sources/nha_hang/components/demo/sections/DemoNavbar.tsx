@@ -33,7 +33,7 @@ export default function DemoNavbar({ business }: NavbarProps) {
         className="cursor-pointer select-none text-2xl md:text-3xl font-bold tracking-[0.08em] text-[#f7ead2]"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         id="navbar-logo"
-        style={{ fontFamily: 'Cambria, "Times New Roman", Georgia, serif' }}
+        style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
       >
         {business.name || "L'Echelle"}
       </div>

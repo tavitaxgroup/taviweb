@@ -1,4 +1,3 @@
-﻿"use client";
 import { useState, FormEvent } from "react";
 import { Phone, Mail, MapPin, Map, CheckCircle2 } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -11,7 +10,7 @@ export default function ContactCTASection({ data }: SectionProps) {
   const { contact } = data;
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [service, setService] = useState("Doanh nghiá»‡p");
+  const [service, setService] = useState("Doanh nghiệp");
   const [message, setMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -47,7 +46,7 @@ export default function ContactCTASection({ data }: SectionProps) {
                   </div>
                   <div>
                     <span className="font-sans font-semibold text-[10px] sm:text-xs text-gray-400 tracking-wider uppercase">
-                      Äiá»‡n thoáº¡i
+                      Điện thoại
                     </span>
                     <p className="font-sans font-bold text-base sm:text-lg text-blue-950">
                       {contact.phone}
@@ -81,7 +80,7 @@ export default function ContactCTASection({ data }: SectionProps) {
                   </div>
                   <div>
                     <span className="font-sans font-semibold text-[10px] sm:text-xs text-gray-400 tracking-wider uppercase">
-                      Äá»‹a chá»‰
+                      Địa chỉ
                     </span>
                     <p className="font-sans font-bold text-base sm:text-lg text-blue-950">
                       {contact.address}
@@ -99,10 +98,10 @@ export default function ContactCTASection({ data }: SectionProps) {
                   <Map className="w-8 h-8 text-blue-900 animate-pulse" />
                 </div>
                 <h4 className="font-sans font-bold text-blue-950 text-base mb-1">
-                  Báº£n Äá»“ Chá»‰ ÄÆ°á»ng
+                  Bản Đồ Chỉ Đường
                 </h4>
                 <p className="font-sans text-xs text-gray-500 max-w-sm">
-                  {contact.address || "Há»“ ChÃ­ Minh, Viá»‡t Nam"}
+                  {contact.address || "Hồ Chí Minh, Việt Nam"}
                 </p>
               </div>
             </div>
@@ -118,23 +117,23 @@ export default function ContactCTASection({ data }: SectionProps) {
                   <CheckCircle2 className="w-12 h-12" />
                 </div>
                 <h3 className="font-sans font-bold text-2xl text-blue-950 mb-3">
-                  Gá»­i YÃªu Cáº§u ThÃ nh CÃ´ng!
+                  Gửi Yêu Cầu Thành Công!
                 </h3>
                 <p className="font-sans text-gray-600 text-base max-w-md mx-auto mb-8">
-                  Cáº£m Æ¡n báº¡n Ä‘Ã£ tin tÆ°á»Ÿng Juris & Integrity. ChÃºng tÃ´i Ä‘Ã£ nháº­n Ä‘Æ°á»£c yÃªu cáº§u vÃ  sáº½ pháº£n há»“i láº¡i báº¡n trong vÃ²ng 2 giá» lÃ m viá»‡c.
+                  Cảm ơn bạn đã tin tưởng Juris & Integrity. Chúng tôi đã nhận được yêu cầu và sẽ phản hồi lại bạn trong vòng 2 giờ làm việc.
                 </p>
                 <button
                   onClick={() => setIsSubmitted(false)}
                   className="bg-blue-950 hover:bg-blue-900 text-white font-sans font-semibold text-sm px-6 py-3 rounded-lg transition-all"
                 >
-                  Gá»­i yÃªu cáº§u khÃ¡c
+                  Gửi yêu cầu khác
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block font-sans font-semibold text-xs tracking-wider text-gray-500 uppercase mb-2">
-                    Há» vÃ  TÃªn <span className="text-red-500">*</span>
+                    Họ và Tên <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -142,13 +141,13 @@ export default function ContactCTASection({ data }: SectionProps) {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     className="w-full bg-stone-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all outline-none"
-                    placeholder="Nguyá»…n VÄƒn A"
+                    placeholder="Nguyễn Văn A"
                   />
                 </div>
 
                 <div>
                   <label className="block font-sans font-semibold text-xs tracking-wider text-gray-500 uppercase mb-2">
-                    Sá»‘ Ä‘iá»‡n thoáº¡i <span className="text-red-500">*</span>
+                    Số điện thoại <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -162,31 +161,31 @@ export default function ContactCTASection({ data }: SectionProps) {
 
                 <div>
                   <label className="block font-sans font-semibold text-xs tracking-wider text-gray-500 uppercase mb-2">
-                    LÄ©nh vá»±c cáº§n tÆ° váº¥n
+                    Lĩnh vực cần tư vấn
                   </label>
                   <select
                     value={service}
                     onChange={(e) => setService(e.target.value)}
                     className="w-full bg-stone-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all outline-none"
                   >
-                    <option>Doanh nghiá»‡p</option>
-                    <option>Há»£p Ä‘á»“ng</option>
-                    <option>DÃ¢n sá»±</option>
-                    <option>Lao Ä‘á»™ng</option>
-                    <option>KhÃ¡c</option>
+                    <option>Doanh nghiệp</option>
+                    <option>Hợp đồng</option>
+                    <option>Dân sự</option>
+                    <option>Lao động</option>
+                    <option>Khác</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block font-sans font-semibold text-xs tracking-wider text-gray-500 uppercase mb-2">
-                    Ná»™i dung yÃªu cáº§u
+                    Nội dung yêu cầu
                   </label>
                   <textarea
                     rows={4}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     className="w-full bg-stone-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all outline-none"
-                    placeholder="Vui lÃ²ng mÃ´ táº£ ngáº¯n gá»n váº¥n Ä‘á» cá»§a báº¡n..."
+                    placeholder="Vui lòng mô tả ngắn gọn vấn đề của bạn..."
                   />
                 </div>
 
@@ -204,4 +203,3 @@ export default function ContactCTASection({ data }: SectionProps) {
     </section>
   );
 }
-

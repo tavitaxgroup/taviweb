@@ -14,7 +14,7 @@ export default function DemoFooter({ business }: DemoFooterProps) {
         
         {/* Brand Column */}
         <div className="space-y-4">
-          <div className="text-2xl font-extrabold text-[#004ac6] tracking-normal">
+          <div className="font-display text-2xl font-extrabold text-[#004ac6] tracking-tight">
             {business.name}
           </div>
           <p className="text-slate-400 text-sm leading-relaxed">

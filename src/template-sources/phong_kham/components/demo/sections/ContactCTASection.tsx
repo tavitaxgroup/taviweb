@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Phone, MapPin, Clock, CheckCircle, Calendar, X } from 'lucide-react';
@@ -12,7 +11,7 @@ interface ContactCTASectionProps {
 export default function ContactCTASection({ contact, business }: ContactCTASectionProps) {
   const [showModal, setShowModal] = useState(false);
   const [booked, setBooked] = useState(false);
-  const [formData, setFormData] = useState({ name: '', phone: '', date: '', dept: 'KhÃ¡m Tá»•ng QuÃ¡t' });
+  const [formData, setFormData] = useState({ name: '', phone: '', date: '', dept: 'Khám Tổng Quát' });
 
   const handleBook = (e: FormEvent) => {
     e.preventDefault();
@@ -20,7 +19,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
     setTimeout(() => {
       setShowModal(false);
       setBooked(false);
-      setFormData({ name: '', phone: '', date: '', dept: 'KhÃ¡m Tá»•ng QuÃ¡t' });
+      setFormData({ name: '', phone: '', date: '', dept: 'Khám Tổng Quát' });
     }, 2500);
   };
 
@@ -35,7 +34,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
               <div className="space-y-3">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-[#004ac6] rounded-full text-xs font-bold uppercase tracking-wider">
                   <Calendar className="w-3.5 h-3.5" />
-                  ÄÄ‚NG KÃ Háº¸N KHÃM
+                  ĐĂNG KÝ HẸN KHÁM
                 </div>
                 <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight leading-tight">
                   {contact.title}
@@ -50,7 +49,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                       <Phone className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">Hotline TÆ° Váº¥n</div>
+                      <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">Hotline Tư Vấn</div>
                       <a href={`tel:${contact.phone}`} className="text-xl md:text-2xl font-extrabold text-[#004ac6] hover:underline">
                         {contact.phone}
                       </a>
@@ -65,7 +64,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">Äá»‹a Chá»‰</div>
+                      <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">Địa Chỉ</div>
                       <div className="text-slate-800 font-extrabold text-base leading-relaxed">
                         {contact.address}
                       </div>
@@ -80,7 +79,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                       <Clock className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">Giá» LÃ m Viá»‡c</div>
+                      <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">Giờ Làm Việc</div>
                       <div className="text-slate-700 font-extrabold text-base">
                         {contact.workingHours}
                       </div>
@@ -95,7 +94,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                   className="bg-[#004ac6] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/30 hover:-translate-y-1 transition-all flex items-center gap-2.5 cursor-pointer"
                 >
                   <Calendar className="w-5 h-5" />
-                  Äáº·t Lá»‹ch KhÃ¡m Ngay
+                  Đặt Lịch Khám Ngay
                 </button>
               </div>
             </div>
@@ -113,8 +112,8 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
               <div className="absolute inset-0 bg-slate-200 flex items-center justify-center -z-10">
                 <div className="text-center p-8">
                   <MapPin className="w-14 h-14 text-[#004ac6] mx-auto mb-4 animate-bounce" />
-                  <p className="font-bold text-slate-800">Äá»‹a Ä‘iá»ƒm cá»§a {business.name}</p>
-                  <p className="text-xs text-slate-500">Báº£n Ä‘á»“ Ä‘ang Ä‘Æ°á»£c táº£i...</p>
+                  <p className="font-bold text-slate-800">Địa điểm của {business.name}</p>
+                  <p className="text-xs text-slate-500">Bản đồ đang được tải...</p>
                 </div>
               </div>
             </div>
@@ -155,25 +154,25 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                   <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto animate-pulse">
                     <CheckCircle className="w-10 h-10" />
                   </div>
-                  <h3 className="text-2xl font-display font-extrabold text-slate-800">Äáº·t Lá»‹ch ThÃ nh CÃ´ng!</h3>
+                  <h3 className="text-2xl font-display font-extrabold text-slate-800">Đặt Lịch Thành Công!</h3>
                   <p className="text-sm text-slate-500 font-sans">
-                    Cáº£m Æ¡n báº¡n. Äá»™i ngÅ© y táº¿ cá»§a <span className="font-bold text-[#004ac6]">{business.name}</span> sáº½ liÃªn há»‡ láº¡i qua sá»‘ Ä‘iá»‡n thoáº¡i cá»§a báº¡n trong Ã­t phÃºt Ä‘á»ƒ xÃ¡c nháº­n.
+                    Cảm ơn bạn. Đội ngũ y tế của <span className="font-bold text-[#004ac6]">{business.name}</span> sẽ liên hệ lại qua số điện thoại của bạn trong ít phút để xác nhận.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-2xl font-display font-extrabold text-slate-800">Äáº·t Lá»‹ch TÆ° Váº¥n</h3>
-                    <p className="text-xs text-slate-500 mt-1 font-sans">Há»— trá»£ Ä‘áº·t háº¹n vÃ  tÆ° váº¥n sá»©c khá»e miá»…n phÃ­ nhanh chÃ³ng.</p>
+                    <h3 className="text-2xl font-display font-extrabold text-slate-800">Đặt Lịch Tư Vấn</h3>
+                    <p className="text-xs text-slate-500 mt-1 font-sans">Hỗ trợ đặt hẹn và tư vấn sức khỏe miễn phí nhanh chóng.</p>
                   </div>
 
                   <form onSubmit={handleBook} className="space-y-4 font-sans">
                     <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Há» vÃ  TÃªn</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Họ và Tên</label>
                       <input 
                         type="text" 
                         required
-                        placeholder="Nguyá»…n VÄƒn A" 
+                        placeholder="Nguyễn Văn A" 
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#004ac6] focus:ring-2 focus:ring-blue-100 transition-all text-slate-800"
@@ -181,7 +180,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Sá»‘ Äiá»‡n Thoáº¡i</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Số Điện Thoại</label>
                       <input 
                         type="tel" 
                         required
@@ -194,7 +193,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">NgÃ y KhÃ¡m</label>
+                        <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Ngày Khám</label>
                         <input 
                           type="date" 
                           required
@@ -205,16 +204,16 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">ChuyÃªn Khoa</label>
+                        <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Chuyên Khoa</label>
                         <select 
                           value={formData.dept}
                           onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
                           className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-[#004ac6] focus:ring-2 focus:ring-blue-100 transition-all text-slate-800"
                         >
-                          <option>KhÃ¡m Tá»•ng QuÃ¡t</option>
-                          <option>KhÃ¡m ChuyÃªn Khoa</option>
-                          <option>XÃ©t Nghiá»‡m</option>
-                          <option>TÆ° Váº¥n Gia ÄÃ¬nh</option>
+                          <option>Khám Tổng Quát</option>
+                          <option>Khám Chuyên Khoa</option>
+                          <option>Xét Nghiệm</option>
+                          <option>Tư Vấn Gia Đình</option>
                         </select>
                       </div>
                     </div>
@@ -224,7 +223,7 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
                       className="w-full bg-[#004ac6] text-white py-4 rounded-xl font-bold text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 mt-2 cursor-pointer flex items-center justify-center gap-2"
                     >
                       <Calendar className="w-5 h-5" />
-                      XÃ¡c Nháº­n ÄÄƒng KÃ½
+                      Xác Nhận Đăng Ký
                     </button>
                   </form>
                 </div>
@@ -236,4 +235,3 @@ export default function ContactCTASection({ contact, business }: ContactCTASecti
     </section>
   );
 }
-

@@ -1,4 +1,3 @@
-﻿"use client";
 import { useState } from 'react';
 import { Menu, X, Calendar } from 'lucide-react';
 import { BusinessData } from '../../../types/demo';
@@ -30,17 +29,17 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
         
         {/* Desktop Nav */}
         <div className="hidden shrink-0 md:flex items-center gap-8 font-medium">
-          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#services">Dá»‹ch vá»¥</a>
-          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#about">Vá» chÃºng tÃ´i</a>
-          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#why-choose-us">Æ¯u Ä‘iá»ƒm</a>
-          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#reviews">ÄÃ¡nh giÃ¡</a>
-          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#contact">LiÃªn há»‡</a>
+          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#services">Dịch vụ</a>
+          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#about">Về chúng tôi</a>
+          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#why-choose-us">Ưu điểm</a>
+          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#reviews">Đánh giá</a>
+          <a className="text-slate-600 hover:text-[#004ac6] transition-colors" href="#contact">Liên hệ</a>
           <button 
             onClick={handleBook}
             className="bg-[#004ac6] text-white px-6 py-2.5 rounded-full font-bold active:scale-95 transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 text-sm flex items-center gap-2"
           >
             <Calendar className="w-4 h-4" />
-            Äáº·t Lá»‹ch Háº¹n
+            Đặt Lịch Hẹn
           </button>
         </div>
 
@@ -53,21 +52,20 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
       {/* Mobile Drawer */}
       {isOpen && (
         <div className="md:hidden bg-white border-b border-slate-100 px-6 py-4 space-y-4 shadow-inner">
-          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#services">Dá»‹ch vá»¥</a>
-          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#about">Vá» chÃºng tÃ´i</a>
-          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#why-choose-us">Æ¯u Ä‘iá»ƒm</a>
-          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#reviews">ÄÃ¡nh giÃ¡</a>
-          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#contact">LiÃªn há»‡</a>
+          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#services">Dịch vụ</a>
+          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#about">Về chúng tôi</a>
+          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#why-choose-us">Ưu điểm</a>
+          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#reviews">Đánh giá</a>
+          <a onClick={() => setIsOpen(false)} className="block text-slate-600 hover:text-[#004ac6] font-medium" href="#contact">Liên hệ</a>
           <button 
             onClick={() => { setIsOpen(false); handleBook(); }}
             className="w-full bg-[#004ac6] text-white px-6 py-3 rounded-xl font-bold transition-all text-center flex items-center justify-center gap-2"
           >
             <Calendar className="w-5 h-5" />
-            Äáº·t Lá»‹ch Háº¹n
+            Đặt Lịch Hẹn
           </button>
         </div>
       )}
     </header>
   );
 }
-

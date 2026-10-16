@@ -1,4 +1,3 @@
-﻿"use client";
 import { motion } from 'motion/react';
 import { 
   FileText, 
@@ -52,13 +51,13 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
             viewport={{ once: true }}
             className="inline-block px-3 py-1 bg-blue-100 text-[#004ac6] rounded-full text-xs font-bold tracking-wider"
           >
-            CHUYÃŠN KHOA & Dá»ŠCH Vá»¤
+            CHUYÊN KHOA & DỊCH VỤ
           </motion.div>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight">
-            Dá»‹ch Vá»¥ ChÄƒm SÃ³c Sá»©c Khá»e
+            Dịch Vụ Chăm Sóc Sức Khỏe
           </h2>
           <p className="font-sans text-slate-600 max-w-2xl mx-auto text-base">
-            ChÃºng tÃ´i cung cáº¥p cÃ¡c gÃ³i dá»‹ch vá»¥ y táº¿ Ä‘a dáº¡ng, Ä‘Ã¡p á»©ng má»i nhu cáº§u kiá»ƒm tra vÃ  Ä‘iá»u trá»‹ cá»§a gia Ä‘Ã¬nh báº¡n.
+            Chúng tôi cung cấp các gói dịch vụ y tế đa dạng, đáp ứng mọi nhu cầu kiểm tra và điều trị của gia đình bạn.
           </p>
         </div>
 
@@ -98,7 +97,7 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
 
                 {isLarge && (
                   <div className="inline-flex items-center gap-2 text-[#004ac6] font-bold text-sm">
-                    ÄÄƒng kÃ½ tÆ° váº¥n
+                    Đăng ký tư vấn
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 )}
@@ -111,4 +110,3 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
     </section>
   );
 }
-

@@ -1,4 +1,3 @@
-﻿"use client";
 import React, { useState, useEffect } from "react";
 import { BusinessInfo, ContactData } from "../../../types/demo";
 import { Menu, X, Phone } from "lucide-react";
@@ -48,25 +47,25 @@ export function DemoNavbar({ business, contact }: DemoNavbarProps) {
             href="#services"
             className="font-sans text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </a>
           <a
             href="#why-choose-us"
             className="font-sans text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
           >
-            Æ¯u Ä‘iá»ƒm
+            Ưu điểm
           </a>
           <a
             href="#gallery"
             className="font-sans text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
           >
-            KhÃ´ng gian
+            Không gian
           </a>
           <a
             href="#reviews"
             className="font-sans text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
           >
-            ÄÃ¡nh giÃ¡
+            Đánh giá
           </a>
           <a
             href={contact.primaryAction.href}
@@ -94,28 +93,28 @@ export function DemoNavbar({ business, contact }: DemoNavbarProps) {
             onClick={() => setIsOpen(false)}
             className="font-sans text-base font-semibold text-on-surface hover:text-primary py-2"
           >
-            Dá»‹ch vá»¥
+            Dịch vụ
           </a>
           <a
             href="#why-choose-us"
             onClick={() => setIsOpen(false)}
             className="font-sans text-base font-semibold text-on-surface hover:text-primary py-2"
           >
-            Æ¯u Ä‘iá»ƒm
+            Ưu điểm
           </a>
           <a
             href="#gallery"
             onClick={() => setIsOpen(false)}
             className="font-sans text-base font-semibold text-on-surface hover:text-primary py-2"
           >
-            KhÃ´ng gian
+            Không gian
           </a>
           <a
             href="#reviews"
             onClick={() => setIsOpen(false)}
             className="font-sans text-base font-semibold text-on-surface hover:text-primary py-2"
           >
-            ÄÃ¡nh giÃ¡
+            Đánh giá
           </a>
           <a
             href={contact.primaryAction.href}
@@ -130,4 +129,3 @@ export function DemoNavbar({ business, contact }: DemoNavbarProps) {
     </nav>
   );
 }
-

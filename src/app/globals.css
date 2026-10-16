@@ -17,7 +17,7 @@
 
 @theme {
   --font-sans: var(--font-be-vietnam-pro), var(--font-inter), "Be Vietnam Pro", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-serif: var(--font-playfair), "Playfair Display", "Noto Serif", Georgia, Cambria, serif;
+  --font-serif: var(--font-newsreader), var(--font-playfair), "Newsreader", "Playfair Display", "Noto Serif", Georgia, Cambria, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-display: var(--font-be-vietnam-pro), var(--font-inter), sans-serif;
   --font-label: var(--font-be-vietnam-pro), var(--font-inter), sans-serif;
@@ -5420,9 +5420,18 @@ img {
   }
 }
 
-/* --- High-End Typography & Utilities for Corporate Profile, B2B Product & Lead Generation --- */
+/* --- High-End Typography & Utilities with Full Vietnamese Support --- */
+@font-face {
+  font-family: 'Syne';
+  src: local('Be Vietnam Pro'), local('Inter');
+}
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: local('Be Vietnam Pro'), local('Inter');
+}
+
 .font-syne {
-  font-family: "Syne", "Be Vietnam Pro", sans-serif;
+  font-family: var(--font-be-vietnam-pro), var(--font-inter), "Be Vietnam Pro", Inter, sans-serif;
   letter-spacing: -0.025em;
 }
 
@@ -5431,15 +5440,15 @@ img {
 }
 
 .font-body {
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-family: var(--font-be-vietnam-pro), var(--font-inter), "Be Vietnam Pro", Inter, sans-serif;
 }
 
 .font-display-xl, .font-display-lg, .font-headline-lg, .font-headline-md, .font-headline-sm {
-  font-family: 'Newsreader', Georgia, serif;
+  font-family: var(--font-newsreader), var(--font-playfair), 'Newsreader', 'Playfair Display', Georgia, serif;
 }
 
 .font-body-lg, .font-body-md, .font-body-sm, .font-label-md, .font-label-sm {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: var(--font-be-vietnam-pro), var(--font-inter), 'Be Vietnam Pro', Inter, sans-serif;
 }
 
 .text-display-xl {

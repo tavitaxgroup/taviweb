@@ -1,4 +1,3 @@
-﻿"use client";
 import React from 'react';
 import { HeroData } from '../../../types/demo';
 
@@ -8,19 +7,19 @@ interface DemoHeroProps {
 
 function normalizeHeroTitle(title: string) {
   return title
-    .replace(/Kiáº¿\s+n/g, 'Kiáº¿n')
-    .replace(/Sá»‘\s+ng/g, 'Sá»‘ng')
+    .replace(/Kiế\s+n/g, 'Kiến')
+    .replace(/Số\s+ng/g, 'Sống')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 function getTitleLines(title: string) {
-  if (title === 'Kiáº¿n Táº¡o KhÃ´ng Gian Sá»‘ng Tinh Táº¿') {
-    return ['Kiáº¿n Táº¡o KhÃ´ng Gian', 'Sá»‘ng Tinh Táº¿'];
+  if (title === 'Kiến Tạo Không Gian Sống Tinh Tế') {
+    return ['Kiến Tạo Không Gian', 'Sống Tinh Tế'];
   }
 
-  if (title.includes(' KhÃ´ng Gian ')) {
-    return title.replace(' KhÃ´ng Gian ', ' KhÃ´ng Gian\n').split('\n');
+  if (title.includes(' Không Gian ')) {
+    return title.replace(' Không Gian ', ' Không Gian\n').split('\n');
   }
 
   return [title];
@@ -40,7 +39,7 @@ export default function DemoHero({ data }: DemoHeroProps) {
 
   const title = normalizeHeroTitle(data.title);
   const titleLines = getTitleLines(title);
-  const primaryLabel = data.primaryActionLabel?.trim() || 'Nháº­n tÆ° váº¥n thiáº¿t káº¿';
+  const primaryLabel = data.primaryActionLabel?.trim() || 'Nhận tư vấn thiết kế';
 
   return (
     <section className="relative h-[600px] md:h-[650px] flex items-center overflow-hidden bg-brand-primary">
@@ -67,7 +66,7 @@ export default function DemoHero({ data }: DemoHeroProps) {
           <h1
             className="text-[clamp(3.1rem,6vw,5.25rem)] font-bold text-white leading-[1.08] tracking-normal mb-6 drop-shadow-md [overflow-wrap:normal] [word-break:keep-all] [text-wrap:normal] [hyphens:none]"
             style={{
-              fontFamily: 'Cambria, "Times New Roman", Georgia, serif',
+              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
               textShadow: '0 4px 24px rgba(0,0,0,0.5)',
             }}
           >
@@ -104,4 +103,3 @@ export default function DemoHero({ data }: DemoHeroProps) {
     </section>
   );
 }
-

@@ -1,4 +1,3 @@
-﻿"use client";
 import { Scale, Share2 } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
 
@@ -18,20 +17,20 @@ export default function DemoFooter({ data }: SectionProps) {
             {data.business.name}
           </span>
           <p className="font-sans text-xs text-gray-400 max-w-md">
-            Â© {currentYear} {data.business.name}. Báº£o lÆ°u má»i quyá»n. TÆ° váº¥n phÃ¡p lÃ½ chuyÃªn nghiá»‡p vÃ  táº­n tÃ¢m.
+            © {currentYear} {data.business.name}. Bảo lưu mọi quyền. Tư vấn pháp lý chuyên nghiệp và tận tâm.
           </p>
         </div>
 
         {/* Footer legal links */}
         <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-300">
           <a href="#" className="hover:text-amber-500 transition-colors">
-            Äiá»u khoáº£n dá»‹ch vá»¥
+            Điều khoản dịch vụ
           </a>
           <a href="#" className="hover:text-amber-500 transition-colors">
-            ChÃ­nh sÃ¡ch báº£o máº­t
+            Chính sách bảo mật
           </a>
           <a href="#" className="hover:text-amber-500 transition-colors">
-            SÆ¡ Ä‘á»“ trang web
+            Sơ đồ trang web
           </a>
         </div>
 
@@ -39,7 +38,7 @@ export default function DemoFooter({ data }: SectionProps) {
         <div className="flex gap-4">
           <a
             href="#"
-            title="Äáº¡o Ä‘á»©c nghá» nghiá»‡p"
+            title="Đạo đức nghề nghiệp"
             className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all"
           >
             <Scale className="w-4 h-4" />
@@ -54,7 +53,7 @@ export default function DemoFooter({ data }: SectionProps) {
                 }).catch(() => {});
               }
             }}
-            title="Chia sáº»"
+            title="Chia sẻ"
             className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all"
           >
             <Share2 className="w-4 h-4" />
@@ -64,4 +63,3 @@ export default function DemoFooter({ data }: SectionProps) {
     </footer>
   );
 }
-
