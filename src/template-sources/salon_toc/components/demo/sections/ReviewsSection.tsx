@@ -14,13 +14,13 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
         <div className="text-center mb-16">
           <span 
             className="text-xs font-bold text-[#855316] uppercase tracking-[0.2em] mb-4 block"
-            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             Đánh giá từ khách hàng
           </span>
           <h2 
-            className="text-3xl md:text-4xl font-bold text-[#121315] tracking-tight"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            className="text-3xl md:text-4xl font-bold text-[#121315]"
+            style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
           >
             Sự hài lòng của khách hàng là niềm tự hào của chúng tôi
           </h2>
@@ -46,7 +46,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
                 {/* Text */}
                 <p 
                   className="text-sm md:text-base text-gray-600 mb-8 italic leading-relaxed font-normal"
-                  style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+                  style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                 >
                   "{review.text}"
                 </p>
@@ -71,13 +71,13 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
                 <div>
                   <span 
                     className="text-sm font-bold text-[#121315] block"
-                    style={{ fontFamily: 'Syne, sans-serif' }}
+                    style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                   >
                     {review.authorName}
                   </span>
                   <span 
                     className="text-xs text-gray-400 uppercase font-semibold tracking-wider"
-                    style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+                    style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                   >
                     {review.authorRole}
                   </span>

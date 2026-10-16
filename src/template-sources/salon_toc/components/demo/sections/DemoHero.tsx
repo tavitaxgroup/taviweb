@@ -38,12 +38,12 @@ export default function DemoHero({ hero }: DemoHeroProps) {
             transition={{ duration: 0.8 }}
           >
             <h1 
-              className="text-4xl md:text-6xl font-extrabold text-[#121315] leading-[1.1] tracking-tighter mb-6"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              className="text-4xl md:text-6xl font-extrabold text-[#121315] leading-[1.15] mb-6"
+              style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
               id="hero-title"
             >
               {hero.title}
-              <span className="italic block mt-2 text-[#855316] font-normal tracking-tighter">
+              <span className="italic block mt-2 text-[#855316] font-normal">
                 {hero.italicSubtitle}
               </span>
             </h1>
@@ -54,7 +54,7 @@ export default function DemoHero({ hero }: DemoHeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-base md:text-lg text-gray-600 mb-10 max-w-lg font-normal leading-relaxed"
-            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             id="hero-description"
           >
             {hero.description}
@@ -68,15 +68,15 @@ export default function DemoHero({ hero }: DemoHeroProps) {
           >
             <button 
               onClick={() => handleScroll('contact')}
-              className="bg-[#855316] text-white px-8 py-4 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#121315] hover:shadow-md transition-all duration-300 text-center"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              className="bg-[#855316] text-white px-8 py-4 text-xs font-semibold uppercase tracking-wider rounded-sm hover:bg-[#121315] hover:shadow-md transition-all duration-300 text-center"
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {hero.primaryCtaText}
             </button>
             <button 
               onClick={() => handleScroll('services')}
-              className="border border-[#855316] text-[#855316] px-8 py-4 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#855316]/5 transition-all duration-300 text-center"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              className="border border-[#855316] text-[#855316] px-8 py-4 text-xs font-semibold uppercase tracking-wider rounded-sm hover:bg-[#855316]/5 transition-all duration-300 text-center"
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {hero.secondaryCtaText}
             </button>

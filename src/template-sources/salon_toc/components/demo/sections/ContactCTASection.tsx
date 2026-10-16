@@ -12,8 +12,8 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
     <section id="contact" className="bg-[#121315] py-24 text-white relative z-20">
       <div className="max-w-7xl mx-auto px-6 md:px-16 text-center">
         <h2 
-          className="text-3xl md:text-5xl font-bold text-[#ffdcbd] mb-12 tracking-tight leading-snug max-w-4xl mx-auto"
-          style={{ fontFamily: 'Syne, sans-serif' }}
+          className="text-3xl md:text-5xl font-bold text-[#ffdcbd] mb-12 leading-snug max-w-4xl mx-auto"
+          style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
         >
           {contact.title}
         </h2>
@@ -32,8 +32,8 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
               <MessageSquare size={24} />
             </div>
             <span 
-              className="text-lg md:text-xl font-bold tracking-tight"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              className="text-lg md:text-xl font-bold"
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {contact.facebookCtaText}
             </span>
@@ -52,8 +52,8 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
                 <Phone size={24} />
               </div>
               <span 
-                className="text-lg md:text-xl font-bold tracking-tight"
-                style={{ fontFamily: 'Syne, sans-serif' }}
+                className="text-lg md:text-xl font-bold"
+                style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
               >
                 {contact.callCtaText}: {business.phone}
               </span>
@@ -67,8 +67,8 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
                 <Mail size={24} />
               </div>
               <span 
-                className="text-lg md:text-xl font-bold tracking-tight"
-                style={{ fontFamily: 'Syne, sans-serif' }}
+                className="text-lg md:text-xl font-bold"
+                style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
               >
                 Gửi Email
               </span>
@@ -84,8 +84,8 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
                 <MapPin size={24} />
               </div>
               <span 
-                className="text-lg md:text-xl font-bold tracking-tight"
-                style={{ fontFamily: 'Syne, sans-serif' }}
+                className="text-lg md:text-xl font-bold"
+                style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
               >
                 Tìm đường đi
               </span>
@@ -98,8 +98,8 @@ export default function ContactCTASection({ contact, business, onBookClick }: Co
           {/* Main Book Button */}
           <button 
             onClick={onBookClick}
-            className="bg-[#855316] text-white px-10 py-5 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#ffdcbd] hover:text-[#121315] active:scale-95 transition-all duration-300 shadow-sm text-center"
-            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+            className="bg-[#855316] text-white px-10 py-5 text-xs font-semibold uppercase tracking-wider rounded-sm hover:bg-[#ffdcbd] hover:text-[#121315] active:scale-95 transition-all duration-300 shadow-sm text-center"
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             {contact.bookCtaText}
           </button>

@@ -18,20 +18,20 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
         <div className="max-w-xl text-left">
           <span 
             className="text-xs font-bold text-[#855316] uppercase tracking-[0.2em] mb-4 block"
-            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             Bộ sưu tập
           </span>
           <h2 
-            className="text-3xl md:text-4xl font-bold text-[#121315] tracking-tight"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            className="text-3xl md:text-4xl font-bold text-[#121315]"
+            style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
           >
             Những khoảnh khắc sáng tạo & tác phẩm tóc mẫu
           </h2>
         </div>
         <span 
-          className="text-xs font-bold text-[#855316] uppercase tracking-widest border-b border-[#855316] pb-1 cursor-default select-none hidden sm:block"
-          style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+          className="text-xs font-bold text-[#855316] uppercase tracking-wider border-b border-[#855316] pb-1 cursor-default select-none hidden sm:block"
+          style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
         >
           Tác phẩm thực tế tại Salon
         </span>
@@ -56,7 +56,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
             <span 
               className="text-white text-sm md:text-base font-semibold"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {getImg(0).caption || getImg(0).alt}
             </span>
@@ -80,7 +80,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
             <span 
               className="text-white text-xs md:text-sm font-semibold"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {getImg(1).caption || getImg(1).alt}
             </span>
@@ -104,7 +104,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
             <span 
               className="text-white text-xs md:text-sm font-semibold"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {getImg(2).caption || getImg(2).alt}
             </span>
@@ -128,7 +128,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
             <span 
               className="text-white text-xs md:text-sm font-semibold"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {getImg(3).caption || getImg(3).alt}
             </span>

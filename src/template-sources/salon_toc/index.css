@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Hanken+Grotesk:wght@300;400;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Syne", sans-serif;
+  --font-sans: var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
 }
 
 html {

@@ -48,27 +48,27 @@ export default function AboutSection({ about }: AboutSectionProps) {
           >
             <span 
               className="text-xs font-bold text-[#855316] uppercase tracking-[0.2em] mb-4 block"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {about.subtitle}
             </span>
             <h2 
-              className="text-3xl md:text-4xl font-bold text-[#121315] mb-6 tracking-tight leading-snug"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              className="text-3xl md:text-4xl font-bold text-[#121315] mb-6 leading-snug"
+              style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
             >
               {about.title}
             </h2>
             <p 
               className="text-sm md:text-base text-gray-600 mb-8 leading-relaxed font-normal"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               {about.description}
             </p>
             <a 
               href="#services"
               onClick={handleScrollToServices}
-              className="text-xs font-bold text-[#121315] uppercase tracking-widest border-b-2 border-[#855316] pb-1 hover:text-[#855316] transition-all duration-300 inline-block"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              className="text-xs font-bold text-[#121315] uppercase tracking-wider border-b-2 border-[#855316] pb-1 hover:text-[#855316] transition-all duration-300 inline-block"
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               Khám phá dịch vụ
             </a>

@@ -15,13 +15,13 @@ export default function ServicesSection({ services, onBookClick }: ServicesSecti
         <div className="text-center mb-16">
           <span 
             className="text-xs font-bold text-[#855316] uppercase tracking-[0.2em] mb-4 block"
-            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             Menu dịch vụ
           </span>
           <h2 
-            className="text-3xl md:text-4xl font-bold text-[#121315] tracking-tight"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            className="text-3xl md:text-4xl font-bold text-[#121315]"
+            style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
           >
             Trải nghiệm chăm sóc tóc chuyên nghiệp
           </h2>
@@ -43,21 +43,21 @@ export default function ServicesSection({ services, onBookClick }: ServicesSecti
                 <div className="flex items-end justify-between mb-2">
                   <h3 
                     className="text-lg md:text-xl font-bold text-[#121315] group-hover:text-[#855316] transition-colors duration-300"
-                    style={{ fontFamily: 'Syne, sans-serif' }}
+                    style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
                   >
                     {item.name}
                   </h3>
                   <div className="border-b border-dotted border-gray-400 grow mx-3 mb-1.5" />
                   <span 
                     className="text-sm md:text-base font-bold text-[#121315] whitespace-nowrap uppercase tracking-wider"
-                    style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+                    style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                   >
                     {item.price}
                   </span>
                 </div>
                 <p 
                   className="text-sm text-gray-500 italic font-normal"
-                  style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+                  style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                 >
                   {item.description}
                 </p>
@@ -77,20 +77,20 @@ export default function ServicesSection({ services, onBookClick }: ServicesSecti
               <div className="relative z-10">
                 <h4 
                   className="text-2xl font-bold text-[#121315] mb-4"
-                  style={{ fontFamily: 'Syne, sans-serif' }}
+                  style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
                 >
                   Sẵn sàng cho một diện mạo mới?
                 </h4>
                 <p 
                   className="text-sm md:text-base text-gray-700 mb-10 font-normal leading-relaxed"
-                  style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+                  style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                 >
                   Đừng bỏ lỡ cơ hội được tư vấn miễn phí bởi các chuyên gia tạo mẫu tóc hàng đầu tại salon của chúng tôi. Hãy đặt lịch hôm nay!
                 </p>
                 <button 
                   onClick={onBookClick}
-                  className="bg-[#121315] text-white px-8 py-4 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#855316] transition-all duration-300 active:scale-95 shadow-sm"
-                  style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+                  className="bg-[#121315] text-white px-8 py-4 text-xs font-semibold uppercase tracking-wider rounded-sm hover:bg-[#855316] transition-all duration-300 active:scale-95 shadow-sm"
+                  style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
                 >
                   Đặt lịch làm tóc
                 </button>

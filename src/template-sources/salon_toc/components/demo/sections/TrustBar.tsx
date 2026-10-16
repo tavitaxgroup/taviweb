@@ -14,7 +14,7 @@ export default function TrustBar({ trust }: TrustBarProps) {
           <Star className="text-[#855316] fill-[#855316]" size={20} />
           <span 
             className="text-base md:text-lg font-bold text-[#121315]"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             {typeof trust.rating === "object" ? (trust.rating as any).score : trust.rating}
           </span>
@@ -28,7 +28,7 @@ export default function TrustBar({ trust }: TrustBarProps) {
           <Heart className="text-[#855316] fill-[#855316]" size={20} />
           <span 
             className="text-base md:text-lg font-bold text-[#121315]"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             {typeof trust.followers === "object" ? (trust.followers as any).count : trust.followers}
           </span>
@@ -42,7 +42,7 @@ export default function TrustBar({ trust }: TrustBarProps) {
           <Award className="text-[#855316] fill-[#855316]" size={20} />
           <span 
             className="text-base md:text-lg font-bold text-[#121315]"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             {trust.certifiedText}
           </span>

@@ -12,13 +12,13 @@ export default function WhyChooseUsSection() {
             </div>
             <h3 
               className="text-lg md:text-xl font-bold mb-4"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
             >
               Stylist Tận Tâm
             </h3>
             <p 
               className="text-sm text-gray-400 leading-relaxed font-normal"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               Đội ngũ nghệ sĩ tóc với nhiều năm kinh nghiệm, luôn lắng nghe, tư vấn tận tình và thấu hiểu mong muốn của từng khách hàng.
             </p>
@@ -31,13 +31,13 @@ export default function WhyChooseUsSection() {
             </div>
             <h3 
               className="text-lg md:text-xl font-bold mb-4"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
             >
               Sản Phẩm Cao Cấp
             </h3>
             <p 
               className="text-sm text-gray-400 leading-relaxed font-normal"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               Chúng tôi cam kết sử dụng 100% các dòng sản phẩm chăm sóc tóc organic và cao cấp từ các thương hiệu hàng đầu thế giới.
             </p>
@@ -50,13 +50,13 @@ export default function WhyChooseUsSection() {
             </div>
             <h3 
               className="text-lg md:text-xl font-bold mb-4"
-              style={{ fontFamily: 'Syne, sans-serif' }}
+              style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
             >
               Không Gian Sang Trọng
             </h3>
             <p 
               className="text-sm text-gray-400 leading-relaxed font-normal"
-              style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+              style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
             >
               Thiết kế hiện đại, tinh tế cùng tiếng nhạc êm dịu mang đến cho quý khách những giây phút thư giãn, tái tạo năng lượng tuyệt vời.
             </p>

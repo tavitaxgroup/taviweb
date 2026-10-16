@@ -23,8 +23,8 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
         {/* Logo */}
         <div 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="font-sans font-extrabold text-2xl md:text-3xl tracking-tighter text-[#121315] cursor-pointer select-none"
-          style={{ fontFamily: 'Syne, sans-serif' }}
+          className="font-extrabold text-2xl md:text-3xl tracking-normal text-[#121315] cursor-pointer select-none"
+          style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}
           id="nav-logo"
         >
           {business.logoText}
@@ -34,33 +34,33 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
         <div className="hidden md:flex space-x-10 items-center">
           <button 
             onClick={() => handleScroll('services')}
-            className="font-sans text-sm font-bold text-[#855316] uppercase tracking-widest hover:text-[#121315] transition-colors duration-300"
+            className="font-sans text-sm font-bold text-[#855316] uppercase tracking-wider hover:text-[#121315] transition-colors duration-300"
           >
             Dịch vụ
           </button>
           <button 
             onClick={() => handleScroll('gallery')}
-            className="font-sans text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#855316] transition-colors duration-300"
+            className="font-sans text-sm font-bold text-gray-500 uppercase tracking-wider hover:text-[#855316] transition-colors duration-300"
           >
             Bộ sưu tập
           </button>
           <button 
             onClick={() => handleScroll('about')}
-            className="font-sans text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#855316] transition-colors duration-300"
+            className="font-sans text-sm font-bold text-gray-500 uppercase tracking-wider hover:text-[#855316] transition-colors duration-300"
           >
             Giới thiệu
           </button>
           <button 
             onClick={() => handleScroll('reviews')}
-            className="font-sans text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#855316] transition-colors duration-300"
+            className="font-sans text-sm font-bold text-gray-500 uppercase tracking-wider hover:text-[#855316] transition-colors duration-300"
           >
             Đánh giá
           </button>
           
           <button 
             onClick={() => handleScroll('contact')}
-            className="bg-[#121315] text-white px-7 py-3 text-xs font-semibold uppercase tracking-widest rounded-sm hover:bg-[#855316] active:scale-95 transition-all duration-300"
-            style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
+            className="bg-[#121315] text-white px-7 py-3 text-xs font-semibold uppercase tracking-wider rounded-sm hover:bg-[#855316] active:scale-95 transition-all duration-300"
+            style={{ fontFamily: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif' }}
           >
             Đặt lịch ngay
           </button>
