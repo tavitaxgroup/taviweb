@@ -1,3 +1,4 @@
+﻿"use client";
 import { GalleryItem } from '../../../types/demo';
 import { motion } from 'motion/react';
 
@@ -14,10 +15,10 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-sans">
-              Không Gian &amp; Thiết Bị
+              KhÃ´ng Gian &amp; Thiáº¿t Bá»‹
             </h2>
             <p className="mt-3 text-base text-gray-500 font-sans max-w-xl">
-              Môi trường điều trị được đầu tư khang trang, vô trùng tuyệt đối theo chuẩn quốc tế, mang lại trải nghiệm thư giãn và tin cậy nhất.
+              MÃ´i trÆ°á»ng Ä‘iá»u trá»‹ Ä‘Æ°á»£c Ä‘áº§u tÆ° khang trang, vÃ´ trÃ¹ng tuyá»‡t Ä‘á»‘i theo chuáº©n quá»‘c táº¿, mang láº¡i tráº£i nghiá»‡m thÆ° giÃ£n vÃ  tin cáº­y nháº¥t.
             </p>
           </div>
         </div>
@@ -56,3 +57,4 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     </section>
   );
 }
+

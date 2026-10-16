@@ -1,3 +1,4 @@
+﻿"use client";
 import React from "react";
 import { ArrowRight, Phone } from "lucide-react";
 import { motion } from "motion/react";
@@ -81,3 +82,4 @@ export function DemoHero({ hero }: DemoHeroProps) {
     </header>
   );
 }
+

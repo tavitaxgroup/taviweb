@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState } from "react";
 import { DemoPageData } from "../../../types/demo";
 
@@ -6,13 +7,13 @@ interface GallerySectionProps {
 }
 
 export function GallerySection({ gallery }: GallerySectionProps) {
-  const [activeCategory, setActiveCategory] = useState("Tất cả");
+  const [activeCategory, setActiveCategory] = useState("Táº¥t cáº£");
 
-  // Dynamically compile categories present in data, always adding "Tất cả"
-  const categories = ["Tất cả", ...Array.from(new Set(gallery.map(item => item.category)))];
+  // Dynamically compile categories present in data, always adding "Táº¥t cáº£"
+  const categories = ["Táº¥t cáº£", ...Array.from(new Set(gallery.map(item => item.category)))];
 
   // Filter items based on active click selection
-  const filteredGallery = activeCategory === "Tất cả" 
+  const filteredGallery = activeCategory === "Táº¥t cáº£" 
     ? gallery 
     : gallery.filter(item => item.category === activeCategory);
 
@@ -23,10 +24,10 @@ export function GallerySection({ gallery }: GallerySectionProps) {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
             <span className="font-sans text-xs font-bold text-amber-500 uppercase tracking-widest block mb-4">
-              Hồ sơ năng lực
+              Há»“ sÆ¡ nÄƒng lá»±c
             </span>
             <h2 className="font-sans text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
-              Công trình tiêu biểu
+              CÃ´ng trÃ¬nh tiÃªu biá»ƒu
             </h2>
           </div>
           
@@ -62,7 +63,7 @@ export function GallerySection({ gallery }: GallerySectionProps) {
                 <img 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-70" 
                   src={(project.image as any)?.src ?? (project as any).src ?? (typeof project.image === 'string' ? project.image : "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80")} 
-                  alt={(project.image as any)?.alt ?? project.title ?? "Dự án"}
+                  alt={(project.image as any)?.alt ?? project.title ?? "Dá»± Ã¡n"}
                 />
                 
                 {/* Semi-transparent Overlay showing details on hover */}
@@ -74,7 +75,7 @@ export function GallerySection({ gallery }: GallerySectionProps) {
                     {project.title}
                   </h3>
                   <span className="text-slate-300 text-xs mt-2 border-t border-slate-700/60 pt-2 block">
-                    Danh mục: {project.category}
+                    Danh má»¥c: {project.category}
                   </span>
                 </div>
 
@@ -87,10 +88,11 @@ export function GallerySection({ gallery }: GallerySectionProps) {
           </div>
         ) : (
           <div className="text-center py-20 border border-dashed border-slate-200 rounded text-slate-400">
-            Hiện chưa có công trình mẫu trong danh mục này.
+            Hiá»‡n chÆ°a cÃ³ cÃ´ng trÃ¬nh máº«u trong danh má»¥c nÃ y.
           </div>
         )}
       </div>
     </section>
   );
 }
+

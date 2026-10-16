@@ -1,3 +1,4 @@
+﻿"use client";
 import React from 'react';
 import { HeroInfo } from '../../../types/demo';
 import { motion } from 'motion/react';
@@ -103,3 +104,4 @@ export default function DemoHero({ hero }: DemoHeroProps) {
     </section>
   );
 }
+

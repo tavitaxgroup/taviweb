@@ -14,7 +14,8 @@ function getPgPool(): Pool | null {
   if (!pgPool && DATABASE_URL) {
     pgPool = new Pool({
       connectionString: DATABASE_URL,
-      ssl: false
+      ssl: false,
+      connectionTimeoutMillis: 3000
     });
   }
   return pgPool;
@@ -22,6 +23,38 @@ function getPgPool(): Pool | null {
 
 export function hasSupabaseConfig() {
   return Boolean(DATABASE_URL || (SUPABASE_URL && SUPABASE_KEY));
+}
+
+function mapRowToLead(row: Record<string, any>): BusinessLead {
+  return {
+    id: String(row.id),
+    place_id: row.place_id,
+    industry: row.industry,
+    template_name: row.template_name,
+    tax_code: row.tax_code,
+    raw_industry: row.raw_industry,
+    representative: row.representative,
+    name: row.name,
+    formatted_address: row.formatted_address || row.address,
+    formatted_phone_number: row.formatted_phone_number || row.phone,
+    website: row.website,
+    image_url: row.image_url || row.logo_url,
+    logo_url: row.logo_url,
+    about_image_url: row.about_image_url,
+    gallery_urls: row.gallery_urls,
+    rating: row.rating ? Number(row.rating) : 4.9,
+    user_ratings_total: row.user_ratings_total ? Number(row.user_ratings_total) : 185,
+    facebook_url: row.facebook_url,
+    facebook_followers: row.facebook_followers,
+    facebook_email: row.facebook_email || row.email,
+    created_at: row.created_at ? String(row.created_at) : null,
+    updated_at: row.updated_at ? String(row.updated_at) : null,
+    demo_url: row.demo_url,
+    demo_status: row.demo_status,
+    outreach_status: row.outreach_status,
+    notes: row.notes,
+    template_data: row.template_data
+  };
 }
 
 export async function getBusinessByPlaceId(placeId: string): Promise<BusinessLead | null> {
@@ -33,32 +66,7 @@ export async function getBusinessByPlaceId(placeId: string): Promise<BusinessLea
         [placeId]
       );
       if (res.rows.length > 0) {
-        const row = res.rows[0];
-        return {
-          id: String(row.id),
-          place_id: row.place_id,
-          industry: row.industry,
-          name: row.name,
-          formatted_address: row.formatted_address || row.address,
-          formatted_phone_number: row.formatted_phone_number || row.phone,
-          website: row.website,
-          image_url: row.image_url || row.logo_url,
-          logo_url: row.logo_url,
-          about_image_url: row.about_image_url,
-          gallery_urls: row.gallery_urls,
-          rating: row.rating ? Number(row.rating) : 4.9,
-          user_ratings_total: row.user_ratings_total ? Number(row.user_ratings_total) : 185,
-          facebook_url: row.facebook_url,
-          facebook_followers: row.facebook_followers,
-          facebook_email: row.email,
-          created_at: row.created_at ? String(row.created_at) : null,
-          updated_at: row.updated_at ? String(row.updated_at) : null,
-          demo_url: row.demo_url,
-          demo_status: row.demo_status,
-          outreach_status: row.outreach_status,
-          notes: row.notes,
-          template_data: row.template_data
-        };
+        return mapRowToLead(res.rows[0]);
       }
     } catch (err) {
       console.error(`PostgreSQL fetch error for place_id=${placeId}:`, err);
@@ -87,8 +95,8 @@ export async function getBusinessByPlaceId(placeId: string): Promise<BusinessLea
       return null;
     }
 
-    const rows = (await response.json()) as BusinessLead[];
-    return rows[0] ?? null;
+    const rows = (await response.json()) as Record<string, any>[];
+    return rows[0] ? mapRowToLead(rows[0]) : null;
   } catch (error) {
     console.error(`Supabase fetch error for place_id=${placeId}:`, error);
     return null;

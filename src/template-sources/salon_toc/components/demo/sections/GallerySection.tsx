@@ -1,3 +1,4 @@
+﻿"use client";
 import { motion } from 'motion/react';
 import { GalleryItem } from '../../../types/demo';
 
@@ -20,20 +21,20 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
             className="text-xs font-bold text-[#855316] uppercase tracking-[0.2em] mb-4 block"
             style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
           >
-            Bộ sưu tập
+            Bá»™ sÆ°u táº­p
           </span>
           <h2 
             className="text-3xl md:text-4xl font-bold text-[#121315] tracking-tight"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            Những khoảnh khắc sáng tạo & tác phẩm tóc mẫu
+            Nhá»¯ng khoáº£nh kháº¯c sÃ¡ng táº¡o & tÃ¡c pháº©m tÃ³c máº«u
           </h2>
         </div>
         <span 
           className="text-xs font-bold text-[#855316] uppercase tracking-widest border-b border-[#855316] pb-1 cursor-default select-none hidden sm:block"
           style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
         >
-          Tác phẩm thực tế tại Salon
+          TÃ¡c pháº©m thá»±c táº¿ táº¡i Salon
         </span>
       </div>
 
@@ -138,3 +139,4 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     </section>
   );
 }
+

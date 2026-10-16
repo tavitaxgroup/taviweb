@@ -1,3 +1,4 @@
+﻿"use client";
 import { motion } from 'motion/react';
 import { GalleryItem } from '../../../types/demo';
 
@@ -17,10 +18,10 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
             viewport={{ once: true }}
             className="inline-block px-3 py-1 bg-teal-100 text-[#244d50] rounded-full text-xs font-bold uppercase tracking-wider mb-3"
           >
-            KHÔNG GIAN
+            KHÃ”NG GIAN
           </motion.div>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight">
-            Cơ Sở Vật Chất Hiện Đại
+            CÆ¡ Sá»Ÿ Váº­t Cháº¥t Hiá»‡n Äáº¡i
           </h2>
         </div>
 
@@ -39,7 +40,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
                 <img
                   className="h-[280px] w-full object-cover group-hover:scale-105 transition-transform duration-500"
                   src={item.src ?? ((item as any).image as any)?.src ?? (typeof (item as any).image === "string" ? (item as any).image : "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80")}
-                  alt={item.alt || item.title || "Hình ảnh phòng khám"}
+                  alt={item.alt || item.title || "HÃ¬nh áº£nh phÃ²ng khÃ¡m"}
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
@@ -56,3 +57,4 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     </section>
   );
 }
+

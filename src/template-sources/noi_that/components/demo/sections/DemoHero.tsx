@@ -1,3 +1,4 @@
+﻿"use client";
 import React from 'react';
 import { HeroData } from '../../../types/demo';
 
@@ -7,19 +8,19 @@ interface DemoHeroProps {
 
 function normalizeHeroTitle(title: string) {
   return title
-    .replace(/Kiế\s+n/g, 'Kiến')
-    .replace(/Số\s+ng/g, 'Sống')
+    .replace(/Kiáº¿\s+n/g, 'Kiáº¿n')
+    .replace(/Sá»‘\s+ng/g, 'Sá»‘ng')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 function getTitleLines(title: string) {
-  if (title === 'Kiến Tạo Không Gian Sống Tinh Tế') {
-    return ['Kiến Tạo Không Gian', 'Sống Tinh Tế'];
+  if (title === 'Kiáº¿n Táº¡o KhÃ´ng Gian Sá»‘ng Tinh Táº¿') {
+    return ['Kiáº¿n Táº¡o KhÃ´ng Gian', 'Sá»‘ng Tinh Táº¿'];
   }
 
-  if (title.includes(' Không Gian ')) {
-    return title.replace(' Không Gian ', ' Không Gian\n').split('\n');
+  if (title.includes(' KhÃ´ng Gian ')) {
+    return title.replace(' KhÃ´ng Gian ', ' KhÃ´ng Gian\n').split('\n');
   }
 
   return [title];
@@ -39,7 +40,7 @@ export default function DemoHero({ data }: DemoHeroProps) {
 
   const title = normalizeHeroTitle(data.title);
   const titleLines = getTitleLines(title);
-  const primaryLabel = data.primaryActionLabel?.trim() || 'Nhận tư vấn thiết kế';
+  const primaryLabel = data.primaryActionLabel?.trim() || 'Nháº­n tÆ° váº¥n thiáº¿t káº¿';
 
   return (
     <section className="relative h-[600px] md:h-[650px] flex items-center overflow-hidden bg-brand-primary">
@@ -103,3 +104,4 @@ export default function DemoHero({ data }: DemoHeroProps) {
     </section>
   );
 }
+

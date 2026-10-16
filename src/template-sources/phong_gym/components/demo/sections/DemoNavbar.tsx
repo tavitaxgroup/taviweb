@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
@@ -57,7 +58,7 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
             style={{ borderRadius: "0px" }}
             id="nav-cta-button"
           >
-            Đăng ký tư vấn
+            ÄÄƒng kÃ½ tÆ° váº¥n
           </a>
         </div>
 
@@ -114,10 +115,11 @@ export default function DemoNavbar({ data }: DemoNavbarProps) {
             style={{ borderRadius: "0px" }}
             id="mob-cta-btn"
           >
-            Đăng ký tư vấn
+            ÄÄƒng kÃ½ tÆ° váº¥n
           </a>
         </div>
       )}
     </nav>
   );
 }
+

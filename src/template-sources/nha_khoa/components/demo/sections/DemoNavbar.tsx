@@ -1,3 +1,4 @@
+﻿"use client";
 import React from 'react';
 import { BusinessInfo } from '../../../types/demo';
 import { Phone, Calendar } from 'lucide-react';
@@ -37,28 +38,28 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
             onClick={(e) => handleScroll(e, 'services')}
             className="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors"
           >
-            Dịch vụ
+            Dá»‹ch vá»¥
           </a>
           <a
             href="#about"
             onClick={(e) => handleScroll(e, 'about')}
             className="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors"
           >
-            Về chúng tôi
+            Vá» chÃºng tÃ´i
           </a>
           <a
             href="#gallery"
             onClick={(e) => handleScroll(e, 'gallery')}
             className="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors"
           >
-            Hình ảnh
+            HÃ¬nh áº£nh
           </a>
           <a
             href="#reviews"
             onClick={(e) => handleScroll(e, 'reviews')}
             className="text-sm font-medium text-gray-600 hover:text-teal-700 transition-colors"
           >
-            Đánh giá
+            ÄÃ¡nh giÃ¡
           </a>
         </div>
 
@@ -78,10 +79,11 @@ export default function DemoNavbar({ business }: DemoNavbarProps) {
             className="inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-teal-800 active:scale-95 transition-all font-sans"
           >
             <Calendar className="h-3.5 w-3.5" />
-            Đặt lịch hẹn
+            Äáº·t lá»‹ch háº¹n
           </a>
         </div>
       </div>
     </nav>
   );
 }
+

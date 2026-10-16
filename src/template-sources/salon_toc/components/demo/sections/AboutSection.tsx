@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { MouseEvent } from 'react';
 import { motion } from 'motion/react';
 import { AboutData } from '../../../types/demo';
@@ -70,7 +71,7 @@ export default function AboutSection({ about }: AboutSectionProps) {
               className="text-xs font-bold text-[#121315] uppercase tracking-widest border-b-2 border-[#855316] pb-1 hover:text-[#855316] transition-all duration-300 inline-block"
               style={{ fontFamily: 'Hanken Grotesk, sans-serif' }}
             >
-              Khám phá dịch vụ
+              KhÃ¡m phÃ¡ dá»‹ch vá»¥
             </a>
           </motion.div>
         </div>
@@ -78,3 +79,4 @@ export default function AboutSection({ about }: AboutSectionProps) {
     </section>
   );
 }
+

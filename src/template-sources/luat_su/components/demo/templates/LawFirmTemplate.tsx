@@ -1,3 +1,4 @@
+﻿"use client";
 import { useEffect } from "react";
 import { DemoPageData } from "../../../types/demo";
 import { updateSEO } from "../../../lib/demo/seo";
@@ -59,3 +60,4 @@ export default function LawFirmTemplate({ data }: TemplateProps) {
     </div>
   );
 }
+

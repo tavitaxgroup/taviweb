@@ -1,3 +1,4 @@
+﻿"use client";
 import React, { useState, useEffect } from "react";
 import { Menu, X, PhoneCall } from "lucide-react";
 import { BusinessInfo } from "../../../types/demo";
@@ -51,31 +52,31 @@ export function DemoNavbar({ business }: DemoNavbarProps) {
             onClick={() => handleScrollTo("services")} 
             className="font-sans text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors cursor-pointer"
           >
-            Dịch vụ
+            Dá»‹ch vá»¥
           </button>
           <button 
             onClick={() => handleScrollTo("gallery")} 
             className="font-sans text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors cursor-pointer"
           >
-            Công trình
+            CÃ´ng trÃ¬nh
           </button>
           <button 
             onClick={() => handleScrollTo("about")} 
             className="font-sans text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors cursor-pointer"
           >
-            Giới thiệu
+            Giá»›i thiá»‡u
           </button>
           <button 
             onClick={() => handleScrollTo("why-choose-us")} 
             className="font-sans text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors cursor-pointer"
           >
-            Sự khác biệt
+            Sá»± khÃ¡c biá»‡t
           </button>
           <button 
             onClick={() => handleScrollTo("contact")} 
             className="font-sans text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors cursor-pointer"
           >
-            Liên hệ
+            LiÃªn há»‡
           </button>
 
           {/* Call CTA Button */}
@@ -85,14 +86,14 @@ export function DemoNavbar({ business }: DemoNavbarProps) {
               className="bg-amber-500 hover:bg-amber-600 text-slate-950 px-5 py-2.5 rounded text-sm font-bold uppercase transition-all duration-200 shadow-sm flex items-center space-x-2 shrink-0"
             >
               <PhoneCall className="w-4 h-4" />
-              <span>Gọi tư vấn</span>
+              <span>Gá»i tÆ° váº¥n</span>
             </a>
           ) : (
             <button 
               onClick={() => handleScrollTo("contact")}
               className="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded text-sm font-bold uppercase transition-all duration-200 shadow-sm shrink-0"
             >
-              Nhận báo giá
+              Nháº­n bÃ¡o giÃ¡
             </button>
           )}
         </div>
@@ -114,31 +115,31 @@ export function DemoNavbar({ business }: DemoNavbarProps) {
             onClick={() => handleScrollTo("services")} 
             className="text-left font-sans text-base font-semibold text-slate-700 py-2 border-b border-slate-100"
           >
-            Dịch vụ
+            Dá»‹ch vá»¥
           </button>
           <button 
             onClick={() => handleScrollTo("gallery")} 
             className="text-left font-sans text-base font-semibold text-slate-700 py-2 border-b border-slate-100"
           >
-            Công trình
+            CÃ´ng trÃ¬nh
           </button>
           <button 
             onClick={() => handleScrollTo("about")} 
             className="text-left font-sans text-base font-semibold text-slate-700 py-2 border-b border-slate-100"
           >
-            Giới thiệu
+            Giá»›i thiá»‡u
           </button>
           <button 
             onClick={() => handleScrollTo("why-choose-us")} 
             className="text-left font-sans text-base font-semibold text-slate-700 py-2 border-b border-slate-100"
           >
-            Sự khác biệt
+            Sá»± khÃ¡c biá»‡t
           </button>
           <button 
             onClick={() => handleScrollTo("contact")} 
             className="text-left font-sans text-base font-semibold text-slate-700 py-2 border-b border-slate-100"
           >
-            Liên hệ
+            LiÃªn há»‡
           </button>
 
           {business.phone ? (
@@ -147,14 +148,14 @@ export function DemoNavbar({ business }: DemoNavbarProps) {
               className="bg-amber-500 hover:bg-amber-600 text-slate-950 py-3 rounded font-bold uppercase transition-all text-center flex items-center justify-center space-x-2"
             >
               <PhoneCall className="w-4 h-4" />
-              <span>Gọi: {business.phone}</span>
+              <span>Gá»i: {business.phone}</span>
             </a>
           ) : (
             <button 
               onClick={() => handleScrollTo("contact")}
               className="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded font-bold uppercase transition-all text-center"
             >
-              Nhận báo giá
+              Nháº­n bÃ¡o giÃ¡
             </button>
           )}
         </div>
@@ -162,3 +163,4 @@ export function DemoNavbar({ business }: DemoNavbarProps) {
     </nav>
   );
 }
+
