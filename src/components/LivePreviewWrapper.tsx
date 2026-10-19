@@ -56,6 +56,8 @@ function clientMergeData(base: DemoPageData, overrides?: WebsiteOverrides): Demo
 }
 
 import { getTemplateComponent } from '@/lib/templates/templateRegistry';
+import { getTemplateThemeStyle } from '@/components/demo/StudioTemplateRenderer';
+import type { IndustryKey } from '@/types/demo';
 
 interface LivePreviewWrapperProps {
   initialData: DemoPageData;
@@ -99,5 +101,9 @@ export function LivePreviewWrapper({ initialData, templateKey }: LivePreviewWrap
     return <div className="p-8 text-center">Template không tồn tại.</div>;
   }
 
-  return <TemplateComponent data={data} />;
+  return (
+    <div className="template-render-root" style={getTemplateThemeStyle(templateKey as IndustryKey)}>
+      <TemplateComponent data={data} />
+    </div>
+  );
 }

@@ -721,6 +721,26 @@ export function CompanyHome() {
                 <li>Tặng gói lưu trữ Hosting năm đầu, tối ưu tốc độ tải trang</li>
               </ul>
 
+              <div style={{ marginBottom: "18px", display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+                <button
+                  type="button"
+                  onClick={() => setAuthModalOpen("register")}
+                  className="button button-primary"
+                  style={{
+                    minHeight: "52px",
+                    padding: "0 28px",
+                    fontSize: "15px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    boxShadow: "0 14px 30px rgba(226, 11, 18, 0.28)",
+                  }}
+                >
+                  <Sparkles size={18} />
+                  <span>Tạo Website Ngay (Dùng thử miễn phí 7 ngày)</span>
+                </button>
+              </div>
+
               <form className="consult-form" id="consult-form" onSubmit={submitConsult}>
                 <p>Đăng ký nhận tư vấn miễn phí ngay hôm nay</p>
                 <div className="consult-row">

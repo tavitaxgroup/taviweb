@@ -1,22 +1,18 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import '@/lib/supabase/pgRestEngine';
+import { adminSupabase as supabase } from '@/lib/supabase';
 
 export async function GET(req: Request) {
   try {
-    // Optional: Protect cron route with a secret key if Vercel Cron is configured to send it
     const authHeader = req.headers.get('authorization');
     if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('Running expired packages cron job...');
-
-    // Find tenants where package_expires_at is in the past
-    // and they currently have an active package.
     const { data: expiredTenants, error: fetchError } = await supabase
       .from('tenants')
-      .select('id, package_name, package_expires_at')
-      .not('package_name', 'is', null)
+      .select('id, slug, package_name, package_expires_at')
+      .neq('slug', 'tavi')
       .not('package_expires_at', 'is', null)
       .lt('package_expires_at', new Date().toISOString());
 
@@ -25,19 +21,21 @@ export async function GET(req: Request) {
     }
 
     if (!expiredTenants || expiredTenants.length === 0) {
-      return NextResponse.json({ success: true, message: 'No expired packages found.', count: 0 });
+      return NextResponse.json({
+        success: true,
+        message: 'No expired packages found.',
+        count: 0,
+      });
     }
 
-    const expiredIds = expiredTenants.map((t: any) => t.id);
-    
-    // Update these tenants to remove their package
+    const expiredIds = expiredTenants.map((t) => t.id);
+
+    // Keep package_expires_at as the past timestamp so website suspension remains active until renewed
     const { error: updateError } = await supabase
       .from('tenants')
       .update({
-        package_name: null,
+        package_name: 'Đã hết hạn (Tạm ngưng)',
         ai_quota: 0,
-        ai_used: 0,
-        package_expires_at: null
       })
       .in('id', expiredIds);
 
@@ -45,9 +43,11 @@ export async function GET(req: Request) {
       throw updateError;
     }
 
-    console.log(`Successfully deactivated ${expiredIds.length} expired packages.`);
-    return NextResponse.json({ success: true, count: expiredIds.length, disabledTenants: expiredIds });
-
+    return NextResponse.json({
+      success: true,
+      count: expiredIds.length,
+      disabledTenants: expiredIds,
+    });
   } catch (error) {
     console.error('Check Expired Packages Cron Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

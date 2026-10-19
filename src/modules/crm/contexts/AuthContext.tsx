@@ -23,6 +23,7 @@ export interface User {
     template_key: string;
     active_modules?: string[];
     package_name?: string;
+    package_expires_at?: string | null;
   };
 }
 

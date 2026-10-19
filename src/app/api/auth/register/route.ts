@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123';
+const TRIAL_DAYS = 7;
 
 function slugifyVietnamese(text: string): string {
   return text
@@ -28,6 +29,8 @@ export async function POST(request: Request) {
       name,
       email,
       phone,
+      address,
+      tagline,
       password,
       templateKey = 'noi_that',
     } = body;
@@ -52,7 +55,7 @@ export async function POST(request: Request) {
     const { data: existingUser } = await adminSupabase
       .from('crm_users')
       .select('id')
-      .eq('email', normalizedEmail)
+      .ilike('email', normalizedEmail)
       .maybeSingle();
 
     if (existingUser) {
@@ -65,7 +68,7 @@ export async function POST(request: Request) {
     // 2. Generate unique slug from businessName
     let baseSlug = slugifyVietnamese(businessName);
     if (!baseSlug || baseSlug.length < 2) {
-      baseSlug = `shop-${Math.floor(1000 + Math.random() * 9000)}`;
+      baseSlug = `web-${Math.floor(1000 + Math.random() * 9000)}`;
     }
 
     let finalSlug = baseSlug;
@@ -79,30 +82,54 @@ export async function POST(request: Request) {
       finalSlug = `${baseSlug}-${Math.floor(100 + Math.random() * 900)}`;
     }
 
-    // 3. Get starter package if available
-    const { data: starterPkg } = await adminSupabase
-      .from('packages')
-      .select('id, added_quota')
-      .order('tier', { ascending: true })
-      .limit(1)
-      .maybeSingle();
+    // 3. Calculate 7-day free trial expiration
+    const trialExpiresAt = new Date(
+      Date.now() + TRIAL_DAYS * 24 * 60 * 60 * 1000
+    ).toISOString();
 
-    // 4. Create Tenant Workspace
+    const trimmedBusinessName = String(businessName).trim();
+    const trimmedAddress = address ? String(address).trim() : 'Việt Nam';
+    const trimmedPhone = phone ? String(phone).trim() : '';
+    const trimmedTagline = tagline ? String(tagline).trim() : '';
+
+    const websiteOverrides: Record<string, any> = {
+      business: {
+        name: trimmedBusinessName,
+        address: trimmedAddress,
+        phone: trimmedPhone || '0901234567',
+        email: normalizedEmail,
+      },
+    };
+
+    if (trimmedTagline) {
+      websiteOverrides.hero = {
+        title: trimmedBusinessName,
+        subtitle: trimmedTagline,
+      };
+    }
+
+    // 4. Create Tenant Workspace with 7-day trial
     const { data: tenant, error: tenantErr } = await adminSupabase
       .from('tenants')
       .insert([
         {
-          name: String(businessName).trim(),
+          name: trimmedBusinessName,
           slug: finalSlug,
           template_key: templateKey || 'noi_that',
           active_modules: ['crm', 'ecommerce', 'booking', 'cms', 'chatbot'],
           contact_info: {
-            phone: phone ? String(phone).trim() : '',
+            phone: trimmedPhone,
             email: normalizedEmail,
+            address: trimmedAddress,
           },
-          package_id: starterPkg?.id || null,
-          ai_quota: starterPkg?.added_quota || 100,
+          theme_config: {
+            website_overrides: websiteOverrides,
+          },
+          package_id: null,
+          package_name: 'Dùng thử 7 ngày (Free Trial)',
+          ai_quota: 100,
           ai_used: 0,
+          package_expires_at: trialExpiresAt,
         },
       ])
       .select()
@@ -118,7 +145,7 @@ export async function POST(request: Request) {
 
     // 5. Create Admin User for this Tenant
     const hashedPassword = await bcrypt.hash(String(password), 10);
-    const displayName = name ? String(name).trim() : String(businessName).trim();
+    const displayName = name ? String(name).trim() : trimmedBusinessName;
 
     const { data: newUser, error: userErr } = await adminSupabase
       .from('crm_users')
@@ -136,7 +163,6 @@ export async function POST(request: Request) {
 
     if (userErr || !newUser) {
       console.error('Error creating user during register:', userErr);
-      // Rollback tenant creation
       await adminSupabase.from('tenants').delete().eq('id', tenant.id);
       return NextResponse.json(
         { error: userErr?.message || 'Không thể tạo tài khoản quản trị.' },
@@ -171,6 +197,8 @@ export async function POST(request: Request) {
           slug: tenant.slug,
           template_key: tenant.template_key,
           active_modules: tenant.active_modules,
+          package_name: tenant.package_name,
+          package_expires_at: tenant.package_expires_at,
         },
       },
     });

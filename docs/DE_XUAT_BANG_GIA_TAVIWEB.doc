@@ -1,0 +1,448 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset="utf-8">
+<title>Đề Xuất Bảng Giá Dịch Vụ Website &amp; Module TAVIWEB</title>
+<!--[if gte mso 9]>
+<xml>
+  <w:WordDocument>
+    <w:View>Print</w:View>
+    <w:Zoom>100</w:Zoom>
+    <w:DoNotOptimizeForBrowser/>
+  </w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page {
+    size: A4;
+    margin: 2cm 1.8cm 2cm 1.8cm;
+  }
+  body {
+    font-family: "Times New Roman", "Segoe UI", Arial, sans-serif;
+    font-size: 11.5pt;
+    line-height: 1.5;
+    color: #0f172a;
+  }
+  h1 {
+    font-size: 18pt;
+    color: #073b8e;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 11pt;
+    color: #475569;
+    margin-bottom: 18pt;
+  }
+  h2 {
+    font-size: 13.5pt;
+    color: #073b8e;
+    border-bottom: 2px solid #073b8e;
+    padding-bottom: 4pt;
+    margin-top: 18pt;
+    margin-bottom: 10pt;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-size: 12pt;
+    color: #e20b12;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8pt;
+    margin-bottom: 14pt;
+    font-size: 10.5pt;
+  }
+  th {
+    background-color: #073b8e;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 8pt 10pt;
+    border: 1px solid #cbd5e1;
+  }
+  td {
+    padding: 8pt 10pt;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  .price-highlight {
+    color: #e20b12;
+    font-weight: bold;
+    font-size: 11.5pt;
+  }
+  .badge {
+    display: inline-block;
+    background-color: #fef2f2;
+    color: #e20b12;
+    font-weight: bold;
+    font-size: 9.5pt;
+    padding: 2pt 6pt;
+    border: 1px solid #fecaca;
+  }
+  .note-box {
+    background-color: #eff6ff;
+    border-left: 4px solid #073b8e;
+    padding: 10pt 12pt;
+    margin: 12pt 0;
+  }
+  ul {
+    margin: 4pt 0;
+    padding-left: 16pt;
+  }
+  li {
+    margin-bottom: 3pt;
+  }
+</style>
+</head>
+<body>
+
+<h1>ĐỀ XUẤT BẢNG GIÁ WEBSITE &amp; HỆ SINH THÁI MODULE TAVIWEB</h1>
+<p class="subtitle">
+  <strong>Đơn vị:</strong> TAVIWEB — Nền tảng Thiết kế Website &amp; Tự động hóa Doanh nghiệp<br/>
+  <strong>Mục tiêu:</strong> Giá khởi điểm cạnh tranh, linh hoạt lắp ghép từng Module lẻ và đóng gói theo Kịch bản ngành
+</p>
+
+<h2>PHẦN 1: CHIẾN LƯỢC CHU KỲ TÍNH PHÍ ĐỀ XUẤT</h2>
+<p>
+  Ở phân khúc giá phổ thông và SME tại Việt Nam (từ <strong>199.000đ – 6.999.000đ</strong>), việc thu lắt nhắt hàng tháng (20k–50k/tháng) sẽ tốn nhiều chi phí vận hành nhắc phí và dễ làm khách hàng bỏ ngang. Mô hình tối ưu nhất cho TaviWeb là:
+  <strong>"Thu trọn gói Khởi tạo &amp; Sử dụng 12 Tháng Đầu + Phí Duy trì Hạ tầng nhẹ nhàng từ Năm thứ 2"</strong>.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 28%;">Hạng mục chi phí</th>
+      <th style="width: 30%;">Chu kỳ thu phí đề xuất</th>
+      <th style="width: 42%;">Lý do &amp; Lợi ích kinh doanh</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Gói Nền tảng (Starter, Basic) &amp; Gói Kịch bản (Pro, Business, Premium)</strong></td>
+      <td><strong>Thu 1 lần cho trọn gói 12 tháng đầu</strong><br/>(Đã gồm Khởi tạo + Hosting + SSL năm 1)</td>
+      <td>
+        <ul>
+          <li>Khách dễ chốt đơn nhanh vì thấy tổng chi phí rõ ràng, không lo phí ẩn hàng tháng.</li>
+          <li>TaviWeb thu hồi dòng tiền mặt ngay khi ký hợp đồng.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>2. Mua lẻ từng Module tính năng (E-commerce, Booking, CRM...)</strong></td>
+      <td><strong>Thu theo chu kỳ 12 tháng</strong><br/>(Hoặc hỗ trợ gói 6 tháng bằng 60% giá năm)</td>
+      <td>
+        <ul>
+          <li>Bật/tắt tức thì trong trang quản trị <code>/admin/workspaces</code>.</li>
+          <li>Lấp khoảng trống giá giữa gói Basic (599k) và gói Pro (2.999k).</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>3. Phí Duy trì Hạ tầng từ Năm thứ 2 (Hosting + SSL + Bảo trì)</strong></td>
+      <td><strong>Thu theo Năm (12 tháng/lần)</strong><br/>• Starter/Basic: <strong>299k – 499k/năm</strong><br/>• Gói có Module: <strong>790k – 1.490k/năm</strong></td>
+      <td>
+        <ul>
+          <li>Chỉ tương đương 1.000đ – 4.000đ/ngày, rẻ hơn thuê hosting lẻ bên ngoài nên tỷ lệ khách hàng gia hạn năm 2 rất cao (&gt;85%).</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>4. Hạn mức AI tiêu hao (Chatbot AI &amp; AI Viết bài)</strong></td>
+      <td><strong>Cấp sẵn hạn mức theo gói + Mua thêm gói nạp (Top-up) khi dùng hết</strong></td>
+      <td>
+        <ul>
+          <li>Kiểm soát 100% chi phí API AI, không bao giờ bị lỗ vốn khi khách có lượng truy cập đột biến.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>PHẦN 2: BẢNG GIÁ GÓI NỀN TẢNG (KHỞI TẠO WEBSITE CƠ BẢN)</h2>
+<p>Dành cho cá nhân, hộ kinh doanh nhỏ cần Website giới thiệu uy tín hoặc Landing Page chạy quảng cáo nhanh trong ngày.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 18%;">Tên Gói</th>
+      <th style="width: 18%;">Giá Năm Đầu</th>
+      <th style="width: 15%;">Duy Trì Năm 2</th>
+      <th style="width: 20%;">Tên Miền (Domain)</th>
+      <th style="width: 29%;">Tính Năng Bao Gồm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>GÓI STARTER</strong><br/><em>(Khởi đầu siêu tốc)</em></td>
+      <td class="price-highlight">299.000đ<br/><span class="badge">Ưu đãi: 199.000đ</span></td>
+      <td>299.000đ / năm</td>
+      <td>Sử dụng tên miền chung với TaviWeb<br/><em>(VD: taviweb.vn/ten-shop)</em></td>
+      <td>
+        <ul>
+          <li>Chọn 1 trong 15 mẫu giao diện ngành nghề có sẵn.</li>
+          <li>Trang quản trị đổi Logo, Banner, Giới thiệu, Dịch vụ, Liên hệ.</li>
+          <li>Nút gọi Hotline, Chat Zalo nổi &amp; Form thu SĐT cơ bản.</li>
+          <li>Hosting đám mây &amp; SSL miễn phí năm đầu.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>GÓI BASIC</strong><br/><em>(Thương hiệu riêng)</em></td>
+      <td class="price-highlight">599.000đ<br/><em>(Chưa gồm phí mua domain)</em></td>
+      <td>499.000đ / năm</td>
+      <td>Hỗ trợ cài đặt <strong>Tên miền riêng</strong> (.com, .vn...) + Bảo mật HTTPS/SSL</td>
+      <td>
+        <ul>
+          <li><strong>Toàn bộ tính năng Gói Starter.</strong></li>
+          <li>Cấu hình trỏ tên miền riêng chính chủ của khách hàng.</li>
+          <li>Mở khóa bảng danh sách khách hàng để lại SĐT trên web.</li>
+          <li>Tối ưu thẻ SEO cơ bản &amp; Tặng <strong>100 lượt AI Chatbot</strong> dùng thử.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>PHẦN 3: BẢNG GIÁ MUA LẺ TỪNG MODULE (CHO KHÁCH KHÔNG CẦN HẾT GÓI PRO)</h2>
+<p>
+  Khách hàng đang dùng <strong>Gói Basic (599.000đ)</strong> (hoặc Starter) có thể chọn gắn thêm <strong>từng Module lẻ</strong> theo đúng nhu cầu thực tế mà không bắt buộc phải mua toàn bộ Gói Pro:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Mã</th>
+      <th style="width: 22%;">Tên Module</th>
+      <th style="width: 15%;">Giá Mua Lẻ (12 Tháng)</th>
+      <th style="width: 13%;">Gia Hạn Năm 2</th>
+      <th style="width: 40%;">Chi Tiết Tính Năng Bên Trong Module</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MOD-01</strong></td>
+      <td><strong>Module E-Commerce</strong><br/><em>(Cửa hàng &amp; Giỏ hàng Online)</em></td>
+      <td class="price-highlight">+990.000đ</td>
+      <td>+390.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Quản lý Danh mục, Sản phẩm, SKU, biến thể (Size/Màu), giá gốc &amp; giá khuyến mãi.</li>
+          <li>Giỏ hàng trượt thông minh, tự tính phí ship &amp; ngưỡng miễn phí vận chuyển.</li>
+          <li>Cơ chế khóa tồn kho tự động chống bán lố khi nhiều người cùng mua sản phẩm cuối.</li>
+          <li>Thanh toán COD &amp; tự động tạo mã QR VietQR đúng số tiền và mã đơn hàng.</li>
+          <li>Quản lý trạng thái đơn hàng, thanh toán &amp; tra cứu đơn hàng cho khách.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-02</strong></td>
+      <td><strong>Module Booking</strong><br/><em>(Đặt lịch hẹn &amp; Quản lý Ca/Bàn/Phòng)</em></td>
+      <td class="price-highlight">+890.000đ</td>
+      <td>+350.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Biểu mẫu đặt lịch trực tuyến trên web theo Dịch vụ, Nhân sự/Bác sĩ/Bàn/Phòng và Giờ hẹn.</li>
+          <li>Bảng điều phối lịch hẹn (Timeline Calendar) kéo-thả trực quan theo từng nhân sự.</li>
+          <li>Tự động kiểm tra và cảnh báo trùng khung giờ hẹn.</li>
+          <li>Quản lý danh mục dịch vụ, giá tiền và thời lượng phục vụ (30p, 60p, 90p...).</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-03</strong></td>
+      <td><strong>Module CRM &amp; Pipeline</strong><br/><em>(Quản lý Khách hàng, Sale &amp; Báo giá)</em></td>
+      <td class="price-highlight">+790.000đ</td>
+      <td>+290.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Bảng kéo-thả Kanban theo dõi cơ hội bán hàng qua từng giai đoạn tư vấn.</li>
+          <li>Hồ sơ khách hàng 360°, lưu lịch sử chăm sóc và ghi chú cuộc gọi.</li>
+          <li>Tạo và xuất bản in/PDF Báo giá chuyên nghiệp gửi khách hàng.</li>
+          <li>Phân quyền Quản trị viên / Nhân viên Sale và giao chỉ tiêu KPI doanh số tháng.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-04</strong></td>
+      <td><strong>Module CMS &amp; Blog AI</strong><br/><em>(Tin tức Chuẩn SEO &amp; AI Viết bài)</em></td>
+      <td class="price-highlight">+690.000đ</td>
+      <td>+250.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Trình soạn thảo bài viết chuyên nghiệp (Rich-Text Editor), quản lý chuyên mục &amp; thẻ tag.</li>
+          <li>Tích hợp Trợ lý AI tự động viết bài chuẩn SEO chỉ từ chủ đề và từ khóa.</li>
+          <li>Bộ chấm điểm SEO trực tiếp (kiểm tra tiêu đề, mật độ từ khóa, Meta Description, Slug).</li>
+          <li>Tặng kèm 50 lượt tạo bài viết bằng AI.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-05</strong></td>
+      <td><strong>Module AI Chatbot 24/7</strong><br/><em>(Huấn luyện theo Dữ liệu Riêng - RAG)</em></td>
+      <td class="price-highlight">+790.000đ</td>
+      <td>+290.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Bong bóng Chat AI tư vấn tự động 24/7 ngay góc phải website.</li>
+          <li>Huấn luyện AI bằng tài liệu, bảng giá, chính sách riêng của cửa hàng (Vector RAG).</li>
+          <li>AI tự động thu thập SĐT khách hoặc đặt lịch hẹn trực tiếp trong khung chat.</li>
+          <li>Thống kê các câu hỏi khách hay hỏi &amp; tặng sẵn <strong>1.500 lượt phản hồi AI</strong>.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-06</strong></td>
+      <td><strong>Module LMS E-Learning</strong><br/><em>(Bán &amp; Dạy Khóa học Video Online)</em></td>
+      <td class="price-highlight">+1.190.000đ</td>
+      <td>+450.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Tạo khóa học trực tuyến, phân chia Chương (Modules) và Bài giảng (Lessons).</li>
+          <li>Nhúng video bài giảng, tài liệu đính kèm, thiết lập bài học thử miễn phí (Preview).</li>
+          <li>Quản lý học viên đăng ký và theo dõi tỷ lệ hoàn thành khóa học.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-07</strong></td>
+      <td><strong>Module Edu Center</strong><br/><em>(Quản lý Trung tâm, Lớp học &amp; Học phí)</em></td>
+      <td class="price-highlight">+990.000đ</td>
+      <td>+390.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Quản lý danh sách lớp học, giảng viên, phòng học, lịch học và sĩ số tối đa.</li>
+          <li>Quản lý hồ sơ học viên ghi danh, trạng thái đang học / bảo lưu / tốt nghiệp.</li>
+          <li>Theo dõi trạng thái thu học phí (Đã đóng / Chưa đóng / Đóng một phần).</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MOD-08</strong></td>
+      <td><strong>Module Săn Lead B2B</strong><br/><em>(Quản lý &amp; Khai thác Khách tiềm năng)</em></td>
+      <td class="price-highlight">+690.000đ</td>
+      <td>+250.000đ/năm</td>
+      <td>
+        <ul>
+          <li>Bảng quản lý danh sách dữ liệu khách hàng tiềm năng số lượng lớn.</li>
+          <li>Tra cứu nhanh vị trí Google Maps, Fanpage Facebook, Website và trạng thái tiếp cận.</li>
+          <li>Chuyển đổi hàng loạt khách tiềm năng sang phễu CRM chỉ với 1 cú nhấp chuột.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note-box">
+  <strong>Ví dụ thực tế khi khách ghép Gói Basic + Module lẻ:</strong>
+  <ul>
+    <li><strong>Shop bán lẻ cơ bản:</strong> Gói Basic (599k) + Module E-Commerce (990k) = <strong>1.589.000đ</strong>.</li>
+    <li><strong>Tiệm Spa / Nha khoa / Salon nhỏ:</strong> Gói Basic (599k) + Module Booking (890k) = <strong>1.489.000đ</strong>.</li>
+    <li><strong>Công ty Dịch vụ cần viết bài SEO:</strong> Gói Basic (599k) + Module CMS Blog AI (690k) = <strong>1.289.000đ</strong>.</li>
+    <li><strong>Hiệu ứng đòn bẩy lên Gói Pro:</strong> Khi khách chọn từ 3 Module lẻ trở lên (tổng ~3.170.000đ), khách sẽ thấy nâng lên <strong>Gói Pro Theo Kịch Bản (2.999.000đ)</strong> có lợi hơn hẳn!</li>
+  </ul>
+</div>
+
+<h2>PHẦN 4: BẢNG GIÁ CÁC GÓI TRỌN GÓI THEO KỊCH BẢN SỬ DỤNG (2.999K – 6.999K)</h2>
+<p>Dành cho doanh nghiệp muốn giải pháp hoàn chỉnh theo đúng ngành nghề với chi phí tiết kiệm 25% – 40% so với mua lẻ từng module:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 20%;">Tên Gói</th>
+      <th style="width: 16%;">Giá Trọn Gói Năm Đầu</th>
+      <th style="width: 14%;">Duy Trì Năm 2</th>
+      <th style="width: 50%;">Kịch Bản Ngành &amp; Tổ Hợp Tính Năng Tích Hợp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>GÓI PRO — THEO KỊCH BẢN NGÀNH</strong><br/><span class="badge">Bán chạy nhất ⭐</span></td>
+      <td class="price-highlight">2.999.000đ<br/><em>(Tiết kiệm ~900k)</em></td>
+      <td>990.000đ / năm</td>
+      <td>
+        <strong>Chọn 1 trong 3 kịch bản đóng gói sẵn:</strong>
+        <ul>
+          <li><strong>Kịch bản 1 - Bán Hàng Online (Shop/Thời trang/Nội thất):</strong> Gói Basic + <strong>E-Commerce</strong> + <strong>CRM Pipeline</strong> + <strong>CMS Blog AI</strong> + <strong>AI Chatbot</strong> (1.500 lượt).</li>
+          <li><strong>Kịch bản 2 - Dịch Vụ Đặt Lịch (Spa/Nha khoa/Phòng khám/Nhà hàng):</strong> Gói Basic + <strong>Booking</strong> + <strong>CRM Pipeline</strong> + <strong>CMS Blog AI</strong> + <strong>AI Chatbot</strong> (1.500 lượt).</li>
+          <li><strong>Kịch bản 3 - Công Ty B2B (Xây dựng/Luật/Vệ sinh):</strong> Gói Basic + <strong>CRM &amp; Báo giá</strong> + <strong>Săn Lead B2B</strong> + <strong>CMS Blog AI</strong> + <strong>AI Chatbot</strong> (1.500 lượt).</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>GÓI BUSINESS — ĐA KÊNH / ĐÀO TẠO</strong><br/><em>(Tăng trưởng mạnh)</em></td>
+      <td class="price-highlight">4.999.000đ<br/><em>(Tiết kiệm ~1.500k)</em></td>
+      <td>1.490.000đ / năm</td>
+      <td>
+        <strong>Chọn 1 trong 2 tổ hợp chuyên sâu:</strong>
+        <ul>
+          <li><strong>Tổ hợp Thương mại &amp; Đặt lịch Đa kênh:</strong> Gói Basic + <strong>E-Commerce</strong> + <strong>Booking</strong> + <strong>CRM &amp; KPI</strong> + <strong>CMS Blog AI</strong> + <strong>Săn Lead</strong> + <strong>AI Chatbot</strong> (4.000 lượt).</li>
+          <li><strong>Tổ hợp Trung tâm Đào tạo &amp; Khóa học:</strong> Gói Basic + <strong>LMS E-Learning</strong> + <strong>Edu Center</strong> + <strong>CRM Tuyển sinh</strong> + <strong>CMS Blog AI</strong> + <strong>AI Chatbot</strong> (4.000 lượt).</li>
+          <li><em>Tặng kèm:</em> Hỗ trợ nhập liệu 20 sản phẩm/dịch vụ đầu tiên &amp; phân quyền đội ngũ Sale.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>GÓI PREMIUM — ALL-IN-ONE &amp; CUSTOM</strong><br/><em>(Toàn diện &amp; Độc quyền)</em></td>
+      <td class="price-highlight">6.999.000đ</td>
+      <td>1.990.000đ / năm</td>
+      <td>
+        <ul>
+          <li><strong>Mở khóa TOÀN BỘ 8 Module</strong> trên hệ thống TaviWeb.</li>
+          <li><strong>Tùy biến giao diện thương hiệu (Custom Branding):</strong> Tinh chỉnh màu sắc, bố cục, thiết kế bộ banner và cá nhân hóa theo nhận diện riêng.</li>
+          <li><strong>Hạn mức AI lớn:</strong> 10.000 lượt phản hồi AI Chatbot + 200 bài viết AI SEO.</li>
+          <li>Mở cổng <strong>Developer API Key &amp; Webhook</strong> kết nối phần mềm bên thứ 3.</li>
+          <li>Bàn giao "Chìa khóa trao tay" (nhập liệu trọn gói) &amp; Hỗ trợ kỹ thuật 1-1 qua Zalo VIP.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>PHẦN 5: BẢNG GIÁ DỊCH VỤ BỔ SUNG (ADD-ONS)</h2>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 35%;">Dịch vụ bổ sung</th>
+      <th style="width: 25%;">Đơn giá</th>
+      <th style="width: 40%;">Ghi chú áp dụng</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Nạp thêm 1.000 lượt phản hồi AI Chatbot</strong></td>
+      <td class="price-highlight">199.000đ</td>
+      <td>Cộng dồn vào hạn mức, không giới hạn thời gian sử dụng.</td>
+    </tr>
+    <tr>
+      <td><strong>Nạp thêm 5.000 lượt phản hồi AI Chatbot</strong></td>
+      <td class="price-highlight">690.000đ</td>
+      <td>Tiết kiệm 30%, phù hợp fanpage/website chạy quảng cáo mạnh.</td>
+    </tr>
+    <tr>
+      <td><strong>Gói Nhập liệu &amp; Chuẩn hóa 30 Sản phẩm/Dịch vụ</strong></td>
+      <td class="price-highlight">499.000đ / lần</td>
+      <td>Miễn phí đối với khách hàng đăng ký Gói Business &amp; Premium.</td>
+    </tr>
+    <tr>
+      <td><strong>Đăng ký hộ Tên miền Quốc tế (.com, .net)</strong></td>
+      <td>350.000đ / năm</td>
+      <td>Khách hàng đứng tên chính chủ hoặc TaviWeb quản lý kỹ thuật hộ.</td>
+    </tr>
+    <tr>
+      <td><strong>Đăng ký hộ Tên miền Quốc gia (.vn, .com.vn)</strong></td>
+      <td>750.000đ / năm</td>
+      <td>Bao gồm phí khởi tạo và duy trì năm đầu tiên.</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

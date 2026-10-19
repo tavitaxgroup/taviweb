@@ -20,7 +20,7 @@ export async function GET() {
 
     const { data: user, error } = await adminSupabase
       .from('crm_users')
-      .select('id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(id, name, slug, template_key, active_modules, package_name)')
+      .select('id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(id, name, slug, template_key, active_modules, package_name, package_expires_at)')
       .eq('id', decoded.id)
       .single();
 
