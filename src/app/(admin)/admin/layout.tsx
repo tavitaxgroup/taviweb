@@ -7,7 +7,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full flex overflow-hidden bg-slate-50 w-full">
+    <div className="h-dvh max-h-dvh flex overflow-hidden bg-slate-50 w-full">
       <AuthProvider>
         <ClientLayout>
           {children}

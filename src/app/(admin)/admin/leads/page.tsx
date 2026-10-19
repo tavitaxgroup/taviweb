@@ -57,7 +57,7 @@ export default async function LeadsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-8 font-sans text-slate-900">
+    <div className="min-h-full bg-slate-50 p-6 md:p-8 font-sans text-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>

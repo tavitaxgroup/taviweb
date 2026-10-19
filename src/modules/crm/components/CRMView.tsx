@@ -146,7 +146,7 @@ export default function CRMView() {
   };
 
   if (authLoading) {
-    return <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-slate-50"><div className="animate-spin h-8 w-8 border-4 border-indigo-600 rounded-full border-t-transparent"></div></div>;
+    return <div className="flex h-full min-h-[560px] items-center justify-center bg-slate-50"><div className="animate-spin h-8 w-8 border-4 border-indigo-600 rounded-full border-t-transparent"></div></div>;
   }
 
   if (!user) {
@@ -154,7 +154,7 @@ export default function CRMView() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 font-sans relative overflow-hidden">
+    <div className="flex flex-col h-full min-h-[560px] bg-slate-50 font-sans relative overflow-hidden">
       {/* Subtle Background Orbs for liveliness */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-indigo-200/40 blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />

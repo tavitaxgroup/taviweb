@@ -33,8 +33,8 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
   if (isAuthPage) {
     return (
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50 h-full">
-        <main className="flex-1 overflow-y-auto relative h-full">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50 h-dvh">
+        <main className="flex-1 min-h-0 overflow-y-auto relative h-full">
           {children}
         </main>
       </div>
@@ -72,7 +72,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarContext.Provider value={{ isSidebarOpen, toggleSidebar }}>
       <AdminSidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50/50">
+      <div className="flex-1 flex flex-col min-w-0 h-dvh max-h-dvh overflow-hidden bg-slate-50/50">
         <AdminHeader />
 
         {/* Trial / Expiration Top Banner for Customers */}
@@ -118,7 +118,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto relative">
+        <main className="flex-1 min-h-0 overflow-y-auto relative">
           {isExpired && !isOnBillingPage ? (
             <div className="p-6 md:p-12 max-w-2xl mx-auto flex items-center justify-center min-h-[75vh]">
               <div className="bg-white rounded-3xl border border-rose-200 shadow-xl p-8 text-center">

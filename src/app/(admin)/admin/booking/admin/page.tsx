@@ -30,11 +30,11 @@ export default function StandaloneBookingAdminPage() {
   }, [user]);
 
   if (loading) {
-    return <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-slate-50"><div className="animate-spin h-8 w-8 border-4 border-indigo-600 rounded-full border-t-transparent"></div></div>;
+    return <div className="flex h-full min-h-[560px] items-center justify-center bg-slate-50"><div className="animate-spin h-8 w-8 border-4 border-indigo-600 rounded-full border-t-transparent"></div></div>;
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-[#f8fafc] font-sans overflow-hidden">
+    <div className="flex flex-col h-full min-h-[560px] bg-[#f8fafc] font-sans overflow-hidden">
       {/* Top Navigation for Booking Module */}
       <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-sm z-20 shrink-0">
         <div className="flex items-center gap-3">

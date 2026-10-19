@@ -130,13 +130,13 @@ export function AdminSidebar() {
   return (
     <aside
       className={`${
-        isSidebarOpen ? 'w-68' : 'w-0'
-      } bg-slate-950 h-full flex flex-col text-slate-300 transition-all duration-300 border-r border-slate-800/80 shadow-2xl shrink-0 overflow-hidden relative select-none`}
+        isSidebarOpen ? 'w-68 border-r border-slate-800/80' : 'w-0 border-r-0'
+      } bg-slate-950 h-dvh max-h-dvh sticky top-0 flex flex-col text-slate-300 transition-all duration-300 shadow-2xl shrink-0 overflow-hidden relative select-none`}
     >
       <div className="absolute top-0 left-0 right-0 h-32 bg-indigo-500/10 blur-[60px] pointer-events-none" />
 
       {/* Brand + Tenant Switcher Info */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800/60 relative z-10">
+      <div className="h-16 shrink-0 flex items-center justify-between px-5 border-b border-slate-800/60 relative z-10">
         <div className="flex items-center min-w-0">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.4)] mr-3 shrink-0">
             <Building2 className="w-4 h-4 text-white" />
@@ -159,7 +159,7 @@ export function AdminSidebar() {
       </div>
 
       {/* Scrollable Unified Navigation */}
-      <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto custom-scrollbar whitespace-nowrap relative z-10">
+      <nav className="flex-1 min-h-0 py-4 px-3 pb-6 space-y-6 overflow-y-auto custom-scrollbar whitespace-nowrap relative z-10">
         {/* Section 1: Business Operations */}
         <div>
           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">
@@ -188,7 +188,7 @@ export function AdminSidebar() {
       </nav>
 
       {/* Footer Quick Storefront Preview */}
-      <div className="p-3 border-t border-slate-800/60 bg-slate-900/50 relative z-10">
+      <div className="p-3 shrink-0 border-t border-slate-800/60 bg-slate-900/50 relative z-10">
         <Link
           href="/kho-giao-dien"
           target="_blank"
