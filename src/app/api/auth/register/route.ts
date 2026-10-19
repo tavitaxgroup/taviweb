@@ -170,6 +170,82 @@ export async function POST(request: Request) {
       );
     }
 
+    // 5b. Auto-seed Default CRM Pipeline, Stages, and Booking Resources/Services for immediate 7-day trial experience
+    try {
+      const { data: defaultPipeline } = await adminSupabase
+        .from('crm_pipelines')
+        .insert([
+          {
+            tenant_id: tenant.id,
+            name: 'Quy trình chuẩn',
+            description: 'Quy trình chăm sóc khách hàng mặc định',
+          },
+        ])
+        .select()
+        .single();
+
+      if (defaultPipeline) {
+        await adminSupabase.from('crm_stages').insert([
+          { tenant_id: tenant.id, pipeline_id: defaultPipeline.id, name: 'Mới (Leads)', order: 0 },
+          { tenant_id: tenant.id, pipeline_id: defaultPipeline.id, name: 'Đang tư vấn', order: 1 },
+          { tenant_id: tenant.id, pipeline_id: defaultPipeline.id, name: 'Đã gửi báo giá', order: 2 },
+          { tenant_id: tenant.id, pipeline_id: defaultPipeline.id, name: 'Chốt thành công', order: 3 },
+        ]);
+      }
+
+      const isMedicalOrDental = ['nha_khoa', 'phong_kham'].includes(templateKey);
+      const isDining = ['nha_hang', 'quan_cafe'].includes(templateKey);
+
+      const defaultResources = isMedicalOrDental
+        ? [
+            { tenant_id: tenant.id, name: 'BS. Nguyễn Minh Tuấn', type: 'resource', role_or_capacity: 'Bác sĩ Chuyên khoa I', status: 'active' },
+            { tenant_id: tenant.id, name: 'BS. Trần Thanh Hà', type: 'resource', role_or_capacity: 'Bác sĩ Tư vấn & Điều trị', status: 'active' },
+            { tenant_id: tenant.id, name: 'Phòng khám VIP 01', type: 'resource', role_or_capacity: 'Phòng tiêu chuẩn quốc tế', status: 'active' },
+          ]
+        : isDining
+        ? [
+            { tenant_id: tenant.id, name: 'Bàn VIP 01 (Cửa sổ)', type: 'resource', role_or_capacity: '4 - 6 Khách', status: 'active' },
+            { tenant_id: tenant.id, name: 'Bàn Gia Đình 02', type: 'resource', role_or_capacity: '6 - 10 Khách', status: 'active' },
+            { tenant_id: tenant.id, name: 'Phòng Riêng Private', type: 'resource', role_or_capacity: '10 - 15 Khách', status: 'active' },
+          ]
+        : [
+            { tenant_id: tenant.id, name: 'Chuyên viên Minh Anh', type: 'resource', role_or_capacity: 'Senior Specialist', status: 'active' },
+            { tenant_id: tenant.id, name: 'Chuyên viên Hoàng Nam', type: 'resource', role_or_capacity: 'Tư vấn trưởng', status: 'active' },
+            { tenant_id: tenant.id, name: 'Phòng Dịch Vụ VIP 01', type: 'resource', role_or_capacity: 'Khu vực ưu tiên', status: 'active' },
+          ];
+
+      const defaultServices = isMedicalOrDental
+        ? [
+            { tenant_id: tenant.id, name: 'Khám & Tư vấn chuyên sâu 1-1', duration_minutes: 45, price: 300000 },
+            { tenant_id: tenant.id, name: 'Gói Chăm sóc & Điều trị tiêu chuẩn', duration_minutes: 60, price: 1200000 },
+            { tenant_id: tenant.id, name: 'Gói Thẩm mỹ / Phục hồi cao cấp', duration_minutes: 90, price: 3500000 },
+          ]
+        : isDining
+        ? [
+            { tenant_id: tenant.id, name: 'Đặt bàn Set Menu Trưa / Tối', duration_minutes: 90, price: 450000 },
+            { tenant_id: tenant.id, name: 'Tiệc Kỷ niệm / Sinh nhật trang trí riêng', duration_minutes: 120, price: 1800000 },
+            { tenant_id: tenant.id, name: 'Tiệc Tiếp đối tác Phòng VIP', duration_minutes: 120, price: 3500000 },
+          ]
+        : [
+            { tenant_id: tenant.id, name: 'Tư vấn & Khảo sát nhu cầu trực tiếp', duration_minutes: 45, price: 0 },
+            { tenant_id: tenant.id, name: 'Gói Dịch vụ Tiêu chuẩn (Standard)', duration_minutes: 60, price: 850000 },
+            { tenant_id: tenant.id, name: 'Gói Dịch vụ Cao cấp (VIP / Trọn gói)', duration_minutes: 90, price: 2500000 },
+          ];
+
+      await adminSupabase.from('booking_resources').insert(defaultResources);
+      await adminSupabase.from('booking_services').insert(defaultServices);
+      await adminSupabase.from('crm_products').insert(
+        defaultServices.map((s) => ({
+          tenant_id: tenant.id,
+          name: s.name,
+          description: `Thời lượng dự kiến: ${s.duration_minutes} phút`,
+          price: s.price || 1500000,
+        }))
+      );
+    } catch (seedErr) {
+      console.warn('Non-fatal seed error during registration:', seedErr);
+    }
+
     // 6. Sign JWT and set crm_token cookie
     const token = jwt.sign(
       {

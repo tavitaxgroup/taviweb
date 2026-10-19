@@ -17,9 +17,39 @@ export default function QuoteGenerator({ deal, onClose, onQuoteCreated }: QuoteG
   
   const printRef = useRef<HTMLDivElement>(null);
 
+  const [tenantBrand, setTenantBrand] = useState<{ name: string; email: string; phone: string; address: string }>({
+    name: user?.tenant?.name || 'DOANH NGHIỆP CỦA BẠN',
+    email: user?.email || 'contact@doanhnghiep.vn',
+    phone: '0901 234 567',
+    address: 'Việt Nam'
+  });
+
   useEffect(() => {
     loadProducts();
-  }, []);
+    loadTenantInfo();
+  }, [user?.tenant_id]);
+
+  const loadTenantInfo = async () => {
+    if (!user?.tenant_id) return;
+    try {
+      const { supabase } = await import('@/lib/supabase');
+      const { data } = await supabase
+        .from('tenants')
+        .select('name, contact_info')
+        .eq('id', user.tenant_id)
+        .single();
+      if (data) {
+        setTenantBrand({
+          name: data.name || user?.tenant?.name || 'DOANH NGHIỆP CỦA BẠN',
+          email: data.contact_info?.email || user?.email || 'contact@doanhnghiep.vn',
+          phone: data.contact_info?.phone || '0901 234 567',
+          address: data.contact_info?.address || 'Việt Nam'
+        });
+      }
+    } catch (e) {
+      console.error('Failed to load tenant brand info', e);
+    }
+  };
 
   const loadProducts = async () => {
     if (!user?.tenant_id) return;
@@ -68,16 +98,43 @@ export default function QuoteGenerator({ deal, onClose, onQuoteCreated }: QuoteG
       if (!user) return;
       await CRMService.createQuote(user.tenant_id || '', deal.id, itemsPayload);
       
-      // In PDF thông qua browser
+      // In PDF sạch sẽ qua cửa sổ in chuyên dụng mà không phá vỡ DOM React
       if (printRef.current) {
-         const printContent = printRef.current.innerHTML;
-         const originalContent = document.body.innerHTML;
-         document.body.innerHTML = printContent;
-         window.print();
-         document.body.innerHTML = originalContent;
-         window.location.reload(); // Khôi phục lại trạng thái React
+        const printWindow = window.open('', '_blank', 'width=900,height=800');
+        if (printWindow) {
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="vi">
+              <head>
+                <meta charset="utf-8" />
+                <title>Báo giá - ${deal.contact?.name || deal.title}</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+                <style>
+                  .print-hidden { display: none !important; }
+                  .print-visible { display: inline !important; }
+                  @page { size: A4; margin: 12mm; }
+                  body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+                </style>
+              </head>
+              <body>
+                ${printRef.current.innerHTML}
+                <script>
+                  window.onload = function() {
+                    setTimeout(function() {
+                      window.print();
+                      window.close();
+                    }, 350);
+                  };
+                </script>
+              </body>
+            </html>
+          `);
+          printWindow.document.close();
+        } else {
+          window.print();
+        }
       }
-
+      onQuoteCreated();
     } catch (error) {
       console.error(error);
       alert('Có lỗi khi tạo báo giá');
@@ -129,10 +186,11 @@ export default function QuoteGenerator({ deal, onClose, onQuoteCreated }: QuoteG
                   <p className="text-slate-500 font-medium mt-2">Mã BG: QTE-{new Date().getTime().toString().slice(-6)}</p>
                   <p className="text-slate-500 font-medium">Ngày lập: {new Date().toLocaleDateString('vi-VN')}</p>
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold text-slate-800">TAVI COMPANY</p>
-                  <p className="text-sm text-slate-600 mt-1">contact@tavi.vn</p>
-                  <p className="text-sm text-slate-600">+84 123 456 789</p>
+                <div className="text-right max-w-[260px]">
+                  <p className="font-extrabold text-slate-900 uppercase">{tenantBrand.name}</p>
+                  <p className="text-sm text-slate-600 mt-1">{tenantBrand.email}</p>
+                  <p className="text-sm text-slate-600">{tenantBrand.phone}</p>
+                  {tenantBrand.address && <p className="text-xs text-slate-500 mt-0.5">{tenantBrand.address}</p>}
                 </div>
               </div>
 

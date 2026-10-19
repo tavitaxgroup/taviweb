@@ -26,8 +26,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ ten
     }
 
     // 2. Automations: CRM Integration
-    // Check if CRM module is active for this tenant (we can assume yes for demo, or check config)
-    
     try {
       // Find or create Contact by Phone
       let contactId = null;
@@ -37,8 +35,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ ten
           .select('id')
           .eq('tenant_id', tenantId)
           .eq('phone', body.customer_phone)
-          .single();
-          
+          .maybeSingle();
+
         if (existingContact) {
           contactId = existingContact.id;
         } else {
@@ -47,7 +45,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ ten
             .insert([{
               tenant_id: tenantId,
               name: body.customer_name,
-              phone: body.customer_phone
+              phone: body.customer_phone,
+              source: 'Web Booking'
             }])
             .select()
             .single();
@@ -56,27 +55,67 @@ export async function POST(request: Request, { params }: { params: Promise<{ ten
       }
 
       if (contactId) {
-        // Create Deal
-        // Find default pipeline "Mới (Leads)" stage
-        const { data: stages } = await supabase
+        // Resolve service price if service_id is provided
+        let dealValue = Number(body.service_price || 0);
+        if (!dealValue && body.service_id) {
+          const { data: svcData } = await supabase
+            .from('booking_services')
+            .select('price')
+            .eq('id', body.service_id)
+            .maybeSingle();
+          if (svcData?.price) {
+            dealValue = Number(svcData.price) || 0;
+          }
+        }
+
+        // Ensure default pipeline & stages exist so stage_id is never null
+        let { data: stages } = await supabase
           .from('crm_stages')
-          .select('id')
+          .select('id, pipeline_id')
           .eq('tenant_id', tenantId)
           .order('order', { ascending: true })
           .limit(1);
 
+        if (!stages || stages.length === 0) {
+          const { data: newPipeline } = await supabase
+            .from('crm_pipelines')
+            .insert([{
+              tenant_id: tenantId,
+              name: 'Quy trình chuẩn',
+              description: 'Quy trình chăm sóc khách hàng mặc định'
+            }])
+            .select()
+            .single();
+
+          if (newPipeline) {
+            const { data: createdStages } = await supabase
+              .from('crm_stages')
+              .insert([
+                { tenant_id: tenantId, pipeline_id: newPipeline.id, name: 'Mới (Leads)', order: 0 },
+                { tenant_id: tenantId, pipeline_id: newPipeline.id, name: 'Đang xử lý', order: 1 },
+                { tenant_id: tenantId, pipeline_id: newPipeline.id, name: 'Hoàn thành', order: 2 }
+              ])
+              .select('id, pipeline_id')
+              .order('order', { ascending: true });
+            stages = createdStages || [];
+          }
+        }
+
         const stageId = stages && stages.length > 0 ? stages[0].id : null;
+        const pipelineId = stages && stages.length > 0 ? (stages[0] as any).pipeline_id : null;
 
         const { data: deal } = await supabase
           .from('crm_deals')
           .insert([{
             tenant_id: tenantId,
+            pipeline_id: pipelineId,
             contact_id: contactId,
             title: `Lịch hẹn: ${body.service_name || 'Dịch vụ'} - ${body.customer_name}`,
-            value: 0,
+            value: dealValue,
             stage_id: stageId,
             custom_data: {
               'Nguồn': 'Web Booking',
+              'Dịch vụ': body.service_name || 'Dịch vụ tiêu chuẩn',
               'Ngày Hẹn': body.start_time
             }
           }])
@@ -84,13 +123,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ ten
           .single();
 
         if (deal) {
-          // Log Activity
+          // Log Activity (include tenant_id so CRM DealDetailModal can query it)
           await supabase.from('crm_activities').insert([{
+            tenant_id: tenantId,
             deal_id: deal.id,
             type: 'note',
-            content: `🎯 Hệ thống: Khách hàng đã đặt lịch hẹn trên Web.
-Thời gian: ${new Date(body.start_time).toLocaleString('vi-VN')}
-Ghi chú: ${body.notes || 'Không có'}`
+            content: `🎯 Hệ thống: Khách hàng đã đặt lịch hẹn trên Web.\nDịch vụ: ${body.service_name || 'Dịch vụ tiêu chuẩn'}\nThời gian: ${new Date(body.start_time).toLocaleString('vi-VN')}\nGhi chú: ${body.notes || 'Không có'}`
           }]);
         }
       }
@@ -98,8 +136,6 @@ Ghi chú: ${body.notes || 'Không có'}`
       console.error('CRM Automation Error:', crmError);
       // We don't fail the booking if CRM automation fails
     }
-
-    return NextResponse.json({ success: true, appointment });
 
     return NextResponse.json({ success: true, appointment });
 

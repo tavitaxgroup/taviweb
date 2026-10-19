@@ -57,16 +57,41 @@ export async function POST(request: Request) {
     }
 
     if (contactId) {
-      // Create Deal
-      // Find default pipeline "Mới (Leads)" stage
-      const { data: stages } = await supabase
+      // Ensure default pipeline & stages exist
+      let { data: stages } = await supabase
         .from('crm_stages')
-        .select('id')
+        .select('id, pipeline_id')
         .eq('tenant_id', tenantId)
         .order('order', { ascending: true })
         .limit(1);
 
+      if (!stages || stages.length === 0) {
+        const { data: newPipeline } = await supabase
+          .from('crm_pipelines')
+          .insert([{
+            tenant_id: tenantId,
+            name: 'Quy trình chuẩn',
+            description: 'Quy trình chăm sóc khách hàng mặc định'
+          }])
+          .select()
+          .single();
+
+        if (newPipeline) {
+          const { data: createdStages } = await supabase
+            .from('crm_stages')
+            .insert([
+              { tenant_id: tenantId, pipeline_id: newPipeline.id, name: 'Mới (Leads)', order: 0 },
+              { tenant_id: tenantId, pipeline_id: newPipeline.id, name: 'Đang xử lý', order: 1 },
+              { tenant_id: tenantId, pipeline_id: newPipeline.id, name: 'Hoàn thành', order: 2 }
+            ])
+            .select('id, pipeline_id')
+            .order('order', { ascending: true });
+          stages = createdStages || [];
+        }
+      }
+
       const stageId = stages && stages.length > 0 ? stages[0].id : null;
+      const pipelineId = stages && stages.length > 0 ? (stages[0] as any).pipeline_id : null;
 
       const dealTitle = body.name ? `Yêu cầu từ: ${body.name}` : `Liên hệ mới: ${body.phone}`;
 
@@ -74,6 +99,7 @@ export async function POST(request: Request) {
         .from('crm_deals')
         .insert([{
           tenant_id: tenantId,
+          pipeline_id: pipelineId,
           contact_id: contactId,
           title: dealTitle,
           value: 0,
@@ -88,12 +114,12 @@ export async function POST(request: Request) {
         .single();
 
       if (deal) {
-        // Log Activity
+        // Log Activity with tenant_id
         await supabase.from('crm_activities').insert([{
+          tenant_id: tenantId,
           deal_id: deal.id,
           type: 'note',
-          content: `🎯 Hệ thống: Khách hàng điền form liên hệ trên Landing Page.
-Dịch vụ: ${body.service || 'Chưa rõ'}`
+          content: `🎯 Hệ thống: Khách hàng điền form liên hệ trên Landing Page.\nDịch vụ: ${body.service || 'Chưa rõ'}\nNội dung: ${body.message || 'Không có'}`
         }]);
       }
     }
