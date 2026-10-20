@@ -1,3 +1,4 @@
+import '@/lib/supabase/pgRestEngine';
 import { notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Calendar, ArrowRight, FileText, ArrowLeft, Clock } from 'lucide-react';

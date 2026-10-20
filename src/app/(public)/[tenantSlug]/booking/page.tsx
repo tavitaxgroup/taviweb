@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import '@/lib/supabase/pgRestEngine';
 import { notFound } from 'next/navigation';
 import PublicBookingForm from '@/modules/booking/components/PublicBookingForm';
 import Link from 'next/link';

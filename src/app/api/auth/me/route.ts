@@ -7,6 +7,19 @@ import { adminSupabase } from '@/lib/supabase';
 const JWT_SECRET = process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123';
 export const DEFAULT_SYSTEM_TENANT_ID = '00000000-0000-0000-0000-000000000000';
 
+type AuthCacheEntry = {
+  user: any;
+  expiresAt: number;
+};
+
+function getAuthCache(): Map<string, AuthCacheEntry> {
+  const g = globalThis as any;
+  if (!g.__taviAuthMeCache) {
+    g.__taviAuthMeCache = new Map<string, AuthCacheEntry>();
+  }
+  return g.__taviAuthMeCache;
+}
+
 export async function GET() {
   try {
     const cookieStore = await cookies();
@@ -17,10 +30,18 @@ export async function GET() {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const cache = getAuthCache();
+    const now = Date.now();
+    const cached = cache.get(decoded.id);
+    if (cached && cached.expiresAt > now) {
+      return NextResponse.json({ user: cached.user });
+    }
 
     const { data: user, error } = await adminSupabase
       .from('crm_users')
-      .select('id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(id, name, slug, template_key, active_modules, package_name, package_expires_at)')
+      .select(
+        'id, name, email, role, role_id, tenant_id, role_data:crm_roles(*), tenant:tenants(id, name, slug, template_key, active_modules, package_name, package_expires_at)'
+      )
       .eq('id', decoded.id)
       .single();
 
@@ -44,8 +65,13 @@ export async function GET() {
       },
     };
 
+    cache.set(decoded.id, { user: userData, expiresAt: now + 30_000 });
+
     return NextResponse.json({ user: userData });
-  } catch (error) {
-    return NextResponse.json({ error: 'Phiên đăng nhập hết hạn hoặc không hợp lệ' }, { status: 401 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Phiên đăng nhập hết hạn hoặc không hợp lệ' },
+      { status: 401 }
+    );
   }
 }

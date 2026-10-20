@@ -1,3 +1,4 @@
+import '@/lib/supabase/pgRestEngine';
 import { AuthProvider } from '@/modules/crm/contexts/AuthContext';
 import { ClientLayout } from '@/components/layout/ClientLayout';
 
@@ -9,9 +10,7 @@ export default function AdminLayout({
   return (
     <div className="h-dvh max-h-dvh flex overflow-hidden bg-slate-50 w-full">
       <AuthProvider>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+        <ClientLayout>{children}</ClientLayout>
       </AuthProvider>
     </div>
   );

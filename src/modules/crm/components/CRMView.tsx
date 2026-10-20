@@ -46,27 +46,30 @@ export default function CRMView() {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user?.tenant_id) {
       loadPipelines();
-
-      import('@/lib/supabase').then(({ supabase }) => {
-        supabase
-          .from('tenants')
-          .select('template_key')
-          .eq('id', user.tenant_id)
-          .single()
-          .then(({ data }: { data: any }) => {
-            if (data) setTemplateKey(data.template_key);
-          });
-      });
+      if (user.tenant?.template_key) {
+        setTemplateKey(user.tenant.template_key);
+      } else {
+        import('@/lib/supabase').then(({ supabase }) => {
+          supabase
+            .from('tenants')
+            .select('template_key')
+            .eq('id', user.tenant_id)
+            .single()
+            .then(({ data }: { data: any }) => {
+              if (data) setTemplateKey(data.template_key);
+            });
+        });
+      }
     }
-  }, [user, viewMode]);
+  }, [user?.tenant_id]);
 
   useEffect(() => {
-    if (activePipeline && user) {
+    if (activePipeline && user?.tenant_id) {
       loadPipelineData(activePipeline);
     }
-  }, [activePipeline, user]);
+  }, [activePipeline, user?.tenant_id]);
 
   const loadPipelines = async () => {
     if (!user?.tenant_id) {
@@ -110,8 +113,17 @@ export default function CRMView() {
     if (!user?.tenant_id) return;
     setLoading(true);
     try {
-      let s = await CRMService.getStages(user.tenant_id, pipelineId);
+      const [initialStages, allDeals] = await Promise.all([
+        CRMService.getStages(user.tenant_id, pipelineId),
+        CRMService.getDeals(
+          user.tenant_id,
+          pipelineId,
+          user?.id,
+          hasPermission('view_all_deals')
+        ),
+      ]);
 
+      let s = initialStages;
       if (s.length === 0) {
         await CRMService.upsertStages(user.tenant_id, pipelineId, [
           { name: 'Mới (Leads)', order: 0 },
@@ -123,16 +135,9 @@ export default function CRMView() {
 
       setStages(s);
 
-      const stageIds = s.map(stage => stage.id);
-      if (stageIds.length > 0) {
-        const d = await CRMService.getDeals(
-          user.tenant_id,
-          pipelineId,
-          user?.id,
-          hasPermission('view_all_deals'),
-          stageIds
-        );
-        setDeals(d);
+      const stageIdSet = new Set(s.map(stage => stage.id));
+      if (stageIdSet.size > 0) {
+        setDeals(allDeals.filter(d => stageIdSet.has(d.stage_id)));
       } else {
         setDeals([]);
       }

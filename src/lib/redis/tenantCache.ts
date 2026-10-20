@@ -1,4 +1,4 @@
-import { redis } from './client';
+import { redis, isRedisConfigured } from './client';
 import '../supabase/pgRestEngine';
 import { adminSupabase } from '../supabase';
 
@@ -13,17 +13,50 @@ export type CachedTenant = {
   isExpired: boolean;
 };
 
+type MemoryCacheEntry = {
+  data: CachedTenant;
+  expiresAt: number;
+};
+
+const MEMORY_TTL_MS = 60 * 1000; // 60 seconds in-memory fast cache
+
+function getMemoryCache(): Map<string, MemoryCacheEntry> {
+  const g = globalThis as any;
+  if (!g.__tenantStatusMemoryCache) {
+    g.__tenantStatusMemoryCache = new Map<string, MemoryCacheEntry>();
+  }
+  return g.__tenantStatusMemoryCache;
+}
+
+export function invalidateTenantCache(tenantId: string) {
+  const mem = getMemoryCache();
+  mem.delete(tenantId);
+  if (isRedisConfigured) {
+    redis.del(`tenant:${tenantId}`).catch(() => {});
+  }
+}
+
 export async function getTenantStatus(tenantId: string): Promise<CachedTenant | null> {
+  const mem = getMemoryCache();
+  const now = Date.now();
+  const memHit = mem.get(tenantId);
+  if (memHit && memHit.expiresAt > now) {
+    return memHit.data;
+  }
+
   const cacheKey = `tenant:${tenantId}`;
 
-  // 1. Try get from Redis (gracefully fallback if Redis is unavailable)
-  try {
-    const cached = await redis.get<CachedTenant>(cacheKey);
-    if (cached) {
-      return cached;
+  // 1. Try get from Redis only if Upstash Redis is actually configured
+  if (isRedisConfigured) {
+    try {
+      const cached = await redis.get<CachedTenant>(cacheKey);
+      if (cached) {
+        mem.set(tenantId, { data: cached, expiresAt: now + MEMORY_TTL_MS });
+        return cached;
+      }
+    } catch {
+      // Ignore Redis error and fallback to DB
     }
-  } catch (err) {
-    console.warn('Redis get error in getTenantStatus, falling back to DB:', err);
   }
 
   // 2. Fetch from Database
@@ -52,11 +85,12 @@ export async function getTenantStatus(tenantId: string): Promise<CachedTenant | 
     isExpired,
   };
 
-  // 3. Cache in Redis (TTL 60s)
-  try {
-    await redis.setex(cacheKey, 60, JSON.stringify(payload));
-  } catch (err) {
-    console.warn('Redis setex error in getTenantStatus:', err);
+  // Save in-memory immediately (0ms subsequent lookups)
+  mem.set(tenantId, { data: payload, expiresAt: now + MEMORY_TTL_MS });
+
+  // 3. Cache in Redis asynchronously (do not block response)
+  if (isRedisConfigured) {
+    redis.setex(cacheKey, 60, JSON.stringify(payload)).catch(() => {});
   }
 
   return payload;

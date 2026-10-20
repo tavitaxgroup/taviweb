@@ -12,34 +12,27 @@ export interface AuditLogData {
 
 export const AuditService = {
   /**
-   * Log an activity to the system_audit_logs table.
+   * Non-blocking activity logger to system_audit_logs.
+   * Executes asynchronously in the background so UI actions return immediately.
    */
   async logActivity(data: AuditLogData): Promise<void> {
-    try {
-      let userId = data.userId;
-      
-      // If userId is not provided, try to get the current authenticated user's ID
-      if (!userId) {
-        const { data: sessionData } = await supabase.auth.getSession();
-        if (sessionData?.session?.user) {
-           // We might need to map from auth.users to crm_users if needed, 
-           // or we assume the CRM context can provide it.
-           // For now, if we don't have it, we leave it null or try to find it.
-        }
+    void Promise.resolve().then(async () => {
+      try {
+        await supabase.from('system_audit_logs').insert([
+          {
+            user_id: data.userId || null,
+            module: data.module,
+            action: data.action,
+            entity_type: data.entityType || null,
+            entity_id: data.entityId || null,
+            description: data.description,
+            details: data.details || null,
+          },
+        ]);
+      } catch (error) {
+        console.error('Failed to log activity:', error);
       }
-
-      await supabase.from('system_audit_logs').insert([{
-        user_id: userId || null,
-        module: data.module,
-        action: data.action,
-        entity_type: data.entityType || null,
-        entity_id: data.entityId || null,
-        description: data.description,
-        details: data.details || null
-      }]);
-    } catch (error) {
-      console.error('Failed to log activity:', error);
-    }
+    });
   },
 
   /**
@@ -52,7 +45,7 @@ export const AuditService = {
     offset?: number;
   }): Promise<any[]> {
     const { module, userId, limit = 100, offset = 0 } = options || {};
-    
+
     let query = supabase
       .from('system_audit_logs')
       .select('*, user:crm_users(name, role)')
@@ -67,12 +60,12 @@ export const AuditService = {
     }
 
     const { data, error } = await query;
-    
+
     if (error) {
       console.error('Failed to fetch audit logs:', error);
       return [];
     }
-    
+
     return data || [];
-  }
+  },
 };

@@ -65,8 +65,14 @@ export default function BookingAdmin({ template }: { template: string }) {
 
   useEffect(() => {
     if (user?.tenant_id) {
-      loadData();
+      loadStaticConfig();
       loadBankConfig();
+    }
+  }, [user?.tenant_id]);
+
+  useEffect(() => {
+    if (user?.tenant_id) {
+      loadAppointmentsOnly();
     }
   }, [user?.tenant_id, selectedDate]);
 
@@ -92,6 +98,47 @@ export default function BookingAdmin({ template }: { template: string }) {
       }
     } catch (e) {
       console.error('Failed to load tenant bank info', e);
+    }
+  };
+
+  const loadStaticConfig = async () => {
+    if (!user?.tenant_id) return;
+    try {
+      const [res, svcs, cfg] = await Promise.all([
+        BookingService.getResources(user.tenant_id),
+        BookingService.getServices(user.tenant_id),
+        BookingService.getSettings(user.tenant_id),
+      ]);
+      setResources(res.filter(r => r.status === 'active'));
+      setServices(svcs);
+      setSettings(cfg);
+
+      const slots = [];
+      const startHour = parseInt(cfg.opening_time.split(':')[0], 10);
+      const endHour = parseInt(cfg.closing_time.split(':')[0], 10);
+      for (let i = startHour; i <= endHour; i++) {
+        slots.push(`${i.toString().padStart(2, '0')}:00`);
+      }
+      setTimeSlots(slots);
+    } catch (error) {
+      console.error('Failed to load static booking config', error);
+    }
+  };
+
+  const loadAppointmentsOnly = async () => {
+    if (!user?.tenant_id) return;
+    setLoading(true);
+    try {
+      const apps = await BookingService.getAppointments(
+        user.tenant_id,
+        new Date(new Date(selectedDate).setHours(0, 0, 0, 0)).toISOString(),
+        new Date(new Date(selectedDate).setHours(23, 59, 59, 999)).toISOString()
+      );
+      setBookings(apps);
+    } catch (error) {
+      console.error('Failed to load appointments', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -366,7 +413,7 @@ export default function BookingAdmin({ template }: { template: string }) {
       const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
       const serviceName = svc?.name || 'Dịch vụ tiêu chuẩn';
 
-      await BookingService.createAppointment(user.tenant_id, {
+      const createdApp = await BookingService.createAppointment(user.tenant_id, {
         resource_id: res?.id,
         service_id: svc?.id,
         service_name: serviceName,
@@ -378,8 +425,14 @@ export default function BookingAdmin({ template }: { template: string }) {
         status: 'confirmed',
       });
 
+      setBookings(prev =>
+        [...prev, createdApp].sort(
+          (a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+        )
+      );
+
       if (formData.syncToCrm) {
-        await syncAppointmentToCrm(
+        void syncAppointmentToCrm(
           formData.customerName,
           formData.customerPhone,
           serviceName,
@@ -400,7 +453,6 @@ export default function BookingAdmin({ template }: { template: string }) {
         notes: '',
         syncToCrm: true,
       });
-      loadData(false);
     } catch (error) {
       toast.error('Không thể tạo lịch hẹn.');
     } finally {
@@ -410,15 +462,19 @@ export default function BookingAdmin({ template }: { template: string }) {
 
   const handleStatusChange = async (appointmentId: string, newStatus: string) => {
     if (!user?.tenant_id) return;
+    const prevBookings = bookings;
+    setBookings(prev =>
+      prev.map(b => (b.id === appointmentId ? { ...b, status: newStatus as any } : b))
+    );
+    if (selectedAppointment && selectedAppointment.id === appointmentId) {
+      setSelectedAppointment({ ...selectedAppointment, status: newStatus as any });
+    }
     try {
       await BookingService.updateAppointmentStatus(user.tenant_id, appointmentId, newStatus);
       toast.success('Đã cập nhật trạng thái lịch hẹn.');
-      loadData(false);
-      if (selectedAppointment && selectedAppointment.id === appointmentId) {
-        setSelectedAppointment({ ...selectedAppointment, status: newStatus as any });
-      }
     } catch (error) {
       console.error(error);
+      setBookings(prevBookings);
       toast.error('Không thể cập nhật trạng thái.');
     }
   };
@@ -426,12 +482,14 @@ export default function BookingAdmin({ template }: { template: string }) {
   const handleDeleteAppointment = async (appointmentId: string) => {
     if (!user?.tenant_id) return;
     if (!window.confirm('Xác nhận xóa vĩnh viễn lịch hẹn này?')) return;
+    const prevBookings = bookings;
+    setBookings(prev => prev.filter(b => b.id !== appointmentId));
+    setSelectedAppointment(null);
     try {
       await BookingService.deleteAppointment(user.tenant_id, appointmentId);
       toast.success('Đã xóa lịch hẹn.');
-      loadData(false);
-      setSelectedAppointment(null);
     } catch (error) {
+      setBookings(prevBookings);
       toast.error('Không thể xóa lịch hẹn.');
     }
   };
@@ -443,20 +501,24 @@ export default function BookingAdmin({ template }: { template: string }) {
     newResourceId?: string
   ) => {
     if (!user?.tenant_id) return;
+    const prevBookings = bookings;
+    const updates: Partial<BookingAppointment> = {
+      start_time: newStart.toISOString(),
+      end_time: newEnd.toISOString(),
+    };
+    if (newResourceId && newResourceId !== 'unassigned') {
+      updates.resource_id = newResourceId;
+    } else if (newResourceId === 'unassigned') {
+      updates.resource_id = null as any;
+    }
+    setBookings(prev =>
+      prev.map(b => (b.id === appointmentId ? { ...b, ...updates } : b))
+    );
     try {
-      const updates: Partial<BookingAppointment> = {
-        start_time: newStart.toISOString(),
-        end_time: newEnd.toISOString(),
-      };
-      if (newResourceId && newResourceId !== 'unassigned') {
-        updates.resource_id = newResourceId;
-      } else if (newResourceId === 'unassigned') {
-        updates.resource_id = null as any;
-      }
       await BookingService.updateAppointment(user.tenant_id, appointmentId, updates);
-      loadData(false);
     } catch (error) {
       console.error(error);
+      setBookings(prevBookings);
       toast.error('Không thể dời lịch hẹn.');
     }
   };
@@ -1318,20 +1380,27 @@ export default function BookingAdmin({ template }: { template: string }) {
                   <select
                     value={selectedAppointment.resource_id || ''}
                     onChange={async e => {
-                      if (!e.target.value) return;
+                      const newResId = e.target.value;
+                      if (!newResId) return;
+                      const prevBookings = bookings;
+                      setBookings(prev =>
+                        prev.map(b =>
+                          b.id === selectedAppointment.id ? { ...b, resource_id: newResId } : b
+                        )
+                      );
+                      setSelectedAppointment({
+                        ...selectedAppointment,
+                        resource_id: newResId,
+                      });
                       try {
                         await BookingService.updateAppointmentResource(
                           user!.tenant_id!,
                           selectedAppointment.id,
-                          e.target.value
+                          newResId
                         );
                         toast.success('Đã cập nhật nhân sự / khu vực.');
-                        loadData(false);
-                        setSelectedAppointment({
-                          ...selectedAppointment,
-                          resource_id: e.target.value,
-                        });
                       } catch (err) {
+                        setBookings(prevBookings);
                         toast.error('Không thể đổi nhân sự.');
                       }
                     }}

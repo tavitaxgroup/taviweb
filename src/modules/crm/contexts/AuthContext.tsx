@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 export const SYSTEM_TENANT_IDS = new Set([
@@ -55,25 +55,71 @@ const AuthContext = createContext<AuthContextType>({
   refreshUser: async () => {},
 });
 
+const AUTH_SESSION_STORAGE_KEY = 'tavi_auth_user_v1';
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = window.sessionStorage.getItem(AUTH_SESSION_STORAGE_KEY);
+        if (cached) return JSON.parse(cached);
+      } catch {
+        // Ignore storage parse error
+      }
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return !window.sessionStorage.getItem(AUTH_SESSION_STORAGE_KEY);
+      } catch {
+        return true;
+      }
+    }
+    return true;
+  });
+
   const router = useRouter();
   const pathname = usePathname();
+  const hasCheckedRef = useRef(false);
 
   useEffect(() => {
-    checkAuth();
-  }, [pathname]);
+    if (!hasCheckedRef.current) {
+      hasCheckedRef.current = true;
+      checkAuth();
+    }
+  }, []);
+
+  const updateUserState = (nextUser: User | null) => {
+    setUser(prev => {
+      const prevJson = prev ? JSON.stringify(prev) : '';
+      const nextJson = nextUser ? JSON.stringify(nextUser) : '';
+      if (prevJson === nextJson) return prev;
+      return nextUser;
+    });
+    if (typeof window !== 'undefined') {
+      try {
+        if (nextUser) {
+          window.sessionStorage.setItem(AUTH_SESSION_STORAGE_KEY, JSON.stringify(nextUser));
+        } else {
+          window.sessionStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
+        }
+      } catch {
+        // Ignore storage write error
+      }
+    }
+  };
 
   const checkAuth = async () => {
     try {
       const res = await fetch('/api/auth/me', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
-        setUser(data.user);
+        updateUserState(data.user);
       } else {
         if (process.env.NODE_ENV === 'development') {
-          setUser({
+          updateUserState({
             id: '00000000-0000-0000-0000-000000000000',
             name: 'Super Admin',
             email: 'admin',
@@ -83,31 +129,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               name: 'TAVIWEB',
               slug: 'tavi',
               template_key: 'fashion',
-              active_modules: ['crm', 'ecommerce', 'booking', 'leads', 'cms', 'lms', 'edu', 'chatbot'],
+              active_modules: [
+                'crm',
+                'ecommerce',
+                'booking',
+                'leads',
+                'cms',
+                'lms',
+                'edu',
+                'chatbot',
+              ],
             },
           });
         } else {
-          setUser(null);
+          updateUserState(null);
           if (pathname?.startsWith('/admin') && pathname !== '/admin/crm/login') {
             router.push('/admin/crm/login');
           }
         }
       }
-    } catch (error) {
-      setUser(null);
+    } catch {
+      if (!user) updateUserState(null);
     } finally {
       setLoading(false);
     }
   };
 
   const login = (userData: User) => {
-    setUser(userData);
+    updateUserState(userData);
     window.location.href = '/admin';
   };
 
   const logout = async () => {
+    updateUserState(null);
     await fetch('/api/auth/logout', { method: 'POST' });
-    setUser(null);
     router.push('/admin/crm/login');
   };
 

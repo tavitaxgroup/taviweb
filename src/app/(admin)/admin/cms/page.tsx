@@ -1,3 +1,4 @@
+import '@/lib/supabase/pgRestEngine';
 import { supabase } from '@/lib/supabase/client';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
@@ -18,20 +19,18 @@ export default async function CMSPage() {
     if (token) {
       const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-      const { data: tenant } = await supabase
-        .from('tenants')
-        .select('slug')
-        .eq('id', decoded.tenant_id)
-        .single();
+      const [{ data: tenant }, { data }] = await Promise.all([
+        supabase.from('tenants').select('slug').eq('id', decoded.tenant_id).single(),
+        supabase
+          .from('posts')
+          .select('*')
+          .eq('tenant_id', decoded.tenant_id)
+          .order('created_at', { ascending: false }),
+      ]);
+
       if (tenant) {
         tenantSlug = tenant.slug;
       }
-
-      const { data } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('tenant_id', decoded.tenant_id)
-        .order('created_at', { ascending: false });
 
       if (data) {
         posts = data;

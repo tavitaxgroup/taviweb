@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   LayoutTemplate,
 } from 'lucide-react';
+import '@/lib/supabase/pgRestEngine';
 import { adminSupabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
@@ -40,11 +41,30 @@ export default async function DashboardHome() {
       const decoded = jwt.verify(token, JWT_SECRET) as any;
       const tenantId = decoded.tenant_id || '00000000-0000-0000-0000-000000000000';
 
-      const { data: user } = await adminSupabase
-        .from('crm_users')
-        .select('id, name, role, role_id, role_data:crm_roles(*), tenant:tenants(name, slug, active_modules)')
-        .eq('id', decoded.id)
-        .single();
+      const [{ data: user }, { data: rawDeals }, { data: allOrders }, { data: allProducts }] =
+        await Promise.all([
+          adminSupabase
+            .from('crm_users')
+            .select(
+              'id, name, role, role_id, role_data:crm_roles(*), tenant:tenants(name, slug, active_modules)'
+            )
+            .eq('id', decoded.id)
+            .single(),
+          adminSupabase
+            .from('crm_deals')
+            .select('id, value, stage_id, created_at, title, assignee_id')
+            .eq('tenant_id', tenantId),
+          adminSupabase
+            .from('orders')
+            .select('id, order_code, customer_name, total_amount, status, payment_status, created_at')
+            .eq('tenant_id', tenantId)
+            .order('created_at', { ascending: false }),
+          adminSupabase
+            .from('products')
+            .select('id')
+            .eq('tenant_id', tenantId)
+            .eq('status', 'active'),
+        ]);
 
       if (user) {
         userName = user.name;
@@ -59,38 +79,19 @@ export default async function DashboardHome() {
         const permissions = roleData?.permissions || [];
         canViewAll = user.role_id ? permissions.includes('view_all_deals') : user.role === 'admin';
 
-        // 1. Deals CRM
-        let dealsQuery = adminSupabase
-          .from('crm_deals')
-          .select('id, value, stage_id, created_at, title')
-          .eq('tenant_id', tenantId);
-        if (!canViewAll) {
-          dealsQuery = dealsQuery.eq('assignee_id', user.id);
-        }
-        const { data: allDeals } = await dealsQuery;
-        if (allDeals && allDeals.length > 0) {
+        const allDeals = canViewAll
+          ? rawDeals || []
+          : (rawDeals || []).filter((d: any) => d.assignee_id === user.id);
+
+        if (allDeals.length > 0) {
           dealsCount = allDeals.length;
-          allDeals.forEach((d) => {
+          allDeals.forEach((d: any) => {
             totalRevenue += Number(d.value || 0);
           });
           recentDeals = [...allDeals]
             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
             .slice(0, 5);
         }
-
-        // 2. Store Orders & Products
-        const [{ data: allOrders }, { data: allProducts }] = await Promise.all([
-          adminSupabase
-            .from('orders')
-            .select('id, order_code, customer_name, total_amount, status, payment_status, created_at')
-            .eq('tenant_id', tenantId)
-            .order('created_at', { ascending: false }),
-          adminSupabase
-            .from('products')
-            .select('id')
-            .eq('tenant_id', tenantId)
-            .eq('status', 'active'),
-        ]);
 
         if (allOrders) {
           ordersCount = allOrders.length;
