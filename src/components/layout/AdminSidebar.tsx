@@ -182,21 +182,6 @@ export function AdminSidebar() {
           <div className="space-y-1">{SETTINGS_MENU.map(renderNavItem)}</div>
         </div>
       </nav>
-
-      {/* Footer Quick Storefront Preview */}
-      <div className="p-3 shrink-0 border-t border-slate-800/60 bg-slate-900/50 relative z-10">
-        <Link
-          href="/kho-giao-dien"
-          target="_blank"
-          className="flex items-center justify-between px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-600/20 to-purple-600/20 hover:from-indigo-600/30 hover:to-purple-600/30 border border-indigo-500/30 text-xs font-semibold text-indigo-200 transition-all"
-        >
-          <span className="flex items-center gap-2">
-            <Globe className="w-3.5 h-3.5 text-indigo-400" />
-            Kho 15 Giao diện Mẫu
-          </span>
-          <ExternalLink className="w-3.5 h-3.5 opacity-70" />
-        </Link>
-      </div>
     </aside>
   );
 }
