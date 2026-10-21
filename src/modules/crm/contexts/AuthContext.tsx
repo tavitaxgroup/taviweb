@@ -58,27 +58,8 @@ const AuthContext = createContext<AuthContextType>({
 const AUTH_SESSION_STORAGE_KEY = 'tavi_auth_user_v1';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const cached = window.sessionStorage.getItem(AUTH_SESSION_STORAGE_KEY);
-        if (cached) return JSON.parse(cached);
-      } catch {
-        // Ignore storage parse error
-      }
-    }
-    return null;
-  });
-  const [loading, setLoading] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        return !window.sessionStorage.getItem(AUTH_SESSION_STORAGE_KEY);
-      } catch {
-        return true;
-      }
-    }
-    return true;
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -87,6 +68,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (!hasCheckedRef.current) {
       hasCheckedRef.current = true;
+      try {
+        const cached = window.sessionStorage.getItem(AUTH_SESSION_STORAGE_KEY);
+        if (cached) {
+          setUser(JSON.parse(cached));
+          setLoading(false);
+        }
+      } catch {
+        // Ignore storage parse error
+      }
       checkAuth();
     }
   }, []);
