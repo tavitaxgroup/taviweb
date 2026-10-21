@@ -95,7 +95,26 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
           });
         }
         setDates(nextDates);
-        setFormData(f => ({ ...f, date: nextDates[0].date.toISOString().split('T')[0] }));
+        let preselectedServiceId = '';
+        if (typeof window !== 'undefined') {
+          const sp = new URLSearchParams(window.location.search);
+          const qServiceId = sp.get('serviceId');
+          const qServiceName = sp.get('service');
+          if (qServiceId && svcs.some(s => s.id === qServiceId)) {
+            preselectedServiceId = qServiceId;
+          } else if (qServiceName) {
+            const matched = svcs.find(s =>
+              s.name.toLowerCase().includes(qServiceName.toLowerCase()) ||
+              qServiceName.toLowerCase().includes(s.name.toLowerCase())
+            );
+            if (matched) preselectedServiceId = matched.id;
+          }
+        }
+        setFormData(f => ({
+          ...f,
+          date: nextDates[0].date.toISOString().split('T')[0],
+          serviceId: preselectedServiceId || f.serviceId,
+        }));
       } catch (err) {
         console.error('Lỗi khi tải dữ liệu booking', err);
       } finally {

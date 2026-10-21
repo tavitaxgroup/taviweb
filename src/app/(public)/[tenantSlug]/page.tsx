@@ -8,6 +8,7 @@ import { CompanyHome } from "@/components/company/CompanyHome";
 import ChatbotWidget from "@/components/ChatbotWidget";
 import { LivePreviewWrapper } from "@/components/LivePreviewWrapper";
 import TenantStorefrontShop from "@/components/storefront/TenantStorefrontShop";
+import TenantEcosystemShowcase from "@/components/storefront/TenantEcosystemShowcase";
 import {
   SuspendedWebsiteView,
   TrialWebsiteBanner,
@@ -73,30 +74,67 @@ export default async function TenantHomePage({ params }: Props) {
   const hasChatbot = tenant.active_modules?.includes("chatbot");
   const hasEcommerce = tenant.active_modules?.includes("ecommerce");
 
-  // Fetch tenant's active products if ecommerce module is enabled
-  let storeProducts: any[] = [];
-  if (hasEcommerce) {
-    const { data: prods } = await supabase
-      .from("products")
-      .select("*")
+  // Fetch tenant's live Booking Services, Booking Resources, Published CMS Posts, and Products in parallel
+  const [servicesRes, resourcesRes, postsRes, prodsRes] = await Promise.all([
+    supabase
+      .from("booking_services")
+      .select("id, name, duration_minutes, price")
+      .eq("tenant_id", tenant.id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("booking_resources")
+      .select("id, name, type, role_or_capacity, status")
       .eq("tenant_id", tenant.id)
       .eq("status", "active")
-      .order("created_at", { ascending: false });
-    if (prods) {
-      storeProducts = prods.map((p: any) => ({
-        ...p,
-        price: Number(p.price || 0),
-        compare_price: Number(p.compare_price || 0),
-        stock: Number(p.stock || 0),
-        images: Array.isArray(p.images) ? p.images : [],
-        variants: Array.isArray(p.variants) ? p.variants : [],
-      }));
-    }
-  }
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("posts")
+      .select("id, title, slug, content, thumbnail_url, meta_description, created_at")
+      .eq("tenant_id", tenant.id)
+      .eq("status", "published")
+      .order("created_at", { ascending: false })
+      .limit(4),
+    hasEcommerce
+      ? supabase
+          .from("products")
+          .select("*")
+          .eq("tenant_id", tenant.id)
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+      : Promise.resolve({ data: [] as any[] }),
+  ]);
+
+  const bookingServices = (servicesRes.data || []).map((s: any) => ({
+    ...s,
+    price: Number(s.price || 0),
+    duration_minutes: Number(s.duration_minutes || 60),
+  }));
+  const bookingResources = resourcesRes.data || [];
+  const cmsPosts = postsRes.data || [];
+
+  const storeProducts: any[] = (prodsRes.data || []).map((p: any) => ({
+    ...p,
+    price: Number(p.price || 0),
+    compare_price: Number(p.compare_price || 0),
+    stock: Number(p.stock || 0),
+    images: Array.isArray(p.images) ? p.images : [],
+    variants: Array.isArray(p.variants) ? p.variants : [],
+  }));
 
   const storeSettings = tenant.theme_config?.store_settings || {};
+  const bookingUrl = `/${tenant.slug}/booking`;
+  const blogUrl = `/${tenant.slug}/blog`;
 
-  // If the tenant has a template_key, render the specific template + Storefront Shop
+  const ecosystemProps = {
+    tenantId: tenant.id,
+    tenantSlug: tenant.slug,
+    tenantName: tenant.name,
+    services: bookingServices,
+    resources: bookingResources,
+    posts: cmsPosts,
+  };
+
+  // If the tenant has a template_key, render the specific template + Ecosystem (Booking + CRM + CMS) + Storefront Shop
   if (tenant.template_key) {
     const buildData = getTemplateDataBuilder(tenant.template_key);
 
@@ -115,7 +153,36 @@ export default async function TenantHomePage({ params }: Props) {
         ...overrides,
       };
 
-      const data = buildData(tenant.id, partialData);
+      const data: any = buildData(tenant.id, partialData);
+
+      // Connect all Booking / Consultation buttons directly to the tenant's live /booking & CRM sections
+      data.bookingUrl = bookingUrl;
+      data.blogUrl = blogUrl;
+      data.ecosystemProps = ecosystemProps;
+
+      if (data.hero) {
+        data.hero.primaryAction = {
+          label: data.hero.primaryAction?.label || "Đặt lịch hẹn trực tuyến",
+          href: bookingUrl,
+        };
+        data.hero.primaryCta = {
+          label: data.hero.primaryCta?.label || "Đặt lịch hẹn trực tuyến",
+          href: bookingUrl,
+        };
+        data.hero.secondaryAction = {
+          label: "Đăng ký tư vấn 1:1",
+          href: "#crm-lead-section",
+        };
+      }
+
+      if (data.contact) {
+        data.contact.primaryAction = {
+          label: "Đặt lịch hẹn trực tuyến ngay",
+          href: bookingUrl,
+        };
+      }
+
+      const isInlineEcosystemTemplate = tenant.template_key === "tham_my_vien";
 
       return (
         <>
@@ -130,6 +197,9 @@ export default async function TenantHomePage({ params }: Props) {
             initialData={data}
             templateKey={tenant.template_key}
           />
+          {!isInlineEcosystemTemplate && (
+            <TenantEcosystemShowcase {...ecosystemProps} />
+          )}
           {hasEcommerce && (
             <TenantStorefrontShop
               tenantId={tenant.id}
@@ -163,16 +233,7 @@ export default async function TenantHomePage({ params }: Props) {
           storeSettings={storeSettings}
         />
       ) : (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center p-8 bg-white rounded-xl shadow-sm border border-gray-100 max-w-md">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">
-              {tenant.name}
-            </h1>
-            <p className="text-gray-500">
-              Website đang trong quá trình xây dựng.
-            </p>
-          </div>
-        </div>
+        <TenantEcosystemShowcase {...ecosystemProps} />
       )}
       {hasChatbot && <ChatbotWidget tenantId={tenant.id} />}
     </>
