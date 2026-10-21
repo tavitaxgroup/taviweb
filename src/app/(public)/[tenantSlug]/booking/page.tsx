@@ -16,11 +16,11 @@ export default async function PublicBookingPage({
 
   const { data: tenant, error } = await supabase
     .from('tenants')
-    .select('id, name, template_key, status')
+    .select('id, name, template_key')
     .eq('slug', resolvedParams.tenantSlug)
     .single();
 
-  if (error || !tenant || tenant.status !== 'active') {
+  if (error || !tenant) {
     notFound();
   }
 
