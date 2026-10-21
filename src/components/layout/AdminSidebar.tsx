@@ -11,17 +11,12 @@ import {
   Settings,
   Building2,
   ChevronRight,
-  Shield,
-  History,
-  Bot,
-  Globe,
   FileText,
   BookOpen,
   GraduationCap,
   ShoppingBag,
   Sparkles,
   ExternalLink,
-  Sliders,
 } from 'lucide-react';
 import { useSidebar } from './ClientLayout';
 
@@ -52,13 +47,7 @@ const PLATFORM_MENU: NavItem[] = [
 ];
 
 const SETTINGS_MENU: NavItem[] = [
-  { name: 'Giao diện & Thanh toán Web', path: '/admin/settings/website', icon: Globe, permissionKey: 'manage_settings' },
-  { name: 'Trợ lý AI (Chatbot)', path: '/admin/settings/chatbot', icon: Bot, moduleKey: 'chatbot', permissionKey: 'manage_settings' },
-  { name: 'Quy trình Pipeline', path: '/admin/settings/pipelines', icon: Sliders, permissionKey: 'manage_pipelines' },
-  { name: 'Đội ngũ Nhân sự', path: '/admin/settings/team', icon: Users, permissionKey: 'manage_users' },
-  { name: 'Phân quyền (Roles)', path: '/admin/settings/roles', icon: Shield, permissionKey: 'manage_roles' },
-  { name: 'Gói cước & API Key', path: '/admin/settings', icon: Settings, permissionKey: 'manage_settings' },
-  { name: 'Nhật ký hệ thống', path: '/admin/audit-logs', icon: History, permissionKey: 'manage_settings' },
+  { name: 'Cài đặt chung', path: '/admin/settings/website', icon: Settings },
 ];
 
 export function AdminSidebar() {
@@ -89,6 +78,8 @@ export function AdminSidebar() {
     const isActive =
       item.path === '/admin'
         ? pathname === '/admin'
+        : item.path === '/admin/settings/website'
+        ? pathname === '/admin/settings' || pathname?.startsWith('/admin/settings/')
         : pathname === item.path || pathname?.startsWith(item.path + '/');
 
     return (
@@ -177,7 +168,7 @@ export function AdminSidebar() {
         {/* Section 3: Configuration & Settings */}
         <div>
           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">
-            Cấu hình & Hệ thống
+            Hệ thống
           </div>
           <div className="space-y-1">{SETTINGS_MENU.map(renderNavItem)}</div>
         </div>
