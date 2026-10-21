@@ -284,7 +284,6 @@ export default function ResourceManagement({ template }: { template: string }) {
             <thead>
               <tr className="bg-slate-50/70 text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-slate-200/70">
                 <th className="px-6 py-3">{config.resourceNameColumn || 'Nhân sự / Khu vực'}</th>
-                <th className="px-6 py-3">Phân loại</th>
                 <th className="px-6 py-3">{config.resourceRoleColumn || 'Chức danh / Quy mô'}</th>
                 <th className="px-6 py-3">Trạng thái nhận lịch</th>
                 <th className="px-6 py-3 text-right">Thao tác</th>
@@ -312,18 +311,6 @@ export default function ResourceManagement({ template }: { template: string }) {
                         </div>
                         <span className="font-semibold text-slate-900 text-sm">{res.name}</span>
                       </div>
-                    </td>
-
-                    <td className="px-6 py-3.5">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium border ${
-                          cat === 'staff'
-                            ? 'bg-slate-100 text-slate-700 border-slate-200/80'
-                            : 'bg-amber-50/80 text-amber-800 border-amber-200/70'
-                        }`}
-                      >
-                        {cat === 'staff' ? 'Nhân sự / Chuyên gia' : 'Phòng / Bàn / Khu vực'}
-                      </span>
                     </td>
 
                     <td className="px-6 py-3.5 text-slate-600 font-medium">
