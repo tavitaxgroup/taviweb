@@ -16,6 +16,9 @@ import { buildDemoPageData as buildQuanCafe } from "@/template-sources/quan_cafe
 import { buildDemoPageData as buildStudioChupAnh } from "@/template-sources/studio_chup_anh/lib/demo/buildDemoPageData";
 import { buildDemoPageData as buildPhongGym } from "@/template-sources/phong_gym/lib/demo/buildDemoPageData";
 import { buildDemoPageData as buildGarageOto } from "@/template-sources/garage_oto/lib/demo/buildDemoPageData";
+import { buildDemoPageData as buildCorporateProfile } from "@/template-sources/corporate_profile/lib/demo/buildDemoPageData";
+import { buildDemoPageData as buildB2BProduct } from "@/template-sources/b2b_product/lib/demo/buildDemoPageData";
+import { buildDemoPageData as buildLeadGeneration } from "@/template-sources/lead_generation/lib/demo/buildDemoPageData";
 
 export type BuildDemoDataFunction = (placeId: string, partialData?: Partial<DemoPageData>) => DemoPageData;
 
@@ -72,6 +75,9 @@ const dataBuilders: Record<string, BuildDemoDataFunction> = {
   studio_chup_anh: (id, partial) => mergeData(buildStudioChupAnh({ placeId: id, name: partial?.business?.name || "Studio" } as any) as any, partial),
   phong_gym: (id, partial) => mergeData(buildPhongGym((partial as any) || {}) as any, partial),
   garage_oto: (id, partial) => mergeData(buildGarageOto(id) as any, partial),
+  corporate_profile: (_id, partial) => mergeData(buildCorporateProfile() as any, partial),
+  b2b_product: (_id, partial) => mergeData(buildB2BProduct() as any, partial),
+  lead_generation: (_id, partial) => mergeData(buildLeadGeneration() as any, partial),
 };
 
 export function getTemplateDataBuilder(templateKey: string): BuildDemoDataFunction | null {

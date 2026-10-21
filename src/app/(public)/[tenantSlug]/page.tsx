@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 export const dynamic = "force-dynamic";
 import "@/lib/supabase/pgRestEngine";
 import { supabase } from "@/lib/supabase";
-import { getTemplateComponent } from "@/lib/templates/templateRegistry";
+import { getTemplateDataBuilder } from "@/lib/templates/templateDataRegistry";
 import { CompanyHome } from "@/components/company/CompanyHome";
 import ChatbotWidget from "@/components/ChatbotWidget";
 import { LivePreviewWrapper } from "@/components/LivePreviewWrapper";
@@ -98,57 +98,50 @@ export default async function TenantHomePage({ params }: Props) {
 
   // If the tenant has a template_key, render the specific template + Storefront Shop
   if (tenant.template_key) {
-    const TemplateComponent = getTemplateComponent(tenant.template_key);
+    const buildData = getTemplateDataBuilder(tenant.template_key);
 
-    if (TemplateComponent) {
-      const { getTemplateDataBuilder } = await import(
-        "@/lib/templates/templateDataRegistry"
-      );
-      const buildData = getTemplateDataBuilder(tenant.template_key);
+    if (buildData) {
+      const overrides = tenant.theme_config?.website_overrides || {};
+      const partialData: any = {
+        business: {
+          id: tenant.id,
+          placeId: tenant.id,
+          name: tenant.name,
+          address: tenant.contact_info?.address || "Việt Nam",
+          phone: tenant.contact_info?.phone || "0901234567",
+          email: tenant.contact_info?.email || undefined,
+          ...(overrides.business || {}),
+        },
+        ...overrides,
+      };
 
-      if (buildData) {
-        const overrides = tenant.theme_config?.website_overrides || {};
-        const partialData: any = {
-          business: {
-            id: tenant.id,
-            placeId: tenant.id,
-            name: tenant.name,
-            address: tenant.contact_info?.address || "Việt Nam",
-            phone: tenant.contact_info?.phone || "0901234567",
-            email: tenant.contact_info?.email || undefined,
-            ...(overrides.business || {}),
-          },
-          ...overrides,
-        };
+      const data = buildData(tenant.id, partialData);
 
-        const data = buildData(tenant.id, partialData);
-
-        return (
-          <>
-            {isTrial && tenant.package_expires_at && (
-              <TrialWebsiteBanner
-                tenantName={tenant.name}
-                tenantSlug={tenant.slug}
-                expiresAt={tenant.package_expires_at}
-              />
-            )}
-            <LivePreviewWrapper
-              initialData={data}
-              templateKey={tenant.template_key}
+      return (
+        <>
+          {isTrial && tenant.package_expires_at && (
+            <TrialWebsiteBanner
+              tenantName={tenant.name}
+              tenantSlug={tenant.slug}
+              expiresAt={tenant.package_expires_at}
             />
-            {hasEcommerce && (
-              <TenantStorefrontShop
-                tenantId={tenant.id}
-                tenantName={tenant.name}
-                tenantSlug={tenant.slug}
-                products={storeProducts}
-                storeSettings={storeSettings}
-              />
-            )}
-            {hasChatbot && <ChatbotWidget tenantId={tenant.id} />}
-          </>
-        );
-      }
+          )}
+          <LivePreviewWrapper
+            initialData={data}
+            templateKey={tenant.template_key}
+          />
+          {hasEcommerce && (
+            <TenantStorefrontShop
+              tenantId={tenant.id}
+              tenantName={tenant.name}
+              tenantSlug={tenant.slug}
+              products={storeProducts}
+              storeSettings={storeSettings}
+            />
+          )}
+          {hasChatbot && <ChatbotWidget tenantId={tenant.id} />}
+        </>
+      );
     }
   }
 
