@@ -72,10 +72,10 @@ export default function CmsPostsClient({ posts, tenantSlug }: CmsPostsClientProp
           )}
           <Link
             href="/admin/cms/editor/new"
-            className="inline-flex items-center gap-1.5 h-9 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold text-xs shadow-xs shadow-indigo-600/20 transition-all active:scale-[0.985]"
+            className="inline-flex items-center gap-1.5 h-9 px-4 bg-indigo-600 hover:bg-indigo-500 !text-white rounded-lg font-semibold text-xs shadow-xs shadow-indigo-600/20 transition-all active:scale-[0.985]"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Viết bài mới</span>
+            <Plus className="w-3.5 h-3.5 text-white" />
+            <span className="text-white">Viết bài mới</span>
           </Link>
         </div>
       </div>
