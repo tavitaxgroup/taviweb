@@ -89,7 +89,7 @@ export default async function TenantHomePage({ params }: Props) {
       .order("created_at", { ascending: true }),
     supabase
       .from("posts")
-      .select("id, title, slug, content, thumbnail_url, meta_description, created_at")
+      .select("id, title, slug, content, thumbnail_url, status, created_at")
       .eq("tenant_id", tenant.id)
       .eq("status", "published")
       .order("created_at", { ascending: false })
@@ -182,7 +182,9 @@ export default async function TenantHomePage({ params }: Props) {
         };
       }
 
-      const isInlineEcosystemTemplate = tenant.template_key === "tham_my_vien";
+      const isInlineEcosystemTemplate =
+        tenant.template_key === "tham_my_vien" ||
+        tenant.template_key === "nha_khoa";
 
       return (
         <>

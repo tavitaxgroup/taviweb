@@ -1,13 +1,14 @@
 import React from 'react';
 import { HeroInfo } from '../../../types/demo';
 import { motion } from 'motion/react';
-import { Star, MapPin, CalendarCheck } from 'lucide-react';
+import { Star, CalendarCheck, Sparkles } from 'lucide-react';
 
 interface DemoHeroProps {
   hero: HeroInfo;
+  bookingUrl?: string;
 }
 
-export default function DemoHero({ hero }: DemoHeroProps) {
+export default function DemoHero({ hero, bookingUrl }: DemoHeroProps) {
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const slides = hero.images || (hero.image ? [hero.image] : []);
 
@@ -19,10 +20,9 @@ export default function DemoHero({ hero }: DemoHeroProps) {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  const handleScrollToContact = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const primaryHref =
+    bookingUrl || hero.primaryAction?.href || '#crm-lead-section';
+  const secondaryHref = hero.secondaryAction?.href || '#crm-lead-section';
 
   return (
     <section className="relative h-[600px] md:h-[650px] flex items-center overflow-hidden bg-teal-950">
@@ -35,21 +35,27 @@ export default function DemoHero({ hero }: DemoHeroProps) {
             alt={slide.alt || `Dental Slide ${idx + 1}`}
             referrerPolicy="no-referrer"
             className={`absolute inset-0 w-full h-full object-cover object-center scale-105 filter brightness-[0.75] transition-opacity duration-1000 ${
-              idx === currentSlide ? "opacity-100" : "opacity-0"
+              idx === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
-            loading={idx === 0 ? "eager" : "lazy"}
+            loading={idx === 0 ? 'eager' : 'lazy'}
             style={{ zIndex: idx === currentSlide ? 1 : 0 }}
           />
         ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-950/60 via-teal-900/25 to-transparent" style={{ zIndex: 2 }}></div>
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-teal-950/15 to-transparent" style={{ zIndex: 2 }}></div>
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-teal-950/60 via-teal-900/25 to-transparent"
+          style={{ zIndex: 2 }}
+        ></div>
+        <div
+          className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-teal-950/15 to-transparent"
+          style={{ zIndex: 2 }}
+        ></div>
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="max-w-3xl"
         >
           {/* Google Rating Badge */}
@@ -61,7 +67,7 @@ export default function DemoHero({ hero }: DemoHeroProps) {
           )}
 
           {/* Main Heading */}
-          <h1 
+          <h1
             className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl font-sans leading-[1.15]"
             style={{ textShadow: '0 4px 24px rgba(0,0,0,0.85)' }}
           >
@@ -69,7 +75,7 @@ export default function DemoHero({ hero }: DemoHeroProps) {
           </h1>
 
           {/* Subtitle */}
-          <p 
+          <p
             className="mt-6 text-lg leading-relaxed text-white font-sans max-w-xl"
             style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
           >
@@ -78,23 +84,36 @@ export default function DemoHero({ hero }: DemoHeroProps) {
 
           {/* CTA Buttons */}
           <div className="mt-10 flex flex-wrap gap-4">
-            <button
-              onClick={handleScrollToContact}
-              className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-teal-950/30 hover:bg-teal-700 active:scale-95 transition-all font-sans cursor-pointer"
+            <a
+              href={primaryHref}
+              className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-6 py-4 text-base font-semibold !text-white shadow-lg shadow-teal-950/30 hover:bg-teal-700 active:scale-95 transition-all font-sans cursor-pointer"
             >
-              <CalendarCheck className="h-5 w-5" />
-              {hero.primaryAction.label}
-            </button>
-            
+              <CalendarCheck className="h-5 w-5 !text-white" />
+              <span className="!text-white">
+                {hero.primaryAction?.label || 'Đặt lịch hẹn trực tuyến'}
+              </span>
+            </a>
+
             {hero.secondaryAction && (
               <a
-                href={hero.secondaryAction.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-6 py-4 text-base font-semibold text-white shadow-md hover:bg-white/20 active:scale-95 transition-all font-sans"
+                href={secondaryHref}
+                onClick={(e) => {
+                  if (secondaryHref.startsWith('#')) {
+                    const target = document.getElementById(
+                      secondaryHref.slice(1)
+                    );
+                    if (target) {
+                      e.preventDefault();
+                      target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }
+                }}
+                className="inline-flex items-center gap-2 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 px-6 py-4 text-base font-semibold !text-white shadow-md hover:bg-white/25 active:scale-95 transition-all font-sans"
               >
-                <MapPin className="h-5 w-5 text-teal-300" />
-                {hero.secondaryAction.label}
+                <Sparkles className="h-5 w-5 text-teal-300" />
+                <span className="!text-white">
+                  {hero.secondaryAction.label}
+                </span>
               </a>
             )}
           </div>
