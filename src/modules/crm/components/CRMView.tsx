@@ -13,10 +13,11 @@ import CommandPalette from './CommandPalette';
 import CreateDealModal from './CreateDealModal';
 import CRMSettings from './CRMSettings';
 import QuoteCalculator from './QuoteCalculator';
+import { Search, Plus, SlidersHorizontal, Kanban, List, BarChart3, Calculator } from 'lucide-react';
 
 export default function CRMView() {
   const { user, loading: authLoading, hasPermission } = useAuth();
-  
+
   const [viewMode, setViewMode] = useState<'kanban' | 'table' | 'report' | 'settings' | 'calculator'>('kanban');
   const [pipelines, setPipelines] = useState<CRMPipeline[]>([]);
   const [activePipeline, setActivePipeline] = useState<string>('');
@@ -25,7 +26,7 @@ export default function CRMView() {
   const [selectedDeal, setSelectedDeal] = useState<CRMDeal | null>(null);
   const [loading, setLoading] = useState(true);
   const [templateKey, setTemplateKey] = useState<string>('');
-  
+
   // Filters & Views state
   const [searchQuery, setSearchQuery] = useState('');
   const [activeView, setActiveView] = useState<'all' | 'vip' | 'this_month' | 'ecommerce'>('all');
@@ -33,7 +34,6 @@ export default function CRMView() {
   const [createDealOpen, setCreateDealOpen] = useState(false);
   const [createDealStageId, setCreateDealStageId] = useState<string | undefined>(undefined);
 
-  // Keyboard shortcut for Cmd+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -46,23 +46,30 @@ export default function CRMView() {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user?.tenant_id) {
       loadPipelines();
-      
-      // Fetch tenant template key to conditionally show modules (like LMS)
-      import('@/lib/supabase').then(({ supabase }) => {
-        supabase.from('tenants').select('template_key').eq('id', user.tenant_id).single().then(({data}: { data: any }) => {
-          if (data) setTemplateKey(data.template_key);
+      if (user.tenant?.template_key) {
+        setTemplateKey(user.tenant.template_key);
+      } else {
+        import('@/lib/supabase').then(({ supabase }) => {
+          supabase
+            .from('tenants')
+            .select('template_key')
+            .eq('id', user.tenant_id)
+            .single()
+            .then(({ data }: { data: any }) => {
+              if (data) setTemplateKey(data.template_key);
+            });
         });
-      });
+      }
     }
-  }, [user, viewMode]); // Tải lại pipeline mỗi khi chuyển tab (vd: từ Builder về Kanban)
+  }, [user?.tenant_id]);
 
   useEffect(() => {
-    if (activePipeline && user) {
+    if (activePipeline && user?.tenant_id) {
       loadPipelineData(activePipeline);
     }
-  }, [activePipeline, user]);
+  }, [activePipeline, user?.tenant_id]);
 
   const loadPipelines = async () => {
     if (!user?.tenant_id) {
@@ -71,29 +78,29 @@ export default function CRMView() {
     }
     try {
       let p = await CRMService.getPipelines(user.tenant_id);
-      
-      // Auto-create default pipeline if none exists
+
       if (p.length === 0) {
-         const newPipeline = await CRMService.upsertPipeline(user.tenant_id, { name: 'Quy trình chuẩn', description: 'Quy trình chăm sóc khách hàng mặc định' });
-         await CRMService.upsertStages(user.tenant_id, newPipeline.id, [
-            { name: 'Mới (Leads)', order: 0, color: 'bg-slate-200 text-slate-700' },
-            { name: 'Đang xử lý', order: 1, color: 'bg-indigo-100 text-indigo-700' },
-            { name: 'Hoàn thành', order: 2, color: 'bg-emerald-100 text-emerald-700' }
-         ]);
-         p = await CRMService.getPipelines(user.tenant_id);
+        const newPipeline = await CRMService.upsertPipeline(user.tenant_id, {
+          name: 'Quy trình chuẩn',
+          description: 'Quy trình chăm sóc khách hàng mặc định',
+        });
+        await CRMService.upsertStages(user.tenant_id, newPipeline.id, [
+          { name: 'Mới (Leads)', order: 0, color: 'bg-slate-200 text-slate-700' },
+          { name: 'Đang xử lý', order: 1, color: 'bg-indigo-100 text-indigo-700' },
+          { name: 'Hoàn thành', order: 2, color: 'bg-emerald-100 text-emerald-700' },
+        ]);
+        p = await CRMService.getPipelines(user.tenant_id);
       }
 
       setPipelines(p);
       if (p.length > 0) {
         setActivePipeline(current => {
-          // Giữ nguyên pipeline đang chọn nếu nó vẫn tồn tại, ngược lại lấy cái đầu tiên
           if (current && p.some(pipe => pipe.id === current)) {
             return current;
           }
           return p[0].id;
         });
       } else {
-        // If there are no pipelines, we must stop loading immediately
         setLoading(false);
       }
     } catch (error) {
@@ -106,24 +113,31 @@ export default function CRMView() {
     if (!user?.tenant_id) return;
     setLoading(true);
     try {
-      let s = await CRMService.getStages(user.tenant_id, pipelineId);
-      
-      // Auto-recover stages if the pipeline somehow has no stages (e.g. from previous DB crash)
+      const [initialStages, allDeals] = await Promise.all([
+        CRMService.getStages(user.tenant_id, pipelineId),
+        CRMService.getDeals(
+          user.tenant_id,
+          pipelineId,
+          user?.id,
+          hasPermission('view_all_deals')
+        ),
+      ]);
+
+      let s = initialStages;
       if (s.length === 0) {
-         await CRMService.upsertStages(user.tenant_id, pipelineId, [
-            { name: 'Mới (Leads)', order: 0 },
-            { name: 'Đang xử lý', order: 1 },
-            { name: 'Hoàn thành', order: 2 }
-         ]);
-         s = await CRMService.getStages(user.tenant_id, pipelineId);
+        await CRMService.upsertStages(user.tenant_id, pipelineId, [
+          { name: 'Mới (Leads)', order: 0 },
+          { name: 'Đang xử lý', order: 1 },
+          { name: 'Hoàn thành', order: 2 },
+        ]);
+        s = await CRMService.getStages(user.tenant_id, pipelineId);
       }
-      
+
       setStages(s);
-      
-      const stageIds = s.map(stage => stage.id);
-      if (stageIds.length > 0) {
-        const d = await CRMService.getDeals(user.tenant_id, pipelineId, user?.id, hasPermission('view_all_deals'), stageIds);
-        setDeals(d);
+
+      const stageIdSet = new Set(s.map(stage => stage.id));
+      if (stageIdSet.size > 0) {
+        setDeals(allDeals.filter(d => stageIdSet.has(d.stage_id)));
       } else {
         setDeals([]);
       }
@@ -136,7 +150,7 @@ export default function CRMView() {
 
   const handleDealMove = async (dealId: string, newStageId: string) => {
     if (!user?.tenant_id) return;
-    setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage_id: newStageId } : d));
+    setDeals(prev => prev.map(d => (d.id === dealId ? { ...d, stage_id: newStageId } : d)));
     try {
       await CRMService.updateDealStage(user.tenant_id, dealId, newStageId);
     } catch (error) {
@@ -146,191 +160,227 @@ export default function CRMView() {
   };
 
   if (authLoading) {
-    return <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-slate-50"><div className="animate-spin h-8 w-8 border-4 border-indigo-600 rounded-full border-t-transparent"></div></div>;
+    return (
+      <div className="flex h-full min-h-[560px] items-center justify-center bg-[#FAF9F6]">
+        <div className="h-6 w-6 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
+      </div>
+    );
   }
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
+
+  const isBoardOrTable = viewMode === 'kanban' || viewMode === 'table';
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 font-sans relative overflow-hidden">
-      {/* Subtle Background Orbs for liveliness */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-indigo-200/40 blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute top-[40%] -right-[10%] w-[30%] h-[50%] rounded-full bg-purple-200/40 blur-[120px] animate-pulse" style={{ animationDuration: '12s' }} />
-        <div className="absolute bottom-[-20%] left-[20%] w-[50%] h-[40%] rounded-full bg-blue-200/30 blur-[120px] animate-pulse" style={{ animationDuration: '10s' }} />
-      </div>
+    <div className="flex flex-col h-full min-h-[560px] bg-[#FAF9F6] font-sans relative overflow-hidden">
+      {/* Unified Executive Control Bar */}
+      <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-6 py-3 flex flex-wrap gap-3 justify-between items-center relative z-30 shrink-0">
+        {/* Left: Pipeline + Segment Filters + Search */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          {pipelines.length > 0 && viewMode !== 'report' && viewMode !== 'calculator' && (
+            <PipelineSelector
+              pipelines={pipelines}
+              activeId={activePipeline}
+              onChange={setActivePipeline}
+            />
+          )}
 
-      {/* Top Navigation - Glassmorphism */}
-      <div className="bg-white/70 backdrop-blur-xl border-b border-white/40 px-6 py-3.5 flex flex-wrap gap-4 justify-between items-center shadow-[0_4px_30px_rgba(0,0,0,0.03)] relative z-50 shrink-0">
-        <div className="flex items-center gap-4 whitespace-nowrap">
-          {pipelines.length > 0 && viewMode !== 'report' && (
-            <div>
-              <PipelineSelector 
-                pipelines={pipelines}
-                activeId={activePipeline}
-                onChange={setActivePipeline}
-              />
-            </div>
+          {isBoardOrTable && (
+            <>
+              <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+
+              {/* Segmented Filter Pills */}
+              <div className="flex items-center bg-slate-100/80 p-0.5 rounded-lg border border-slate-200/60">
+                {[
+                  { id: 'all', label: `Tất cả (${deals.length})` },
+                  { id: 'ecommerce', label: 'Đơn Web' },
+                  { id: 'vip', label: 'VIP > 50tr' },
+                  { id: 'this_month', label: 'Tháng này' },
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveView(tab.id as any)}
+                    className={`px-2.5 py-1 text-xs rounded-md transition-all duration-200 ${
+                      activeView === tab.id
+                        ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+                        : 'text-slate-500 hover:text-slate-800 font-medium'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Input + CmdK */}
+              <div className="relative flex items-center">
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Tìm tên khách, SĐT, deal..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="h-9 pl-8 pr-14 text-xs rounded-lg border border-slate-200/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 transition-colors w-[210px] sm:w-[240px]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setCmdKOpen(true)}
+                  title="Tìm kiếm toàn cục (Ctrl+K)"
+                  className="absolute right-1.5 px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200/80 text-[10px] font-mono text-slate-500 transition-colors"
+                >
+                  ⌘K
+                </button>
+              </div>
+            </>
           )}
         </div>
-        
-        <div className="flex items-center gap-3 relative z-20">
-          <div className="flex items-center bg-slate-100/80 backdrop-blur-md p-1 rounded-xl border border-slate-200/60">
+
+        {/* Right: View Switcher + Settings + Primary Action */}
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center bg-slate-100/80 p-0.5 rounded-lg border border-slate-200/60">
             <button
+              type="button"
               onClick={() => setViewMode('kanban')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                viewMode === 'kanban' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-500 hover:text-indigo-600 hover:bg-white/60'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all duration-200 ${
+                viewMode === 'kanban'
+                  ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+                  : 'text-slate-500 hover:text-slate-800 font-medium'
               }`}
             >
-              Kanban
+              <Kanban className="w-3.5 h-3.5" />
+              <span>Kanban</span>
             </button>
             {hasPermission('view_all_deals') && (
-                <button
-                  onClick={() => setViewMode('table')}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                    viewMode === 'table' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-500 hover:text-indigo-600 hover:bg-white/60'
-                  }`}
-                >
-                  Bảng & Lead Mới
-                </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('table')}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all duration-200 ${
+                  viewMode === 'table'
+                    ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+                    : 'text-slate-500 hover:text-slate-800 font-medium'
+                }`}
+              >
+                <List className="w-3.5 h-3.5" />
+                <span>Danh sách</span>
+              </button>
             )}
             <button
+              type="button"
               onClick={() => setViewMode('report')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                viewMode === 'report' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-500 hover:text-indigo-600 hover:bg-white/60'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all duration-200 ${
+                viewMode === 'report'
+                  ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+                  : 'text-slate-500 hover:text-slate-800 font-medium'
               }`}
             >
-              Báo cáo & KPI
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Báo cáo</span>
             </button>
             <button
+              type="button"
               onClick={() => setViewMode('calculator')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                viewMode === 'calculator' ? 'bg-white shadow-sm text-emerald-600' : 'text-slate-500 hover:text-emerald-600 hover:bg-white/60'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all duration-200 ${
+                viewMode === 'calculator'
+                  ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+                  : 'text-slate-500 hover:text-slate-800 font-medium'
               }`}
               title="Tính giá dự án"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
-              Tính Giá Bán
+              <Calculator className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Tính giá</span>
             </button>
           </div>
-          
-          <button  
+
+          <button
+            type="button"
+            onClick={() => setViewMode('settings')}
+            className={`h-9 w-9 inline-flex items-center justify-center rounded-lg border transition-all duration-200 ${
+              viewMode === 'settings'
+                ? 'bg-slate-900 text-white border-slate-900'
+                : 'bg-white text-slate-600 hover:text-slate-900 border-slate-200/80 hover:border-slate-300'
+            }`}
+            title="Cấu hình Phễu & Trường tùy chỉnh CRM"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+          </button>
+
+          <button
+            type="button"
             onClick={() => {
               setCreateDealStageId(stages[0]?.id);
               setCreateDealOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl shadow-sm shadow-indigo-200 hover:bg-indigo-700 transition-all"
+            className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-xs shadow-indigo-600/20 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.985]"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-            Thêm Deal Mới
-          </button>
-          
-          <button
-            onClick={() => setViewMode('settings')}
-            className={`p-2 rounded-xl transition-all ${viewMode === 'settings' ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' : 'bg-white text-slate-500 hover:text-indigo-600 border border-slate-200'}`}
-            title="Cấu hình Phễu & Trường tùy chỉnh CRM"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <Plus className="w-3.5 h-3.5" />
+            <span>Tạo cơ hội</span>
           </button>
         </div>
       </div>
 
-      {/* Filter Bar (Views & Search) */}
-      {viewMode !== 'report' && viewMode !== 'settings' && viewMode !== 'calculator' && (
-        <div className="px-6 py-2.5 bg-white/50 border-b border-slate-200 flex items-center justify-between z-40 relative shrink-0">
-          <div className="flex items-center gap-2">
-            <select 
-              value={activeView}
-              onChange={(e) => setActiveView(e.target.value as any)}
-              className="bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
-            >
-              <option value="all">Tất cả Khách hàng ({deals.length})</option>
-              <option value="ecommerce">🛒 Đơn hàng từ Website</option>
-              <option value="vip">💎 Khách VIP ({'>'} 50 triệu)</option>
-              <option value="this_month">📅 Khách Mới Tháng Này</option>
-            </select>
-            <div className="h-4 w-px bg-slate-300 mx-1.5"></div>
-            <button onClick={() => setCmdKOpen(true)} className="flex items-center gap-2 text-xs text-slate-500 bg-white border border-slate-200 hover:border-indigo-400 hover:text-indigo-600 px-3 py-1.5 rounded-lg shadow-sm transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <span>Tìm kiếm nhanh...</span>
-              <kbd className="hidden sm:inline-block bg-slate-100 text-slate-400 px-1.5 rounded text-[10px] ml-1 font-mono">Ctrl K</kbd>
-            </button>
-          </div>
-          
-          <div className="flex items-center">
-            <input 
-              type="text"
-              placeholder="Lọc theo tên / SĐT..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="text-xs px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm w-[220px]"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Main Content Area with Split View */}
-      <div className="flex-1 overflow-hidden relative flex bg-slate-50">
-        {/* Left Side (Board/Table) */}
-        <div className={`flex-1 overflow-hidden flex flex-col pt-4 pl-6 pb-4 transition-all duration-300 ${selectedDeal ? 'pr-4' : 'pr-6'}`}>
+      {/* Main Content Canvas */}
+      <div className="flex-1 overflow-hidden relative flex">
+        <div className="flex-1 overflow-hidden flex flex-col pt-4 px-6 pb-4">
           {loading && viewMode !== 'report' ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50 backdrop-blur-sm z-50">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent shadow-md"></div>
+            <div className="flex-1 flex items-center justify-center">
+              <div className="h-7 w-7 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
             </div>
+          ) : viewMode === 'settings' ? (
+            <CRMSettings
+              pipelines={pipelines}
+              onPipelinesChange={newPipelines => setPipelines(newPipelines)}
+            />
+          ) : viewMode === 'calculator' ? (
+            <QuoteCalculator />
+          ) : viewMode === 'report' ? (
+            <ReportDashboard deals={deals} stages={stages} />
           ) : (
-            viewMode === 'settings' ? (
-              <CRMSettings 
-                pipelines={pipelines} 
-                onPipelinesChange={(newPipelines) => setPipelines(newPipelines)} 
-              />
-            ) : viewMode === 'calculator' ? (
-              <QuoteCalculator />
-            ) : viewMode === 'report' ? (
-              <ReportDashboard deals={deals} stages={stages} />
-            ) : (() => {
-              // Apply Filters
+            (() => {
               let filteredDeals = deals;
               if (searchQuery) {
                 const q = searchQuery.toLowerCase();
-                filteredDeals = filteredDeals.filter(d => 
-                  String(d.title || '').toLowerCase().includes(q) || 
-                  String(d.contact?.name || '').toLowerCase().includes(q) ||
-                  String(d.contact?.phone || '').includes(q)
+                filteredDeals = filteredDeals.filter(
+                  d =>
+                    String(d.title || '').toLowerCase().includes(q) ||
+                    String(d.contact?.name || '').toLowerCase().includes(q) ||
+                    String(d.contact?.phone || '').includes(q)
                 );
               }
               if (activeView === 'vip') {
                 filteredDeals = filteredDeals.filter(d => (d.value || 0) > 50000000);
               } else if (activeView === 'ecommerce') {
-                filteredDeals = filteredDeals.filter(d =>
-                  d.custom_data?.source === 'ecommerce_checkout' ||
-                  String(d.title || '').startsWith('[Đơn hàng #')
+                filteredDeals = filteredDeals.filter(
+                  d =>
+                    d.custom_data?.source === 'ecommerce_checkout' ||
+                    String(d.title || '').startsWith('[Đơn hàng #')
                 );
               } else if (activeView === 'this_month') {
                 const now = new Date();
                 filteredDeals = filteredDeals.filter(d => {
                   const dDate = new Date(d.created_at);
-                  return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
+                  return (
+                    dDate.getMonth() === now.getMonth() &&
+                    dDate.getFullYear() === now.getFullYear()
+                  );
                 });
               }
 
               return viewMode === 'kanban' ? (
-                <KanbanBoard 
-                  stages={stages} 
-                  deals={filteredDeals} 
-                  onDealMove={handleDealMove} 
+                <KanbanBoard
+                  stages={stages}
+                  deals={filteredDeals}
+                  onDealMove={handleDealMove}
                   onDealClick={setSelectedDeal}
-                  onQuickAddDeal={(stageId) => {
+                  onQuickAddDeal={stageId => {
                     setCreateDealStageId(stageId);
                     setCreateDealOpen(true);
                   }}
                 />
               ) : (
-                <TableBoard 
-                  stages={stages} 
-                  deals={filteredDeals} 
-                  onDealClick={setSelectedDeal} 
+                <TableBoard
+                  stages={stages}
+                  deals={filteredDeals}
+                  onDealClick={setSelectedDeal}
                   onRefresh={() => {
                     if (activePipeline) loadPipelineData(activePipeline);
                   }}
@@ -340,27 +390,35 @@ export default function CRMView() {
           )}
         </div>
 
-        {/* Right Side (Drawer) */}
+        {/* Floating Slide-over Sheet for Deal Details (Never squeezes Kanban) */}
         {selectedDeal && (
-          <div className="w-[500px] flex-shrink-0 border-l border-slate-200 bg-white shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] z-40 h-full overflow-hidden animate-slide-in-right relative">
-            <DealDetailModal 
-              deal={selectedDeal} 
-              stages={stages}
-              onClose={() => setSelectedDeal(null)} 
-              onRefresh={() => {
-                if (activePipeline) loadPipelineData(activePipeline);
-              }}
-              onDelete={() => {
-                if (activePipeline) loadPipelineData(activePipeline);
-              }}
-            />
+          <div
+            className="fixed inset-0 z-50 flex justify-end bg-slate-950/20 backdrop-blur-[2px] animate-in fade-in duration-200"
+            onClick={() => setSelectedDeal(null)}
+          >
+            <div
+              className="w-full max-w-[540px] h-[calc(100dvh-16px)] m-2 rounded-2xl bg-white shadow-[0_24px_64px_-12px_rgba(15,23,42,0.18)] ring-1 ring-slate-900/10 overflow-hidden flex flex-col animate-in slide-in-from-right-8 duration-300"
+              onClick={e => e.stopPropagation()}
+            >
+              <DealDetailModal
+                deal={selectedDeal}
+                stages={stages}
+                onClose={() => setSelectedDeal(null)}
+                onRefresh={() => {
+                  if (activePipeline) loadPipelineData(activePipeline);
+                }}
+                onDelete={() => {
+                  if (activePipeline) loadPipelineData(activePipeline);
+                }}
+              />
+            </div>
           </div>
         )}
       </div>
 
       {/* Create Deal Modal */}
       {createDealOpen && (
-        <CreateDealModal 
+        <CreateDealModal
           stages={stages}
           initialStageId={createDealStageId}
           onClose={() => setCreateDealOpen(false)}
@@ -372,10 +430,10 @@ export default function CRMView() {
 
       {/* Command Palette Modal */}
       {cmdKOpen && (
-        <CommandPalette 
+        <CommandPalette
           deals={deals}
           onClose={() => setCmdKOpen(false)}
-          onSelect={(deal) => {
+          onSelect={deal => {
             setSelectedDeal(deal);
             setCmdKOpen(false);
           }}

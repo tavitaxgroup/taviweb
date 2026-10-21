@@ -124,13 +124,29 @@ export function AdminHeader() {
                   <div className="p-6 text-center text-xs text-slate-400">Chưa có thông báo nào.</div>
                 ) : (
                   notifications.map(noti => (
-                    <div key={noti.id} className="px-4 py-3 hover:bg-slate-50 transition-colors text-left">
-                      <p className="text-xs font-bold text-slate-800">{noti.title}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{noti.message}</p>
-                      <p className="text-[10px] text-slate-400 mt-1">
+                    <Link
+                      key={noti.id}
+                      href={noti.link || '/admin'}
+                      onClick={() => setShowNotiMenu(false)}
+                      className="block px-4 py-3 hover:bg-slate-50/90 transition-colors text-left"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                            noti.type === 'reminder'
+                              ? 'bg-amber-500'
+                              : noti.type === 'deal'
+                              ? 'bg-emerald-500'
+                              : 'bg-slate-900'
+                          }`}
+                        />
+                        <p className="text-xs font-semibold text-slate-900 truncate">{noti.title}</p>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1 pl-3.5 line-clamp-2">{noti.message}</p>
+                      <p className="text-[10px] font-mono tabular-nums text-slate-400 mt-1 pl-3.5">
                         {new Date(noti.time).toLocaleString('vi-VN')}
                       </p>
-                    </div>
+                    </Link>
                   ))
                 )}
               </div>

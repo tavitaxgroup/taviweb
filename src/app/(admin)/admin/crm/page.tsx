@@ -6,8 +6,8 @@ export const metadata = {
 
 export default function CRMPage() {
   return (
-    <main className="min-h-screen">
+    <div className="h-full">
       <CRMView />
-    </main>
+    </div>
   );
 }

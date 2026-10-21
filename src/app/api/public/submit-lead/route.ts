@@ -1,106 +1,194 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase'; // Using normal client, might need service role if RLS blocks public inserts
+import '@/lib/supabase/pgRestEngine';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
-    // 1. Find the root tenant (assumed to be the first tenant created or a specific slug)
-    // We will look for a tenant with slug 'taviweb' first, otherwise grab the oldest tenant.
-    let { data: tenant } = await supabase
-      .from('tenants')
-      .select('id')
-      .eq('slug', 'taviweb')
-      .single();
 
-    if (!tenant) {
+    // 1. Resolve target tenant by tenantId or tenantSlug, falling back to 'tavi'
+    let tenantId: string | null = body.tenantId || null;
+
+    if (!tenantId && body.tenantSlug) {
+      const { data: bySlug } = await supabase
+        .from('tenants')
+        .select('id')
+        .eq('slug', body.tenantSlug)
+        .maybeSingle();
+      tenantId = bySlug?.id || null;
+    }
+
+    if (!tenantId) {
+      const { data: taviTenant } = await supabase
+        .from('tenants')
+        .select('id')
+        .in('slug', ['tavi', 'taviweb'])
+        .limit(1)
+        .maybeSingle();
+      tenantId = taviTenant?.id || null;
+    }
+
+    if (!tenantId) {
       const { data: firstTenant } = await supabase
         .from('tenants')
         .select('id')
         .order('created_at', { ascending: true })
         .limit(1)
-        .single();
-      tenant = firstTenant;
+        .maybeSingle();
+      tenantId = firstTenant?.id || null;
     }
 
-    if (!tenant) {
-      return NextResponse.json({ error: 'System not initialized (no tenant found)' }, { status: 500 });
+    if (!tenantId) {
+      return NextResponse.json(
+        { error: 'System not initialized (no tenant found)' },
+        { status: 500 }
+      );
     }
 
-    const tenantId = tenant.id;
-
-    // 2. Automations: CRM Integration
-    let contactId = null;
+    // 2. Find or create Contact in CRM
+    let contactId: string | null = null;
     if (body.phone) {
-      // Find or create Contact by Phone
       const { data: existingContact } = await supabase
         .from('crm_contacts')
         .select('id')
         .eq('tenant_id', tenantId)
         .eq('phone', body.phone)
-        .single();
-        
+        .maybeSingle();
+
       if (existingContact) {
         contactId = existingContact.id;
       } else {
         const { data: newContact } = await supabase
           .from('crm_contacts')
-          .insert([{
-            tenant_id: tenantId,
-            name: body.name || 'Khách chưa có tên',
-            phone: body.phone
-          }])
+          .insert([
+            {
+              tenant_id: tenantId,
+              name: body.name || 'Khách hàng Website',
+              phone: body.phone,
+              email: body.email || null,
+            },
+          ])
           .select()
           .single();
-        contactId = newContact?.id;
+        contactId = newContact?.id || null;
       }
     }
 
+    let createdDealId: string | null = null;
+
     if (contactId) {
-      // Create Deal
-      // Find default pipeline "Mới (Leads)" stage
-      const { data: stages } = await supabase
+      let { data: stages } = await supabase
         .from('crm_stages')
-        .select('id')
+        .select('id, pipeline_id, order')
         .eq('tenant_id', tenantId)
         .order('order', { ascending: true })
         .limit(1);
 
-      const stageId = stages && stages.length > 0 ? stages[0].id : null;
+      if (!stages || stages.length === 0) {
+        const { data: newPipeline } = await supabase
+          .from('crm_pipelines')
+          .insert([
+            {
+              tenant_id: tenantId,
+              name: 'Quy trình chuẩn',
+              description: 'Quy trình chăm sóc khách hàng mặc định',
+            },
+          ])
+          .select()
+          .single();
 
-      const dealTitle = body.name ? `Yêu cầu từ: ${body.name}` : `Liên hệ mới: ${body.phone}`;
+        if (newPipeline) {
+          const { data: createdStages } = await supabase
+            .from('crm_stages')
+            .insert([
+              {
+                tenant_id: tenantId,
+                pipeline_id: newPipeline.id,
+                name: 'Mới tiếp nhận (Leads)',
+                order: 0,
+              },
+              {
+                tenant_id: tenantId,
+                pipeline_id: newPipeline.id,
+                name: 'Đang xử lý',
+                order: 1,
+              },
+              {
+                tenant_id: tenantId,
+                pipeline_id: newPipeline.id,
+                name: 'Hoàn thành',
+                order: 2,
+              },
+            ])
+            .select('id, pipeline_id, order')
+            .order('order', { ascending: true });
+          stages = createdStages || [];
+        }
+      }
+
+      const stageId = stages && stages.length > 0 ? stages[0].id : null;
+      const pipelineId =
+        stages && stages.length > 0 ? (stages[0] as any).pipeline_id : null;
+
+      const serviceLabel = body.service || 'Tư vấn chuyên sâu 1:1';
+      const dealValue = Number(body.servicePrice || 0);
+      const dealTitle = body.name
+        ? `${serviceLabel} — ${body.name}`
+        : `Liên hệ mới: ${body.phone}`;
 
       const { data: deal } = await supabase
         .from('crm_deals')
-        .insert([{
-          tenant_id: tenantId,
-          contact_id: contactId,
-          title: dealTitle,
-          value: 0,
-          stage_id: stageId,
-          custom_data: {
-            'Nguồn': 'Website TaviWeb',
-            'Dịch vụ': body.service || 'Chưa rõ',
-            'Ghi chú': body.message || ''
-          }
-        }])
+        .insert([
+          {
+            tenant_id: tenantId,
+            pipeline_id: pipelineId,
+            contact_id: contactId,
+            title: dealTitle,
+            value: dealValue,
+            stage_id: stageId,
+            custom_data: {
+              'Nguồn khách hàng': body.source || 'Web Booking',
+              'Dịch vụ quan tâm': serviceLabel,
+              'Hạng thẻ Thành viên': body.memberTier || 'Member',
+              'Chi nhánh đăng ký': body.branch || 'Quận 1 - Đồng Khởi',
+              'Ghi chú': body.message || '',
+            },
+          },
+        ])
         .select()
         .single();
 
       if (deal) {
-        // Log Activity
-        await supabase.from('crm_activities').insert([{
-          deal_id: deal.id,
-          type: 'note',
-          content: `🎯 Hệ thống: Khách hàng điền form liên hệ trên Landing Page.
-Dịch vụ: ${body.service || 'Chưa rõ'}`
-        }]);
+        createdDealId = deal.id;
+        await supabase.from('crm_activities').insert([
+          {
+            tenant_id: tenantId,
+            deal_id: deal.id,
+            type: 'note',
+            content: `Khách hàng gửi form đăng ký tư vấn từ Website.\n• Họ tên: ${body.name}\n• SĐT: ${body.phone}\n• Dịch vụ quan tâm: ${serviceLabel}\n• Chi nhánh: ${body.branch || 'Quận 1 - Đồng Khởi'}\n• Lời nhắn: ${body.message || 'Cần tư vấn phác đồ & báo giá ưu đãi'}`,
+          },
+          {
+            tenant_id: tenantId,
+            deal_id: deal.id,
+            type: 'task',
+            content: `Gọi tư vấn ngay trong 15 phút cho ${body.name} (${body.phone}) về ${serviceLabel}`,
+            task_due_date: new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
+            is_completed: false,
+          },
+        ]);
       }
     }
 
-    return NextResponse.json({ success: true, message: 'Đã nhận thông tin' });
+    return NextResponse.json({
+      success: true,
+      dealId: createdDealId,
+      message: 'Đã tiếp nhận thông tin tư vấn vào hệ thống CRM!',
+    });
   } catch (error: any) {
     console.error('Submit Lead Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal error' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Internal error' },
+      { status: 500 }
+    );
   }
 }

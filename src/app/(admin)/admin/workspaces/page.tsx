@@ -224,7 +224,7 @@ export default function WorkspacesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 p-8 font-sans">
+    <div className="min-h-full bg-slate-50 text-slate-800 p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}

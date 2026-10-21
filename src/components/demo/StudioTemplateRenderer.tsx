@@ -1008,7 +1008,7 @@ function toStudioTemplateData(data: DemoPageData) {
   return postProcessStudioData(replaced, data);
 }
 
-function getTemplateThemeStyle(templateKey: IndustryKey): CSSProperties {
+export function getTemplateThemeStyle(templateKey: IndustryKey): CSSProperties {
   const sharedSpa = {
     "--color-primary": "#9a3b54",
     "--color-on-primary": "#ffffff",

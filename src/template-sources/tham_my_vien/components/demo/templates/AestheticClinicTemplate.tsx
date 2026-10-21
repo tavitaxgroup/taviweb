@@ -11,13 +11,17 @@ import ReviewsSection from "../sections/ReviewsSection";
 import ContactCTASection from "../sections/ContactCTASection";
 import DemoFooter from "../sections/DemoFooter";
 import { updateSEO } from "../../../lib/demo/seo";
+import TenantEcosystemShowcase from "@/components/storefront/TenantEcosystemShowcase";
 
 interface AestheticClinicTemplateProps {
   data: DemoPageData;
 }
 
-export default function AestheticClinicTemplate({ data }: AestheticClinicTemplateProps) {
-  // Update browser tab SEO fields on mount or data change
+export default function AestheticClinicTemplate({
+  data,
+}: AestheticClinicTemplateProps) {
+  const anyData = data as any;
+
   useEffect(() => {
     if (data && data.seo) {
       updateSEO(data.seo);
@@ -50,10 +54,15 @@ export default function AestheticClinicTemplate({ data }: AestheticClinicTemplat
       {/* 8. Reviews (Cảm nhận khách hàng) */}
       <ReviewsSection data={data} />
 
-      {/* 9. Contact CTA */}
+      {/* 9. Live Ecosystem Integration: Booking Services + CRM Lead Form + AI CMS Magazine */}
+      {anyData.ecosystemProps && (
+        <TenantEcosystemShowcase {...anyData.ecosystemProps} />
+      )}
+
+      {/* 10. Contact CTA */}
       <ContactCTASection data={data} />
 
-      {/* 10. Footer */}
+      {/* 11. Footer */}
       <DemoFooter data={data} />
     </div>
   );

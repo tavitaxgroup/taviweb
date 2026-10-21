@@ -71,9 +71,10 @@ export async function POST(req: Request) {
     await supabase
       .from('tenants')
       .update({ 
-        ai_quota: addedQuota, // Reset token
-        ai_used: 0,           // Reset mức sử dụng
-        package_id: transaction.package_id,
+        ai_quota: addedQuota,
+        ai_used: 0,
+        package_id: transaction.package_id || null,
+        package_name: transaction.package_name || 'Gói Chính Thức',
         package_expires_at: packageExpiresAt
       })
       .eq('id', transaction.tenant_id);

@@ -1,20 +1,22 @@
 import { Pool } from 'pg';
 
-let pool: Pool | null = null;
-
 const DEFAULT_PG_CONN =
   'postgresql://postgres.afykilitmywbbgvwcsby:Tavitax%40123@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres';
 
 export function getPool(): Pool {
-  if (!pool) {
+  const g = globalThis as any;
+  if (!g.__taviPgPool) {
     const conn = process.env.DIRECT_URL || process.env.DATABASE_URL || DEFAULT_PG_CONN;
-    pool = new Pool({
+    g.__taviPgPool = new Pool({
       connectionString: conn,
       ssl: { rejectUnauthorized: false },
-      max: 10,
+      max: 15,
+      keepAlive: true,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 8000,
     });
   }
-  return pool;
+  return g.__taviPgPool;
 }
 
 function ident(name: string): string {
@@ -270,70 +272,72 @@ function buildOrderClause(searchParams: URLSearchParams): string {
 async function hydrateRelations(db: Pool, rows: any[], relations: RelationSpec[]) {
   if (rows.length === 0 || relations.length === 0) return rows;
 
-  for (const rel of relations) {
-    if (rel.isCount) {
-      const parentIds = Array.from(new Set(rows.map(r => r[rel.fkColumn]).filter(Boolean)));
-      if (parentIds.length === 0) continue;
-      const placeholders = parentIds.map((_, i) => `$${i + 1}`).join(', ');
-      const q = `SELECT ${ident(rel.targetColumn)} AS pid, COUNT(*)::int AS cnt FROM public.${ident(
-        rel.targetTable
-      )} WHERE ${ident(rel.targetColumn)} IN (${placeholders}) GROUP BY ${ident(rel.targetColumn)}`;
-      const res = await db.query(q, parentIds);
-      const countMap = new Map(res.rows.map(r => [String(r.pid), r.cnt]));
-      for (const row of rows) {
-        row[rel.alias] = [{ count: countMap.get(String(row[rel.fkColumn])) || 0 }];
-      }
-    } else if (rel.isArray) {
-      const parentIds = Array.from(new Set(rows.map(r => r[rel.fkColumn]).filter(Boolean)));
-      if (parentIds.length === 0) continue;
-      const placeholders = parentIds.map((_, i) => `$${i + 1}`).join(', ');
-      const q = `SELECT * FROM public.${ident(rel.targetTable)} WHERE ${ident(
-        rel.targetColumn
-      )} IN (${placeholders})`;
-      const res = await db.query(q, parentIds);
-      const childRows = res.rows;
+  await Promise.all(
+    relations.map(async rel => {
+      if (rel.isCount) {
+        const parentIds = Array.from(new Set(rows.map(r => r[rel.fkColumn]).filter(Boolean)));
+        if (parentIds.length === 0) return;
+        const placeholders = parentIds.map((_, i) => `$${i + 1}`).join(', ');
+        const q = `SELECT ${ident(rel.targetColumn)} AS pid, COUNT(*)::int AS cnt FROM public.${ident(
+          rel.targetTable
+        )} WHERE ${ident(rel.targetColumn)} IN (${placeholders}) GROUP BY ${ident(rel.targetColumn)}`;
+        const res = await db.query(q, parentIds);
+        const countMap = new Map(res.rows.map(r => [String(r.pid), r.cnt]));
+        for (const row of rows) {
+          row[rel.alias] = [{ count: countMap.get(String(row[rel.fkColumn])) || 0 }];
+        }
+      } else if (rel.isArray) {
+        const parentIds = Array.from(new Set(rows.map(r => r[rel.fkColumn]).filter(Boolean)));
+        if (parentIds.length === 0) return;
+        const placeholders = parentIds.map((_, i) => `$${i + 1}`).join(', ');
+        const q = `SELECT * FROM public.${ident(rel.targetTable)} WHERE ${ident(
+          rel.targetColumn
+        )} IN (${placeholders})`;
+        const res = await db.query(q, parentIds);
+        const childRows = res.rows;
 
-      if (rel.nestedLessons && childRows.length > 0) {
-        await hydrateRelations(db, childRows, [
-          { alias: 'lessons', targetTable: 'lessons', fkColumn: 'id', targetColumn: 'module_id', isArray: true },
-        ]);
-      }
+        if (rel.nestedLessons && childRows.length > 0) {
+          await hydrateRelations(db, childRows, [
+            { alias: 'lessons', targetTable: 'lessons', fkColumn: 'id', targetColumn: 'module_id', isArray: true },
+          ]);
+        }
 
-      const groupMap = new Map<string, any[]>();
-      for (const child of childRows) {
-        const key = String(child[rel.targetColumn]);
-        if (!groupMap.has(key)) groupMap.set(key, []);
-        groupMap.get(key)!.push(child);
-      }
-      for (const row of rows) {
-        row[rel.alias] = groupMap.get(String(row[rel.fkColumn])) || [];
-      }
-    } else {
-      const fkValues = Array.from(new Set(rows.map(r => r[rel.fkColumn]).filter(Boolean)));
-      if (fkValues.length === 0) {
-        for (const row of rows) row[rel.alias] = null;
-        continue;
-      }
-      const placeholders = fkValues.map((_, i) => `$${i + 1}`).join(', ');
-      const q = `SELECT * FROM public.${ident(rel.targetTable)} WHERE ${ident(
-        rel.targetColumn
-      )} IN (${placeholders})`;
-      const res = await db.query(q, fkValues);
-      const targetRows = res.rows;
+        const groupMap = new Map<string, any[]>();
+        for (const child of childRows) {
+          const key = String(child[rel.targetColumn]);
+          if (!groupMap.has(key)) groupMap.set(key, []);
+          groupMap.get(key)!.push(child);
+        }
+        for (const row of rows) {
+          row[rel.alias] = groupMap.get(String(row[rel.fkColumn])) || [];
+        }
+      } else {
+        const fkValues = Array.from(new Set(rows.map(r => r[rel.fkColumn]).filter(Boolean)));
+        if (fkValues.length === 0) {
+          for (const row of rows) row[rel.alias] = null;
+          return;
+        }
+        const placeholders = fkValues.map((_, i) => `$${i + 1}`).join(', ');
+        const q = `SELECT * FROM public.${ident(rel.targetTable)} WHERE ${ident(
+          rel.targetColumn
+        )} IN (${placeholders})`;
+        const res = await db.query(q, fkValues);
+        const targetRows = res.rows;
 
-      if (rel.nestedCourse && targetRows.length > 0) {
-        await hydrateRelations(db, targetRows, [
-          { alias: 'course', targetTable: 'crm_courses', fkColumn: 'course_id', targetColumn: 'id' },
-        ]);
-      }
+        if (rel.nestedCourse && targetRows.length > 0) {
+          await hydrateRelations(db, targetRows, [
+            { alias: 'course', targetTable: 'crm_courses', fkColumn: 'course_id', targetColumn: 'id' },
+          ]);
+        }
 
-      const map = new Map(targetRows.map(r => [String(r[rel.targetColumn]), r]));
-      for (const row of rows) {
-        const fkVal = row[rel.fkColumn];
-        row[rel.alias] = fkVal ? map.get(String(fkVal)) || null : null;
+        const map = new Map(targetRows.map(r => [String(r[rel.targetColumn]), r]));
+        for (const row of rows) {
+          const fkVal = row[rel.fkColumn];
+          row[rel.alias] = fkVal ? map.get(String(fkVal)) || null : null;
+        }
       }
-    }
-  }
+    })
+  );
 
   return rows;
 }
@@ -395,20 +399,17 @@ export async function executePostgrestRequest(
       const orderSql = buildOrderClause(searchParams);
       const { columnsSql, relations } = parseSelect(table, searchParams.get('select') || '*');
 
-      let totalCount: number | null = null;
-      if (wantsCount || method === 'HEAD') {
+      if (method === 'HEAD') {
         const countRes = await db.query(`SELECT COUNT(*)::int AS cnt FROM ${tableSql} ${whereSql}`, values);
-        totalCount = countRes.rows[0]?.cnt ?? 0;
-        if (method === 'HEAD') {
-          return {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-              'Content-Range': `*/${totalCount}`,
-            },
-            body: '',
-          };
-        }
+        const headCount = countRes.rows[0]?.cnt ?? 0;
+        return {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Range': `*/${headCount}`,
+          },
+          body: '',
+        };
       }
 
       let limitSql = '';
@@ -430,7 +431,13 @@ export async function executePostgrestRequest(
       }
 
       const sql = `SELECT ${columnsSql} FROM ${tableSql} ${whereSql} ${orderSql} ${limitSql} ${offsetSql}`;
-      const res = await db.query(sql, values);
+      const [res, countRes] = await Promise.all([
+        db.query(sql, values),
+        wantsCount
+          ? db.query(`SELECT COUNT(*)::int AS cnt FROM ${tableSql} ${whereSql}`, values)
+          : Promise.resolve(null),
+      ]);
+      const totalCount: number | null = countRes ? (countRes.rows[0]?.cnt ?? 0) : null;
       const hydrated = await hydrateRelations(db, res.rows, relations);
 
       const resHeaders: Record<string, string> = { 'Content-Type': 'application/json' };

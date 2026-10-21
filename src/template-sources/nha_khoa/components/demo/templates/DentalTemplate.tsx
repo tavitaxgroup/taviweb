@@ -9,6 +9,7 @@ import WhyChooseUsSection from '../sections/WhyChooseUsSection';
 import ReviewsSection from '../sections/ReviewsSection';
 import ContactCTASection from '../sections/ContactCTASection';
 import DemoFooter from '../sections/DemoFooter';
+import TenantEcosystemShowcase from '@/components/storefront/TenantEcosystemShowcase';
 import { Phone } from 'lucide-react';
 
 interface DentalTemplateProps {
@@ -16,16 +17,22 @@ interface DentalTemplateProps {
 }
 
 export default function DentalTemplate({ data }: DentalTemplateProps) {
-  const cleanPhone = data.business.phone ? data.business.phone.replace(/\s+/g, '') : '';
+  const anyData = data as any;
+  const cleanPhone = data.business.phone
+    ? data.business.phone.replace(/\s+/g, '')
+    : '';
 
   return (
     <div className="relative min-h-screen bg-slate-50 text-gray-850 font-sans selection:bg-teal-150 selection:text-teal-900">
-      
       {/* 1. Sticky Navigation Bar */}
-      <DemoNavbar business={data.business} />
+      <DemoNavbar
+        business={data.business}
+        bookingUrl={anyData.bookingUrl}
+        blogUrl={anyData.blogUrl}
+      />
 
       {/* 2. Hero Section */}
-      <DemoHero hero={data.hero} />
+      <DemoHero hero={data.hero} bookingUrl={anyData.bookingUrl} />
 
       {/* 3. Social Proof Trust Bar */}
       <TrustBar trust={data.trust} />
@@ -45,10 +52,18 @@ export default function DentalTemplate({ data }: DentalTemplateProps) {
       {/* 8. Positive Testimonials Grid */}
       <ReviewsSection reviews={data.reviews} />
 
-      {/* 9. High-conversion Call-To-Action (CTA) Contact Box */}
-      <ContactCTASection contact={data.contact} />
+      {/* 9. Live Ecosystem Integration: Booking Services + CRM Lead Form + AI CMS Magazine */}
+      {anyData.ecosystemProps && (
+        <TenantEcosystemShowcase {...anyData.ecosystemProps} />
+      )}
 
-      {/* 10. Comprehensive Footer */}
+      {/* 10. High-conversion Call-To-Action (CTA) Contact Box */}
+      <ContactCTASection
+        contact={data.contact}
+        bookingUrl={anyData.bookingUrl}
+      />
+
+      {/* 11. Comprehensive Footer */}
       <DemoFooter business={data.business} />
 
       {/* Floating Action Button (FAB) on Mobile for instant dialing */}
@@ -61,7 +76,6 @@ export default function DentalTemplate({ data }: DentalTemplateProps) {
           <Phone className="h-6 w-6 stroke-[2.5]" />
         </a>
       )}
-
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { CRMStage, CRMDeal, CRMUser } from '../types';
 import { CRMService } from '../api/crm.service';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
+import { Phone, MessageCircle, X, Users } from 'lucide-react';
 
 interface TableBoardProps {
   stages: CRMStage[];
@@ -13,7 +14,7 @@ interface TableBoardProps {
 
 export default function TableBoard({ stages, deals, onDealClick, onRefresh }: TableBoardProps) {
   const { user } = useAuth();
-  const [editingCell, setEditingCell] = useState<{ dealId: string, field: string } | null>(null);
+  const [editingCell, setEditingCell] = useState<{ dealId: string; field: string } | null>(null);
   const [editValue, setEditValue] = useState<string | number>('');
 
   const [selectedDealIds, setSelectedDealIds] = useState<string[]>([]);
@@ -33,20 +34,25 @@ export default function TableBoard({ stages, deals, onDealClick, onRefresh }: Ta
     setAssigning(true);
     try {
       await CRMService.bulkAssignLeads(user.tenant_id, selectedDealIds, selectedAssignees);
-      toast.success('Chia số thành công!');
+      toast.success('Đã phân bổ khách hàng cho nhân sự.');
       setSelectedDealIds([]);
       setShowBulkAssign(false);
       setSelectedAssignees([]);
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error(err);
-      toast.error('Có lỗi xảy ra khi chia số');
+      toast.error('Không thể phân bổ khách hàng. Vui lòng thử lại.');
     } finally {
       setAssigning(false);
     }
   };
 
-  const handleCellClick = (e: React.MouseEvent, deal: CRMDeal, field: string, currentValue: string | number) => {
+  const handleCellClick = (
+    e: React.MouseEvent,
+    deal: CRMDeal,
+    field: string,
+    currentValue: string | number
+  ) => {
     e.stopPropagation();
     setEditValue(currentValue);
     setEditingCell({ dealId: deal.id, field });
@@ -71,207 +77,292 @@ export default function TableBoard({ stages, deals, onDealClick, onRefresh }: Ta
     }
     setEditingCell(null);
   };
+
+  const dotColors = [
+    'bg-slate-400',
+    'bg-indigo-500',
+    'bg-amber-500',
+    'bg-emerald-500',
+    'bg-sky-500',
+    'bg-rose-500',
+  ];
+
   return (
-    <div className="overflow-auto border border-slate-200 bg-white flex-1 h-full custom-scrollbar rounded-xl shadow-sm relative">
+    <div className="overflow-auto border border-slate-200/80 bg-white flex-1 h-full custom-scrollbar rounded-2xl shadow-[0_1px_2px_rgba(15,23,42,0.03)] relative">
       {selectedDealIds.length > 0 && (
-        <div className="sticky top-0 left-0 right-0 bg-indigo-50 border-b border-indigo-200 px-4 py-2 flex items-center justify-between z-30 shadow-sm">
-          <div className="text-sm font-medium text-indigo-800">
-            Đã chọn {selectedDealIds.length} lead
+        <div className="sticky top-0 left-0 right-0 bg-slate-900 text-white px-5 py-2.5 flex items-center justify-between z-30">
+          <div className="text-xs font-medium flex items-center gap-2">
+            <span className="font-mono tabular-nums px-2 py-0.5 rounded bg-white/15 font-semibold">
+              {selectedDealIds.length}
+            </span>
+            <span>cơ hội đang được chọn</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setSelectedDealIds([])}
-              className="px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded hover:bg-slate-50"
+              className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
             >
               Bỏ chọn
             </button>
             <button
+              type="button"
               onClick={() => setShowBulkAssign(true)}
-              className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-700 shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-900 bg-white rounded-lg hover:bg-slate-100 transition-colors"
             >
-              Chia số (Bulk Assign)
+              <Users className="w-3.5 h-3.5" />
+              <span>Phân bổ nhân sự</span>
             </button>
           </div>
         </div>
       )}
 
       {showBulkAssign && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-              <h3 className="font-bold text-slate-800">Chia số ({selectedDealIds.length} leads)</h3>
-              <button onClick={() => setShowBulkAssign(false)} className="text-slate-400 hover:text-slate-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <div className="fixed inset-0 bg-slate-950/30 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-slate-900/10 w-full max-w-md overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+              <h3 className="font-semibold text-slate-900 text-sm">
+                Phân bổ {selectedDealIds.length} cơ hội cho nhân sự
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowBulkAssign(false)}
+                className="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-6">
-              <p className="text-sm text-slate-600 mb-4">Chọn các nhân sự để phân bổ đều số lượng leads này:</p>
-              <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="p-5">
+              <p className="text-xs text-slate-500 mb-3">
+                Chọn các nhân sự để hệ thống chia đều danh sách khách hàng đã chọn:
+              </p>
+              <div className="space-y-1.5 max-h-[38vh] overflow-y-auto pr-1 custom-scrollbar">
                 {users.length === 0 ? (
-                  <div className="text-sm text-slate-500 text-center py-4">Đang tải nhân sự...</div>
+                  <div className="text-xs text-slate-400 text-center py-6">Đang tải danh sách nhân sự...</div>
                 ) : (
                   users.map(u => (
-                    <label key={u.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded cursor-pointer border border-transparent hover:border-slate-200 transition-colors">
-                      <input 
-                        type="checkbox" 
-                        className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-600"
+                    <label
+                      key={u.id}
+                      className="flex items-center gap-3 p-2.5 hover:bg-slate-50 rounded-xl cursor-pointer border border-transparent hover:border-slate-200/80 transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 accent-slate-900 rounded border-slate-300"
                         checked={selectedAssignees.includes(u.id)}
-                        onChange={(e) => {
+                        onChange={e => {
                           if (e.target.checked) setSelectedAssignees([...selectedAssignees, u.id]);
                           else setSelectedAssignees(selectedAssignees.filter(id => id !== u.id));
                         }}
                       />
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-6 h-6 rounded-md bg-slate-100 border border-slate-200/80 flex items-center justify-center text-xs font-semibold text-slate-700">
                           {u.name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="text-sm font-medium text-slate-700">{u.name}</span>
+                        <span className="text-xs font-medium text-slate-800">{u.name}</span>
                       </div>
                     </label>
                   ))
                 )}
               </div>
             </div>
-            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
-              <button 
+            <div className="px-5 py-3.5 border-t border-slate-100 bg-slate-50/60 flex justify-end gap-2.5">
+              <button
+                type="button"
                 onClick={() => setShowBulkAssign(false)}
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 bg-slate-100 rounded-lg transition-colors"
+                className="px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200/60 rounded-lg transition-colors"
               >
                 Hủy
               </button>
-              <button 
+              <button
+                type="button"
                 onClick={handleBulkAssign}
                 disabled={assigning || selectedAssignees.length === 0}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-40"
               >
-                {assigning ? 'Đang chia...' : `Chia đều cho ${selectedAssignees.length} người`}
+                {assigning ? 'Đang xử lý...' : `Chia đều (${selectedAssignees.length} nhân sự)`}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      <table className="min-w-full divide-y divide-slate-200 border-collapse">
-        <thead className="bg-slate-50 text-slate-500 text-xs font-semibold sticky top-0 z-20 shadow-sm border-b border-slate-200">
-          <tr className="divide-x divide-slate-100">
-            <th className="px-3 py-2 w-10 text-center">
-              <input 
-                type="checkbox" 
-                className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-600 cursor-pointer"
+      <table className="min-w-full border-collapse text-left">
+        <thead className="bg-slate-50/90 backdrop-blur-md text-slate-500 text-[11px] font-medium sticky top-0 z-20 border-b border-slate-200/80">
+          <tr>
+            <th className="px-4 py-3 w-10 text-center">
+              <input
+                type="checkbox"
+                className="w-3.5 h-3.5 accent-slate-900 rounded border-slate-300 cursor-pointer"
                 checked={deals.length > 0 && selectedDealIds.length === deals.length}
-                onChange={(e) => {
+                onChange={e => {
                   if (e.target.checked) setSelectedDealIds(deals.map(d => d.id));
                   else setSelectedDealIds([]);
                 }}
               />
             </th>
-            <th className="px-3 py-2 font-medium text-slate-500 whitespace-nowrap"><div className="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l16 0"/><path d="M4 12l16 0"/><path d="M4 18l16 0"/></svg>Tiêu đề Deal</div></th>
-            <th className="px-3 py-2 font-medium text-slate-500 whitespace-nowrap"><div className="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg>Khách hàng</div></th>
-            <th className="px-3 py-2 font-medium text-slate-500 whitespace-nowrap"><div className="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l0 4l2 2"/></svg>Trạng thái</div></th>
-            <th className="px-3 py-2 font-medium text-slate-500 text-right whitespace-nowrap">Giá trị</th>
-            <th className="px-3 py-2 font-medium text-slate-500 whitespace-nowrap"><div className="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg>Người phụ trách</div></th>
-            <th className="px-3 py-2 font-medium text-slate-500 whitespace-nowrap"><div className="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M11 15h1"/><path d="M12 15v3"/></svg>Ngày tạo</div></th>
+            <th className="px-4 py-3 font-medium">Cơ hội bán hàng</th>
+            <th className="px-4 py-3 font-medium">Khách hàng & Liên hệ</th>
+            <th className="px-4 py-3 font-medium">Giai đoạn</th>
+            <th className="px-4 py-3 font-medium text-right">Giá trị dự kiến</th>
+            <th className="px-4 py-3 font-medium">Phụ trách</th>
+            <th className="px-4 py-3 font-medium text-right">Ngày tạo</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 bg-white">
-          {deals.map((deal) => {
+        <tbody className="divide-y divide-slate-100 bg-white text-[13px]">
+          {deals.map(deal => {
             const stage = stages.find(s => s.id === deal.stage_id);
             const stageIndex = stages.findIndex(s => s.id === deal.stage_id);
-            
-            // Dynamic badge color based on stage index
-            const badgeColors = [
-              'bg-blue-50 text-blue-700 border-blue-200',
-              'bg-indigo-50 text-indigo-700 border-indigo-200',
-              'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200',
-              'bg-orange-50 text-orange-700 border-orange-200',
-              'bg-emerald-50 text-emerald-700 border-emerald-200',
-              'bg-slate-50 text-slate-700 border-slate-200',
-            ];
-            const badgeClass = stageIndex >= 0 ? badgeColors[stageIndex % badgeColors.length] : badgeColors[5];
+            const dotColor = stageIndex >= 0 ? dotColors[stageIndex % dotColors.length] : 'bg-slate-400';
+            const phoneClean = deal.contact?.phone
+              ? String(deal.contact.phone).replace(/\s+/g, '')
+              : '';
 
             return (
-              <tr 
-                key={deal.id} 
+              <tr
+                key={deal.id}
                 onClick={() => onDealClick(deal)}
-                className="hover:bg-slate-50 cursor-pointer transition-none group text-[13px] divide-x divide-slate-100"
+                className="hover:bg-slate-50/80 cursor-pointer transition-colors group"
               >
-                <td className="px-3 py-2 text-center" onClick={(e) => e.stopPropagation()}>
-                  <input 
-                    type="checkbox" 
-                    className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-600 cursor-pointer"
+                <td className="px-4 py-3 text-center" onClick={e => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    className="w-3.5 h-3.5 accent-slate-900 rounded border-slate-300 cursor-pointer"
                     checked={selectedDealIds.includes(deal.id)}
-                    onChange={(e) => {
+                    onChange={e => {
                       if (e.target.checked) setSelectedDealIds([...selectedDealIds, deal.id]);
                       else setSelectedDealIds(selectedDealIds.filter(id => id !== deal.id));
                     }}
                   />
                 </td>
-                <td 
-                  className="px-3 py-2 font-medium text-slate-900 group-hover:text-indigo-600 truncate max-w-[250px] border-l-2 border-transparent hover:border-l-indigo-500 cursor-text"
-                  onClick={(e) => handleCellClick(e, deal, 'title', deal.title)}
+
+                {/* Deal Title */}
+                <td
+                  className="px-4 py-3 font-semibold text-slate-900 max-w-[280px]"
+                  onClick={e => handleCellClick(e, deal, 'title', deal.title)}
                 >
                   {editingCell?.dealId === deal.id && editingCell?.field === 'title' ? (
-                    <input 
+                    <input
                       autoFocus
-                      className="w-full bg-white border border-indigo-400 rounded px-1.5 py-0.5 text-xs text-slate-900 outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full bg-white border border-slate-400 rounded-md px-2 py-1 text-xs text-slate-900 outline-none"
                       value={editValue as string}
-                      onChange={(e) => setEditValue(e.target.value)}
+                      onChange={e => setEditValue(e.target.value)}
                       onBlur={() => handleSaveCell(deal)}
-                      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+                      onKeyDown={e => e.key === 'Enter' && e.currentTarget.blur()}
                     />
-                  ) : deal.title}
+                  ) : (
+                    <div className="truncate">{deal.title}</div>
+                  )}
                 </td>
-                <td className="px-3 py-2 text-slate-600 truncate max-w-[200px]">{deal.contact?.name || '-'}</td>
-                <td 
-                  className="px-3 py-2 text-center whitespace-nowrap cursor-pointer hover:bg-slate-100"
-                  onClick={(e) => handleCellClick(e, deal, 'stage_id', deal.stage_id)}
+
+                {/* Customer & Quick Actions */}
+                <td className="px-4 py-3 text-slate-600 max-w-[240px]">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="font-medium text-slate-800 truncate">
+                        {deal.contact?.name || 'Chưa cập nhật'}
+                      </div>
+                      {deal.contact?.phone && (
+                        <div className="font-mono tabular-nums text-[11px] text-slate-400">
+                          {deal.contact.phone}
+                        </div>
+                      )}
+                    </div>
+                    {phoneClean && (
+                      <div
+                        className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <a
+                          href={`tel:${phoneClean}`}
+                          title="Gọi điện"
+                          className="w-6 h-6 rounded-md bg-slate-100 hover:bg-slate-900 text-slate-600 hover:text-white flex items-center justify-center transition-colors"
+                        >
+                          <Phone className="w-3 h-3" />
+                        </a>
+                        <a
+                          href={`https://zalo.me/${phoneClean}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          title="Nhắn Zalo"
+                          className="w-6 h-6 rounded-md bg-slate-100 hover:bg-slate-900 text-slate-600 hover:text-white flex items-center justify-center transition-colors"
+                        >
+                          <MessageCircle className="w-3 h-3" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </td>
+
+                {/* Stage */}
+                <td
+                  className="px-4 py-3 whitespace-nowrap"
+                  onClick={e => handleCellClick(e, deal, 'stage_id', deal.stage_id)}
                 >
                   {editingCell?.dealId === deal.id && editingCell?.field === 'stage_id' ? (
-                    <select 
+                    <select
                       autoFocus
-                      className="w-full bg-white border border-indigo-400 rounded px-1 py-0.5 text-xs text-slate-900 outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="bg-white border border-slate-400 rounded-md px-2 py-1 text-xs text-slate-900 outline-none"
                       value={editValue as string}
-                      onChange={(e) => setEditValue(e.target.value)}
+                      onChange={e => setEditValue(e.target.value)}
                       onBlur={() => handleSaveCell(deal)}
-                      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+                      onKeyDown={e => e.key === 'Enter' && e.currentTarget.blur()}
                     >
-                      {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                      {stages.map(s => (
+                        <option key={s.id} value={s.id}>
+                          {s.name}
+                        </option>
+                      ))}
                     </select>
                   ) : (
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${badgeClass}`}>
-                      {stage?.name || 'Unknown'}
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100/90 text-slate-700 border border-slate-200/70">
+                      <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />
+                      {stage?.name || 'Chưa phân loại'}
                     </span>
                   )}
                 </td>
-                <td 
-                  className="px-3 py-2 text-slate-700 text-right whitespace-nowrap font-mono text-[13px] cursor-text hover:bg-slate-100"
-                  onClick={(e) => handleCellClick(e, deal, 'value', deal.value || 0)}
+
+                {/* Value */}
+                <td
+                  className="px-4 py-3 text-slate-900 text-right whitespace-nowrap font-mono tabular-nums font-semibold text-xs"
+                  onClick={e => handleCellClick(e, deal, 'value', deal.value || 0)}
                 >
                   {editingCell?.dealId === deal.id && editingCell?.field === 'value' ? (
-                    <input 
+                    <input
                       autoFocus
                       type="number"
-                      className="w-[100px] text-right bg-white border border-indigo-400 rounded px-1.5 py-0.5 text-xs text-slate-900 outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-[120px] text-right bg-white border border-slate-400 rounded-md px-2 py-1 text-xs text-slate-900 outline-none"
                       value={editValue as number}
-                      onChange={(e) => setEditValue(Number(e.target.value))}
+                      onChange={e => setEditValue(Number(e.target.value))}
                       onBlur={() => handleSaveCell(deal)}
-                      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+                      onKeyDown={e => e.key === 'Enter' && e.currentTarget.blur()}
                     />
                   ) : (
-                    new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(deal.value)
+                    new Intl.NumberFormat('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                      maximumFractionDigits: 0,
+                    }).format(deal.value || 0)
                   )}
                 </td>
-                <td className="px-3 py-2 text-slate-600 whitespace-nowrap">
+
+                {/* Assignee */}
+                <td className="px-4 py-3 text-slate-600 whitespace-nowrap">
                   {deal.assignee ? (
-                    <span className="inline-flex items-center gap-1.5">
-                      <div className="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-md bg-slate-100 border border-slate-200/80 text-slate-700 flex items-center justify-center text-[10px] font-semibold">
                         {(deal.assignee?.name || 'U').charAt(0).toUpperCase()}
-                      </div>
-                      <span className="truncate max-w-[120px]">{deal.assignee.name}</span>
+                      </span>
+                      <span className="truncate max-w-[130px] text-xs font-medium text-slate-700">
+                        {deal.assignee.name}
+                      </span>
                     </span>
-                  ) : '-'}
+                  ) : (
+                    <span className="text-xs text-slate-400">—</span>
+                  )}
                 </td>
-                <td className="px-3 py-2 text-slate-500 whitespace-nowrap">
+
+                {/* Created At */}
+                <td className="px-4 py-3 text-slate-400 text-right whitespace-nowrap font-mono tabular-nums text-xs">
                   {new Date(deal.created_at).toLocaleDateString('vi-VN')}
                 </td>
               </tr>
@@ -279,11 +370,8 @@ export default function TableBoard({ stages, deals, onDealClick, onRefresh }: Ta
           })}
           {deals.length === 0 && (
             <tr>
-              <td colSpan={7} className="px-6 py-12 text-center text-slate-400 font-medium">
-                <div className="flex flex-col items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                  <span>Chưa có deal nào.</span>
-                </div>
+              <td colSpan={7} className="px-6 py-16 text-center text-slate-400 text-xs">
+                Chưa có cơ hội bán hàng nào phù hợp với bộ lọc hiện tại.
               </td>
             </tr>
           )}

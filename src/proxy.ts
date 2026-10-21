@@ -3,19 +3,17 @@ import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 import { getTenantStatus } from './lib/redis/tenantCache';
 import { globalRateLimiter } from './lib/redis/rateLimiter';
+import { isRedisConfigured } from './lib/redis/client';
+import './lib/supabase/pgRestEngine';
 import { adminSupabase as supabase } from './lib/supabase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tavi-super-secret-key-for-jwt-123';
+const encodedJwtSecret = new TextEncoder().encode(JWT_SECRET);
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
-  const hostname = request.headers
-    .get('host')!
-    .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    .replace('localhost:3000', process.env.NEXT_PUBLIC_ROOT_DOMAIN || '');
 
-  // 1. Bypass public static assets, internal pg-rest bridge, and auth routes
+  // 1. Fast-path bypass for static assets, internal pg-rest bridge, and auth/webhook routes
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/assets') ||
@@ -28,10 +26,17 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Handle Custom Domains FIRST (before Auth Guard, because public sites use custom domains)
-  const isSystemDomain = 
-    hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN || 
-    hostname === 'localhost' || 
+  const hostname = (request.headers.get('host') || '')
+    .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+    .replace('localhost:3000', process.env.NEXT_PUBLIC_ROOT_DOMAIN || '');
+
+  // Handle Custom Domains FIRST (only for external custom domains)
+  const isSystemDomain =
+    !hostname ||
+    hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN ||
+    hostname === 'localhost' ||
+    hostname.startsWith('localhost:') ||
+    hostname.startsWith('127.0.0.1') ||
     hostname.includes('vercel.app');
 
   if (!isSystemDomain && !pathname.startsWith('/api/') && !pathname.startsWith('/admin')) {
@@ -52,8 +57,8 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // 2. Global Rate Limiting for public API endpoints
-  if (pathname.startsWith('/api/')) {
+  // 2. Global Rate Limiting for public API endpoints (only when Upstash Redis is configured)
+  if (isRedisConfigured && pathname.startsWith('/api/') && !pathname.startsWith('/api/admin')) {
     try {
       const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1';
       const { success, limit, reset, remaining } = await globalRateLimiter.limit(ip);
@@ -67,13 +72,17 @@ export async function proxy(request: NextRequest) {
           },
         });
       }
-    } catch (err) {
+    } catch {
       // Gracefully continue if Redis rate limiter is unreachable
     }
   }
 
-  // 3. Auth Guard cho các route bảo vệ (/admin, /crm, hoặc API private)
-  if (pathname.startsWith('/admin') || pathname.startsWith('/crm') || pathname.startsWith('/api/admin')) {
+  // 3. Auth Guard for protected routes (/admin, /crm, or /api/admin)
+  if (
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/crm') ||
+    pathname.startsWith('/api/admin')
+  ) {
     if (pathname.includes('/login')) {
       return NextResponse.next();
     }
@@ -85,25 +94,22 @@ export async function proxy(request: NextRequest) {
     }
 
     try {
-      const secret = new TextEncoder().encode(JWT_SECRET);
-      const { payload } = await jwtVerify(token, secret);
+      const { payload } = await jwtVerify(token, encodedJwtSecret);
       const tenantId = payload.tenant_id as string;
 
       if (!tenantId) {
         return NextResponse.redirect(new URL('/admin/crm/login', request.url));
       }
 
-      // 4. Kiểm tra Tenant Status cache ở Redis
+      // 4. Check Tenant Status (In-Memory 0ms cache -> Redis -> DB)
       const tenant = await getTenantStatus(tenantId);
-      
+
       if (!tenant) {
-        // Tenant không tồn tại
         const res = NextResponse.redirect(new URL('/admin/crm/login', request.url));
         res.cookies.delete('crm_token');
         return res;
       }
 
-      // Clone request headers và set X-Tenant-ID
       const requestHeaders = new Headers(request.headers);
       requestHeaders.set('x-tenant-id', tenantId);
       requestHeaders.set('x-user-id', payload.id as string);
@@ -114,8 +120,7 @@ export async function proxy(request: NextRequest) {
           headers: requestHeaders,
         },
       });
-    } catch (error) {
-      // Token invalid hoặc expired
+    } catch {
       const res = NextResponse.redirect(new URL('/admin/crm/login', request.url));
       res.cookies.delete('crm_token');
       return res;
@@ -126,7 +131,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
