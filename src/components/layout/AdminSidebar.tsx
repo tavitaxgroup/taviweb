@@ -68,12 +68,8 @@ export function AdminSidebar() {
 
   const activeModules = user?.tenant?.active_modules || [
     'crm',
-    'ecommerce',
     'booking',
     'cms',
-    'lms',
-    'edu',
-    'chatbot',
   ];
 
   const tenantSlug = user?.tenant?.slug || 'tavi';

@@ -55,7 +55,7 @@ const AuthContext = createContext<AuthContextType>({
   refreshUser: async () => {},
 });
 
-const AUTH_SESSION_STORAGE_KEY = 'tavi_auth_user_v1';
+const AUTH_SESSION_STORAGE_KEY = 'tavi_auth_user_v2';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
