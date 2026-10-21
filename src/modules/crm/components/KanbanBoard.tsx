@@ -70,7 +70,7 @@ export default function KanbanBoard({
     <div className="flex flex-1 h-full gap-3.5 overflow-x-auto overflow-y-hidden pb-3 custom-scrollbar relative z-10 w-full">
       {stages.map((stage, index) => {
         const stageDeals = deals.filter(d => d.stage_id === stage.id);
-        const stageTotalValue = stageDeals.reduce((sum, deal) => sum + (deal.value || 0), 0);
+        const stageTotalValue = stageDeals.reduce((sum, deal) => sum + Number(deal.value || 0), 0);
         const isStageDone = isWonOrDoneStage(stage.name);
         const dotClass = isStageDone ? 'bg-emerald-500' : dotColors[index % dotColors.length];
         const nextStage = stages[index + 1];

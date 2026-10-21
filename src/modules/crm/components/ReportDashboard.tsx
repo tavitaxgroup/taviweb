@@ -45,7 +45,7 @@ export default function ReportDashboard({ deals, stages }: ReportDashboardProps)
   };
 
   const totalDeals = deals.length;
-  const totalValue = deals.reduce((acc, deal) => acc + (deal.value || 0), 0);
+  const totalValue = deals.reduce((acc, deal) => acc + Number(deal.value || 0), 0);
 
   // Recognize all Vietnamese & English completion stage names, falling back to last stage if needed
   const wonStages = useMemo(() => {
@@ -65,7 +65,7 @@ export default function ReportDashboard({ deals, stages }: ReportDashboardProps)
 
   const wonStageIds = useMemo(() => wonStages.map(s => s.id), [wonStages]);
   const wonDeals = deals.filter(d => wonStageIds.includes(d.stage_id));
-  const wonValue = wonDeals.reduce((acc, deal) => acc + (deal.value || 0), 0);
+  const wonValue = wonDeals.reduce((acc, deal) => acc + Number(deal.value || 0), 0);
   const winRate = totalDeals > 0 ? ((wonDeals.length / totalDeals) * 100).toFixed(1) : '0.0';
 
   const funnelData = {
