@@ -589,7 +589,8 @@ function addCompatibilityFields(baseData: Record<string, any>, leadData: DemoPag
     }))
   };
 
-  if (isMock) {
+  const isTokenInspection = leadData.business.placeId === "__token_preview__";
+  if (isTokenInspection) {
     if (baseData.business) {
       baseData.business.name = "[business.name]";
       baseData.business.logoText = "[business.name]";
@@ -1000,9 +1001,10 @@ function postProcessStudioData(baseData: Record<string, any>, leadData: DemoPage
 }
 
 function toStudioTemplateData(data: DemoPageData) {
-  const originalTemplateData = getOriginalStudioData(data.template.key);
+  const key = (data.template.key as IndustryKey) ?? "corporate_profile";
+  const originalTemplateData = getOriginalStudioData(key);
   const replaced = applyLeadIdentity(originalTemplateData, data);
-  mergeCustomTemplateData(replaced, data.template.customData, data.template.key);
+  mergeCustomTemplateData(replaced, data.template.customData, key);
   return postProcessStudioData(replaced, data);
 }
 
@@ -1080,9 +1082,10 @@ function getTemplateThemeStyle(templateKey: IndustryKey): CSSProperties {
 }
 
 export function StudioTemplateRenderer({ data }: { data: DemoPageData }) {
-  const Template = studioTemplateRegistry[data.template.key] ?? GeneralClinicTemplate;
+  const templateKey = (data.template.key as IndustryKey) ?? "corporate_profile";
+  const Template = studioTemplateRegistry[templateKey] ?? GeneralClinicTemplate;
   return (
-    <div className="template-render-root" style={getTemplateThemeStyle(data.template.key)}>
+    <div className="template-render-root" style={getTemplateThemeStyle(templateKey)}>
       <Template data={toStudioTemplateData(data)} />
     </div>
   );

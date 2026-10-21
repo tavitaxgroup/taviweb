@@ -62,10 +62,9 @@ export default async function IndustryTemplatePage({ params }: PageProps) {
 
           <section className="gallery-section">
             <div className="gallery-section-heading">
-              <h2>Mẫu website hiện có</h2>
+              <h2>Mẫu website có sẵn</h2>
               <p>
-                Hiện tại ngành này có một mẫu website để xem thử. Các mẫu ảnh dài khác
-                sẽ được bổ sung vào kho giao diện sau.
+                Rê chuột vào từng mẫu để xem ảnh website tự cuộn, bấm xem chi tiết hoặc trải nghiệm trực tiếp bản demo.
               </p>
             </div>
             <TemplateGrid templates={templates} />

@@ -1,8 +1,8 @@
 # Source Of Truth - Demo Renderer Rules
 
-Cập nhật: 2026-08-07.
+Cập nhật: 2026-10-21.
 
-Demo renderer là phần render website demo public theo `place_id`. Route `/demo/[place_id]` phải hiện trực tiếp landing page của doanh nghiệp, không hiện dashboard hay màn hình cấu hình.
+Demo renderer là phần render website demo public theo `place_id`. Route `/demo/[place_id]` phục vụ việc hiển thị giải pháp website theo thương hiệu của khách hàng hoặc làm trang demo mẫu cho từng ngành.
 
 ## Mục tiêu
 
@@ -12,40 +12,47 @@ Khi truy cập:
 /demo/{place_id}
 ```
 
-Hệ thống phải:
+Hệ thống xử lý qua luồng logic:
 
 1. Lấy `place_id` từ URL.
-2. Gọi `getBusinessByPlaceId(place_id)` để fetch từ Supabase table `leads`.
+2. Gọi `getBusinessByPlaceId(place_id)` để fetch từ Supabase table `leads` hoặc PostgreSQL pool.
 3. Nếu không tìm thấy lead hoặc là mock URL, fallback sang `getMockLeadByPlaceId(place_id)`.
-4. Chọn template bằng `routeTemplateByIndustry(lead.industry)`.
-5. Build `DemoPageData` bằng `buildDemoPageData` (tự động phân tích cú pháp cột JSON `template_data` nếu có).
-6. Áp dụng đè dữ liệu động qua hàm ghép lồng sâu `mergeCustomTemplateData` ở `StudioTemplateRenderer.tsx`.
-7. Render template qua `DemoTemplateRenderer` và `StudioTemplateRenderer`.
+4. Xác định ngành nghề bằng `routeTemplateByIndustry(lead.industry)`.
+5. Lấy danh sách template render sẵn có của ngành từ `getTemplatesByIndustry(industryKey)`.
+6. **Kiểm tra phân nhánh giao diện**:
+   - **Trường hợp A (Khách hàng thực tế & ngành có > 1 template render, chưa chọn `?template=`)**:
+     Hệ thống hiển thị **Industry Template Hub** (`IndustryTemplateHub.tsx`) để khách hàng xem các thẻ mẫu, hover cuộn ảnh dài và bấm chọn xem demo trực tiếp.
+   - **Trường hợp B (Link demo mẫu canonical `/demo/mock-{industry_key}`)**:
+     Bỏ qua Hub và chuyển thẳng vào **Mẫu 1 (XD001)** để người xem trải nghiệm ngay một website mẫu hoàn chỉnh.
+   - **Trường hợp C (Có tham số `?template={templateKey}`)**:
+     Chuyển thẳng vào template được chỉ định (ví dụ: `?template=xay_dung_2` hoặc `?template=cong_ty_xay_dung`), nạp dữ liệu của lead vào template đó.
+7. Build `DemoPageData` bằng `buildDemoPageData` (tự động phân tích cú pháp cột JSON `template_data` nếu có).
+8. Áp dụng đè dữ liệu động qua hàm ghép lồng sâu `mergeCustomTemplateData` ở `StudioTemplateRenderer.tsx`.
+9. Render template qua `DemoTemplateRenderer` (phân nhánh sang `XayDung2Renderer` hoặc `StudioTemplateRenderer`).
 
 ## Không được tạo trong route demo
 
-- Dashboard.
-- Playground.
-- Form nhập tên doanh nghiệp.
-- Form chọn doanh nghiệp mẫu.
-- Live editor.
-- Preset launcher.
-- UI cấu hình dữ liệu.
+- Dashboard / Cấu hình phức tạp cho khách hàng.
+- Form nhập tên doanh nghiệp thủ công.
+- Live editor làm rối giao diện demo.
 
 ## File chính
 
 | File | Vai trò |
 |---|---|
-| `src/app/demo/[place_id]/page.tsx` | Fetch lead, build data, render template |
-| `src/app/demo/[place_id]/not-found.tsx` | Trang fallback khi không có lead |
-| `src/lib/supabase/server.ts` | Fetch Supabase REST API |
-| `src/lib/demo/buildDemoPageData.ts` | Map lead thành `DemoPageData` (chứa logic parse JSON `template_data` và chuyển đổi chế độ Blueprint cho Mock) |
-| `src/lib/demo/mockDemoData.ts` | Mock data cho 15 ngành |
+| `src/app/(public)/demo/[place_id]/page.tsx` | Fetch lead, kiểm tra phân nhánh Template Hub, build data, render template |
+| `src/app/(public)/demo/[place_id]/not-found.tsx` | Trang fallback khi không có lead |
+| `src/components/demo/IndustryTemplateHub.tsx` | Giao diện Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy, đỏ, không giá tiền, ảnh dài) |
+| `src/lib/supabase/server.ts` | Fetch Supabase REST API & PostgreSQL pool |
+| `src/lib/demo/buildDemoPageData.ts` | Map lead thành `DemoPageData` (chứa logic parse JSON `template_data`) |
+| `src/lib/demo/mockDemoData.ts` | Mock data cho các ngành và alias slugs (`xay-dung-an-gia`,...) |
 | `src/lib/demo/templateRouter.ts` | Chọn template theo industry |
 | `src/lib/demo/templateDefaults.ts` | Fallback text, service, image theo ngành |
-| `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry |
-| `src/components/demo/StudioTemplateRenderer.tsx` | Đóng vai trò bộ định hình (Adapter), thực thi ghép đè JSON nâng cao và registry 15 template thực tế |
-| `src/template-sources/{industry}` | Source template đã import từ Studio AI |
+| `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry router (chọn engine render tương ứng: `XayDung2Renderer` hoặc `StudioTemplateRenderer`) |
+| `src/components/demo/StudioTemplateRenderer.tsx` | Đóng vai trò bộ định hình (Adapter), thực thi ghép đè JSON nâng cao và registry các template core |
+| `src/template-sources/xay_dung_2` | Mã nguồn template kiến trúc & xây dựng cao cấp XD002 (Prague Architecture) |
+| `src/template-sources/cong_ty_xay_dung` | Mã nguồn template xây dựng & thi công tiêu chuẩn XD001 |
+| `src/template-sources/{industry}` | Source template khác đã import từ Studio AI |
 
 ## Supabase table
 
@@ -101,14 +108,16 @@ Hàm `mergeCustomTemplateData` hỗ trợ ghi đè bất kỳ thuộc tính nào
 
 ---
 
-## Chế độ Bản đồ khóa trực quan (Visual Blueprint Mode) cho Preview
+## Chế độ Demo Mẫu Canonical & Chế độ Kiểm tra Token (Blueprint Mode)
 
-Khi truy cập trang xem thử mẫu qua đường dẫn `/demo/mock-{industry_key}`:
-1.  Hệ thống kích hoạt cờ hiệu `isMockPreview`.
-2.  Bỏ qua toàn bộ dữ liệu thật của lead và dữ liệu mockup y khoa/spa.
-3.  **Tất cả các đoạn chữ và nút bấm** trên màn hình sẽ hiển thị trực tiếp tên khóa JSON nằm trong dấu ngoặc vuông (ví dụ: `[hero.title]`, `[about.badge]`, `[contact.phone]`).
-4.  **Tất cả các hình ảnh** được thay thế bằng ảnh placeholder màu xanh của `https://placehold.co/` có in rõ nhãn khóa tương ứng (ví dụ: `[logo_url]`, `[hero_image]`, `[gallery_urls[0]]`).
-5.  **Mục đích**: Giúp quản trị viên có thể xem trực quan giao diện thực tế và biết ngay khóa nào điều chỉnh khối thông tin nào để viết cấu hình JSON chính xác tuyệt đối mà không cần đọc code.
+### 1. Demo Mẫu Canonical (`/demo/mock-{industry_key}`)
+- Các đường link mock demo công khai (như `/demo/mock-cong_ty_xay_dung`, `/demo/mock-noi_that`,...) là các trang demo mẫu sống (live preview).
+- **Yêu cầu hiển thị**: Toàn bộ nội dung văn bản, tiêu đề hero, giới thiệu, dịch vụ, đánh giá, hotline và hình ảnh phải hiển thị đầy đủ, chân thực bằng tiếng Việt chuyên nghiệp theo bộ `templateDefaults`. Tuyệt đối không hiển thị các mã giữ chỗ trong ngoặc vuông (`[hero.title]`, `[business.name]`) trên trang demo công khai.
+- **Routing**: Đối với các ngành có > 1 template (như `cong_ty_xay_dung`), đường dẫn `/demo/mock-{industry_key}` sẽ dẫn thẳng vào **Mẫu 1 (XD001)**, không chuyển hướng vào Hub chọn mẫu.
+
+### 2. Chế độ Kiểm tra Token (Token Blueprint Mode)
+- Chỉ được kích hoạt khi có cờ định danh nội bộ (ví dụ: `lead.notes === "__token_preview__"`).
+- Khi kích hoạt, các trường dữ liệu sẽ hiển thị tên token JSON (`[hero.title]`, `[contact.phone]`) phục vụ việc tra cứu mã trường dữ liệu của quản trị viên khi cần viết JSON cấu hình đè.
 
 ---
 
@@ -136,8 +145,11 @@ Hệ thống tự động đồng bộ hóa và làm sạch cấu hình đầu v
 
 ## Checklist khi sửa demo renderer
 
-- [ ] `/demo/mock-nha_khoa` và `/demo/mock-spa` chạy bình thường và hiển thị đúng nhãn khóa Blueprint.
-- [ ] Truy cập lead thật hiển thị đúng thông tin và ảnh thật.
+- [ ] `/demo/mock-cong_ty_xay_dung` dẫn trực tiếp vào Mẫu 1 (XD001), hiển thị đầy đủ chữ và ảnh tiếng Việt, không có mã `[hero.title]`.
+- [ ] `/xay-dung-2` hiển thị đầy đủ giao diện Mẫu 2 (XD002 - Prague Architecture).
+- [ ] Truy cập lead thật (ví dụ `/demo/xay-dung-an-gia`, `/demo/dau-tu-xay-dung-ht-dai-phat`) hiển thị giao diện **Industry Template Hub** tinh gọn, không có giá tiền, rê chuột cuộn dài mượt mà.
+- [ ] Tham số `?template=cong_ty_xay_dung` và `?template=xay_dung_2` mở trực tiếp mẫu tương ứng với dữ liệu của lead.
 - [ ] Ghi đè JSON qua cột `template_data` hoạt động ổn định và chính xác trên môi trường thật.
-- [ ] Chạy kiểm tra kiểu `npx tsc --noEmit` thành công.
+- [ ] Chạy kiểm tra kiểu `npm run typecheck` (`tsc --noEmit`) đạt 0 lỗi.
 - [ ] Chạy kiểm tra đóng gói `npm run build` thành công.
+

@@ -45,6 +45,10 @@ const templates: Record<string, React.ComponentType<any>> = {
     return function Fallback() { return <div className="p-8 text-center">Template "cong_ty_xay_dung" đang được cập nhật.</div> };
   }), { ssr: true }),
 
+  xay_dung_2: dynamic(() => import('@/template-sources/xay_dung_2/components/demo/DemoTemplateRenderer').catch(() => {
+    return function Fallback() { return <div className="p-8 text-center">Template "xay_dung_2" đang được cập nhật.</div> };
+  }), { ssr: true }),
+
   nha_hang: dynamic(() => import('@/template-sources/nha_hang/components/demo/DemoTemplateRenderer').catch(() => {
     return function Fallback() { return <div className="p-8 text-center">Template "nha_hang" đang được cập nhật.</div> };
   }), { ssr: true }),

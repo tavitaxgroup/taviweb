@@ -13,7 +13,7 @@ export type TemplateCatalogItem = {
   id: string;
   type: TemplateCatalogType;
   industryKey: IndustryKey;
-  templateKey?: IndustryKey;
+  templateKey?: IndustryKey | string;
   name: string;
   description: string;
   tags: string[];
@@ -137,7 +137,9 @@ export const industryCatalog: IndustryCatalogItem[] = [
   }
 ];
 
-const renderTemplateItems: TemplateCatalogItem[] = industryCatalog.map((industry) => ({
+const renderTemplateItems: TemplateCatalogItem[] = industryCatalog
+  .filter((industry) => industry.key !== "cong_ty_xay_dung")
+  .map((industry) => ({
   id: `${industry.key}-main-template`,
   type: "render_template",
   industryKey: industry.key,
@@ -602,31 +604,33 @@ const referenceTemplateItems: TemplateCatalogItem[] = [
   },
   {
     id: "XD001",
-    type: "reference_image",
+    type: "render_template",
     industryKey: "cong_ty_xay_dung",
-    name: "Website xây dựng XD001",
-    description: "Mẫu website xây dựng dạng ảnh dài, phù hợp công ty thi công, cảnh quan hoặc nhà thầu.",
-    tags: ["Xây dựng", "Ảnh dài", "Công trình"],
-    thumbnail: "/assets/anh-template/xay-dung/XD001.webp",
-    longPreviewImage: "/assets/anh-template/xay-dung/XD001.webp",
-    packageName: "Gói website xây dựng",
-    priceLabel: "Liên hệ",
+    templateKey: "cong_ty_xay_dung",
+    name: "Website xây dựng & thi công XD001",
+    description: "Mẫu website chuyên nghiệp cho công ty xây dựng, nhà thầu thi công, cảnh quan và hoàn thiện công trình.",
+    tags: ["Xây dựng", "Live Demo", "Công trình", "Mẫu website", "TAVIWEB"],
+    thumbnail: "/assets/anh-template/xay-dung/XD001-live.webp",
+    longPreviewImage: "/assets/anh-template/xay-dung/XD001-live.webp",
+    demoUrl: "/demo/mock-cong_ty_xay_dung",
+    packageName: "Gói website xây dựng tiêu chuẩn",
     status: "active",
-    order: 1001
+    order: 101
   },
   {
     id: "XD002",
-    type: "reference_image",
+    type: "render_template",
     industryKey: "cong_ty_xay_dung",
-    name: "Website xây dựng XD002",
-    description: "Mẫu thiết kế website xây dựng nhấn mạnh giới thiệu công ty, dịch vụ và dự án tiêu biểu.",
-    tags: ["Xây dựng", "Ảnh dài", "Giới thiệu công ty"],
-    thumbnail: "/assets/anh-template/xay-dung/XD002.jpg",
-    longPreviewImage: "/assets/anh-template/xay-dung/XD002.jpg",
-    packageName: "Gói website xây dựng",
-    priceLabel: "5.700.000",
+    templateKey: "xay_dung_2",
+    name: "Website kiến trúc & xây dựng XD002 (Prague Architecture)",
+    description: "Mẫu website thiết kế kiến trúc và thi công xây dựng cao cấp phong cách tối giản chuẩn Châu Âu, lưới dự án, chỉ số năng lực, giải thưởng và biểu mẫu báo giá.",
+    tags: ["Xây dựng", "Kiến trúc", "Live Demo", "Mẫu website", "TAVIWEB"],
+    thumbnail: "/assets/anh-template/xay-dung/XD002-prague.webp",
+    longPreviewImage: "/assets/anh-template/xay-dung/XD002-prague.webp",
+    demoUrl: "/xay-dung-2",
+    packageName: "Gói website xây dựng cao cấp",
     status: "active",
-    order: 1002
+    order: 102
   },
   {
     id: "XD003",

@@ -1,0 +1,12 @@
+/* Prague Architecture - Xây dựng 2 Template Styles */
+@layer components {
+  .a-btn-line {
+    display: inline-block;
+    height: 1px;
+    width: 20px;
+    background-color: currentColor;
+    vertical-align: middle;
+    margin-right: 10px;
+    transition: width 0.3s ease;
+  }
+}

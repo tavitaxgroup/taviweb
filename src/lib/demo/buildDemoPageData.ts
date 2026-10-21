@@ -91,7 +91,8 @@ export function buildDemoPageData(lead: BusinessLead, forcedTemplateKey?: Indust
     }
   }
 
-  const isMockPreview = lead.place_id?.startsWith("mock-");
+  // Only render raw bracket tokens if explicitly flagged for token inspection
+  const isMockPreview = lead.notes === "__token_preview__";
 
   const name = isMockPreview ? "[business.name]" : (clean(lead.name) || defaults.label);
   const address = isMockPreview ? "[contact.address]" : clean(lead.formatted_address);

@@ -34,10 +34,22 @@ const SLUG_ALIASES: Record<string, IndustryKey> = {
   "corporate-profile": "corporate_profile",
   "b2b-product-showcase": "b2b_product",
   "lead-generation": "lead_generation",
-  "thuong-mai-selavyn-viet-nam": "b2b_product"
+  "thuong-mai-selavyn-viet-nam": "b2b_product",
+  "xay-dung-an-gia": "cong_ty_xay_dung"
 };
 
 export function getMockLeadByPlaceId(placeId: string): BusinessLead | null {
+  if (placeId === "xay-dung-an-gia") {
+    const aliasLead = lead("cong_ty_xay_dung", 1);
+    aliasLead.place_id = placeId;
+    aliasLead.id = placeId;
+    aliasLead.name = "CÔNG TY CP TẬP ĐOÀN KIẾN TRÚC & XÂY DỰNG AN GIA";
+    aliasLead.formatted_address = "Số 168 Đường Nguyễn Thị Thập, Tân Phú, Quận 7, TP. Hồ Chí Minh";
+    aliasLead.formatted_phone_number = "0938 123 456";
+    aliasLead.facebook_email = "lienhe@xaydungangia.vn";
+    aliasLead.demo_url = `/demo/${placeId}`;
+    return aliasLead;
+  }
   if (placeId === "thuong-mai-selavyn-viet-nam") {
     const aliasLead = lead("b2b_product", 1);
     aliasLead.place_id = placeId;

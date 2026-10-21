@@ -1,115 +1,128 @@
 # Source Of Truth - Project Architecture
 
-Cap nhat: 2026-08-05.
+Cập nhật: 2026-10-21.
 
-Tai lieu nay la nguon su that cho kien truc hien tai cua project `taviweb`. Moi developer hoac AI coding agent phai doc file nay truoc khi sua code de tranh lam lech cau truc he thong.
+Tài liệu này là nguồn sự thật cho kiến trúc hiện tại của dự án `taviweb`. Mọi developer hoặc AI coding agent phải đọc file này trước khi sửa code để tránh làm lệch cấu trúc hệ thống.
 
-## Vai tro he thong
+## Vai trò hệ thống
 
-`taviweb` la mot Next.js App Router project duy nhat, gom 3 khu vuc chinh:
+`taviweb` là một Next.js App Router project duy nhất, gồm 4 khu vực chính:
 
-| Khu vuc | Route | Vai tro |
+| Khu vực | Route | Vai trò |
 |---|---|---|
-| Website cong ty | `/` | Trang gioi thieu TAVIWEB, dich vu thiet ke website, quy trinh, bang gia va form lien he |
-| Kho giao dien | `/kho-giao-dien/noi_that` | Trang kho giao dien mac dinh, hien nganh noi that va sidebar 15 nganh |
-| Demo renderer | `/demo/[place_id]` | Render website demo theo du lieu lead tu Supabase table `leads` hoac mock data |
+| Website công ty | `/` | Trang giới thiệu TAVIWEB, dịch vụ thiết kế website, quy trình, bảng giá và form liên hệ |
+| Kho giao diện | `/kho-giao-dien/noi_that` | Trang kho giao diện mặc định, hiện ngành nội thất và sidebar các ngành |
+| Demo renderer & Hub | `/demo/[place_id]` | Render website demo theo dữ liệu lead từ Supabase table `leads` hoặc mock data. Khi ngành có > 1 template render và là lead khách hàng (chưa chọn `?template=`), tự động hiển thị **Industry Template Hub** để khách hàng chọn mẫu |
+| Standalone Templates | `/xay-dung-2` | Route xem trực tiếp mẫu độc lập (Mẫu XD002 - Prague Architecture) |
 
-Khong tach thanh nhieu app deploy trong MVP. Website cong ty, kho giao dien va demo renderer dung chung domain, chung codebase va chung deploy Vercel.
+Không tách thành nhiều app deploy. Website công ty, kho giao diện, template hub và demo renderer dùng chung domain, chung codebase và chung deploy Vercel/Next.js.
 
-## Route hien tai
+## Route hiện tại
 
 ```txt
-src/app/page.tsx
-src/app/demo/[place_id]/page.tsx
-src/app/kho-giao-dien/page.tsx
-src/app/kho-giao-dien/[industry_key]/page.tsx
-src/app/kho-giao-dien/[industry_key]/[template_id]/page.tsx
+src/app/(public)/page.tsx
+src/app/(public)/demo/[place_id]/page.tsx
+src/app/(public)/xay-dung-2/page.tsx
+src/app/(public)/kho-giao-dien/page.tsx
+src/app/(public)/kho-giao-dien/[industry_key]/page.tsx
+src/app/(public)/kho-giao-dien/[industry_key]/[template_id]/page.tsx
+src/app/(admin)/admin/...
 ```
 
-Y nghia:
+Ý nghĩa:
 
-- `/`: trang chu TAVIWEB.
-- `/kho-giao-dien`: route alias, tu dong redirect ve `/kho-giao-dien/noi_that`.
-- `/kho-giao-dien/[industry_key]`: trang kho giao dien cua tung nganh.
-- `/kho-giao-dien/[industry_key]/[template_id]`: trang chi tiet item trong catalog, dung khi can mo rong nhieu mau.
-- `/demo/[place_id]`: render landing page demo theo `place_id`.
+- `/`: trang chủ TAVIWEB.
+- `/kho-giao-dien`: route alias, tự động redirect về `/kho-giao-dien/noi_that`.
+- `/kho-giao-dien/[industry_key]`: trang kho giao diện của từng ngành.
+- `/kho-giao-dien/[industry_key]/[template_id]`: trang chi tiết item trong catalog.
+- `/demo/[place_id]`:
+  - **Khách hàng / Lead thực tế (ngành có 1 template)**: Render trực tiếp landing page theo thông tin thương hiệu của doanh nghiệp.
+  - **Khách hàng / Lead thực tế (ngành có > 1 template, ví dụ Xây dựng có XD001 & XD002)**: Hiển thị giao diện **Industry Template Hub** (`IndustryTemplateHub.tsx`) mang nhận diện TAVIWEB để khách hàng xem thẻ ảnh cuộn dài và bấm trải nghiệm bản demo trực tiếp theo từng phương án.
+  - **Link Demo mẫu canonical (`/demo/mock-{industry_key}`)**: Đi thẳng vào Mẫu 1 (XD001), không qua Hub.
+  - **Link Demo có tham số `?template={templateKey}`**: Đi thẳng vào template chỉ định được render theo dữ liệu lead (ví dụ: `?template=xay_dung_2` hoặc `?template=cong_ty_xay_dung`).
+- `/xay-dung-2`: trang demo standalone độc lập của mẫu kiến trúc & xây dựng XD002 (Prague Architecture).
 
-## Phan vung code
+## Phân vùng code
 
-| Folder/file | Vai tro |
+| Folder/file | Vai trò |
 |---|---|
-| `src/components/company` | UI trang cong ty TAVIWEB |
-| `src/components/template-gallery` | UI kho giao dien |
-| `src/components/demo/DemoTemplateRenderer.tsx` | Entry renderer cho demo |
-| `src/components/demo/StudioTemplateRenderer.tsx` | Registry va adapter de render 15 template that |
-| `src/lib/templates/templateCatalog.ts` | Catalog 15 nganh va danh sach mau trong kho giao dien |
-| `src/lib/demo/buildDemoPageData.ts` | Map `BusinessLead` thanh `DemoPageData` |
-| `src/lib/demo/mockDemoData.ts` | Mock lead cho `/demo/mock-{industry_key}` |
-| `src/lib/demo/templateRouter.ts` | Chon template theo `industry` |
-| `src/lib/demo/templateDefaults.ts` | Fallback content theo tung nganh |
-| `src/lib/supabase/server.ts` | Fetch lead tu Supabase REST API |
-| `src/template-sources` | 15 template render thật theo ngành |
-| `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead` (chứa `template_data`), `DemoPageData` |
-| `public/assets/tavi-software-hero.png` | Ảnh background hero trang chủ |
-| `public/assets/anh-template` | Ảnh template dài dùng trong kho giao diện |
+| `src/components/company` | UI trang công ty TAVIWEB |
+| `src/components/template-gallery` | UI kho giao diện hệ thống |
+| `src/components/demo/IndustryTemplateHub.tsx` | UI Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy `#073b8e`, đỏ `#e20b12`, không để giá tiền, hover ảnh cuộn dài, modal popup xem full-page) |
+| `src/components/demo/DemoTemplateRenderer.tsx` | Entry router renderer phân phối giữa các engine template |
+| `src/components/demo/StudioTemplateRenderer.tsx` | Adapter engine render 15 template core |
+| `src/template-sources/xay_dung_2` | Mã nguồn template kiến trúc & xây dựng cao cấp XD002 (Prague Architecture) |
+| `src/template-sources/cong_ty_xay_dung` | Mã nguồn template xây dựng & thi công tiêu chuẩn XD001 |
+| `src/template-sources/{industry}` | Các template render thật khác theo ngành |
+| `src/lib/templates/templateCatalog.ts` | Catalog ngành và danh sách mẫu trong hệ thống |
+| `src/lib/demo/buildDemoPageData.ts` | Map `BusinessLead` thành `DemoPageData` |
+| `src/lib/demo/mockDemoData.ts` | Mock lead cho `/demo/mock-{industry_key}` và alias slugs |
+| `src/lib/demo/templateRouter.ts` | Chọn template theo `industry` |
+| `src/lib/demo/templateDefaults.ts` | Fallback content theo từng ngành |
+| `src/lib/supabase/server.ts` | Fetch lead từ Supabase REST / PostgreSQL connection pool |
+| `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead`, `DemoPageData` |
+| `public/assets/anh-template/xay-dung/` | Lưu ảnh chụp màn hình cuộn dài (`XD001-live.webp` chụp từ `/demo/mock-cong_ty_xay_dung`, `XD002-prague.webp` chụp từ `/xay-dung-2`) |
 
-
-Luu y: `src/public/assets` khong phai thu muc serve static cua Next.js. Anh public phai nam trong `public/...`.
+Lưu ý: Ảnh public phải nằm trong thư mục `public/...`.
 
 ## Industry keys chuẩn hệ thống
 
-Field `industry` trong Supabase và `IndustryKey` trong code gồm 3 nhóm B2B cốt lõi và 15 ngành ngách:
+Field `industry` trong Supabase và `IndustryKey` trong code gồm 3 nhóm B2B cốt lõi và các ngành ngách:
 
-| Industry key | Ngành / Loại hình | Vai trò |
-|---|---|---|
-| `corporate_profile` | Doanh nghiệp B2B & Tập đoàn | Mẫu Hồ sơ năng lực B2B đa ngành, tư vấn, đầu tư, logistics |
-| `b2b_product` | Showroom Thiết bị & B2B (SISBIO) | Mẫu trưng bày thiết bị, máy móc, vật tư công nghiệp & tìm đại lý |
-| `lead_generation` | Tăng trưởng Doanh số & Chuyển đổi | Mẫu landing page chuyển đổi cao, tối ưu khách nóng |
-| `nha_khoa` | Nha khoa | Template ngách B2C |
-| `spa` | Spa | Template ngách B2C |
-| `tham_my_vien` | Thẩm mỹ viện | Template ngách B2C |
-| `phong_kham` | Phòng khám | Template ngách B2C |
-| `salon_toc` | Hair salon | Template ngách B2C |
-| `luat_su` | Luật sư | Template ngách B2B |
-| `trung_tam_tieng_anh` | Trung tâm tiếng Anh | Template ngách B2C |
-| `dich_vu_ve_sinh` | Dịch vụ vệ sinh | Template ngách B2B/B2C |
-| `noi_that` | Thiết kế nội thất | Template ngách B2B/B2C |
-| `cong_ty_xay_dung` | Công ty xây dựng | Template ngách B2B |
-| `nha_hang` | Nhà hàng | Template ngách B2C |
-| `quan_cafe` | Quán cafe | Template ngách B2C |
-| `studio_chup_anh` | Studio chụp ảnh | Template ngách B2C |
-| `phong_gym` | Gym/Fitness | Template ngách B2C |
-| `garage_oto` | Garage ô tô | Template ngách B2C |
+| Industry key | Ngành / Loại hình | Số lượng mẫu render | Chi tiết mẫu |
+|---|---|:---:|---|
+| `cong_ty_xay_dung` | Công ty xây dựng & Kiến trúc | **2 mẫu** | Mẫu 1: `XD001` (Thi công xây dựng tiêu chuẩn)<br>Mẫu 2: `XD002` (Prague Architecture cao cấp) |
+| `corporate_profile` | Doanh nghiệp B2B & Tập đoàn | 1 mẫu | Hồ sơ năng lực B2B đa ngành, tư vấn, đầu tư |
+| `b2b_product` | Showroom Thiết bị & B2B | 1 mẫu | Trưng bày thiết bị, máy móc, vật tư công nghiệp |
+| `lead_generation` | Tăng trưởng Doanh số & Chuyển đổi | 1 mẫu | Landing page chuyển đổi cao |
+| `noi_that` | Thiết kế nội thất | 1 mẫu | Mẫu nội thất cao cấp |
+| `nha_khoa` | Nha khoa | 1 mẫu | Mẫu phòng khám nha khoa |
+| `spa` | Spa & Dưỡng sinh | 1 mẫu | Mẫu spa & chăm sóc sắc đẹp |
+| `tham_my_vien` | Thẩm mỹ viện | 1 mẫu | Mẫu thẩm mỹ viện công nghệ cao |
+| `phong_kham` | Phòng khám | 1 mẫu | Mẫu phòng khám đa khoa / chuyên khoa |
+| `salon_toc` | Hair salon | 1 mẫu | Mẫu salon tóc & tạo mẫu |
+| `luat_su` | Luật sư & Pháp lý | 1 mẫu | Mẫu văn phòng luật sư |
+| `trung_tam_tieng_anh` | Trung tâm ngoại ngữ | 1 mẫu | Mẫu trung tâm đào tạo tiếng Anh |
+| `dich_vu_ve_sinh` | Dịch vụ vệ sinh công nghiệp | 1 mẫu | Mẫu dịch vụ làm sạch công nghiệp |
+| `nha_hang` | Nhà hàng | 1 mẫu | Mẫu ẩm thực & nhà hàng |
+| `quan_cafe` | Quán cafe | 1 mẫu | Mẫu cafe & trà sữa |
+| `studio_chup_anh` | Studio chụp ảnh cưới | 1 mẫu | Mẫu studio ảnh viện áo cưới |
+| `phong_gym` | Gym/Fitness | 1 mẫu | Mẫu trung tâm thể hình |
+| `garage_oto` | Garage ô tô | 1 mẫu | Mẫu gara & bảo dưỡng xe hơi |
 
-Neu them/sua industry key, bat buoc cap nhat dong bo:
+## Luồng render demo và Template Hub
 
-1. `src/types/demo.ts`
-2. `src/lib/demo/templateRouter.ts`
-3. `src/lib/demo/templateDefaults.ts`
-4. `src/lib/demo/mockDemoData.ts`
-5. `src/components/demo/StudioTemplateRenderer.tsx`
-6. `src/lib/templates/templateCatalog.ts`
-7. Thu muc tuong ung trong `src/template-sources`
-
-## Luong render demo
-
-```txt
-User truy cap /demo/{place_id}
-  -> src/app/demo/[place_id]/page.tsx
-  -> getBusinessByPlaceId(place_id)
-  -> fallback getMockLeadByPlaceId(place_id)
-  -> routeTemplateByIndustry(lead.industry)
-  -> buildDemoPageData(lead, templateKey)
-  -> DemoTemplateRenderer
-  -> StudioTemplateRenderer
-  -> src/template-sources/{industry}
+```mermaid
+graph TD
+    A[Người dùng truy cập /demo/place_id] --> B{Kiểm tra place_id}
+    B -->|startsWith 'mock-'| C[Bỏ qua Hub -> Render thẳng Mẫu 1 XD001]
+    B -->|Lead khách hàng thật / alias| D[Fetch lead từ Supabase/Alias]
+    D --> E{Có tham số ?template= hoặc ?t=?}
+    E -->|Có chỉ định template| F[Render trực tiếp template được chọn với data của lead]
+    E -->|Không chỉ định template| G{Ngành có > 1 template render?}
+    G -->|Có > 1 template| H[Hiển thị IndustryTemplateHub.tsx]
+    G -->|Chỉ có 1 template| F
+    H -->|Khách click 'Xem demo trực tiếp'| I[/demo/place_id?template=templateKey]
+    H -->|Khách click 'Xem ảnh cuộn dài'| J[Mở TemplatePreviewModal cuộn tự động]
 ```
 
-Route demo khong duoc bien thanh dashboard, playground, form nhap lieu hoac man hinh chon doanh nghiep.
+Quy tắc giao diện Template Hub (`IndustryTemplateHub.tsx`):
+- **Phần đầu tinh gọn**: Không để văn bản giải thích dài dòng, breadcrumb phức tạp hay tiêu đề trùng lặp. Đặt tiêu đề lớn nổi bật: `MẪU WEBSITE CHO [TÊN DOANH NGHIỆP]` kèm chỉ dẫn cuộn ảnh góc phải.
+- **Thẻ mẫu giao diện**:
+  - Tự động cuộn ảnh từ trên xuống dưới khi rê chuột vào khung (`group-hover:-translate-y-[calc(100%-460px)]`).
+  - Huy hiệu góc trái: `MẪU X • MÃ_MẪU` (ví dụ `MẪU 1 • XD001`, `MẪU 2 • XD002`).
+  - Huy hiệu xanh: `ĐÃ ĐỒNG BỘ THƯƠNG HIỆU`.
+  - **TUYỆT ĐỐI KHÔNG HIỂN THỊ GIÁ TIỀN** trên các thẻ mẫu.
+  - Nút bấm chính: `Trải nghiệm bản demo` dẫn vào `/demo/[place_id]?template=[key]`.
+  - Nút bấm phụ: `Xem ảnh toàn trang` mở modal popup cuộn tự động toàn bộ chiều dài website.
+- **Phong cách chuẩn nhận diện TAVIWEB**:
+  - Màu chủ đạo: Xanh Navy `#073b8e` (tiêu đề, thẻ, nút bấm).
+  - Màu điểm nhấn: Đỏ thương hiệu `#e20b12` (eyebrow, hotline, nút CTA chính).
+  - Typography: Font Sans `Be Vietnam Pro`, việt hóa hoàn chỉnh 100%.
 
-## Luong kho giao dien
+## Luồng kho giao diện
 
-Kho giao dien khong fetch Supabase.
+Kho giao diện không fetch Supabase.
 
 ```txt
 src/lib/templates/templateCatalog.ts
@@ -173,14 +186,20 @@ NEXT_PUBLIC_SITE_URL=
 - Phải đảm bảo chiều cao Hero đồng bộ lý tưởng (`h-[600px] md:h-[650px]`) cho tất cả các template chính, không làm mờ/vỡ ảnh.
 - Phải duy trì cơ chế slideshow tự động chuyển đổi ảnh sau 3 giây khi cấu hình mảng `hero_images`.
 - Phải duy trì logic tự động chuyển đổi bí danh nút bấm CTA (primaryCta/secondaryCta) và chuẩn hóa dữ liệu Trust để tránh gây crash trang khi dữ liệu DB thay đổi.
+- Phải duy trì cơ chế phân nhánh **Industry Template Hub** cho khách hàng thực tế khi một ngành có > 1 template render (`renderTemplates.length > 1 && !selectedTemplate && !isMockLead`).
+- Tuyệt đối **không hiển thị giá tiền** (`template.priceLabel`) trên các thẻ mẫu giao diện trong Template Hub dành cho khách hàng.
+- Phải đảm bảo route demo mẫu canonical (`/demo/mock-{industry_key}`) luôn đi thẳng vào Mẫu 1 (XD001), không rơi vào Hub chọn mẫu.
+- Không để cờ `isMockPreview` ghi đè các nhãn giữ chỗ trong ngoặc vuông (`[hero.title]`, `[business.name]`) lên các trang demo công khai; các trang demo mẫu phải hiển thị dữ liệu và hình ảnh chân thực chuẩn tiếng Việt.
+- Ảnh cuộn dài (long preview) trong kho giao diện và Hub phải được chụp từ URL canonical gốc: Mẫu 1 từ `/demo/mock-cong_ty_xay_dung` và Mẫu 2 từ `/xay-dung-2`.
 
+## Checklist trước khi kết thúc một thay đổi
 
-## Checklist truoc khi ket thuc mot thay doi
+- [ ] Chạy `npm run typecheck` (`tsc --noEmit`) đạt 0 lỗi.
+- [ ] Nếu có sửa route/build config, chạy `npm run build`.
+- [ ] Kiểm tra `/`.
+- [ ] Kiểm tra `/kho-giao-dien` redirect về `/kho-giao-dien/noi_that`.
+- [ ] Kiểm tra route Hub chọn mẫu cho lead thực tế (ví dụ: `/demo/xay-dung-an-gia`).
+- [ ] Kiểm tra route canonical mẫu 1 đi thẳng vào template (ví dụ: `/demo/mock-cong_ty_xay_dung`).
+- [ ] Kiểm tra route standalone mẫu 2 (ví dụ: `/xay-dung-2`).
+- [ ] Kiểm tra chức năng hover cuộn dài và modal xem ảnh toàn trang trong Template Hub.
 
-- [ ] Chay `npx.cmd tsc --noEmit --incremental false`.
-- [ ] Neu co sua route/build config, chay `npm.cmd run build`.
-- [ ] Kiem tra `/`.
-- [ ] Kiem tra `/kho-giao-dien` redirect ve `/kho-giao-dien/noi_that`.
-- [ ] Kiem tra mot trang nganh, vi du `/kho-giao-dien/nha_khoa`.
-- [ ] Kiem tra mot route demo, vi du `/demo/mock-nha_khoa`.
-- [ ] Neu build loi cache Next.js, co the xoa rieng `.next` trong `taviweb` roi build lai.

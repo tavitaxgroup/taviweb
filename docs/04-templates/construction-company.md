@@ -1,7 +1,16 @@
-# Template Spec: Công Ty Xây Dựng
+# Template Spec: Công Ty Xây Dựng & Thi Công (Mẫu XD001)
 
-## 1. Template key
-`construction-company`
+Cập nhật: 2026-10-21.
+
+## 1. Thông tin chung
+- **Mã mẫu (Catalog ID)**: `XD001`
+- **Template Key**: `cong_ty_xay_dung`
+- **Ngành chính (Industry Key)**: `cong_ty_xay_dung`
+- **Package Name**: Gói website xây dựng tiêu chuẩn
+- **Source Code**: `src/template-sources/cong_ty_xay_dung/`
+- **Canonical Demo Route**: `/demo/mock-cong_ty_xay_dung` (truy cập trực tiếp mẫu 1, không qua Hub)
+- **Ảnh chụp toàn trang**: `public/assets/anh-template/xay-dung/XD001-live.webp`
+- **Mẫu thứ 2 cùng ngành**: [XD002 - Prague Architecture](./construction-company-2-prague.md)
 
 ## 2. Industry mapping
 | Keyword | Match |

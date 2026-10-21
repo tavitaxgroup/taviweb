@@ -24,8 +24,7 @@ Header TAVIWEB
   -> Noi dung phai:
       - Breadcrumb
       - O thong tin chinh dang card
-      - The ngang cua mau render/demo hien co
-      - Ben duoi la grid anh template dai cua nganh dang xem
+      - Grid the mau giao dien (dong nhat dinh dang card doc voi anh cuon dai, hover tu cuon, nut 'Xem chi tiet' va 'Xem demo')
 ```
 
 Quy tac UI:
@@ -35,8 +34,8 @@ Quy tac UI:
 - Noi dung phai phai rong hon sidebar.
 - Khong hien luoi chon tat ca nganh trong noi dung kho giao dien.
 - Click "Kho giao dien" o header phai vao thang nganh mac dinh `noi_that`.
-- Card anh template dai phai nam ben duoi the ngang render/demo cu.
-- Card anh template dai khi hover phai hien nut `Xem chi tiet` va anh tu cuon cham tu tren xuong phan duoi.
+- Tat ca the mau giao dien (ca `render_template` va `reference_image`) deu dung chung dinh dang card doc `.gallery-reference-card` voi anh preview cuon dai, mang lai su dong nhat, sang trong va chuyen nghiep.
+- Card anh template dai khi hover phai tu cuon cham tu tren xuong duoi, hien nut `Xem chi tiet` (mo modal anh lon) va nut `Xem demo` (chuyen huong den dung URL demo cua mau).
 - Khi bam `Xem chi tiet`, hien modal co anh lon trong vung scroll doc lap.
 - Modal chi tiet phai cho nguoi dung luot xem het toan bo anh template dai, khong duoc cat mat phan cuoi anh.
 - Anh trong modal tu cuon cham tu tren xuong sau khi mo, nguoi dung tu scroll/cham/keo thi auto-scroll phai dung lai.

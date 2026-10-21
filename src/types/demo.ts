@@ -114,7 +114,7 @@ export type DemoPageData = {
     aboutImageUrl?: string;
   };
   template: {
-    key: IndustryKey;
+    key: IndustryKey | string;
     label: string;
     palette: TemplatePalette;
     customData?: Record<string, any>;

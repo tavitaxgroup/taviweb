@@ -45,29 +45,17 @@ export function IndustryList({ industries }: { industries: IndustryCatalogItem[]
   );
 }
 
-export function TemplateCard({ template }: { template: TemplateCatalogItem }) {
-  return (
-    <article className="gallery-template-card">
-      <div className="gallery-template-thumb">
-        <span>{template.name}</span>
-      </div>
-      <div className="gallery-template-body">
-        <h3>{template.name}</h3>
-        <p>{template.description}</p>
-        <div className="gallery-tags">
-          {template.tags.map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
-        </div>
-        <div className="gallery-template-actions">
-          {template.demoUrl ? <Link href={template.demoUrl}>Xem giao diện mẫu</Link> : null}
-        </div>
-      </div>
-    </article>
-  );
+export function TemplateCard({
+  template,
+  onOpen
+}: {
+  template: TemplateCatalogItem;
+  onOpen?: (template: TemplateCatalogItem) => void;
+}) {
+  return <ReferenceTemplateCard template={template} onOpen={onOpen ?? (() => {})} />;
 }
 
-function ReferenceTemplateCard({
+export function ReferenceTemplateCard({
   template,
   onOpen
 }: {
@@ -88,9 +76,23 @@ function ReferenceTemplateCard({
         </div>
       </div>
       <div className="gallery-reference-info">
-        <h3>{template.name}</h3>
+        <h3>
+          {template.demoUrl ? (
+            <Link href={template.demoUrl} className="hover:text-[#e20b12] transition-colors">
+              {template.name}
+            </Link>
+          ) : (
+            template.name
+          )}
+        </h3>
         {template.packageName ? <p>{template.packageName}</p> : null}
-        {template.priceLabel ? <strong>{template.priceLabel}</strong> : null}
+        {template.priceLabel ? (
+          <strong>
+            {template.priceLabel.includes("đ") || template.priceLabel === "Liên hệ"
+              ? template.priceLabel
+              : `${template.priceLabel}đ`}
+          </strong>
+        ) : null}
       </div>
     </article>
   );
@@ -200,10 +202,16 @@ function TemplatePreviewModal({
                 <dt>Gói</dt>
                 <dd>{template.packageName ?? "Mẫu website tham khảo"}</dd>
               </div>
-              <div>
-                <dt>Chi phí</dt>
-                <dd>{template.priceLabel ?? "Liên hệ"}</dd>
-              </div>
+              {template.priceLabel ? (
+                <div>
+                  <dt>Chi phí</dt>
+                  <dd>
+                    {template.priceLabel.includes("đ") || template.priceLabel === "Liên hệ"
+                      ? template.priceLabel
+                      : `${template.priceLabel}đ`}
+                  </dd>
+                </div>
+              ) : null}
             </dl>
             <div className="gallery-tags">
               {template.tags.map((tag) => (
@@ -229,9 +237,9 @@ export function TemplateGrid({ templates }: { templates: TemplateCatalogItem[] }
   return (
     <>
       {renderTemplates.length > 0 ? (
-        <div className="gallery-template-grid gallery-template-grid-simple">
+        <div className="gallery-reference-grid">
           {renderTemplates.map((template) => (
-            <TemplateCard template={template} key={template.id} />
+            <ReferenceTemplateCard template={template} key={template.id} onOpen={setSelectedTemplate} />
           ))}
         </div>
       ) : null}

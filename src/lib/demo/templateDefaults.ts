@@ -423,6 +423,10 @@ export const templateDefaults: Record<IndustryKey, TemplateDefaults> = {
   }
 };
 
-export function getTemplateDefaults(key: IndustryKey): TemplateDefaults {
-  return templateDefaults[key] ?? templateDefaults.phong_kham;
+export function getTemplateDefaults(key: string): TemplateDefaults {
+  if (key === "xay_dung_2" || key === "XD002") {
+    return templateDefaults.cong_ty_xay_dung;
+  }
+  return (templateDefaults as any)[key] ?? templateDefaults.cong_ty_xay_dung;
 }
+
