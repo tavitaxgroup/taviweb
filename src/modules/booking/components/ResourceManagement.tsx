@@ -199,7 +199,7 @@ export default function ResourceManagement({ template }: { template: string }) {
             });
             setIsModalOpen(true);
           }}
-          className="h-9 px-4 rounded-lg bg-[#0F172A] hover:bg-slate-800 text-white font-semibold text-xs inline-flex items-center gap-1.5 shadow-2xs transition-all"
+          className="h-9 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs inline-flex items-center gap-1.5 shadow-xs shadow-indigo-600/20 transition-all"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>Thêm nhân sự / khu vực</span>
@@ -474,7 +474,7 @@ export default function ResourceManagement({ template }: { template: string }) {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 py-2.5 px-4 rounded-lg font-semibold text-white bg-[#0F172A] hover:bg-slate-800 transition-colors disabled:opacity-50"
+                  className="flex-1 py-2.5 px-4 rounded-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors disabled:opacity-50"
                 >
                   {submitting ? 'Đang lưu...' : 'Lưu thông tin'}
                 </button>

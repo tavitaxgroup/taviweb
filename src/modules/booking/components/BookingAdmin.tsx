@@ -234,7 +234,7 @@ export default function BookingAdmin({ template }: { template: string }) {
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return 'bg-slate-900 border-slate-800 text-white shadow-[0_2px_8px_rgba(15,23,42,0.12)]';
+        return 'bg-indigo-50/95 border-indigo-300/80 text-indigo-950 shadow-2xs';
       case 'completed':
         return 'bg-emerald-50/95 border-emerald-300/80 text-emerald-950';
       case 'pending':
@@ -248,8 +248,8 @@ export default function BookingAdmin({ template }: { template: string }) {
     switch (status) {
       case 'confirmed':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-900 text-white">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-indigo-50 text-indigo-800 border border-indigo-200/80">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
             Đã xác nhận
           </span>
         );
@@ -722,7 +722,7 @@ export default function BookingAdmin({ template }: { template: string }) {
                 }
                 setIsModalOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-all active:scale-[0.985]"
+              className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-xs shadow-indigo-600/20 transition-all active:scale-[0.985]"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Tạo lịch hẹn</span>

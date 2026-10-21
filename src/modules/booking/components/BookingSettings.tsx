@@ -105,7 +105,7 @@ export default function BookingSettings() {
           <button
             type="submit"
             disabled={saving}
-            className="h-9 bg-[#0F172A] hover:bg-slate-800 text-white font-semibold px-5 rounded-lg shadow-2xs transition-all inline-flex items-center gap-1.5 disabled:opacity-50"
+            className="h-9 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 rounded-lg shadow-xs shadow-indigo-600/20 transition-all inline-flex items-center gap-1.5 disabled:opacity-50"
           >
             <Save className="w-3.5 h-3.5" />
             <span>{saving ? 'Đang lưu...' : 'Lưu khung giờ'}</span>

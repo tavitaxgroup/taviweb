@@ -310,7 +310,7 @@ export default function CRMView() {
               setCreateDealStageId(stages[0]?.id);
               setCreateDealOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.985]"
+            className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-xs shadow-indigo-600/20 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.985]"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Tạo cơ hội</span>
