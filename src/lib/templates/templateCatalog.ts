@@ -147,7 +147,9 @@ const renderTemplateItems: TemplateCatalogItem[] = industryCatalog
   name: `Mẫu website ${industry.name}`,
   description: industry.description,
   tags: [industry.name, "Mẫu website", "TAVIWEB"],
-  thumbnail: `/template-previews/${industry.key}.jpg`,
+  thumbnail: `/assets/anh-template/live-previews/${industry.key}-live.webp`,
+  longPreviewImage: `/assets/anh-template/live-previews/${industry.key}-live.webp`,
+  packageName: `Gói website ${industry.name.toLowerCase()}`,
   demoUrl: `/demo/mock-${industry.key}`,
   status: "active",
   order: industry.order

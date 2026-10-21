@@ -67,7 +67,14 @@ export function ReferenceTemplateCard({
   return (
     <article className="gallery-reference-card">
       <div className="gallery-reference-image" aria-label={`Ảnh mẫu ${template.name}`}>
-        <img src={image} alt={template.name} loading="lazy" />
+        <img
+          src={image}
+          alt={template.name}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src = "/assets/logo.png";
+          }}
+        />
         <div className="gallery-reference-overlay">
           <button type="button" onClick={() => onOpen(template)}>
             Xem chi tiết
@@ -189,7 +196,13 @@ function TemplatePreviewModal({
         </div>
         <div className="gallery-modal-body">
           <div className="gallery-modal-image" ref={imageScrollRef}>
-            <img src={image} alt={template.name} />
+            <img
+              src={image}
+              alt={template.name}
+              onError={(e) => {
+                e.currentTarget.src = "/assets/logo.png";
+              }}
+            />
           </div>
           <aside className="gallery-modal-info">
             <p>{template.description}</p>

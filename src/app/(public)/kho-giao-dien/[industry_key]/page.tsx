@@ -25,10 +25,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function IndustryTemplatePage({ params }: PageProps) {
-  const { industry_key } = await params;
-  const industry = getIndustryByKey(industry_key);
+  const resolvedParams = await params;
+  const industry = getIndustryByKey(resolvedParams.industry_key);
 
-  if (!industry) notFound();
+  if (!industry) {
+    notFound();
+  }
 
   const templates = getTemplatesByIndustry(industry.key);
 
