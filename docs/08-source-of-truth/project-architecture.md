@@ -1,6 +1,6 @@
 # Source Of Truth - Project Architecture
 
-Cập nhật: 2026-10-21.
+Cập nhật: 2026-10-22.
 
 Tài liệu này là nguồn sự thật cho kiến trúc hiện tại của dự án `taviweb`. Mọi developer hoặc AI coding agent phải đọc file này trước khi sửa code để tránh làm lệch cấu trúc hệ thống.
 
@@ -11,7 +11,7 @@ Tài liệu này là nguồn sự thật cho kiến trúc hiện tại của d�
 | Khu vực | Route | Vai trò |
 |---|---|---|
 | Website công ty | `/` | Trang giới thiệu TAVIWEB, dịch vụ thiết kế website, quy trình, bảng giá và form liên hệ |
-| Kho giao diện | `/kho-giao-dien/noi_that` | Trang kho giao diện mặc định, hiện ngành nội thất và sidebar các ngành |
+| Kho giao diện | `/kho-giao-dien/noi_that` | Trang kho giao diện mặc định, hiện ngành nội thất và sidebar 18 ngành |
 | Demo renderer & Hub | `/demo/[place_id]` | Render website demo theo dữ liệu lead từ Supabase table `leads` hoặc mock data. Khi ngành có > 1 template render và là lead khách hàng (chưa chọn `?template=`), tự động hiển thị **Industry Template Hub** để khách hàng chọn mẫu |
 | Standalone Templates | `/xay-dung-2` | Route xem trực tiếp mẫu độc lập (Mẫu XD002 - Prague Architecture) |
 
@@ -33,7 +33,7 @@ src/app/(admin)/admin/...
 
 - `/`: trang chủ TAVIWEB.
 - `/kho-giao-dien`: route alias, tự động redirect về `/kho-giao-dien/noi_that`.
-- `/kho-giao-dien/[industry_key]`: trang kho giao diện của từng ngành.
+- `/kho-giao-dien/[industry_key]`: trang kho giao diện của từng ngành (18 ngành).
 - `/kho-giao-dien/[industry_key]/[template_id]`: trang chi tiết item trong catalog.
 - `/demo/[place_id]`:
   - **Khách hàng / Lead thực tế (ngành có 1 template)**: Render trực tiếp landing page theo thông tin thương hiệu của doanh nghiệp.
@@ -41,26 +41,31 @@ src/app/(admin)/admin/...
   - **Link Demo mẫu canonical (`/demo/mock-{industry_key}`)**: Đi thẳng vào Mẫu 1 (XD001), không qua Hub.
   - **Link Demo có tham số `?template={templateKey}`**: Đi thẳng vào template chỉ định được render theo dữ liệu lead (ví dụ: `?template=xay_dung_2` hoặc `?template=cong_ty_xay_dung`).
 - `/xay-dung-2`: trang demo standalone độc lập của mẫu kiến trúc & xây dựng XD002 (Prague Architecture).
+- `/admin/...`: hệ thống quản trị nội bộ gồm CRM Deals/Leads, CMS bài viết, Quản lý Booking/Lịch hẹn, và Cài đặt chung hệ thống.
 
 ## Phân vùng code
 
 | Folder/file | Vai trò |
 |---|---|
 | `src/components/company` | UI trang công ty TAVIWEB |
-| `src/components/template-gallery` | UI kho giao diện hệ thống |
+| `src/components/template-gallery` | UI kho giao diện hệ thống (đồng bộ chuẩn card đứng cuộn dài `.gallery-reference-card`) |
 | `src/components/demo/IndustryTemplateHub.tsx` | UI Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy `#073b8e`, đỏ `#e20b12`, không để giá tiền, hover ảnh cuộn dài, modal popup xem full-page) |
 | `src/components/demo/DemoTemplateRenderer.tsx` | Entry router renderer phân phối giữa các engine template |
 | `src/components/demo/StudioTemplateRenderer.tsx` | Adapter engine render 15 template core |
 | `src/template-sources/xay_dung_2` | Mã nguồn template kiến trúc & xây dựng cao cấp XD002 (Prague Architecture) |
 | `src/template-sources/cong_ty_xay_dung` | Mã nguồn template xây dựng & thi công tiêu chuẩn XD001 |
 | `src/template-sources/{industry}` | Các template render thật khác theo ngành |
-| `src/lib/templates/templateCatalog.ts` | Catalog ngành và danh sách mẫu trong hệ thống |
+| `src/modules/crm` | Hệ thống quản lý quan hệ khách hàng (CRM, Pipelines, Deals, Quotes, Kanban/Table) |
+| `src/modules/booking` | Hệ thống đặt lịch trực tuyến, quản lý tài nguyên và dịch vụ |
+| `src/components/cms` | Trình soạn thảo CMS bài viết và quản lý tin tức |
+| `src/lib/templates/templateCatalog.ts` | Catalog ngành (18 ngành) và danh sách mẫu trong hệ thống |
 | `src/lib/demo/buildDemoPageData.ts` | Map `BusinessLead` thành `DemoPageData` |
 | `src/lib/demo/mockDemoData.ts` | Mock lead cho `/demo/mock-{industry_key}` và alias slugs |
 | `src/lib/demo/templateRouter.ts` | Chọn template theo `industry` |
 | `src/lib/demo/templateDefaults.ts` | Fallback content theo từng ngành |
 | `src/lib/supabase/server.ts` | Fetch lead từ Supabase REST / PostgreSQL connection pool |
 | `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead`, `DemoPageData` |
+| `public/assets/anh-template/live-previews/` | Lưu ảnh chụp màn hình cuộn dài thực tế chuẩn WebP của 17 ngành nghề trực tiếp từ các bản demo live (`{industry_key}-live.webp`) |
 | `public/assets/anh-template/xay-dung/` | Lưu ảnh chụp màn hình cuộn dài (`XD001-live.webp` chụp từ `/demo/mock-cong_ty_xay_dung`, `XD002-prague.webp` chụp từ `/xay-dung-2`) |
 
 Lưu ý: Ảnh public phải nằm trong thư mục `public/...`.

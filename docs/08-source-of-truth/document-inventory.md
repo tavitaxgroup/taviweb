@@ -27,12 +27,14 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Kho giao dien mac dinh | Link header `Kho giao dien` phai vao `/kho-giao-dien/noi_that` |
 | Route `/kho-giao-dien` | Chi la alias redirect ve `/kho-giao-dien/noi_that` |
 | Trang chon tat ca nganh | Khong con dung; khong tao lai luoi chon nganh trong noi dung |
-| Menu nganh nghe | Chi giu dropdown ngoai header va sidebar trai trong trang kho |
+| Menu nganh nghe | Chi giu dropdown ngoai header va sidebar trai trong trang kho (18 nganh nghe chuan) |
 | Sidebar kho giao dien | Mot khung lon, khong co icon mui ten truoc ten nganh |
-| Anh template dai | Nam trong `public/assets/anh-template/{ten-nganh}/{ma-template}` |
-| Card anh template | Nam ben duoi the render/demo cu, hover auto-scroll, click mo modal chi tiet |
+| The mau kho giao dien | Dong nhat 100% dung the dung `.gallery-reference-card` voi anh cuon dai, hover tu cuon, nut 'Xem chi tiet' va 'Xem demo' |
+| Gia tren the mau | TUYET DOI KHONG hien thi gia tren the mau kho giao dien va Hub de giu chien luoc bao gia linh hoat |
+| Anh template dai | Live previews tu dong chup tu demo nam o `public/assets/anh-template/live-previews/{industryKey}-live.webp`; anh tham khao nam trong `public/assets/anh-template/{ten-nganh}/{ma-template}` |
+| Card anh template | Hover auto-scroll, click mo modal chi tiet co fallback anh an toan |
 | Modal anh template | Anh lon nam trong vung scroll doc lap, tu cuon cham sau khi mo, nguoi dung van luot xem het anh dai |
-| Demo renderer | Route `/demo/[place_id]` render website demo truc tiep, khong tao dashboard/playground |
+| Demo renderer | Route `/demo/[place_id]` render website demo truc tiep; voi nganh co > 1 template se hien Industry Template Hub mang nhan dien TAVIWEB |
 | Facebook link | Uu tien `facebook_url`; neu trong thi tam dung `website` nhu link Facebook fallback |
 | Bo cuc Dich vu | Bố cục Tab tương tác (Interactive Tabs Layout) hai cột tối giản |
 | Bo cuc Quy trinh | Quy trình triển khai dạng thẻ rộng xếp chồng 3D (Double-Bezel vỏ ngoài & lõi trong) nằm dưới tiêu đề căn giữa. Danh sách đầu việc tổ chức dạng lưới 3 cột |
