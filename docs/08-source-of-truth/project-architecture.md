@@ -13,7 +13,7 @@ Tài liệu này là nguồn sự thật cho kiến trúc hiện tại của d�
 | Website công ty | `/` | Trang giới thiệu TAVIWEB, dịch vụ thiết kế website, quy trình, bảng giá và form liên hệ |
 | Kho giao diện | `/kho-giao-dien/noi_that` | Trang kho giao diện mặc định, hiện ngành nội thất và sidebar 18 ngành |
 | Demo renderer & Hub | `/demo/[place_id]` | Render website demo theo dữ liệu lead từ Supabase table `leads` hoặc mock data. Khi ngành có > 1 template render và là lead khách hàng (chưa chọn `?template=`), tự động hiển thị **Industry Template Hub** để khách hàng chọn mẫu |
-| Standalone Templates | `/xay-dung-2` | Route xem trực tiếp mẫu độc lập (Mẫu XD002 - Prague Architecture) |
+| Standalone Templates | `/xay-dung-2`, `/xay-dung-3` | Route xem trực tiếp các mẫu độc lập (XD002 - Prague Architecture, XD003/NT003 - Kiến trúc & Nội thất BIM) |
 
 Không tách thành nhiều app deploy. Website công ty, kho giao diện, template hub và demo renderer dùng chung domain, chung codebase và chung deploy Vercel/Next.js.
 
@@ -23,6 +23,7 @@ Không tách thành nhiều app deploy. Website công ty, kho giao diện, templ
 src/app/(public)/page.tsx
 src/app/(public)/demo/[place_id]/page.tsx
 src/app/(public)/xay-dung-2/page.tsx
+src/app/(public)/xay-dung-3/page.tsx
 src/app/(public)/kho-giao-dien/page.tsx
 src/app/(public)/kho-giao-dien/[industry_key]/page.tsx
 src/app/(public)/kho-giao-dien/[industry_key]/[template_id]/page.tsx
@@ -37,10 +38,11 @@ src/app/(admin)/admin/...
 - `/kho-giao-dien/[industry_key]/[template_id]`: trang chi tiết item trong catalog.
 - `/demo/[place_id]`:
   - **Khách hàng / Lead thực tế (ngành có 1 template)**: Render trực tiếp landing page theo thông tin thương hiệu của doanh nghiệp.
-  - **Khách hàng / Lead thực tế (ngành có > 1 template, ví dụ Xây dựng có XD001 & XD002)**: Hiển thị giao diện **Industry Template Hub** (`IndustryTemplateHub.tsx`) mang nhận diện TAVIWEB để khách hàng xem thẻ ảnh cuộn dài và bấm trải nghiệm bản demo trực tiếp theo từng phương án.
-  - **Link Demo mẫu canonical (`/demo/mock-{industry_key}`)**: Đi thẳng vào Mẫu 1 (XD001), không qua Hub.
-  - **Link Demo có tham số `?template={templateKey}`**: Đi thẳng vào template chỉ định được render theo dữ liệu lead (ví dụ: `?template=xay_dung_2` hoặc `?template=cong_ty_xay_dung`).
+  - **Khách hàng / Lead thực tế (ngành có > 1 template, ví dụ Xây dựng có XD001, XD002, XD003; Nội thất có NT001, NT003)**: Hiển thị giao diện **Industry Template Hub** (`IndustryTemplateHub.tsx`) mang nhận diện TAVIWEB để khách hàng xem thẻ ảnh cuộn dài và bấm trải nghiệm bản demo trực tiếp theo từng phương án.
+  - **Link Demo mẫu canonical (`/demo/mock-{industry_key}`)**: Đi thẳng vào Mẫu 1 (XD001 hoặc template chính), không qua Hub.
+  - **Link Demo có tham số `?template={templateKey}`**: Đi thẳng vào template chỉ định được render theo dữ liệu lead (ví dụ: `?template=xay_dung_2`, `?template=xay_dung_3`, hoặc `?template=cong_ty_xay_dung`).
 - `/xay-dung-2`: trang demo standalone độc lập của mẫu kiến trúc & xây dựng XD002 (Prague Architecture).
+- `/xay-dung-3`: trang demo standalone độc lập của mẫu kiến trúc & nội thất XD003 / NT003 (BIM Architecture & Interior Portfolio có Before/After interactive slider).
 - `/admin/...`: hệ thống quản trị nội bộ gồm CRM Deals/Leads, CMS bài viết, Quản lý Booking/Lịch hẹn, và Cài đặt chung hệ thống.
 
 ## Phân vùng code
@@ -49,9 +51,10 @@ src/app/(admin)/admin/...
 |---|---|
 | `src/components/company` | UI trang công ty TAVIWEB |
 | `src/components/template-gallery` | UI kho giao diện hệ thống (đồng bộ chuẩn card đứng cuộn dài `.gallery-reference-card`) |
-| `src/components/demo/IndustryTemplateHub.tsx` | UI Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy `#073b8e`, đỏ `#e20b12`, không để giá tiền, hover ảnh cuộn dài, modal popup xem full-page) |
-| `src/components/demo/DemoTemplateRenderer.tsx` | Entry router renderer phân phối giữa các engine template |
+| `src/components/demo/IndustryTemplateHub.tsx` | UI Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy `#073b8e`, đỏ `#e20b12`, không để giá tiền, hover ảnh cuộn dài, modal popup xem full-page, hỗ trợ lưới 2 hoặc 3 cột responsive) |
+| `src/components/demo/DemoTemplateRenderer.tsx` | Entry router renderer phân phối giữa các engine template (`StudioTemplateRenderer`, `xay_dung_2`, `xay_dung_3`) |
 | `src/components/demo/StudioTemplateRenderer.tsx` | Adapter engine render 15 template core |
+| `src/template-sources/xay_dung_3` | Mã nguồn template kiến trúc & nội thất cao cấp XD003/NT003 (BIM Architecture & Interior Portfolio, thanh trượt so sánh Trước/Sau interactive) |
 | `src/template-sources/xay_dung_2` | Mã nguồn template kiến trúc & xây dựng cao cấp XD002 (Prague Architecture) |
 | `src/template-sources/cong_ty_xay_dung` | Mã nguồn template xây dựng & thi công tiêu chuẩn XD001 |
 | `src/template-sources/{industry}` | Các template render thật khác theo ngành |
@@ -66,7 +69,8 @@ src/app/(admin)/admin/...
 | `src/lib/supabase/server.ts` | Fetch lead từ Supabase REST / PostgreSQL connection pool |
 | `src/types/demo.ts` | Type chung: `IndustryKey`, `BusinessLead`, `DemoPageData` |
 | `public/assets/anh-template/live-previews/` | Lưu ảnh chụp màn hình cuộn dài thực tế chuẩn WebP của 17 ngành nghề trực tiếp từ các bản demo live (`{industry_key}-live.webp`) |
-| `public/assets/anh-template/xay-dung/` | Lưu ảnh chụp màn hình cuộn dài (`XD001-live.webp` chụp từ `/demo/mock-cong_ty_xay_dung`, `XD002-prague.webp` chụp từ `/xay-dung-2`) |
+| `public/assets/anh-template/xay-dung/` | Lưu ảnh chụp màn hình cuộn dài (`XD001-live.webp` chụp từ `/demo/mock-cong_ty_xay_dung`, `XD002-prague.webp` chụp từ `/xay-dung-2`, `XD003-bim.webp` chụp từ `/xay-dung-3`) |
+| `public/assets/anh-template/noi-that/` | Lưu ảnh chụp màn hình cuộn dài (`NT003-bim.webp` chụp từ `/xay-dung-3`, các ảnh tham khảo NT001...) |
 
 Lưu ý: Ảnh public phải nằm trong thư mục `public/...`.
 
@@ -76,11 +80,11 @@ Field `industry` trong Supabase và `IndustryKey` trong code gồm 3 nhóm B2B c
 
 | Industry key | Ngành / Loại hình | Số lượng mẫu render | Chi tiết mẫu |
 |---|---|:---:|---|
-| `cong_ty_xay_dung` | Công ty xây dựng & Kiến trúc | **2 mẫu** | Mẫu 1: `XD001` (Thi công xây dựng tiêu chuẩn)<br>Mẫu 2: `XD002` (Prague Architecture cao cấp) |
+| `cong_ty_xay_dung` | Công ty xây dựng & Kiến trúc | **3 mẫu** | Mẫu 1: `XD001` (Thi công xây dựng tiêu chuẩn)<br>Mẫu 2: `XD002` (Prague Architecture cao cấp)<br>Mẫu 3: `XD003` (Kiến trúc & Nội thất BIM Portfolio) |
+| `noi_that` | Thiết kế nội thất | **2 mẫu** | Mẫu 1: `noi_that-main-template` (Nội thất cao cấp hiện đại)<br>Mẫu 3: `NT003` (Kiến trúc & Nội thất BIM Portfolio) |
 | `corporate_profile` | Doanh nghiệp B2B & Tập đoàn | 1 mẫu | Hồ sơ năng lực B2B đa ngành, tư vấn, đầu tư |
 | `b2b_product` | Showroom Thiết bị & B2B | 1 mẫu | Trưng bày thiết bị, máy móc, vật tư công nghiệp |
 | `lead_generation` | Tăng trưởng Doanh số & Chuyển đổi | 1 mẫu | Landing page chuyển đổi cao |
-| `noi_that` | Thiết kế nội thất | 1 mẫu | Mẫu nội thất cao cấp |
 | `nha_khoa` | Nha khoa | 1 mẫu | Mẫu phòng khám nha khoa |
 | `spa` | Spa & Dưỡng sinh | 1 mẫu | Mẫu spa & chăm sóc sắc đẹp |
 | `tham_my_vien` | Thẩm mỹ viện | 1 mẫu | Mẫu thẩm mỹ viện công nghệ cao |
@@ -195,7 +199,7 @@ NEXT_PUBLIC_SITE_URL=
 - Tuyệt đối **không hiển thị giá tiền** (`template.priceLabel`) trên các thẻ mẫu giao diện trong Template Hub dành cho khách hàng.
 - Phải đảm bảo route demo mẫu canonical (`/demo/mock-{industry_key}`) luôn đi thẳng vào Mẫu 1 (XD001), không rơi vào Hub chọn mẫu.
 - Không để cờ `isMockPreview` ghi đè các nhãn giữ chỗ trong ngoặc vuông (`[hero.title]`, `[business.name]`) lên các trang demo công khai; các trang demo mẫu phải hiển thị dữ liệu và hình ảnh chân thực chuẩn tiếng Việt.
-- Ảnh cuộn dài (long preview) trong kho giao diện và Hub phải được chụp từ URL canonical gốc: Mẫu 1 từ `/demo/mock-cong_ty_xay_dung` và Mẫu 2 từ `/xay-dung-2`.
+- Ảnh cuộn dài (long preview) trong kho giao diện và Hub phải được chụp từ URL canonical gốc: Mẫu 1 từ `/demo/mock-cong_ty_xay_dung`, Mẫu 2 từ `/xay-dung-2`, và Mẫu 3 từ `/xay-dung-3`.
 
 ## Checklist trước khi kết thúc một thay đổi
 
@@ -206,5 +210,7 @@ NEXT_PUBLIC_SITE_URL=
 - [ ] Kiểm tra route Hub chọn mẫu cho lead thực tế (ví dụ: `/demo/xay-dung-an-gia`).
 - [ ] Kiểm tra route canonical mẫu 1 đi thẳng vào template (ví dụ: `/demo/mock-cong_ty_xay_dung`).
 - [ ] Kiểm tra route standalone mẫu 2 (ví dụ: `/xay-dung-2`).
+- [ ] Kiểm tra route standalone mẫu 3 (ví dụ: `/xay-dung-3`).
 - [ ] Kiểm tra chức năng hover cuộn dài và modal xem ảnh toàn trang trong Template Hub.
+
 

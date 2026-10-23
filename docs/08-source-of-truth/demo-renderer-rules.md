@@ -25,10 +25,10 @@ Hệ thống xử lý qua luồng logic:
    - **Trường hợp B (Link demo mẫu canonical `/demo/mock-{industry_key}`)**:
      Bỏ qua Hub và chuyển thẳng vào **Mẫu 1 (XD001)** để người xem trải nghiệm ngay một website mẫu hoàn chỉnh.
    - **Trường hợp C (Có tham số `?template={templateKey}`)**:
-     Chuyển thẳng vào template được chỉ định (ví dụ: `?template=xay_dung_2` hoặc `?template=cong_ty_xay_dung`), nạp dữ liệu của lead vào template đó.
+     Chuyển thẳng vào template được chỉ định (ví dụ: `?template=xay_dung_2`, `?template=xay_dung_3`, `?template=XD003`, `?template=NT003`, hoặc `?template=cong_ty_xay_dung`), nạp dữ liệu của lead vào template đó.
 7. Build `DemoPageData` bằng `buildDemoPageData` (tự động phân tích cú pháp cột JSON `template_data` nếu có).
-8. Áp dụng đè dữ liệu động qua hàm ghép lồng sâu `mergeCustomTemplateData` ở `StudioTemplateRenderer.tsx`.
-9. Render template qua `DemoTemplateRenderer` (phân nhánh sang `XayDung2Renderer` hoặc `StudioTemplateRenderer`).
+8. Áp dụng đè dữ liệu động qua hàm ghép lồng sâu `mergeCustomTemplateData` ở `StudioTemplateRenderer.tsx` (hoặc data adapter chuyên dụng của template độc lập).
+9. Render template qua `DemoTemplateRenderer` (phân nhánh sang `XayDung3Renderer`, `XayDung2Renderer` hoặc `StudioTemplateRenderer`).
 
 ## Không được tạo trong route demo
 
@@ -42,14 +42,17 @@ Hệ thống xử lý qua luồng logic:
 |---|---|
 | `src/app/(public)/demo/[place_id]/page.tsx` | Fetch lead, kiểm tra phân nhánh Template Hub, build data, render template |
 | `src/app/(public)/demo/[place_id]/not-found.tsx` | Trang fallback khi không có lead |
-| `src/components/demo/IndustryTemplateHub.tsx` | Giao diện Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy, đỏ, không giá tiền, ảnh dài) |
+| `src/app/(public)/xay-dung-2/page.tsx` | Trang demo standalone độc lập của mẫu XD002 (Prague Architecture) |
+| `src/app/(public)/xay-dung-3/page.tsx` | Trang demo standalone độc lập của mẫu XD003 / NT003 (BIM Architecture & Interior) |
+| `src/components/demo/IndustryTemplateHub.tsx` | Giao diện Hub trưng bày các phương án mẫu giao diện cho khách hàng (xanh navy, đỏ, không giá tiền, ảnh dài, responsive 2 hoặc 3 cột) |
 | `src/lib/supabase/server.ts` | Fetch Supabase REST API & PostgreSQL pool |
 | `src/lib/demo/buildDemoPageData.ts` | Map lead thành `DemoPageData` (chứa logic parse JSON `template_data`) |
 | `src/lib/demo/mockDemoData.ts` | Mock data cho các ngành và alias slugs (`xay-dung-an-gia`,...) |
 | `src/lib/demo/templateRouter.ts` | Chọn template theo industry |
 | `src/lib/demo/templateDefaults.ts` | Fallback text, service, image theo ngành |
-| `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry router (chọn engine render tương ứng: `XayDung2Renderer` hoặc `StudioTemplateRenderer`) |
+| `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry router (chọn engine render tương ứng: `XayDung3Renderer`, `XayDung2Renderer` hoặc `StudioTemplateRenderer`) |
 | `src/components/demo/StudioTemplateRenderer.tsx` | Đóng vai trò bộ định hình (Adapter), thực thi ghép đè JSON nâng cao và registry các template core |
+| `src/template-sources/xay_dung_3` | Mã nguồn template kiến trúc & nội thất BIM XD003 / NT003 (thanh trượt Before/After tương tác, portfolio chuyên sâu) |
 | `src/template-sources/xay_dung_2` | Mã nguồn template kiến trúc & xây dựng cao cấp XD002 (Prague Architecture) |
 | `src/template-sources/cong_ty_xay_dung` | Mã nguồn template xây dựng & thi công tiêu chuẩn XD001 |
 | `src/template-sources/{industry}` | Source template khác đã import từ Studio AI |
@@ -147,9 +150,11 @@ Hệ thống tự động đồng bộ hóa và làm sạch cấu hình đầu v
 
 - [ ] `/demo/mock-cong_ty_xay_dung` dẫn trực tiếp vào Mẫu 1 (XD001), hiển thị đầy đủ chữ và ảnh tiếng Việt, không có mã `[hero.title]`.
 - [ ] `/xay-dung-2` hiển thị đầy đủ giao diện Mẫu 2 (XD002 - Prague Architecture).
-- [ ] Truy cập lead thật (ví dụ `/demo/xay-dung-an-gia`, `/demo/dau-tu-xay-dung-ht-dai-phat`) hiển thị giao diện **Industry Template Hub** tinh gọn, không có giá tiền, rê chuột cuộn dài mượt mà.
-- [ ] Tham số `?template=cong_ty_xay_dung` và `?template=xay_dung_2` mở trực tiếp mẫu tương ứng với dữ liệu của lead.
+- [ ] `/xay-dung-3` hiển thị đầy đủ giao diện Mẫu 3 (XD003 / NT003 - BIM Architecture & Interior Portfolio kèm thanh trượt Before/After).
+- [ ] Truy cập lead thật (ví dụ `/demo/xay-dung-an-gia`, `/demo/dau-tu-xay-dung-ht-dai-phat`) hiển thị giao diện **Industry Template Hub** tinh gọn, không có giá tiền, rê chuột cuộn dài mượt mà, hiển thị đủ các phương án mẫu.
+- [ ] Tham số `?template=cong_ty_xay_dung`, `?template=xay_dung_2`, và `?template=xay_dung_3` mở trực tiếp mẫu tương ứng với dữ liệu của lead.
 - [ ] Ghi đè JSON qua cột `template_data` hoạt động ổn định và chính xác trên môi trường thật.
 - [ ] Chạy kiểm tra kiểu `npm run typecheck` (`tsc --noEmit`) đạt 0 lỗi.
 - [ ] Chạy kiểm tra đóng gói `npm run build` thành công.
+
 

@@ -1,6 +1,6 @@
 # Source Of Truth - Document Inventory
 
-Cap nhat: 2026-08-05.
+Cập nhật: 2026-10-23.
 
 File nay phan loai tai lieu hien co de developer va AI coding agent biet nen doc gi truoc, tai lieu nao chi con gia tri tham khao, va tai lieu nao co the don dep sau.
 
@@ -34,8 +34,13 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Anh template dai | Live previews tu dong chup tu demo nam o `public/assets/anh-template/live-previews/{industryKey}-live.webp`; anh tham khao nam trong `public/assets/anh-template/{ten-nganh}/{ma-template}` |
 | Card anh template | Hover auto-scroll, click mo modal chi tiet co fallback anh an toan |
 | Modal anh template | Anh lon nam trong vung scroll doc lap, tu cuon cham sau khi mo, nguoi dung van luot xem het anh dai |
-| Demo renderer | Route `/demo/[place_id]` render website demo truc tiep; voi nganh co > 1 template se hien Industry Template Hub mang nhan dien TAVIWEB |
+| Demo renderer & Hub | Route `/demo/[place_id]` render website demo truc tiep; voi nganh co > 1 template se hien Industry Template Hub mang nhan dien TAVIWEB (lưới 2 hoặc 3 cột responsive) |
 | Facebook link | Uu tien `facebook_url`; neu trong thi tam dung `website` nhu link Facebook fallback |
+| Mẫu Xây dựng & Kiến trúc | Hiện có 3 mẫu: `XD001` (Tiêu chuẩn), `XD002` (Prague cao cấp, route `/xay-dung-2`), `XD003` (BIM Architecture & Interior - Khớp 100% bố cục và hiệu ứng Demo 2 từ ảnh người dùng, route `/xay-dung-3`) |
+| Mẫu Thiết kế Nội thất | Hiện có 2 mẫu: `noi_that-main-template` (Nội thất cao cấp) và `NT003` (Kiến trúc & Nội thất BIM tích hợp Demo 2, route `/xay-dung-3`) |
+| Tích hợp liên ngành (Dual-mapping) | Mẫu `xay-dung-3-template` được ánh xạ song song vào cả ngành Xây dựng (`XD003`) và Nội thất (`NT003`), cùng chia sẻ route độc lập `/xay-dung-3` |
+| Bố cục Demo 2 (xay-dung-3) | Khớp chính xác 11 phần theo ảnh Demo 2: Header, Hero chữ rỗng (Innovative Modern Design) + Slider xem trước, About (box 21 năm lồng ảnh), Services (4 thẻ 01-04 Teko viền vàng), Portfolio (4 cột tràn viền 100%), Team (Tomas Kiel, Harley Nikon, John Pommy), Transformation (Thanh trượt Trước/Sau Twentytwenty), Stats (352, 567, 656, 17), Latest News (3 bài viết), Contact Us (3 thẻ info + Bản đồ London Eye tràn viền, không có form), Footer đen BIM |
+| Đội ngũ nhân sự Việt Nam | 100% ảnh chân dung và danh xưng nhân sự thiết kế là người Việt Nam, khớp chính xác 100% giới tính và học vị (KTS) |
 | Bo cuc Dich vu | Bố cục Tab tương tác (Interactive Tabs Layout) hai cột tối giản |
 | Bo cuc Quy trinh | Quy trình triển khai dạng thẻ rộng xếp chồng 3D (Double-Bezel vỏ ngoài & lõi trong) nằm dưới tiêu đề căn giữa. Danh sách đầu việc tổ chức dạng lưới 3 cột |
 | Bo cuc Bang gia | Hệ thống 3 Tab tương tác sử dụng thanh Tab Switcher hình nhộng kính mờ (Pill glassmorphic). Tab 1 hiển thị 3 cột cấu phần kèm Modal chi tiết, có công thức tổng ở trên đầu và nhãn "Miễn phí" màu đỏ nổi bật. Tab 2 tích hợp Bộ tính toán chi phí tự chọn với dải khoảng giá động (min-max) và tự động nhận diện combo (A, B, C, D). Tab 3 hiển thị 4 combo trọn gói chuẩn hóa theo tài liệu PDF với huy hiệu "Gợi ý" dạng capsule đỏ nhấp nháy. |
@@ -43,7 +48,7 @@ Nhung quyet dinh sau dang la trang thai dung cua he thong:
 | Nut lien he noi | Zalo & Phone dạng hình tròn 52px gọn gàng. Hotline trượt ngang lộ số điện thoại khi hover, đi kèm hiệu ứng pulse glow nhẹ tự động. Zalo liên kết trực tiếp chat với SĐT hotline. |
 | Anh slider du an mau | Dùng ảnh tượng trưng (Symbolic Stock Photos) và các ảnh của người dùng tải lên với `object-position: center` |
 | Tùy biến template_data | Hỗ trợ trường `template_data` JSONb đè sâu thông tin chữ/ảnh. Dot notation hỗ trợ chỉnh sửa thuộc tính lồng. |
-| Chế độ Bản đồ khóa trực quan | Truy cập `/demo/mock-[industry]` tự động hiển thị nhãn khóa JSON (ví dụ `[hero.title]`) thay vì dữ liệu thật. |
+| Hiển thị Demo Mẫu | Truy cập `/demo/mock-[industry]` luôn hiển thị dữ liệu sống chân thực 100% bằng tiếng Việt; chế độ mã khóa Token chỉ kích hoạt nội bộ khi `lead.notes === "__token_preview__"`. |
 | Tương thích kép dữ liệu | Chuẩn hóa GalleryItem (flat & nested) và ReviewItem (text & quote) để chống lỗi crash render giữa các template khác nguồn. |
 
 

@@ -61,8 +61,10 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   }
 
   const activeTemplateKey =
-    selectedTemplate === "xay_dung_2" || selectedTemplate === "XD002"
+    selectedTemplate === "xay_dung_2" || selectedTemplate === "XD002" || selectedTemplate === "xay_dung_3" || selectedTemplate === "XD003"
       ? "cong_ty_xay_dung"
+      : selectedTemplate === "NT003"
+      ? "noi_that"
       : industryKey;
 
   const data = buildDemoPageData(lead, activeTemplateKey);
@@ -122,6 +124,10 @@ export default async function DemoPage({ params, searchParams }: PageProps) {
       activeTemplateKey = "cong_ty_xay_dung";
       targetRendererKey = "xay_dung_2";
       activeTemplateName = "Mẫu Kiến Trúc XD002 (Prague Architecture)";
+    } else if (selectedTemplate === "xay_dung_3" || selectedTemplate === "XD003" || selectedTemplate === "NT003") {
+      activeTemplateKey = industryKey === "noi_that" || selectedTemplate === "NT003" ? "noi_that" : "cong_ty_xay_dung";
+      targetRendererKey = "xay_dung_3";
+      activeTemplateName = "Mẫu Kiến Trúc & Nội Thất XD003 (BIM Creative Studio)";
     } else if (selectedTemplate === "cong_ty_xay_dung" || selectedTemplate === "XD001") {
       activeTemplateKey = "cong_ty_xay_dung";
       targetRendererKey = "cong_ty_xay_dung";

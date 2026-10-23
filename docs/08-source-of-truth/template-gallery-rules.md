@@ -114,6 +114,36 @@ Ví dụ mẫu thực tế chuẩn:
   packageName: "Gói website xây dựng tiêu chuẩn",
   status: "active",
   order: 101
+},
+{
+  id: "XD003",
+  type: "render_template",
+  industryKey: "cong_ty_xay_dung",
+  templateKey: "xay_dung_3",
+  name: "Website Kiến trúc & Nội thất BIM XD003",
+  description: "Mẫu website kiến trúc tích hợp nội thất cao cấp chuẩn BIM, sở hữu thanh trượt so sánh Trước/Sau (Before/After) tương tác thực tế và thư viện portfolio chuyên sâu.",
+  tags: ["Kiến trúc", "BIM", "Nội thất", "Before/After", "Live Demo", "TAVIWEB"],
+  thumbnail: "/assets/anh-template/xay-dung/XD003-bim.webp",
+  longPreviewImage: "/assets/anh-template/xay-dung/XD003-bim.webp",
+  demoUrl: "/xay-dung-3",
+  packageName: "Gói website kiến trúc BIM cao cấp",
+  status: "active",
+  order: 103
+},
+{
+  id: "NT003",
+  type: "render_template",
+  industryKey: "noi_that",
+  templateKey: "xay_dung_3",
+  name: "Website Thiết kế & Thi công Nội thất NT003",
+  description: "Mẫu website nội thất và kiến trúc cao cấp phong cách Modern Minimalist & Scandinavian, tích hợp trình so sánh phối cảnh 3D và hoàn thiện thực tế.",
+  tags: ["Nội thất", "Kiến trúc", "3D Render", "Before/After", "Live Demo", "TAVIWEB"],
+  thumbnail: "/assets/anh-template/noi-that/NT003-bim.webp",
+  longPreviewImage: "/assets/anh-template/noi-that/NT003-bim.webp",
+  demoUrl: "/xay-dung-3",
+  packageName: "Gói website nội thất cao cấp",
+  status: "active",
+  order: 102
 }
 ```
 
@@ -135,6 +165,12 @@ Ví dụ mẫu thực tế chuẩn:
   order: industry.order
 }
 ```
+
+### Quy tắc tích hợp đa ngành (Dual-industry mapping)
+Đối với các mẫu thiết kế có phạm vi ứng dụng liên ngành (như Kiến trúc & Nội thất), mẫu được đăng ký dưới dạng `render_template` trong cả hai danh mục:
+1. `cong_ty_xay_dung` (mã `XD003`): Tập trung vào hồ sơ năng lực quy hoạch, kiến trúc BIM, kết cấu công trình.
+2. `noi_that` (mã `NT003`): Tập trung vào không gian sống, vật liệu hoàn thiện, thiết kế nội thất hiện đại và thanh trượt so sánh Trước/Sau.
+Cả hai thẻ catalog đều trỏ về route độc lập `/xay-dung-3` (hoặc `/demo/[place_id]?template=xay_dung_3`) với ảnh chụp dài canonical riêng biệt (`XD003-bim.webp` và `NT003-bim.webp`).
 
 ## Quy tắc với `reference_image`
 
@@ -175,8 +211,9 @@ Ví dụ:
 public/assets/anh-template/live-previews/noi_that-live.webp
 public/assets/anh-template/xay-dung/XD001-live.webp
 public/assets/anh-template/xay-dung/XD002-prague.webp
+public/assets/anh-template/xay-dung/XD003-bim.webp
+public/assets/anh-template/noi-that/NT003-bim.webp
 public/assets/anh-template/noi-that/NT001.jpg
-public/assets/anh-template/xay-dung/XD003.jpg
 public/assets/anh-template/nha-hang/NH001.jpg
 ```
 

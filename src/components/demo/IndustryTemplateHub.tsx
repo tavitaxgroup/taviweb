@@ -87,9 +87,9 @@ export function IndustryTemplateHub({
         {/* Available Live Templates Section */}
         <section className="mb-12">
           {/* Template Cards Grid matching TaviWeb system style */}
-          <div className="gallery-reference-grid grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <div className={`gallery-reference-grid grid grid-cols-1 ${renderTemplates.length >= 3 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"} gap-6 lg:gap-8`}>
             {renderTemplates.map((template, idx) => {
-              const templateTargetKey = template.templateKey || (template.id === "XD002" ? "xay_dung_2" : "cong_ty_xay_dung");
+              const templateTargetKey = template.templateKey || (template.id === "XD002" ? "xay_dung_2" : (template.id === "XD003" || template.id === "NT003" ? "xay_dung_3" : "cong_ty_xay_dung"));
               const demoUrl = `/demo/${encodeURIComponent(placeId)}?template=${templateTargetKey}`;
               const image = template.longPreviewImage ?? template.thumbnail;
 

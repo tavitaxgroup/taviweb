@@ -1,0 +1,461 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Teko:wght@300;400;500;600;700&display=swap');
+
+/* Smooth Scrolling & Offset for Sticky Header */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 85px;
+}
+
+/* Typography Utilities */
+.bim-font-playfair {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.bim-font-poppins {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.bim-font-teko {
+  font-family: 'Teko', -apple-system, sans-serif;
+}
+
+/* Stroke Text Utilities */
+.bim-stroke-hero {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.95);
+  color: transparent;
+}
+
+.bim-stroke-gold {
+  -webkit-text-stroke: 1.2px #b19777;
+  color: transparent;
+}
+
+.bim-stroke-white {
+  -webkit-text-stroke: 1.2px #ffffff;
+  color: transparent;
+}
+
+/* -------------------------------------------------------------
+   1. BIM SIGNATURE MAGIC CURSOR
+------------------------------------------------------------- */
+.cursor-inner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  z-index: 2147483647;
+  background-color: #b19777;
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease;
+}
+
+.cursor-inner[data-visible="true"] {
+  opacity: 1;
+}
+
+.cursor-inner[data-visible="true"].cursor-hover {
+  width: 70px;
+  height: 70px;
+  opacity: 0.28;
+}
+
+.cursor-outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #b19777;
+  box-sizing: border-box;
+  z-index: 2147483646;
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0);
+  transition: width 0.25s ease-out,
+              height 0.25s ease-out,
+              opacity 0.25s ease-out;
+}
+
+.cursor-outer[data-visible="true"] {
+  opacity: 0.55;
+}
+
+.cursor-outer[data-visible="true"].cursor-hover {
+  opacity: 0;
+  width: 55px;
+  height: 55px;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-inner, .cursor-outer {
+    display: none !important;
+  }
+}
+
+/* -------------------------------------------------------------
+   2. SCROLL REVEAL UTILITIES (AOS / WOW EFFECT)
+   Hidden state only applies BEFORE reveal, so once revealed the
+   element has no reveal transform left and card hover transforms
+   (lift, zoom...) work normally.
+------------------------------------------------------------- */
+.bim-reveal,
+.bim-reveal-left,
+.bim-reveal-right,
+.bim-reveal-scale {
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              translate 0.3s ease, scale 0.3s ease,
+              box-shadow 0.3s ease, background-color 0.3s ease,
+              border-color 0.3s ease, color 0.3s ease;
+}
+
+.bim-reveal:not(.bim-revealed) {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+}
+
+.bim-reveal-left:not(.bim-revealed) {
+  opacity: 0;
+  transform: translate3d(-35px, 0, 0);
+}
+
+.bim-reveal-right:not(.bim-revealed) {
+  opacity: 0;
+  transform: translate3d(35px, 0, 0);
+}
+
+.bim-reveal-scale:not(.bim-revealed) {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+/* Stagger Delays for Grid Children (only meaningful during reveal) */
+.delay-100 { transition-delay: 60ms; }
+.delay-200 { transition-delay: 120ms; }
+.delay-300 { transition-delay: 180ms; }
+.delay-400 { transition-delay: 240ms; }
+.delay-500 { transition-delay: 300ms; }
+.delay-600 { transition-delay: 360ms; }
+
+/* After the reveal finishes, drop the stagger so hover reacts instantly */
+.bim-reveal-done {
+  transition-delay: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bim-reveal:not(.bim-revealed),
+  .bim-reveal-left:not(.bim-revealed),
+  .bim-reveal-right:not(.bim-revealed),
+  .bim-reveal-scale:not(.bim-revealed) {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* -------------------------------------------------------------
+   2b. HERO TEXT ENTRANCE (replays on every slide change)
+------------------------------------------------------------- */
+@keyframes bim-hero-fade-up {
+  from { opacity: 0; transform: translate3d(0, 36px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.bim-hero-anim > * {
+  opacity: 0;
+  animation: bim-hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.bim-hero-anim > *:nth-child(1) { animation-delay: 0.15s; }
+.bim-hero-anim > *:nth-child(2) { animation-delay: 0.35s; }
+.bim-hero-anim > *:nth-child(3) { animation-delay: 0.55s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bim-hero-anim > * { animation: none; opacity: 1; }
+}
+
+/* Mouse Scroll Indicator Dot Animation */
+@keyframes bim-scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.bim-scroll-dot {
+  animation: bim-scroll-dot 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* -------------------------------------------------------------
+   3. SERVICE BOX HOVER INVERSION EFFECT
+------------------------------------------------------------- */
+.bim-service-box {
+  background-color: #ffffff;
+  border: 1px solid #eeeeee;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bim-service-box:hover {
+  background-color: #b19777 !important;
+  border-color: #b19777 !important;
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px -10px rgba(177, 151, 119, 0.4);
+}
+
+.bim-service-box .service-num {
+  -webkit-text-stroke: 1.2px #b19777;
+  color: transparent;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+}
+
+.bim-service-box:hover .service-num {
+  -webkit-text-stroke: 1.2px #ffffff !important;
+  transform: translateY(-4px) scale(1.05);
+}
+
+.bim-service-box .service-title {
+  color: #1e1e1e;
+  transition: color 0.35s ease;
+}
+
+.bim-service-box:hover .service-title {
+  color: #ffffff !important;
+}
+
+.bim-service-box .service-desc {
+  color: #777777;
+  transition: color 0.35s ease;
+}
+
+.bim-service-box:hover .service-desc {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.bim-service-box .service-btn {
+  color: #1e1e1e;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bim-service-box:hover .service-btn {
+  color: #ffffff !important;
+  transform: translateX(8px);
+}
+
+/* -------------------------------------------------------------
+   4. TEAM CARD HOVER EFFECT
+------------------------------------------------------------- */
+.bim-team-card {
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #eeeeee;
+  background-color: #ffffff;
+}
+
+.bim-team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.14);
+  border-color: #b19777;
+}
+
+.bim-team-card .team-img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+.bim-team-card img {
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bim-team-card:hover img {
+  transform: scale(1.08);
+}
+
+.bim-team-card .team-overlay {
+  opacity: 0;
+  transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+}
+
+.bim-team-card:hover .team-overlay {
+  opacity: 1;
+}
+
+.bim-team-card .team-overlay-content {
+  transform: translateY(24px);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.bim-team-card:hover .team-overlay-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.bim-team-card .team-social-btn {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bim-team-card .team-social-btn:hover {
+  transform: translateY(-3px) scale(1.15);
+  background-color: #b19777 !important;
+  color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------
+   5. PORTFOLIO STRIP HOVER ZOOM & OVERLAY
+------------------------------------------------------------- */
+.bim-portfolio-strip-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.bim-portfolio-strip-item img {
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bim-portfolio-strip-item:hover img {
+  transform: scale(1.1);
+}
+
+.bim-portfolio-strip-item .strip-overlay {
+  transition: background-color 0.5s ease;
+}
+
+.bim-portfolio-strip-item:hover .strip-overlay {
+  background-color: rgba(0, 0, 0, 0.72);
+}
+
+.bim-portfolio-strip-item .portfolio-view-more {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bim-portfolio-strip-item:hover .portfolio-view-more {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -------------------------------------------------------------
+   6. BLOG / NEWS CARD HOVER EFFECT (TILT + ZOOM)
+------------------------------------------------------------- */
+.bim-blog-card {
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #eeeeee;
+  background-color: #ffffff;
+}
+
+.bim-blog-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+  border-color: rgba(177, 151, 119, 0.5);
+}
+
+.bim-blog-card .blog-img {
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bim-blog-card:hover .blog-img {
+  transform: scale(1.08) rotate(1deg);
+}
+
+.bim-blog-card .blog-title {
+  transition: color 0.3s ease;
+}
+
+.bim-blog-card:hover .blog-title {
+  color: #b19777 !important;
+}
+
+.bim-blog-card .blog-btn {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bim-blog-card:hover .blog-btn {
+  transform: translateX(8px);
+  color: #b19777 !important;
+}
+
+/* -------------------------------------------------------------
+   7. CONTACT CARD HOVER EFFECT (LIFT + ICON BOUNCE)
+------------------------------------------------------------- */
+.bim-contact-card {
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #eeeeee;
+  background-color: #ffffff;
+}
+
+.bim-contact-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(177, 151, 119, 0.22);
+  border-color: #b19777;
+}
+
+.bim-contact-card .contact-icon {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bim-contact-card:hover .contact-icon {
+  transform: scale(1.22) translateY(-4px);
+  color: #b19777;
+}
+
+/* -------------------------------------------------------------
+   8. TWENTYTWENTY DIVIDER LINE & HANDLE
+------------------------------------------------------------- */
+.bim-twentytwenty-handle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  z-index: 30;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.bim-twentytwenty-handle:hover,
+.bim-twentytwenty-handle:active {
+  background-color: #b19777;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.bim-twentytwenty-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  z-index: 25;
+}
