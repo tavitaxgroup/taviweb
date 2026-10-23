@@ -65,16 +65,16 @@ export default function BookingAdmin({ template }: { template: string }) {
 
   useEffect(() => {
     if (user?.tenant_id) {
-      loadStaticConfig();
       loadBankConfig();
+      loadData();
     }
   }, [user?.tenant_id]);
 
   useEffect(() => {
-    if (user?.tenant_id) {
+    if (user?.tenant_id && resources.length > 0) {
       loadAppointmentsOnly();
     }
-  }, [user?.tenant_id, selectedDate]);
+  }, [selectedDate]);
 
   const loadBankConfig = async () => {
     if (!user?.tenant_id) return;
@@ -338,7 +338,6 @@ export default function BookingAdmin({ template }: { template: string }) {
               tenant_id: tenantId,
               name: customerName,
               phone: customerPhone || '',
-              source: 'Booking Admin',
             },
           ])
           .select()
@@ -748,7 +747,7 @@ export default function BookingAdmin({ template }: { template: string }) {
                   <tr>
                     <th className="px-5 py-3 font-medium">Khung giờ</th>
                     <th className="px-5 py-3 font-medium">Khách hàng</th>
-                    <th className="px-5 py-3 font-medium">{config.serviceLabel}</th>
+                    <th className="px-5 py-3 font-medium capitalize">{config.serviceLabel}</th>
                     <th className="px-5 py-3 font-medium">{config.resourceTitle}</th>
                     <th className="px-5 py-3 font-medium">Trạng thái</th>
                     <th className="px-5 py-3 font-medium text-right">Thao tác nhanh</th>
@@ -802,18 +801,51 @@ export default function BookingAdmin({ template }: { template: string }) {
                             <div className="font-medium text-slate-800">
                               {booking.service_name || 'Dịch vụ tiêu chuẩn'}
                             </div>
+                            {booking.notes && (
+                              <div className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+                                {booking.notes}
+                              </div>
+                            )}
                             {price > 0 && (
-                              <div className="font-mono tabular-nums text-[11px] text-slate-500 mt-0.5">
+                              <div className="font-mono tabular-nums text-[11px] text-slate-600 font-semibold mt-0.5">
                                 {formatVND(price)}
                               </div>
                             )}
                           </td>
-                          <td className="px-5 py-3.5 text-slate-700 font-medium">
-                            {resObj ? (
-                              resObj.name
-                            ) : (
-                              <span className="text-amber-600">Chưa xếp nhân sự/chỗ</span>
-                            )}
+                          <td
+                            className="px-5 py-3.5 text-slate-700 font-medium"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <select
+                              value={booking.resource_id || ''}
+                              onChange={async e => {
+                                const newResId = e.target.value;
+                                if (!user?.tenant_id || !newResId) return;
+                                try {
+                                  await BookingService.updateAppointment(
+                                    user.tenant_id,
+                                    booking.id,
+                                    { resource_id: newResId }
+                                  );
+                                  setBookings(prev =>
+                                    prev.map(b =>
+                                      b.id === booking.id ? { ...b, resource_id: newResId } : b
+                                    )
+                                  );
+                                  toast.success('Đã chuyển phân công khoang / nhân sự.');
+                                } catch (err) {
+                                  toast.error('Không thể đổi phân công.');
+                                }
+                              }}
+                              className="bg-slate-50 hover:bg-white border border-slate-200/90 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-800 outline-none focus:border-slate-400 transition-colors max-w-[210px]"
+                            >
+                              {!resObj && <option value="">-- Chọn khoang / nhân sự --</option>}
+                              {resources.map(r => (
+                                <option key={r.id} value={r.id}>
+                                  {r.name}
+                                </option>
+                              ))}
+                            </select>
                           </td>
                           <td className="px-5 py-3.5">{getStatusBadge(booking.status)}</td>
                           <td

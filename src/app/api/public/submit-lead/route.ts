@@ -132,9 +132,28 @@ export async function POST(request: Request) {
 
       const serviceLabel = body.service || 'Tư vấn chuyên sâu 1:1';
       const dealValue = Number(body.servicePrice || 0);
-      const dealTitle = body.name
+      const vehicleModel = body.vehicleModel || body.vehicle_model || '';
+      const licensePlate = body.licensePlate || body.license_plate || '';
+      const vehicleType = body.vehicleType || body.vehicle_type || '';
+      const odoKm = body.odoKm || body.odo_km || '';
+
+      const dealTitle = licensePlate
+        ? `[${licensePlate}] ${vehicleModel ? `${vehicleModel} — ` : ''}${serviceLabel} — ${body.name || body.phone}`
+        : body.name
         ? `${serviceLabel} — ${body.name}`
         : `Liên hệ mới: ${body.phone}`;
+
+      const customData: Record<string, any> = {
+        'Nguồn khách hàng': body.source || 'Web Booking',
+        'Dịch vụ quan tâm': serviceLabel,
+        'Hạng thẻ Thành viên': body.memberTier || 'Member',
+        'Ghi chú': body.message || '',
+      };
+      if (vehicleType) customData['Loại phương tiện'] = vehicleType;
+      if (vehicleModel) customData['Dòng xe'] = vehicleModel;
+      if (licensePlate) customData['Biển số xe'] = licensePlate;
+      if (odoKm) customData['Số ODO (Km)'] = odoKm;
+      if (body.branch) customData['Chi nhánh đăng ký'] = body.branch;
 
       const { data: deal } = await supabase
         .from('crm_deals')
@@ -146,13 +165,7 @@ export async function POST(request: Request) {
             title: dealTitle,
             value: dealValue,
             stage_id: stageId,
-            custom_data: {
-              'Nguồn khách hàng': body.source || 'Web Booking',
-              'Dịch vụ quan tâm': serviceLabel,
-              'Hạng thẻ Thành viên': body.memberTier || 'Member',
-              'Chi nhánh đăng ký': body.branch || 'Quận 1 - Đồng Khởi',
-              'Ghi chú': body.message || '',
-            },
+            custom_data: customData,
           },
         ])
         .select()
@@ -160,18 +173,22 @@ export async function POST(request: Request) {
 
       if (deal) {
         createdDealId = deal.id;
+        const vehicleLine =
+          vehicleModel || licensePlate
+            ? `\n• Phương tiện: [${vehicleType || 'Xe'}] ${vehicleModel} · Biển số: ${licensePlate || 'Chưa rõ'}${odoKm ? ` · ODO: ${odoKm}km` : ''}`
+            : '';
         await supabase.from('crm_activities').insert([
           {
             tenant_id: tenantId,
             deal_id: deal.id,
             type: 'note',
-            content: `Khách hàng gửi form đăng ký tư vấn từ Website.\n• Họ tên: ${body.name}\n• SĐT: ${body.phone}\n• Dịch vụ quan tâm: ${serviceLabel}\n• Chi nhánh: ${body.branch || 'Quận 1 - Đồng Khởi'}\n• Lời nhắn: ${body.message || 'Cần tư vấn phác đồ & báo giá ưu đãi'}`,
+            content: `Khách hàng gửi form đăng ký từ Website.\n• Họ tên: ${body.name}\n• SĐT: ${body.phone}${vehicleLine}\n• Dịch vụ quan tâm: ${serviceLabel}\n• Lời nhắn: ${body.message || 'Cần tư vấn kỹ thuật & báo giá'}`,
           },
           {
             tenant_id: tenantId,
             deal_id: deal.id,
             type: 'task',
-            content: `Gọi tư vấn ngay trong 15 phút cho ${body.name} (${body.phone}) về ${serviceLabel}`,
+            content: `Gọi tư vấn ngay trong 15 phút cho ${body.name} (${body.phone})${licensePlate ? ` - Xe ${licensePlate}` : ''} về ${serviceLabel}`,
             task_due_date: new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
             is_completed: false,
           },

@@ -1,4 +1,6 @@
 export interface BusinessInfo {
+  id?: string;
+  placeId?: string;
   name: string;
   phone: string;
   phoneAlt?: string;
@@ -26,6 +28,7 @@ export interface HeroData {
   subtitle: string;
   image: ImageAsset;
   primaryAction: ActionButton;
+  secondaryAction?: ActionButton;
   stats?: {
     badge: string;
     title: string;
@@ -62,12 +65,23 @@ export interface ServiceItem {
   description: string;
   icon: string;
   href?: string;
+  vehicleType?: 'all' | 'car' | 'moto';
+  priceLabel?: string;
+  durationLabel?: string;
+  tag?: string;
 }
 
 export interface GalleryItem {
   image: ImageAsset;
   caption: string;
   size?: 'large' | 'normal';
+  category?: 'car' | 'moto' | 'ppf' | 'tuning';
+  vehicleModel?: string;
+  licensePlate?: string;
+  ownerName?: string;
+  workSummary?: string[];
+  completionTime?: string;
+  packagePrice?: string;
 }
 
 export interface ReviewItem {
@@ -75,6 +89,7 @@ export interface ReviewItem {
   author: string;
   authorInitials: string;
   vehicle: string;
+  licensePlate?: string;
   text: string;
   rating: number;
 }
@@ -106,4 +121,32 @@ export interface DemoPageData {
   reviews: ReviewItem[];
   contact: ContactData;
   seo: SeoData;
+  bookingUrl?: string;
+  blogUrl?: string;
+  ecosystemProps?: {
+    tenantId: string;
+    tenantSlug: string;
+    tenantName: string;
+    services: Array<{
+      id: string;
+      name: string;
+      duration_minutes: number;
+      price: number;
+    }>;
+    resources: Array<{
+      id: string;
+      name: string;
+      type?: string;
+      role_or_capacity?: string;
+      status?: string;
+    }>;
+    posts: Array<{
+      id: string;
+      title: string;
+      slug: string;
+      content: string;
+      thumbnail_url?: string | null;
+      created_at: string;
+    }>;
+  };
 }

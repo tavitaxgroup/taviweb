@@ -453,17 +453,11 @@ export default function DealDetailModal({
                   <span className="text-[11px] text-slate-400">Nhấn vào từng mục để sửa</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   {[
                     { key: 'name', label: 'Họ và tên', value: deal.contact?.name, mono: false },
                     { key: 'phone', label: 'Số điện thoại', value: deal.contact?.phone, mono: true },
-                    { key: 'website', label: 'Website', value: deal.contact?.website, mono: false },
-                    {
-                      key: 'facebook_url',
-                      label: 'Facebook / Mạng XH',
-                      value: deal.contact?.facebook_url,
-                      mono: false,
-                    },
+                    { key: 'email', label: 'Email liên hệ', value: (deal.contact as any)?.email, mono: false },
                   ].map(field => (
                     <div key={field.key} className="group p-2.5 rounded-xl bg-slate-50/70 border border-slate-100">
                       <span className="text-[11px] text-slate-400 block mb-1 font-medium">
@@ -526,45 +520,87 @@ export default function DealDetailModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     {customFields.map(field => {
                       const currentValue = deal.custom_data?.[field.name] || '';
+                      const fieldLabel = field.label || field.name;
+                      const fieldType = (field as any).field_type || field.type || 'text';
+                      const fieldOptions: string[] = Array.isArray((field as any).options)
+                        ? (field as any).options
+                        : [];
+
                       return (
                         <div
                           key={field.id}
                           className="group p-2.5 rounded-xl bg-slate-50/70 border border-slate-100"
                         >
                           <span className="text-[11px] text-slate-400 block mb-1 font-medium">
-                            {field.label}
+                            {fieldLabel}
                           </span>
                           {editingCustomField === field.name ? (
-                            <input
-                              autoFocus
-                              type={
-                                field.type === 'date'
-                                  ? 'date'
-                                  : field.type === 'number'
-                                  ? 'number'
-                                  : 'text'
-                              }
-                              value={customFieldValue}
-                              onChange={e => setCustomFieldValue(e.target.value)}
-                              onBlur={async () => {
-                                if (!user?.tenant_id || !deal) return;
-                                const newData = {
-                                  ...(deal.custom_data || {}),
-                                  [field.name]: customFieldValue,
-                                };
-                                try {
-                                  await CRMService.updateDeal(user.tenant_id, deal.id, {
-                                    custom_data: newData,
-                                  });
-                                  deal.custom_data = newData;
-                                  if (onRefresh) onRefresh();
-                                } catch (e) {
-                                  console.error('Failed to save custom field', e);
+                            fieldType === 'select' && fieldOptions.length > 0 ? (
+                              <select
+                                autoFocus
+                                value={customFieldValue}
+                                onChange={async e => {
+                                  const nextVal = e.target.value;
+                                  setCustomFieldValue(nextVal);
+                                  if (!user?.tenant_id || !deal) return;
+                                  const newData = {
+                                    ...(deal.custom_data || {}),
+                                    [field.name]: nextVal,
+                                  };
+                                  try {
+                                    await CRMService.updateDeal(user.tenant_id, deal.id, {
+                                      custom_data: newData,
+                                    });
+                                    deal.custom_data = newData;
+                                    if (onRefresh) onRefresh();
+                                  } catch (err) {
+                                    console.error('Failed to save custom field', err);
+                                  }
+                                  setEditingCustomField(null);
+                                }}
+                                onBlur={() => setEditingCustomField(null)}
+                                className="bg-white border border-slate-300 rounded-md px-2 py-1 w-full text-xs font-semibold text-slate-900 outline-none"
+                              >
+                                <option value="">-- Chọn --</option>
+                                {fieldOptions.map(opt => (
+                                  <option key={opt} value={opt}>
+                                    {opt}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <input
+                                autoFocus
+                                type={
+                                  fieldType === 'date'
+                                    ? 'date'
+                                    : fieldType === 'number'
+                                    ? 'number'
+                                    : 'text'
                                 }
-                                setEditingCustomField(null);
-                              }}
-                              className="bg-white border border-slate-300 rounded-md px-2 py-1 w-full text-xs font-semibold text-slate-900 outline-none"
-                            />
+                                value={customFieldValue}
+                                onChange={e => setCustomFieldValue(e.target.value)}
+                                onBlur={async () => {
+                                  if (!user?.tenant_id || !deal) return;
+                                  const newData = {
+                                    ...(deal.custom_data || {}),
+                                    [field.name]: customFieldValue,
+                                  };
+                                  try {
+                                    await CRMService.updateDeal(user.tenant_id, deal.id, {
+                                      custom_data: newData,
+                                    });
+                                    deal.custom_data = newData;
+                                    if (onRefresh) onRefresh();
+                                  } catch (e) {
+                                    console.error('Failed to save custom field', e);
+                                  }
+                                  setEditingCustomField(null);
+                                }}
+                                onKeyDown={e => e.key === 'Enter' && e.currentTarget.blur()}
+                                className="bg-white border border-slate-300 rounded-md px-2 py-1 w-full text-xs font-semibold text-slate-900 outline-none"
+                              />
+                            )
                           ) : (
                             <div
                               onClick={() => {

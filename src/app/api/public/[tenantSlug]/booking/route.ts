@@ -165,6 +165,27 @@ export async function POST(
             })
           : '';
 
+        const vehicleModel = body.vehicle_model || body.vehicleModel || '';
+        const licensePlate = body.license_plate || body.licensePlate || '';
+        const vehicleType = body.vehicle_type || body.vehicleType || '';
+        const odoKm = body.odo_km || body.odoKm || '';
+
+        const dealTitle = licensePlate
+          ? `[${licensePlate}] ${vehicleModel ? `${vehicleModel} — ` : ''}${resolvedServiceName} — ${body.customer_name}`
+          : `${resolvedServiceName} — ${body.customer_name}`;
+
+        const customData: Record<string, any> = {
+          'Nguồn khách hàng': 'Web Booking',
+          'Dịch vụ quan tâm': resolvedServiceName,
+          'Hạng thẻ Thành viên': 'Member',
+          'Giờ hẹn': formattedTime,
+        };
+        if (vehicleType) customData['Loại phương tiện'] = vehicleType;
+        if (vehicleModel) customData['Dòng xe'] = vehicleModel;
+        if (licensePlate) customData['Biển số xe'] = licensePlate;
+        if (odoKm) customData['Số ODO (Km)'] = odoKm;
+        if (body.branch) customData['Chi nhánh đăng ký'] = body.branch;
+
         const { data: deal } = await supabase
           .from('crm_deals')
           .insert([
@@ -172,16 +193,10 @@ export async function POST(
               tenant_id: tenantId,
               pipeline_id: pipelineId,
               contact_id: contactId,
-              title: `${resolvedServiceName} — ${body.customer_name}`,
+              title: dealTitle,
               value: dealValue,
               stage_id: stageId,
-              custom_data: {
-                'Nguồn khách hàng': 'Web Booking',
-                'Dịch vụ quan tâm': resolvedServiceName,
-                'Hạng thẻ Thành viên': 'Member',
-                'Chi nhánh đăng ký': body.branch || 'Quận 1 - Đồng Khởi',
-                'Giờ hẹn': formattedTime,
-              },
+              custom_data: customData,
             },
           ])
           .select()

@@ -224,6 +224,22 @@ export default function CMSEditor({ params }: { params: Promise<{ id: string }> 
       if (aiKeywords && !focusKeyword) {
         setFocusKeyword(aiKeywords.split(',')[0].trim());
       }
+      if (!thumbnailUrl) {
+        const lowerTopic = aiTopic.toLowerCase();
+        const isAutoOrMoto =
+          lowerTopic.includes('xe') ||
+          lowerTopic.includes('ô tô') ||
+          lowerTopic.includes('mô tô') ||
+          lowerTopic.includes('pkl') ||
+          lowerTopic.includes('ppf') ||
+          lowerTopic.includes('ceramic') ||
+          lowerTopic.includes('bảo dưỡng');
+        setThumbnailUrl(
+          isAutoOrMoto
+            ? 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=85&w=1400&auto=format&fit=crop'
+            : 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=85&w=1400&auto=format&fit=crop'
+        );
+      }
       setContent(data.contentHtml);
       setIsAiModalOpen(false);
       toast.success('Trợ lý AI đã hoàn tất bản thảo bài viết.');

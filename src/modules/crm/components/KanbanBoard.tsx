@@ -117,7 +117,15 @@ export default function KanbanBoard({
                   String(deal.title || '').startsWith('[Đơn hàng #');
                 const isBookingDeal =
                   deal.custom_data?.['Nguồn'] === 'Web Booking' ||
+                  deal.custom_data?.['Nguồn khách hàng'] === 'Web Booking' ||
                   String(deal.title || '').startsWith('Lịch hẹn:');
+
+                const licensePlate = deal.custom_data?.['Biển số xe'] || '';
+                const vehicleModel = deal.custom_data?.['Dòng xe'] || '';
+                const vehicleType = deal.custom_data?.['Loại phương tiện'] || '';
+                const memberTier = deal.custom_data?.['Hạng thẻ Thành viên'] || '';
+                const sourceTag =
+                  deal.custom_data?.['Nguồn khách hàng'] || deal.custom_data?.['Nguồn'] || '';
 
                 const ageDays = deal.created_at
                   ? Math.floor(
@@ -138,19 +146,23 @@ export default function KanbanBoard({
                     className="group bg-white p-3.5 rounded-xl border border-slate-200/80 cursor-grab active:cursor-grabbing hover:border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.03)] hover:shadow-[0_6px_16px_-4px_rgba(15,23,42,0.06)] transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] relative"
                   >
                     {/* Top Meta Row */}
-                    {(isEcommerceDeal || isBookingDeal || isStale) && (
-                      <div className="flex items-center justify-between gap-1.5 mb-2">
-                        <div className="flex items-center gap-1.5">
-                          {isEcommerceDeal && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">
-                              Đơn hàng Web
+                    {(isEcommerceDeal || isBookingDeal || memberTier || sourceTag || isStale) && (
+                      <div className="flex items-center justify-between gap-1.5 mb-2 flex-wrap">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {memberTier && memberTier !== 'Member' && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-900 text-amber-300">
+                              {memberTier}
                             </span>
                           )}
-                          {isBookingDeal && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">
+                          {isBookingDeal ? (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                               Lịch hẹn Web
                             </span>
-                          )}
+                          ) : sourceTag ? (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600">
+                              {sourceTag}
+                            </span>
+                          ) : null}
                         </div>
                         {isStale && (
                           <span
@@ -159,6 +171,30 @@ export default function KanbanBoard({
                           >
                             <Clock className="w-2.5 h-2.5" />
                             {ageDays}d
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Vehicle Profile Badge (For Garage / Automotive CRM) */}
+                    {(licensePlate || vehicleModel) && (
+                      <div className="mb-2 p-2 rounded-lg bg-slate-900 text-white flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="text-[11px] font-semibold text-white truncate">
+                            {vehicleModel || vehicleType || 'Phương tiện'}
+                          </div>
+                          {vehicleType && vehicleModel && (
+                            <div className="text-[10px] text-slate-400 truncate">
+                              {vehicleType}
+                              {deal.custom_data?.['Số ODO (Km)']
+                                ? ` · ODO: ${deal.custom_data['Số ODO (Km)']}`
+                                : ''}
+                            </div>
+                          )}
+                        </div>
+                        {licensePlate && (
+                          <span className="shrink-0 px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-mono font-bold text-[10.5px] tracking-wider">
+                            {licensePlate}
                           </span>
                         )}
                       </div>
