@@ -1,4 +1,4 @@
-import { Building2, Home, Building, Hammer, Armchair, HelpCircle, ChevronRight, LucideIcon } from "lucide-react";
+import { Building2, Home, Building, Hammer, Armchair, HelpCircle, ChevronRight, type LucideIcon } from "lucide-react";
 import { ServiceItem } from "../../../types/demo";
 
 interface ServicesSectionProps {
