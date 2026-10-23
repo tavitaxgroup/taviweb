@@ -16,6 +16,9 @@ import {
   Dumbbell,
   Paintbrush,
   Gavel,
+  Wrench,
+  Car,
+  Bike,
 } from 'lucide-react';
 import { BookingService } from '../api/booking.service';
 import { BookingResource, BookingServiceItem } from '../types';
@@ -39,6 +42,8 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
     { date: Date; label: string; dayName: string; fullDate: string }[]
   >([]);
 
+  const isGarage = templateKey === 'garage_oto';
+
   const [formData, setFormData] = useState({
     customerName: '',
     customerPhone: '',
@@ -47,6 +52,9 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
     time: '',
     resourceId: '',
     serviceId: '',
+    vehicleType: 'Ô tô',
+    vehicleModel: '',
+    odoKm: '',
   });
 
   useEffect(() => {
@@ -96,24 +104,37 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
         }
         setDates(nextDates);
         let preselectedServiceId = '';
+        let preselectedResourceId = '';
+        let preVehicleType = '';
+        let preVehicleModel = '';
         if (typeof window !== 'undefined') {
           const sp = new URLSearchParams(window.location.search);
           const qServiceId = sp.get('serviceId');
           const qServiceName = sp.get('service');
+          const qResourceId = sp.get('resourceId');
+          preVehicleType = sp.get('vehicleType') || '';
+          preVehicleModel = sp.get('vehicleModel') || '';
           if (qServiceId && svcs.some(s => s.id === qServiceId)) {
             preselectedServiceId = qServiceId;
           } else if (qServiceName) {
-            const matched = svcs.find(s =>
-              s.name.toLowerCase().includes(qServiceName.toLowerCase()) ||
-              qServiceName.toLowerCase().includes(s.name.toLowerCase())
+            const matched = svcs.find(
+              s =>
+                s.name.toLowerCase().includes(qServiceName.toLowerCase()) ||
+                qServiceName.toLowerCase().includes(s.name.toLowerCase())
             );
             if (matched) preselectedServiceId = matched.id;
+          }
+          if (qResourceId && activeRes.some(r => r.id === qResourceId)) {
+            preselectedResourceId = qResourceId;
           }
         }
         setFormData(f => ({
           ...f,
           date: nextDates[0].date.toISOString().split('T')[0],
           serviceId: preselectedServiceId || f.serviceId,
+          resourceId: preselectedResourceId || f.resourceId,
+          vehicleType: preVehicleType || f.vehicleType,
+          vehicleModel: preVehicleModel || f.vehicleModel,
         }));
       } catch (err) {
         console.error('Lỗi khi tải dữ liệu booking', err);
@@ -165,6 +186,16 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
       const end = new Date(start);
       end.setMinutes(start.getMinutes() + duration);
 
+      const vehicleSummary =
+        isGarage && formData.vehicleModel.trim()
+          ? `[${formData.vehicleType}] ${formData.vehicleModel.trim()}${
+              formData.odoKm.trim() ? ` · ODO: ${formData.odoKm.trim()}km` : ''
+            }`
+          : '';
+      const combinedNotes = [vehicleSummary, formData.notes.trim()]
+        .filter(Boolean)
+        .join(' — ');
+
       const res = await fetch(`/api/public/${tenantId}/booking`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -177,7 +208,10 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
           start_time: start.toISOString(),
           end_time: end.toISOString(),
           status: 'pending',
-          notes: formData.notes.trim() || 'Đặt lịch trực tuyến trên Website',
+          notes: combinedNotes || 'Đặt lịch trực tuyến trên Website',
+          vehicle_type: isGarage ? formData.vehicleType : undefined,
+          vehicle_model: isGarage ? formData.vehicleModel.trim() : undefined,
+          odo_km: isGarage ? formData.odoKm.trim() : undefined,
         }),
       });
 
@@ -229,6 +263,8 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
         return 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=1200';
       case 'studio_chup_anh':
         return 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200';
+      case 'garage_oto':
+        return 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=85&w=1400';
       default:
         return 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200';
     }
@@ -255,6 +291,8 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
         return <Paintbrush className="w-4 h-4" />;
       case 'luat_su':
         return <Gavel className="w-4 h-4" />;
+      case 'garage_oto':
+        return <Wrench className="w-4 h-4" />;
       default:
         return <User className="w-4 h-4" />;
     }
@@ -578,11 +616,70 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
           </div>
         </section>
 
-        {/* STEP 4: CUSTOMER CONTACT & NOTES */}
+        {/* STEP 4: CUSTOMER CONTACT & VEHICLE PROFILE */}
         <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
           <h2 className="text-lg font-semibold text-slate-900 tracking-[-0.01em] mb-5">
-            Thông tin liên hệ
+            {isGarage ? 'Thông tin chủ xe & Phương tiện' : 'Thông tin liên hệ'}
           </h2>
+
+          {isGarage && (
+            <div className="mb-5 p-4 rounded-2xl bg-slate-900 text-white space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">
+                  Thông tin phương tiện
+                </span>
+                <div className="flex items-center gap-1.5">
+                  {['Ô tô', 'Xe máy - PKL'].map(type => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, vehicleType: type })}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                        formData.vehicleType === type
+                          ? 'bg-orange-500 text-white'
+                          : 'bg-white/10 text-slate-300 hover:text-white'
+                      }`}
+                    >
+                      {type === 'Ô tô' ? (
+                        <Car className="w-3.5 h-3.5" />
+                      ) : (
+                        <Bike className="w-3.5 h-3.5" />
+                      )}
+                      <span>{type}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div className="sm:col-span-8">
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1">
+                    Hãng & Dòng xe <span className="text-orange-400">*</span>
+                  </label>
+                  <input
+                    required={isGarage}
+                    type="text"
+                    value={formData.vehicleModel}
+                    onChange={e => setFormData({ ...formData, vehicleModel: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-white/15 focus:outline-none focus:border-orange-400 text-white text-sm"
+                    placeholder="VD: Porsche 911 / Mazda CX-5 / Honda SH350i"
+                  />
+                </div>
+                <div className="sm:col-span-4">
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1">
+                    Số ODO (Km)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.odoKm}
+                    onChange={e => setFormData({ ...formData, odoKm: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-white/15 focus:outline-none focus:border-orange-400 text-white font-mono text-sm"
+                    placeholder="VD: 15.000 km"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
@@ -615,14 +712,20 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
 
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1.5">
-              Ghi chú hoặc yêu cầu riêng (tùy chọn)
+              {isGarage
+                ? 'Tình trạng xe hoặc yêu cầu kỹ thuật riêng (tùy chọn)'
+                : 'Ghi chú hoặc yêu cầu riêng (tùy chọn)'}
             </label>
             <input
               type="text"
               value={formData.notes}
               onChange={e => setFormData({ ...formData, notes: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-slate-200/90 focus:outline-none focus:border-slate-400 bg-slate-50/50 focus:bg-white text-slate-900 text-sm transition-colors"
-              placeholder="Ví dụ: Đi 2 người, cần tư vấn trước khi làm..."
+              placeholder={
+                isGarage
+                  ? 'Ví dụ: Cần kiểm tra thêm tiếng kêu gầm, xóa vết xước cản trước...'
+                  : 'Ví dụ: Đi 2 người, cần tư vấn trước khi làm...'
+              }
             />
           </div>
         </section>
@@ -655,8 +758,19 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
               </div>
             </div>
 
+            {isGarage && formData.vehicleModel && (
+              <div className="flex justify-between items-start gap-4 pt-4 border-t border-white/10">
+                <span className="text-slate-400">Phương tiện</span>
+                <div className="text-right">
+                  <div className="font-semibold text-white">
+                    {formData.vehicleModel || formData.vehicleType}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex justify-between items-start gap-4 pt-4 border-t border-white/10">
-              <span className="text-slate-400">Phụ trách</span>
+              <span className="text-slate-400">{isGarage ? 'Kỹ thuật viên / Khu vực' : 'Phụ trách'}</span>
               <span className="font-semibold text-white text-right">
                 {selectedResource ? selectedResource.name : 'Sắp xếp tự động'}
               </span>

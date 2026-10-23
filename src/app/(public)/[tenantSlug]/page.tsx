@@ -184,7 +184,8 @@ export default async function TenantHomePage({ params }: Props) {
 
       const isInlineEcosystemTemplate =
         tenant.template_key === "tham_my_vien" ||
-        tenant.template_key === "nha_khoa";
+        tenant.template_key === "nha_khoa" ||
+        tenant.template_key === "garage_oto";
 
       return (
         <>

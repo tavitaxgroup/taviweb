@@ -1,5 +1,5 @@
 import React from "react";
-import { Users, ShieldCheck, Calendar, LucideIcon } from "lucide-react";
+import { Users, ShieldCheck, Calendar, type LucideIcon } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
 
 interface WhyChooseUsSectionProps {

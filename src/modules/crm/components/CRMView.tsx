@@ -193,8 +193,8 @@ export default function CRMView() {
               <div className="flex items-center bg-slate-100/80 p-0.5 rounded-lg border border-slate-200/60">
                 {[
                   { id: 'all', label: `Tất cả (${deals.length})` },
-                  { id: 'ecommerce', label: 'Đơn Web' },
-                  { id: 'vip', label: 'VIP > 50tr' },
+                  { id: 'ecommerce', label: 'Lịch hẹn Web' },
+                  { id: 'vip', label: 'VIP > 15tr' },
                   { id: 'this_month', label: 'Tháng này' },
                 ].map(tab => (
                   <button
@@ -217,10 +217,10 @@ export default function CRMView() {
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Tìm tên khách, SĐT, deal..."
+                  placeholder="Tìm tên, SĐT, biển số, dòng xe..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="h-9 pl-8 pr-14 text-xs rounded-lg border border-slate-200/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 transition-colors w-[210px] sm:w-[240px]"
+                  className="h-9 pl-8 pr-14 text-xs rounded-lg border border-slate-200/80 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 transition-colors w-[220px] sm:w-[260px]"
                 />
                 <button
                   type="button"
@@ -276,19 +276,6 @@ export default function CRMView() {
               <BarChart3 className="w-3.5 h-3.5" />
               <span>Báo cáo</span>
             </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('calculator')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all duration-200 ${
-                viewMode === 'calculator'
-                  ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
-                  : 'text-slate-500 hover:text-slate-800 font-medium'
-              }`}
-              title="Tính giá dự án"
-            >
-              <Calculator className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Tính giá</span>
-            </button>
           </div>
 
           <button
@@ -339,20 +326,30 @@ export default function CRMView() {
               let filteredDeals = deals;
               if (searchQuery) {
                 const q = searchQuery.toLowerCase();
-                filteredDeals = filteredDeals.filter(
-                  d =>
+                filteredDeals = filteredDeals.filter(d => {
+                  const plate = String(d.custom_data?.['Biển số xe'] || '').toLowerCase();
+                  const model = String(d.custom_data?.['Dòng xe'] || '').toLowerCase();
+                  const vType = String(d.custom_data?.['Loại phương tiện'] || '').toLowerCase();
+                  return (
                     String(d.title || '').toLowerCase().includes(q) ||
                     String(d.contact?.name || '').toLowerCase().includes(q) ||
-                    String(d.contact?.phone || '').includes(q)
-                );
+                    String(d.contact?.phone || '').includes(q) ||
+                    plate.includes(q) ||
+                    model.includes(q) ||
+                    vType.includes(q)
+                  );
+                });
               }
               if (activeView === 'vip') {
-                filteredDeals = filteredDeals.filter(d => (d.value || 0) > 50000000);
+                filteredDeals = filteredDeals.filter(d => Number(d.value || 0) >= 15000000);
               } else if (activeView === 'ecommerce') {
                 filteredDeals = filteredDeals.filter(
                   d =>
-                    d.custom_data?.source === 'ecommerce_checkout' ||
-                    String(d.title || '').startsWith('[Đơn hàng #')
+                    d.custom_data?.['Nguồn khách hàng'] === 'Web Booking' ||
+                    d.custom_data?.['Nguồn khách hàng'] === 'Web Garage Telemetry' ||
+                    d.custom_data?.['Nguồn'] === 'Web Booking' ||
+                    String(d.title || '').startsWith('Lịch hẹn:') ||
+                    String(d.title || '').startsWith('[')
                 );
               } else if (activeView === 'this_month') {
                 const now = new Date();

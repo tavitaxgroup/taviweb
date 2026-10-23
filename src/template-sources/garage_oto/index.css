@@ -1,13 +1,232 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-@import "tailwindcss";
+/* ==========================================================================
+   APEX AUTO & MOTO LAB — Dark-Luxury Design System Tokens (Phase 2)
+   Single Source of Truth for Color, Typography, Spacing, Shape & Motion
+   ========================================================================== */
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+.atelier-luxury-root {
+  /* Color Palette — Warm Charcoal & Champagne Gold (WCAG AA Compliant) */
+  --bg-primary: #0B0B0C;
+  --bg-surface: #141416;
+  --bg-elevated: #1C1C1F;
+
+  --text-primary: #F2EFE9;     /* 17.4:1 contrast on #0B0B0C */
+  --text-secondary: #A8A49C;   /* 7.8:1 contrast on #0B0B0C */
+  --text-muted: #6F6B64;       /* 4.6:1 contrast on #0B0B0C */
+
+  --accent-gold: #C8A96A;
+  --accent-gold-hover: #D6B97D;
+  --accent-gold-subtle: rgba(200, 169, 106, 0.12);
+  --accent-racing-green: #1E3A2F;
+  --accent-racing-green-text: #76B59B;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(200, 169, 106, 0.42);
+
+  /* Typography — Architectural Geometric Display (Porsche / Polestar style, Vietnamese Safe) */
+  --font-display-serif: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", var(--font-hanken-grotesk), var(--font-inter), sans-serif;
+  --font-ui-sans: var(--font-inter), "Inter", var(--font-be-vietnam-pro), system-ui, sans-serif;
+  --font-tech-mono: var(--font-space-grotesk), "Space Grotesk", var(--font-jetbrains-mono), monospace;
+
+  /* Fluid Type Scale */
+  --text-hero: clamp(2.35rem, 3.8vw + 0.85rem, 4.15rem);
+  --text-h2: clamp(1.85rem, 2.4vw + 0.75rem, 2.75rem);
+  --text-h3: clamp(1.2rem, 1.1vw + 0.75rem, 1.45rem);
+  --text-body-lg: clamp(1rem, 0.4vw + 0.9rem, 1.125rem);
+
+  /* Shape & Spacing */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-ui-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Ensure smooth scrolling globally */
-html {
-  scroll-behavior: smooth;
+/* Architectural Display Headings — Clean, geometric, masculine, zero swashes */
+.atelier-luxury-root .font-luxury-display {
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", var(--font-inter), Inter, sans-serif !important;
+  line-height: 1.12;
+  letter-spacing: -0.025em !important;
+  font-weight: 700;
 }
 
+/* Eyebrow Uppercase Labels — wide tracking (0.18em) */
+.atelier-luxury-root .eyebrow-label {
+  font-family: var(--font-ui-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em !important;
+  color: var(--accent-gold);
+}
+
+/* Tabular Numerals for prices, years, ODO, stats */
+.atelier-luxury-root .luxury-numeral {
+  font-family: var(--font-tech-mono) !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Restore single-line lock against global .template-render-root override */
+.atelier-luxury-root header a,
+.atelier-luxury-root header button,
+.atelier-luxury-root header span,
+.atelier-luxury-root .no-wrap-item,
+.atelier-luxury-root .whitespace-nowrap,
+.atelier-luxury-root .nav-link-luxury,
+.atelier-luxury-root .btn-gold-primary,
+.atelier-luxury-root .btn-outline-luxury {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+/* Animated Link Underline from Left on Hover */
+.atelier-luxury-root .nav-link-luxury {
+  position: relative;
+  color: var(--text-secondary);
+  transition: color 250ms ease;
+}
+
+.atelier-luxury-root .nav-link-luxury::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background-color: var(--accent-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.atelier-luxury-root .nav-link-luxury:hover,
+.atelier-luxury-root .nav-link-luxury:focus-visible {
+  color: var(--text-primary);
+}
+
+.atelier-luxury-root .nav-link-luxury:hover::after,
+.atelier-luxury-root .nav-link-luxury:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Luxury Card Surface — 1px border, subtle 4px lift + border brighten on hover */
+.atelier-luxury-root .luxury-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition:
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.atelier-luxury-root .luxury-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-hover);
+  background-color: var(--bg-elevated);
+}
+
+/* Primary Gold Button & Secondary 1px Outline Button */
+.atelier-luxury-root .btn-gold-primary {
+  background-color: var(--accent-gold);
+  color: #0B0B0C;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-gold);
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 240ms ease,
+    filter 240ms ease;
+}
+
+.atelier-luxury-root .btn-gold-primary:hover {
+  background-color: var(--accent-gold-hover);
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+
+.atelier-luxury-root .btn-gold-primary:focus-visible,
+.atelier-luxury-root .btn-outline-luxury:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+.atelier-luxury-root .btn-outline-luxury {
+  background-color: rgba(20, 20, 22, 0.65);
+  color: var(--text-primary);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 240ms ease,
+    background-color 240ms ease;
+}
+
+.atelier-luxury-root .btn-outline-luxury:hover {
+  border-color: var(--accent-gold);
+  background-color: var(--bg-elevated);
+  transform: translateY(-2px);
+}
+
+/* Infinite Horizontal Marquee Roll for Brand Logos */
+@keyframes luxury-marquee-roll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.atelier-luxury-root .luxury-marquee-mask {
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+.atelier-luxury-root .luxury-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: luxury-marquee-roll 34s linear infinite;
+  will-change: transform;
+}
+
+.atelier-luxury-root .luxury-marquee-mask:hover .luxury-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .atelier-luxury-root *,
+  .atelier-luxury-root *::before,
+  .atelier-luxury-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .atelier-luxury-root .luxury-card:hover,
+  .atelier-luxury-root .btn-gold-primary:hover,
+  .atelier-luxury-root .btn-outline-luxury:hover {
+    transform: none !important;
+  }
+}

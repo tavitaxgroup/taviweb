@@ -1,5 +1,5 @@
 import React from "react";
-import { ClipboardCheck, Receipt, Clock, LucideIcon } from "lucide-react";
+import { ClipboardCheck, Receipt, Clock, type LucideIcon } from "lucide-react";
 import { DemoPageData } from "../../../types/demo";
 
 interface TrustBarProps {
