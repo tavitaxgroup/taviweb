@@ -15,9 +15,6 @@ import {
   MapPin,
   Phone,
   Calendar,
-  ShieldCheck,
-  Sparkles,
-  Wrench,
 } from 'lucide-react';
 import { DemoPageData, GalleryItem } from '../../../types/demo';
 
@@ -77,7 +74,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
   const [vehicleMode, setVehicleMode] = useState<'car' | 'moto'>('car');
   const [bladeKey, setBladeKey] = useState(0);
 
-  // Interactive Before/After Laser Slider
+  // Interactive Before/After Slider
   const [sliderPos, setSliderPos] = useState(52);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +85,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
   // Service Filter
   const [serviceFilter, setServiceFilter] = useState<'all' | 'car' | 'moto'>('all');
 
-  // Quote Form (submits to CRM behind the scenes, labeled cleanly as "Nhận báo giá")
+  // Quote Form
   const [leadForm, setLeadForm] = useState({
     name: '',
     phone: '',
@@ -279,11 +276,11 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
               <a href="#work" className="hover:text-[#FF5526] transition-colors">
                 Hình ảnh thực tế
               </a>
-              <a href="#shield" className="hover:text-[#FF5526] transition-colors">
-                So sánh trước/sau
-              </a>
               <a href="#services" className="hover:text-[#FF5526] transition-colors">
                 Dịch vụ & Bảng giá
+              </a>
+              <a href="#shield" className="hover:text-[#FF5526] transition-colors">
+                So sánh trước/sau
               </a>
               <a href="#quote" className="hover:text-[#FF5526] transition-colors">
                 Nhận báo giá
@@ -413,7 +410,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
         </div>
       </section>
 
-      {/* 3. HÌNH ẢNH THỰC TẾ CÁC XE ĐÃ THI CÔNG (VISUAL SHOWCASE) */}
+      {/* 3. HÌNH ẢNH THỰC TẾ CÁC XE ĐÃ THI CÔNG (GRID 3 CỘT ĐỒNG ĐỀU 100%, KHÔNG LỆCH BỐ CỤC) */}
       <section id="work" className="py-24 sm:py-32 px-4 sm:px-8 border-b border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
@@ -448,32 +445,29 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            {galleryList.map((item, idx) => {
-              const spanClass =
-                idx % 3 === 0
-                  ? 'md:col-span-7 h-[380px] sm:h-[460px]'
-                  : 'md:col-span-5 h-[380px] sm:h-[460px]';
-              return (
-                <motion.div
-                  key={`${item.caption}-${idx}`}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.5 }}
-                  onClick={() => setActiveLightbox(item)}
-                  className={`${spanClass} group relative rounded-3xl overflow-hidden bg-[#131824] border border-white/15 cursor-pointer`}
-                >
+          {/* Uniform 3-Column Grid — Every image & card has identical size and aspect ratio */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {galleryList.map((item, idx) => (
+              <motion.div
+                key={`${item.caption}-${idx}`}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.4 }}
+                onClick={() => setActiveLightbox(item)}
+                className="group rounded-3xl overflow-hidden bg-[#141926] border border-white/12 hover:border-[#FF5526] cursor-pointer flex flex-col justify-between transition-all duration-300 shadow-[0_16px_40px_rgba(0,0,0,0.4)]"
+              >
+                {/* Fixed 16:10 Image Header */}
+                <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#090B10]">
                   <img
                     src={item.image.src}
                     alt={item.image.alt}
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#090B10] via-[#090B10]/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#141926] via-transparent to-black/30" />
 
-                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
-                    <span className="px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-xs font-bold text-white flex items-center gap-1.5">
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
+                    <span className="px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-xs font-bold text-white flex items-center gap-1.5">
                       {item.category === 'moto' ? (
                         <Bike className="w-3.5 h-3.5 text-[#FF5526]" />
                       ) : (
@@ -487,29 +481,30 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
                       </span>
                     )}
                   </div>
+                </div>
 
-                  <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-4">
-                    <div>
-                      <div className="text-xs font-semibold text-slate-300 mb-1">
-                        {item.ownerName} · Hoàn thiện: {item.completionTime || 'Trong ngày'}
-                      </div>
-                      <h3 className="text-xl sm:text-2xl font-extrabold text-white">
-                        {item.vehicleModel || item.caption}
-                      </h3>
+                {/* Uniform Card Footer */}
+                <div className="p-6 flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold text-slate-300 truncate mb-1">
+                      {item.ownerName} · Hoàn thiện: {item.completionTime || 'Trong ngày'}
                     </div>
-
-                    <div className="w-11 h-11 rounded-full bg-white/15 group-hover:bg-[#FF5526] border border-white/25 flex items-center justify-center transition-all shrink-0">
-                      <Plus className="w-5 h-5 text-white" />
-                    </div>
+                    <h3 className="text-lg sm:text-xl font-extrabold text-white group-hover:text-[#FF5526] transition-colors truncate">
+                      {item.vehicleModel || item.caption}
+                    </h3>
                   </div>
-                </motion.div>
-              );
-            })}
+
+                  <div className="w-10 h-10 rounded-full bg-white/10 group-hover:bg-[#FF5526] border border-white/20 flex items-center justify-center transition-all shrink-0">
+                    <Plus className="w-5 h-5 text-white" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4. DỊCH VỤ & BẢNG GIÁ (VISUAL CARDS — RÕ NÉT, ĐẸP MẮT, DỄ ĐỌC) */}
+      {/* 4. DỊCH VỤ & BẢNG GIÁ (GRID 3 CỘT ĐỒNG ĐỀU, CÙNG KÍCH THƯỚC ẢNH & CHIỀU CAO THẺ) */}
       <section id="services" className="py-24 sm:py-32 px-4 sm:px-8 border-b border-white/10 bg-[#0D1017]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -544,7 +539,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
             </div>
           </div>
 
-          {/* Clean Visual Service Cards Grid */}
+          {/* Clean Visual Service Cards Grid — Identical 16:10 image + locked text height */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredServices.map(svc => (
               <div
@@ -552,17 +547,17 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
                 className="group rounded-3xl bg-[#141926] border border-white/12 hover:border-[#FF5526] overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-[0_16px_40px_rgba(0,0,0,0.4)]"
               >
                 <div>
-                  {/* Card Photo Header */}
-                  <div className="relative h-52 overflow-hidden bg-black">
+                  {/* Fixed 16:10 Card Photo Header */}
+                  <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#090B10]">
                     <img
                       src={svc.image}
                       alt={svc.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#141926] via-transparent to-black/30" />
 
                     <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                      <span className="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-xs font-bold text-white flex items-center gap-1.5">
+                      <span className="px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-xs font-bold text-white flex items-center gap-1.5">
                         {svc.isMoto ? (
                           <Bike className="w-3.5 h-3.5 text-[#FF5526]" />
                         ) : (
@@ -571,19 +566,19 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
                         {svc.isMoto ? 'Mô tô & Xe máy' : 'Ô tô'}
                       </span>
 
-                      <span className="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-xs font-semibold text-slate-200 flex items-center gap-1">
+                      <span className="px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-xs font-semibold text-slate-200 flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5 text-[#FF5526]" />
                         {svc.duration}
                       </span>
                     </div>
                   </div>
 
-                  {/* Card Content */}
+                  {/* Card Content with locked min-heights so all cards align */}
                   <div className="p-6">
-                    <h3 className="text-lg sm:text-xl font-extrabold text-white group-hover:text-[#FF5526] transition-colors leading-snug mb-2.5">
+                    <h3 className="text-lg sm:text-xl font-extrabold text-white group-hover:text-[#FF5526] transition-colors leading-snug line-clamp-2 min-h-[3.5rem] mb-2">
                       {svc.title}
                     </h3>
-                    <p className="text-sm text-slate-300 leading-relaxed line-clamp-2">
+                    <p className="text-sm text-slate-300 leading-relaxed line-clamp-2 min-h-[2.75rem]">
                       {svc.description}
                     </p>
                   </div>
@@ -601,7 +596,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
                       serviceId: svc.id,
                       serviceName: svc.title,
                     })}
-                    className="px-5 py-3 rounded-full bg-[#FF5526] hover:bg-[#ff6a42] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md"
+                    className="px-5 py-3 rounded-full bg-[#FF5526] hover:bg-[#ff6a42] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shrink-0"
                   >
                     <span>Đặt lịch ngay</span>
                     <ArrowUpRight className="w-4 h-4" />
@@ -726,7 +721,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
                 <a
                   key={bay.id}
                   href={buildBookingHref({ resourceId: bay.id })}
-                  className="group p-5 rounded-2xl bg-[#141926] border border-white/12 hover:border-[#FF5526] transition-all flex flex-col justify-between gap-4"
+                  className="group p-5 rounded-2xl bg-[#141926] border border-white/12 hover:border-[#FF5526] transition-all flex flex-col justify-between min-h-[136px]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400">
@@ -737,10 +732,12 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
                   </div>
 
                   <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-[#FF5526] transition-colors">
+                    <h3 className="text-base font-bold text-white group-hover:text-[#FF5526] transition-colors line-clamp-1">
                       {bay.name}
                     </h3>
-                    <div className="text-xs text-slate-300 mt-1">{bay.role_or_capacity}</div>
+                    <div className="text-xs text-slate-300 mt-1 line-clamp-1">
+                      {bay.role_or_capacity}
+                    </div>
                   </div>
                 </a>
               ))}
@@ -897,7 +894,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
         </div>
       </section>
 
-      {/* 7. CẨM NANG CHĂM SÓC XE (TIN TỨC & KINH NGHIỆM) */}
+      {/* 7. CẨM NANG CHĂM SÓC XE (GRID 3 CỘT ĐỒNG ĐỀU, CÙNG KÍCH THƯỚC ẢNH 16:10) */}
       <section className="py-24 sm:py-32 px-4 sm:px-8 border-b border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between gap-6 mb-12">
@@ -918,7 +915,7 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {(livePosts.length > 0
               ? livePosts.slice(0, 3)
               : [
@@ -948,20 +945,20 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
               <a
                 key={post.id}
                 href={`${blogBaseUrl}/${post.slug}`}
-                className="group rounded-3xl bg-[#141926] border border-white/12 hover:border-[#FF5526] transition-all overflow-hidden flex flex-col justify-between"
+                className="group rounded-3xl bg-[#141926] border border-white/12 hover:border-[#FF5526] transition-all overflow-hidden flex flex-col justify-between shadow-[0_16px_40px_rgba(0,0,0,0.4)]"
               >
-                <div className="h-56 overflow-hidden relative">
+                <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#090B10]">
                   <img
                     src={
                       post.thumbnail_url ||
                       'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1000&auto=format&fit=crop'
                     }
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
                 </div>
-                <div className="p-6 flex items-end justify-between gap-4">
-                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#FF5526] transition-colors line-clamp-2 leading-snug">
+                <div className="p-6 flex items-center justify-between gap-4">
+                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#FF5526] transition-colors line-clamp-2 min-h-[3.25rem] leading-snug">
                     {post.title}
                   </h3>
                   <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-[#FF5526] shrink-0" />
