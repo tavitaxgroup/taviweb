@@ -42,6 +42,13 @@
     "scraper",
     "templates-raw",
     "src/template-sources/**/main.tsx",
-    "src/template-sources/**/App.tsx"
+    "src/template-sources/**/App.tsx",
+    "src/template-sources/nha_hang_5/**/*",
+    "src/template-sources/quan_cafe_4/**/*",
+    "src/template-sources/salon_toc_5/**/*",
+    "src/template-sources/studio_chup_anh_5/**/*",
+    "src/template-sources/xay_dung_13/**/*",
+    "src/template-sources/xay_dung_14/**/*",
+    "src/template-sources/xay_dung_16/**/*"
   ]
 }
