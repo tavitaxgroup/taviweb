@@ -54,7 +54,6 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
     serviceId: '',
     vehicleType: 'Ô tô',
     vehicleModel: '',
-    licensePlate: '',
     odoKm: '',
   });
 
@@ -108,7 +107,6 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
         let preselectedResourceId = '';
         let preVehicleType = '';
         let preVehicleModel = '';
-        let preLicensePlate = '';
         if (typeof window !== 'undefined') {
           const sp = new URLSearchParams(window.location.search);
           const qServiceId = sp.get('serviceId');
@@ -116,7 +114,6 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
           const qResourceId = sp.get('resourceId');
           preVehicleType = sp.get('vehicleType') || '';
           preVehicleModel = sp.get('vehicleModel') || '';
-          preLicensePlate = sp.get('licensePlate') || '';
           if (qServiceId && svcs.some(s => s.id === qServiceId)) {
             preselectedServiceId = qServiceId;
           } else if (qServiceName) {
@@ -138,7 +135,6 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
           resourceId: preselectedResourceId || f.resourceId,
           vehicleType: preVehicleType || f.vehicleType,
           vehicleModel: preVehicleModel || f.vehicleModel,
-          licensePlate: preLicensePlate || f.licensePlate,
         }));
       } catch (err) {
         console.error('Lỗi khi tải dữ liệu booking', err);
@@ -191,10 +187,10 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
       end.setMinutes(start.getMinutes() + duration);
 
       const vehicleSummary =
-        isGarage && (formData.vehicleModel.trim() || formData.licensePlate.trim())
-          ? `[${formData.vehicleType}] ${formData.vehicleModel.trim() || 'Chưa rõ dòng xe'}${
-              formData.licensePlate.trim() ? ` · Biển số: ${formData.licensePlate.trim().toUpperCase()}` : ''
-            }${formData.odoKm.trim() ? ` · ODO: ${formData.odoKm.trim()}km` : ''}`
+        isGarage && formData.vehicleModel.trim()
+          ? `[${formData.vehicleType}] ${formData.vehicleModel.trim()}${
+              formData.odoKm.trim() ? ` · ODO: ${formData.odoKm.trim()}km` : ''
+            }`
           : '';
       const combinedNotes = [vehicleSummary, formData.notes.trim()]
         .filter(Boolean)
@@ -215,7 +211,6 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
           notes: combinedNotes || 'Đặt lịch trực tuyến trên Website',
           vehicle_type: isGarage ? formData.vehicleType : undefined,
           vehicle_model: isGarage ? formData.vehicleModel.trim() : undefined,
-          license_plate: isGarage ? formData.licensePlate.trim().toUpperCase() : undefined,
           odo_km: isGarage ? formData.odoKm.trim() : undefined,
         }),
       });
@@ -624,14 +619,14 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
         {/* STEP 4: CUSTOMER CONTACT & VEHICLE PROFILE */}
         <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
           <h2 className="text-lg font-semibold text-slate-900 tracking-[-0.01em] mb-5">
-            {isGarage ? 'Thông tin chủ xe & Hồ sơ phương tiện' : 'Thông tin liên hệ'}
+            {isGarage ? 'Thông tin chủ xe & Phương tiện' : 'Thông tin liên hệ'}
           </h2>
 
           {isGarage && (
             <div className="mb-5 p-4 rounded-2xl bg-slate-900 text-white space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono uppercase tracking-wider text-orange-400 font-semibold">
-                  HỒ SƠ PHƯƠNG TIỆN (ĐỒNG BỘ TRỰC TIẾP VÀO CRM)
+                <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">
+                  Thông tin phương tiện
                 </span>
                 <div className="flex items-center gap-1.5">
                   {['Ô tô', 'Xe máy - PKL'].map(type => (
@@ -657,7 +652,7 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                <div className="sm:col-span-5">
+                <div className="sm:col-span-8">
                   <label className="block text-[11px] font-medium text-slate-300 mb-1">
                     Hãng & Dòng xe <span className="text-orange-400">*</span>
                   </label>
@@ -667,25 +662,10 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
                     value={formData.vehicleModel}
                     onChange={e => setFormData({ ...formData, vehicleModel: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-white/15 focus:outline-none focus:border-orange-400 text-white text-sm"
-                    placeholder="VD: Porsche 911 / Mazda CX-5 / SH350i"
+                    placeholder="VD: Porsche 911 / Mazda CX-5 / Honda SH350i"
                   />
                 </div>
                 <div className="sm:col-span-4">
-                  <label className="block text-[11px] font-medium text-slate-300 mb-1">
-                    Biển số xe <span className="text-orange-400">*</span>
-                  </label>
-                  <input
-                    required={isGarage}
-                    type="text"
-                    value={formData.licensePlate}
-                    onChange={e =>
-                      setFormData({ ...formData, licensePlate: e.target.value.toUpperCase() })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-white/15 focus:outline-none focus:border-orange-400 text-amber-300 font-mono font-bold text-sm uppercase"
-                    placeholder="VD: 51K-888.88"
-                  />
-                </div>
-                <div className="sm:col-span-3">
                   <label className="block text-[11px] font-medium text-slate-300 mb-1">
                     Số ODO (Km)
                   </label>
@@ -694,7 +674,7 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
                     value={formData.odoKm}
                     onChange={e => setFormData({ ...formData, odoKm: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-white/15 focus:outline-none focus:border-orange-400 text-white font-mono text-sm"
-                    placeholder="15.000 km"
+                    placeholder="VD: 15.000 km"
                   />
                 </div>
               </div>
@@ -778,24 +758,19 @@ export default function PublicBookingForm({ tenantId, tenantName, templateKey }:
               </div>
             </div>
 
-            {isGarage && (formData.vehicleModel || formData.licensePlate) && (
+            {isGarage && formData.vehicleModel && (
               <div className="flex justify-between items-start gap-4 pt-4 border-t border-white/10">
                 <span className="text-slate-400">Phương tiện</span>
                 <div className="text-right">
                   <div className="font-semibold text-white">
                     {formData.vehicleModel || formData.vehicleType}
                   </div>
-                  {formData.licensePlate && (
-                    <span className="inline-block mt-1 px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-mono font-bold text-[11px]">
-                      {formData.licensePlate}
-                    </span>
-                  )}
                 </div>
               </div>
             )}
 
             <div className="flex justify-between items-start gap-4 pt-4 border-t border-white/10">
-              <span className="text-slate-400">{isGarage ? 'Khoang / KTV' : 'Phụ trách'}</span>
+              <span className="text-slate-400">{isGarage ? 'Kỹ thuật viên / Khu vực' : 'Phụ trách'}</span>
               <span className="font-semibold text-white text-right">
                 {selectedResource ? selectedResource.name : 'Sắp xếp tự động'}
               </span>

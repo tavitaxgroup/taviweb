@@ -120,7 +120,6 @@ export default function KanbanBoard({
                   deal.custom_data?.['Nguồn khách hàng'] === 'Web Booking' ||
                   String(deal.title || '').startsWith('Lịch hẹn:');
 
-                const licensePlate = deal.custom_data?.['Biển số xe'] || '';
                 const vehicleModel = deal.custom_data?.['Dòng xe'] || '';
                 const vehicleType = deal.custom_data?.['Loại phương tiện'] || '';
                 const memberTier = deal.custom_data?.['Hạng thẻ Thành viên'] || '';
@@ -177,13 +176,13 @@ export default function KanbanBoard({
                     )}
 
                     {/* Vehicle Profile Badge (For Garage / Automotive CRM) */}
-                    {(licensePlate || vehicleModel) && (
+                    {vehicleModel && (
                       <div className="mb-2 p-2 rounded-lg bg-slate-900 text-white flex items-center justify-between gap-2">
                         <div className="min-w-0">
                           <div className="text-[11px] font-semibold text-white truncate">
                             {vehicleModel || vehicleType || 'Phương tiện'}
                           </div>
-                          {vehicleType && vehicleModel && (
+                          {vehicleType && (
                             <div className="text-[10px] text-slate-400 truncate">
                               {vehicleType}
                               {deal.custom_data?.['Số ODO (Km)']
@@ -192,11 +191,6 @@ export default function KanbanBoard({
                             </div>
                           )}
                         </div>
-                        {licensePlate && (
-                          <span className="shrink-0 px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-mono font-bold text-[10.5px] tracking-wider">
-                            {licensePlate}
-                          </span>
-                        )}
                       </div>
                     )}
 
