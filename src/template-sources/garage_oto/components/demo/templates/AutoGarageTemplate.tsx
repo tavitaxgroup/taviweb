@@ -3,29 +3,17 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Wrench,
-  ShieldCheck,
-  Gauge,
-  Sparkles,
-  Calendar,
-  Clock,
   ArrowUpRight,
   ArrowRight,
-  CheckCircle2,
-  Phone,
-  MapPin,
+  Check,
   Car,
   Bike,
   SlidersHorizontal,
-  Eye,
   X,
-  FileText,
-  Layers,
-  Activity,
-  ChevronRight,
-  Menu,
-  Star,
-  Zap,
+  Plus,
+  Clock,
+  MapPin,
+  Phone,
 } from 'lucide-react';
 import { DemoPageData, GalleryItem } from '../../../types/demo';
 
@@ -33,93 +21,81 @@ interface AutoGarageTemplateProps {
   data: DemoPageData;
 }
 
-const VEHICLE_MODES = {
+const MODES = {
   car: {
     id: 'car' as const,
-    badge: 'SUPERCAR & LUXURY AUTOMOTIVE LAB',
-    label: 'Ô Tô & Siêu Xe',
-    heroTitle: 'Đánh Thức Bản Năng Cỗ Máy Của Bạn',
-    heroHighlight: 'Chuẩn Motorsport.',
-    heroSubtitle:
-      'Tổ hợp Phòng sạch Dán PPF TPU, Hiệu chỉnh sơn phủ Ceramic Graphene 10H, Bảo dưỡng định kỳ chuẩn hãng và Nâng cấp hiệu suất dành riêng cho Ô tô & Siêu xe.',
+    code: '01 // AUTOMOTIVE DIVISION',
+    shortLabel: 'Ô TÔ / SUPERCAR',
+    headlineTop: 'CARBON.',
+    headlineMid: 'PRECISION.',
+    headlineBot: 'VELOCITY.',
+    tagline: 'Detailing · PPF TPU 8.5Mil · Ceramic 10H · Performance Tuning',
     heroImage:
-      'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=85&w=1800&auto=format&fit=crop',
-    heroMachineName: 'PORSCHE 911 GT3 RS (992)',
-    heroPlate: '51K-888.99',
-    telemetry: [
-      { code: 'GLOSS_INDEX', value: '99.6 GU', label: 'Độ bóng gương hiệu chỉnh 3 bước' },
-      { code: 'PPF_SHIELD', value: '8.5 MIL', label: 'Màng TPU tự phục hồi vết xước 60°C' },
-      { code: 'ECU_DIAG', value: '45 ĐIỂM', label: 'Chẩn đoán điện tử & gầm máy' },
-      { code: 'WARRANTY', value: '10 NĂM', label: 'Bảo hành điện tử theo Biển số' },
+      'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=85&w=2000&auto=format&fit=crop',
+    machine: 'PORSCHE 911 GT3 RS (992)',
+    specs: [
+      { label: 'FINISH', val: '99.6 GU' },
+      { label: 'ARMOR', val: '8.5 MIL PPF' },
+      { label: 'COATING', val: '10H GRAPHENE' },
     ],
-    placeholderModel: 'VD: Porsche 911, Mercedes GLC300, Mazda CX-5...',
-    placeholderPlate: 'VD: 51K-888.88',
+    placeholderModel: 'Porsche 911 / BMW M4 / Mercedes G63 / Mazda CX-5...',
   },
   moto: {
     id: 'moto' as const,
-    badge: 'HYPERBIKE & BESPOKE MOTORCYCLE ATELIER',
-    label: 'Mô Tô PKL & Xe Máy',
-    heroTitle: 'Chế Tác & Chăm Sóc Chi Tiết Từng',
-    heroHighlight: 'Chiến Mã Hai Bánh.',
-    heroSubtitle:
-      'Phòng Lab chuyên biệt với bàn nâng thủy lực dành cho Mô tô Phân khối lớn & Xe tay ga cao cấp: Rã dàn áo Detailing 18 bước, Dán PPF nhám/bóng, Độ pô Titanium, Cân chỉnh phuộc Ohlins & Heo Brembo.',
+    code: '02 // MOTORRAD ATELIER',
+    shortLabel: 'MÔ TÔ PKL / XE MÁY',
+    headlineTop: 'TORQUE.',
+    headlineMid: 'TITANIUM.',
+    headlineBot: 'ASPHALT.',
+    tagline: '18-Step Strip Detailing · Ohlins Setup · Brembo Lab · Matte PPF',
     heroImage:
-      'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=85&w=1800&auto=format&fit=crop',
-    heroMachineName: 'DUCATI PANIGALE V4S CORSE',
-    heroPlate: '59-A3 388.88',
-    telemetry: [
-      { code: 'DETAILING', value: '18 BƯỚC', label: 'Rã dàn áo vệ sinh lốc máy & ốc tán' },
-      { code: 'SUSPENSION', value: 'OHLINS', label: 'Cân chỉnh tải trọng & Sag phuộc chuẩn' },
-      { code: 'BRAKE_LAB', value: 'BREMBO', label: 'Bảo dưỡng heo dầu & dầu phanh DOT 5.1' },
-      { code: 'CHAIN_ALIGN', value: 'LASER', label: 'Căn chỉnh nhông sên dĩa bằng tia Laser' },
+      'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=85&w=2000&auto=format&fit=crop',
+    machine: 'DUCATI PANIGALE V4S CORSE',
+    specs: [
+      { label: 'STRIP DETAIL', val: '18 STEPS' },
+      { label: 'SUSPENSION', val: 'OHLINS LAB' },
+      { label: 'EXHAUST', val: 'FULL TITAN' },
     ],
-    placeholderModel: 'VD: Ducati Panigale V4, BMW S1000RR, Honda SH350i, Vespa 946...',
-    placeholderPlate: 'VD: 59-A3 388.88',
+    placeholderModel: 'Ducati Panigale V4 / BMW S1000RR / Vespa 946 / SH350i...',
   },
 };
 
 export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
   const [vehicleMode, setVehicleMode] = useState<'car' | 'moto'>('car');
-  const [shutterTrigger, setShutterTrigger] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [bladeKey, setBladeKey] = useState(0);
 
-  // Quick Hero Intake bar state
-  const [quickModel, setQuickModel] = useState('');
-  const [quickPlate, setQuickPlate] = useState('');
+  // Interactive Before/After Laser Slider
+  const [sliderPos, setSliderPos] = useState(52);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
-  // Before/After Slider state (0 to 100)
-  const [sliderPos, setSliderPos] = useState(54);
-  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  // Gallery Filter & Lightbox
+  const [galleryFilter, setGalleryFilter] = useState<'all' | 'car' | 'moto'>('all');
+  const [activeLightbox, setActiveLightbox] = useState<GalleryItem | null>(null);
 
-  // Gallery Filter & Lightbox Modal state
-  const [galleryFilter, setGalleryFilter] = useState<'all' | 'car' | 'moto' | 'ppf' | 'tuning'>('all');
-  const [selectedBuild, setSelectedBuild] = useState<GalleryItem | null>(null);
+  // Hover state for minimalist service rows
+  const [hoveredServiceIdx, setHoveredServiceIdx] = useState<number>(0);
 
-  // Inline CRM Lead & Vehicle Profile Form state
+  // Minimalist CRM Vehicle Intake
   const [leadForm, setLeadForm] = useState({
     name: '',
     phone: '',
     vehicleType: 'Ô tô',
     vehicleModel: '',
-    licensePlate: '',
-    odoKm: '',
     service: '',
-    message: '',
   });
-  const [submittingLead, setSubmittingLead] = useState(false);
-  const [leadSuccess, setLeadSuccess] = useState(false);
-  const [leadError, setLeadError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const activeConfig = VEHICLE_MODES[vehicleMode];
+  const activeMode = MODES[vehicleMode];
   const bookingBaseUrl = data.bookingUrl || '/apex-garage/booking';
   const blogBaseUrl = data.blogUrl || '/apex-garage/blog';
   const liveServices = data.ecosystemProps?.services || [];
   const liveResources = data.ecosystemProps?.resources || [];
   const livePosts = data.ecosystemProps?.posts || [];
 
-  const handleModeSwitch = (mode: 'car' | 'moto') => {
+  const switchMode = (mode: 'car' | 'moto') => {
     if (mode === vehicleMode) return;
-    setShutterTrigger(prev => prev + 1);
+    setBladeKey(k => k + 1);
     setVehicleMode(mode);
     setLeadForm(prev => ({
       ...prev,
@@ -127,49 +103,21 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
     }));
   };
 
-  const handlePointerMoveSlider = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!sliderContainerRef.current) return;
-    if (e.buttons !== 1 && e.pointerType === 'mouse') return;
-    const rect = sliderContainerRef.current.getBoundingClientRect();
-    const x = Math.max(4, Math.min(rect.width - 4, e.clientX - rect.left));
+  const handleSliderMove = (clientX: number) => {
+    if (!sliderRef.current) return;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const x = Math.max(4, Math.min(rect.width - 4, clientX - rect.left));
     setSliderPos(Math.round((x / rect.width) * 100));
   };
 
-  const handleClickSlider = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!sliderContainerRef.current) return;
-    const rect = sliderContainerRef.current.getBoundingClientRect();
-    const x = Math.max(4, Math.min(rect.width - 4, e.clientX - rect.left));
-    setSliderPos(Math.round((x / rect.width) * 100));
-  };
-
-  const scrollToIntakeWithPreset = (preset: {
-    serviceName?: string;
-    vehicleType?: string;
-    vehicleModel?: string;
-    licensePlate?: string;
-  }) => {
-    setLeadForm(prev => ({
-      ...prev,
-      service: preset.serviceName || prev.service,
-      vehicleType: preset.vehicleType || prev.vehicleType,
-      vehicleModel: preset.vehicleModel || quickModel || prev.vehicleModel,
-      licensePlate: preset.licensePlate || quickPlate || prev.licensePlate,
-    }));
-    const el = document.getElementById('crm-lead-section');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const buildBookingLink = (extra?: {
+  const buildBookingHref = (extra?: {
     serviceId?: string;
     serviceName?: string;
     resourceId?: string;
   }) => {
     const params = new URLSearchParams();
     params.set('vehicleType', vehicleMode === 'car' ? 'Ô tô' : 'Xe máy - PKL');
-    if (quickModel.trim()) params.set('vehicleModel', quickModel.trim());
-    if (quickPlate.trim()) params.set('licensePlate', quickPlate.trim());
+    if (leadForm.vehicleModel.trim()) params.set('vehicleModel', leadForm.vehicleModel.trim());
     if (extra?.serviceId) params.set('serviceId', extra.serviceId);
     if (extra?.serviceName) params.set('service', extra.serviceName);
     if (extra?.resourceId) params.set('resourceId', extra.resourceId);
@@ -180,12 +128,10 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!leadForm.name.trim() || !leadForm.phone.trim()) return;
-    setSubmittingLead(true);
-    setLeadError(null);
-
+    setSubmitting(true);
     try {
       const matchedSvc = liveServices.find(s => s.name === leadForm.service);
-      const res = await fetch('/api/public/submit-lead', {
+      await fetch('/api/public/submit-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -195,585 +141,276 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
           phone: leadForm.phone.trim(),
           service:
             leadForm.service ||
-            (vehicleMode === 'car'
-              ? 'Chăm sóc & Bảo dưỡng Ô tô'
-              : 'Chăm sóc & Độ Mô tô PKL / Xe máy'),
+            (vehicleMode === 'car' ? 'Chăm sóc & Nâng cấp Ô tô' : 'Chăm sóc & Độ Mô tô PKL'),
           servicePrice: matchedSvc?.price || 0,
           vehicleType: leadForm.vehicleType,
-          vehicleModel: leadForm.vehicleModel.trim() || 'Chưa rõ dòng xe',
-          licensePlate: leadForm.licensePlate.trim().toUpperCase() || 'Chưa cập nhật',
-          odoKm: leadForm.odoKm.trim() || '',
-          source: 'Web Garage Telemetry',
-          message: leadForm.message.trim(),
+          vehicleModel: leadForm.vehicleModel.trim() || 'Chưa nhập dòng xe',
+          source: 'Web Garage',
         }),
       });
-
-      if (!res.ok) {
-        throw new Error('Không thể gửi thông tin lúc này');
-      }
-
-      setLeadSuccess(true);
-    } catch (err: any) {
-      setLeadError(err.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+      setSubmitted(true);
     } finally {
-      setSubmittingLead(false);
+      setSubmitting(false);
     }
   };
 
-  const filteredGallery = (data.gallery || []).filter(item => {
+  const galleryList = (data.gallery || []).filter(item => {
     if (galleryFilter === 'all') return true;
-    return item.category === galleryFilter;
+    if (galleryFilter === 'moto') return item.category === 'moto';
+    return item.category !== 'moto';
   });
 
-  return (
-    <div className="min-h-dvh bg-[#06070A] text-[#F1F5F9] font-sans antialiased selection:bg-[#FF4D1C] selection:text-white overflow-x-hidden relative">
-      {/* Subtle Fixed Carbon Telemetry Grid Background */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-        }}
-      />
+  const displayServices =
+    liveServices.length > 0
+      ? liveServices.map((s, idx) => ({
+          id: s.id,
+          index: `0${idx + 1}`,
+          title: s.name,
+          duration: `${s.duration_minutes} MIN`,
+          price: new Intl.NumberFormat('vi-VN').format(s.price) + ' ₫',
+          isMoto:
+            s.name.toLowerCase().includes('mô tô') ||
+            s.name.toLowerCase().includes('pkl') ||
+            s.name.toLowerCase().includes('sh350'),
+        }))
+      : data.services.map((s, idx) => ({
+          id: s.id,
+          index: `0${idx + 1}`,
+          title: s.title,
+          duration: s.durationLabel || '120 MIN',
+          price: s.priceLabel || 'LIÊN HỆ',
+          isMoto: s.vehicleType === 'moto',
+        }));
 
-      {/* Diagonal Shutter Transition Overlay when switching Car <-> Moto Mode */}
+  return (
+    <div className="min-h-dvh bg-[#050507] text-white font-sans antialiased selection:bg-[#FF3B1F] selection:text-white overflow-x-hidden">
+      {/* FULL-SCREEN DIAGONAL BLADE TRANSITION OVERLAY */}
       <AnimatePresence mode="wait">
-        {shutterTrigger > 0 && (
+        {bladeKey > 0 && (
           <motion.div
-            key={`shutter-${shutterTrigger}`}
+            key={`blade-${bladeKey}`}
             initial={{ clipPath: 'polygon(0 0, 0 0, 0 100%, 0% 100%)' }}
             animate={{
               clipPath: [
                 'polygon(0 0, 0 0, 0 100%, 0% 100%)',
-                'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                'polygon(0 0, 100% 0, 85% 100%, 0% 100%)',
                 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
               ],
             }}
-            transition={{ duration: 0.75, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed inset-0 z-50 pointer-events-none bg-gradient-to-r from-[#FF4D1C]/90 via-[#0B0D13] to-[#06070A] flex items-center justify-center"
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-50 pointer-events-none bg-[#FF3B1F] flex items-center justify-center"
           >
-            <div className="font-mono text-xs sm:text-sm uppercase tracking-[0.35em] text-white/90 px-6 py-3 rounded-full border border-white/20 bg-black/60">
-              CHUYỂN CHẾ ĐỘ KHOANG DỊCH VỤ: {vehicleMode === 'car' ? 'SUPERCAR & Ô TÔ' : 'MÔ TÔ PKL & XE MÁY'}
-            </div>
+            <span className="font-mono text-2xl sm:text-5xl font-black tracking-[-0.04em] text-black uppercase">
+              {vehicleMode === 'car' ? '// 01 SUPERCAR LAB' : '// 02 MOTORRAD LAB'}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 1. FLOATING FLUID ISLAND HUD NAVBAR */}
-      <header className="fixed top-4 inset-x-0 z-40 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="p-1.5 rounded-full bg-white/[0.04] border border-white/[0.09] backdrop-blur-2xl shadow-[0_24px_60px_rgba(0,0,0,0.65)]">
-            <div className="px-4 sm:px-6 py-2.5 rounded-full bg-[#0B0D13]/90 flex items-center justify-between gap-3">
-              {/* Brand & Live Telemetry Status */}
-              <a href="#" className="flex items-center gap-3 group shrink-0">
-                <div className="w-9 h-9 rounded-full bg-[#FF4D1C] text-white flex items-center justify-center font-mono font-bold text-xs tracking-tighter shadow-[0_0_20px_rgba(255,77,28,0.45)]">
-                  APX
-                </div>
-                <div>
-                  <div className="text-sm font-bold tracking-tight text-white flex items-center gap-2">
-                    <span>{data.business.name}</span>
-                    <span className="hidden xl:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[10px] font-mono text-emerald-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      {liveResources.length || 4} BAYS ONLINE
-                    </span>
-                  </div>
-                  <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
-                    AUTO & MOTO DETAILING LAB
-                  </div>
-                </div>
-              </a>
+      {/* 1. MINIMALIST FLOATING RAZOR NAVBAR */}
+      <header className="fixed top-0 inset-x-0 z-40 px-4 sm:px-8 py-5 pointer-events-none">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
+          {/* Brand Monogram */}
+          <a
+            href="#"
+            className="pointer-events-auto inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/70 backdrop-blur-xl border border-white/10"
+          >
+            <span className="w-2.5 h-2.5 bg-[#FF3B1F] rotate-45" />
+            <span className="font-mono text-xs font-bold tracking-[0.22em] uppercase text-white">
+              {data.business.name}
+            </span>
+          </a>
 
-              {/* Vehicle Mode Toggle Pill (Ô tô <-> Xe máy PKL) */}
-              <div className="hidden md:flex items-center p-1 rounded-full bg-[#131722] border border-white/[0.08]">
-                <button
-                  type="button"
-                  onClick={() => handleModeSwitch('car')}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                    vehicleMode === 'car'
-                      ? 'bg-[#FF4D1C] text-white shadow-[0_4px_16px_rgba(255,77,28,0.35)]'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Car className="w-3.5 h-3.5" />
-                  <span>Ô Tô / Supercar</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleModeSwitch('moto')}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                    vehicleMode === 'moto'
-                      ? 'bg-[#FF4D1C] text-white shadow-[0_4px_16px_rgba(255,77,28,0.35)]'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Bike className="w-3.5 h-3.5" />
-                  <span>Mô Tô PKL & Xe Máy</span>
-                </button>
-              </div>
-
-              {/* Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-6 text-xs font-medium text-slate-300">
-                <a href="#before-after" className="hover:text-[#FF4D1C] transition-colors">
-                  So Sánh Sơn & PPF
-                </a>
-                <a href="#gallery" className="hover:text-[#FF4D1C] transition-colors">
-                  Bản Độ Thực Tế
-                </a>
-                <a href="#services" className="hover:text-[#FF4D1C] transition-colors">
-                  Bảng Giá Dịch Vụ
-                </a>
-                <a href="#bays" className="hover:text-[#FF4D1C] transition-colors">
-                  Sơ Đồ Khoang
-                </a>
-                <a href="#journal" className="hover:text-[#FF4D1C] transition-colors">
-                  Cẩm Nang Kỹ Thuật
-                </a>
-              </nav>
-
-              {/* Island Button CTA */}
-              <div className="flex items-center gap-2">
-                <a
-                  href={buildBookingLink()}
-                  className="group inline-flex items-center gap-3 bg-white hover:bg-[#FF4D1C] text-[#06070A] hover:text-white font-semibold text-xs pl-4 pr-1.5 py-1.5 rounded-full transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98]"
-                >
-                  <span>Đặt Lịch Khoang</span>
-                  <span className="w-7 h-7 rounded-full bg-[#06070A] text-white flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </span>
-                </a>
-
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white"
-                  aria-label="Toggle Menu"
-                >
-                  {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
+          {/* Center Mode Switcher (Ô tô <-> Mô tô PKL) */}
+          <div className="pointer-events-auto flex items-center p-1 rounded-full bg-black/75 backdrop-blur-xl border border-white/12">
+            <button
+              type="button"
+              onClick={() => switchMode('car')}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-mono text-[11px] font-bold tracking-wider uppercase transition-all duration-300 ${
+                vehicleMode === 'car'
+                  ? 'bg-[#FF3B1F] text-white'
+                  : 'text-white/50 hover:text-white'
+              }`}
+            >
+              <Car className="w-3.5 h-3.5" />
+              <span>01 // AUTO</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => switchMode('moto')}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-mono text-[11px] font-bold tracking-wider uppercase transition-all duration-300 ${
+                vehicleMode === 'moto'
+                  ? 'bg-[#FF3B1F] text-white'
+                  : 'text-white/50 hover:text-white'
+              }`}
+            >
+              <Bike className="w-3.5 h-3.5" />
+              <span>02 // MOTO</span>
+            </button>
           </div>
 
-          {/* Mobile Dropdown Menu */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                className="mt-2 p-5 rounded-3xl bg-[#0D1017]/95 backdrop-blur-2xl border border-white/10 lg:hidden space-y-4"
-              >
-                <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-[#131722] border border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleModeSwitch('car');
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold ${
-                      vehicleMode === 'car' ? 'bg-[#FF4D1C] text-white' : 'text-slate-400'
-                    }`}
-                  >
-                    <Car className="w-3.5 h-3.5" />
-                    <span>Ô Tô / Supercar</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleModeSwitch('moto');
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold ${
-                      vehicleMode === 'moto' ? 'bg-[#FF4D1C] text-white' : 'text-slate-400'
-                    }`}
-                  >
-                    <Bike className="w-3.5 h-3.5" />
-                    <span>Mô Tô PKL & Xe Máy</span>
-                  </button>
-                </div>
-                <div className="flex flex-col gap-2.5 text-sm font-medium text-slate-200">
-                  <a href="#before-after" onClick={() => setMobileMenuOpen(false)} className="py-1.5">
-                    01. So Sánh Hiệu Chỉnh Sơn & PPF
-                  </a>
-                  <a href="#gallery" onClick={() => setMobileMenuOpen(false)} className="py-1.5">
-                    02. Hình Ảnh Thực Tế Các Bản Độ
-                  </a>
-                  <a href="#services" onClick={() => setMobileMenuOpen(false)} className="py-1.5">
-                    03. Bảng Giá Dịch Vụ & Bảo Dưỡng
-                  </a>
-                  <a href="#bays" onClick={() => setMobileMenuOpen(false)} className="py-1.5">
-                    04. Sơ Đồ Khoang & Kỹ Thuật Viên
-                  </a>
-                  <a href="#crm-lead-section" onClick={() => setMobileMenuOpen(false)} className="py-1.5 text-[#FF4D1C]">
-                    05. Lập Hồ Sơ Xe & Nhận Báo Giá CRM
-                  </a>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Right Quick Links & Book CTA */}
+          <div className="pointer-events-auto flex items-center gap-3">
+            <nav className="hidden lg:flex items-center gap-6 px-5 py-2 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 font-mono text-[11px] uppercase tracking-widest text-white/70">
+              <a href="#work" className="hover:text-white transition-colors">
+                Showroom
+              </a>
+              <a href="#shield" className="hover:text-white transition-colors">
+                Before/After
+              </a>
+              <a href="#specs" className="hover:text-white transition-colors">
+                Bảng giá
+              </a>
+              <a href="#intake" className="hover:text-white transition-colors">
+                Hồ sơ Xe
+              </a>
+            </nav>
+
+            <a
+              href={buildBookingHref()}
+              className="group inline-flex items-center gap-2.5 bg-[#FF3B1F] hover:bg-white text-white hover:text-black font-mono text-[11px] font-bold uppercase tracking-widest pl-5 pr-2 py-2 rounded-full transition-all duration-300"
+            >
+              <span>Đặt Lịch</span>
+              <span className="w-7 h-7 rounded-full bg-black/25 group-hover:bg-black group-hover:text-white flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </span>
+            </a>
+          </div>
         </div>
       </header>
 
-      {/* 2. HERO SECTION WITH TELEMETRY STAGE & QUICK VEHICLE INTAKE */}
-      <section className="relative min-h-[100dvh] pt-28 sm:pt-36 pb-20 px-4 sm:px-6 flex flex-col justify-between overflow-hidden">
-        {/* Overhead Studio Softbox Lighting Glow */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[920px] h-[420px] rounded-full bg-[#FF4D1C]/12 blur-[140px]"
-        />
+      {/* 2. FULL-BLEED ARCHITECTURAL STAGE HERO (BRABUS / MANSORY STYLE) */}
+      <section className="relative min-h-[100dvh] w-full flex flex-col justify-end overflow-hidden border-b border-white/10">
+        {/* Full-screen Background Machine with Smooth Scale & Clip-Path Reveal */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={vehicleMode}
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 z-0"
+          >
+            <img
+              src={activeMode.heroImage}
+              alt={activeMode.machine}
+              className="w-full h-full object-cover object-center"
+            />
+            {/* Moody Showroom Vignette Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/45 to-black/50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#050507]/90 via-[#050507]/30 to-transparent" />
+          </motion.div>
+        </AnimatePresence>
 
-        <div className="max-w-7xl mx-auto w-full relative z-10">
-          {/* Top Mode Eyebrow & Telemetry Coordinates */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10">
-              <span className="w-2 h-2 rounded-full bg-[#FF4D1C]" />
-              <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-slate-300">
-                {activeConfig.badge}
-              </span>
-            </div>
-
-            <div className="hidden sm:flex items-center gap-4 font-mono text-[11px] text-slate-400">
-              <span>LAT 10.7769° N · LON 106.7219° E</span>
-              <span className="text-white/20">|</span>
-              <span className="text-[#FF4D1C]">CRM VEHICLE TRACKING: ACTIVE</span>
-            </div>
-          </div>
-
-          {/* Asymmetric Split Hero */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            {/* Left 7 Columns: Kinetic Typography & Quick Vehicle Intake Console */}
-            <div className="lg:col-span-7 space-y-8">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={vehicleMode}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-                  className="space-y-5"
-                >
-                  <h1 className="text-4xl sm:text-6xl xl:text-[68px] font-bold tracking-[-0.03em] leading-[1.03] text-white">
-                    {activeConfig.heroTitle}{' '}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D1C] via-orange-400 to-amber-200 italic pr-2">
-                      {activeConfig.heroHighlight}
-                    </span>
-                  </h1>
-                  <p className="text-base sm:text-lg text-slate-300/90 leading-relaxed max-w-[60ch]">
-                    {activeConfig.heroSubtitle}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Double-Bezel Quick Vehicle Intake Bar (Links directly to Booking & CRM) */}
-              <div className="p-1.5 rounded-[1.75rem] bg-white/[0.04] border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.6)]">
-                <div className="p-4 sm:p-5 rounded-[calc(1.75rem-0.375rem)] bg-[#0E1118] border border-white/[0.06]">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3.5">
-                    <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-[#FF4D1C]" />
-                      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-300 font-semibold">
-                        NHẬP THÔNG TIN XE ĐỂ ĐẶT KHOANG DỊCH VỤ & ĐỒNG BỘ HỒ SƠ CRM
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => handleModeSwitch('car')}
-                        className={`px-2.5 py-1 rounded-lg font-mono text-[10px] uppercase transition-all ${
-                          vehicleMode === 'car'
-                            ? 'bg-[#FF4D1C] text-white font-semibold'
-                            : 'bg-white/5 text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        Ô Tô
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleModeSwitch('moto')}
-                        className={`px-2.5 py-1 rounded-lg font-mono text-[10px] uppercase transition-all ${
-                          vehicleMode === 'moto'
-                            ? 'bg-[#FF4D1C] text-white font-semibold'
-                            : 'bg-white/5 text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        Xe Máy / PKL
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                    <div className="sm:col-span-5">
-                      <label className="block font-mono text-[10px] uppercase tracking-wider text-slate-400 mb-1">
-                        Hãng & Dòng xe của bạn
-                      </label>
-                      <input
-                        type="text"
-                        value={quickModel}
-                        onChange={e => setQuickModel(e.target.value)}
-                        placeholder={activeConfig.placeholderModel}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white text-xs sm:text-sm outline-none transition-colors"
-                      />
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label className="block font-mono text-[10px] uppercase tracking-wider text-slate-400 mb-1">
-                        Biển số xe
-                      </label>
-                      <input
-                        type="text"
-                        value={quickPlate}
-                        onChange={e => setQuickPlate(e.target.value.toUpperCase())}
-                        placeholder={activeConfig.placeholderPlate}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-amber-300 font-mono font-semibold text-xs sm:text-sm uppercase outline-none transition-colors"
-                      />
-                    </div>
-                    <div className="sm:col-span-4 flex flex-col justify-end">
-                      <a
-                        href={buildBookingLink()}
-                        className="w-full h-[42px] bg-[#FF4D1C] hover:bg-[#ff5f33] text-white font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-[0_10px_25px_rgba(255,77,28,0.35)] transition-all active:scale-[0.98]"
-                      >
-                        <Calendar className="w-4 h-4" />
-                        <span>Đặt Lịch Khoang Ngay</span>
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 pt-3 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-                    <span>
-                      Hoặc gửi thông tin xe để cố vấn kỹ thuật lên phác đồ & báo giá chi tiết:
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        scrollToIntakeWithPreset({
-                          vehicleType: vehicleMode === 'car' ? 'Ô tô' : 'Xe máy / Mô tô PKL',
-                          vehicleModel: quickModel,
-                          licensePlate: quickPlate,
-                        })
-                      }
-                      className="inline-flex items-center gap-1 text-[#FF4D1C] hover:text-orange-300 font-semibold transition-colors"
-                    >
-                      <span>Lập hồ sơ xe vào CRM</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 4 Telemetry Readout Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {activeConfig.telemetry.map(item => (
-                  <div
-                    key={item.code}
-                    className="p-3.5 rounded-2xl bg-[#0C0F16] border border-white/[0.07] hover:border-[#FF4D1C]/40 transition-colors"
-                  >
-                    <div className="font-mono text-[10px] text-slate-500 uppercase tracking-widest mb-1">
-                      {item.code}
-                    </div>
-                    <div className="font-mono text-xl sm:text-2xl font-bold text-white tabular-nums">
-                      {item.value}
-                    </div>
-                    <div className="text-[11px] text-slate-400 mt-1 leading-snug">{item.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right 5 Columns: Double-Bezel Showroom Visual Card with Clip-Path Reveal */}
-            <div className="lg:col-span-5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={vehicleMode}
-                  initial={{
-                    opacity: 0,
-                    clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)',
-                    scale: 0.96,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-                    scale: 1,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    clipPath: 'polygon(0 0, 85% 0, 100% 100%, 0% 100%)',
-                    scale: 0.97,
-                  }}
-                  transition={{ duration: 0.65, ease: [0.32, 0.72, 0, 1] }}
-                  className="p-2 rounded-[2rem] bg-white/[0.04] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.75)]"
-                >
-                  <div className="relative h-[420px] sm:h-[500px] rounded-[calc(2rem-0.5rem)] overflow-hidden bg-[#0B0D13]">
-                    <img
-                      src={activeConfig.heroImage}
-                      alt={activeConfig.heroMachineName}
-                      className="w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-1000"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#06070A] via-[#06070A]/25 to-transparent" />
-
-                    {/* Top Telemetry Badge on Image */}
-                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
-                      <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 font-mono text-[10px] uppercase tracking-widest text-white">
-                        IN BAY #01 · {activeConfig.heroMachineName}
-                      </span>
-                      <span className="px-2.5 py-1 rounded-md bg-amber-400 text-[#06070A] font-mono font-bold text-xs tracking-wider shadow-md">
-                        {activeConfig.heroPlate}
-                      </span>
-                    </div>
-
-                    {/* Bottom Telemetry Overlay */}
-                    <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-[#0B0D13]/90 backdrop-blur-md border border-white/10">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <div className="font-mono text-[10px] uppercase tracking-widest text-[#FF4D1C]">
-                            HỒ SƠ PHƯƠNG TIỆN TRONG CRM
-                          </div>
-                          <div className="text-sm font-bold text-white mt-0.5">
-                            {activeConfig.heroMachineName}
-                          </div>
-                          <div className="text-xs text-slate-400 mt-0.5">
-                            Đang thi công: Hiệu chỉnh sơn + Full PPF TPU 8.5Mil
-                          </div>
-                        </div>
-                        <a
-                          href="#gallery"
-                          className="shrink-0 w-10 h-10 rounded-full bg-[#FF4D1C] text-white flex items-center justify-center hover:scale-105 transition-transform"
-                          title="Xem bộ sưu tập bản độ"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. INTERACTIVE BEFORE / AFTER PAINT CORRECTION & PPF COMPARISON SLIDER */}
-      <section id="before-after" className="py-24 sm:py-32 px-4 sm:px-6 relative z-10 border-t border-white/[0.06]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF4D1C]/10 border border-[#FF4D1C]/30 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF4D1C] mb-3">
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>INTERACTIVE SURFACE TELEMETRY</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-[-0.02em] text-white">
-                Kéo Thanh Trượt Để Xem Sự Khác Biệt
-              </h2>
-            </div>
-            <p className="text-sm sm:text-base text-slate-400 max-w-md">
-              So sánh trực quan bề mặt sơn xe bị xước xoáy, ố mờ trước khi xử lý và độ bóng sâu như gương sau khi Hiệu chỉnh sơn 3 bước & Phủ Ceramic Graphene 10H / Dán PPF.
-            </p>
-          </div>
-
-          {/* Double-Bezel Interactive Comparison Container */}
-          <div className="p-2 rounded-[2rem] bg-white/[0.03] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
-            <div
-              ref={sliderContainerRef}
-              onPointerMove={handlePointerMoveSlider}
-              onClick={handleClickSlider}
-              className="relative h-[340px] sm:h-[480px] rounded-[calc(2rem-0.5rem)] overflow-hidden cursor-ew-resize select-none bg-[#0B0D13]"
+        {/* Hero Foreground Content */}
+        <div className="relative z-10 max-w-[1440px] w-full mx-auto px-4 sm:px-8 pb-12 sm:pb-16 pt-32">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={vehicleMode}
+              initial={{ opacity: 0, y: 36 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -24 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* AFTER LAYER (Full width underneath: Glossy Mirror Finish) */}
-              <img
-                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=85&w=1800&auto=format&fit=crop"
-                alt="Sau khi hiệu chỉnh sơn và phủ Ceramic 10H"
-                className="w-full h-full object-cover object-center pointer-events-none brightness-110 contrast-110 saturate-125"
-              />
-              <div className="absolute top-4 right-4 px-3.5 py-1.5 rounded-full bg-emerald-500/90 text-[#06070A] font-mono font-bold text-xs tracking-wider shadow-lg">
-                AFTER · SAU KHI PHỦ CERAMIC 10H & PPF (ĐỘ BÓNG 99.6 GU)
+              {/* Eyebrow Telemetry Code */}
+              <div className="inline-flex items-center gap-3 mb-6">
+                <span className="font-mono text-xs font-bold tracking-[0.28em] text-[#FF3B1F] uppercase">
+                  {activeMode.code}
+                </span>
+                <span className="w-12 h-px bg-white/25" />
+                <span className="font-mono text-xs text-white/60 uppercase tracking-widest">
+                  {activeMode.machine}
+                </span>
               </div>
 
-              {/* BEFORE LAYER (Clipped by sliderPos: Dull, Oxidized, Swirl Marks) */}
-              <div
-                className="absolute inset-0 overflow-hidden"
-                style={{
-                  clipPath: `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)`,
-                }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=85&w=1800&auto=format&fit=crop"
-                  alt="Trước khi hiệu chỉnh sơn"
-                  className="w-full h-full object-cover object-center pointer-events-none brightness-75 contrast-75 saturate-50 blur-[0.6px]"
-                />
-                {/* Simulated Swirl Marks / Oxidation Overlay */}
-                <div
-                  className="absolute inset-0 pointer-events-none opacity-45"
+              {/* Massive Stacked Display Typography */}
+              <h1 className="font-black uppercase tracking-[-0.05em] leading-[0.86] text-[54px] sm:text-[88px] lg:text-[124px] text-white select-none">
+                <span className="block">{activeMode.headlineTop}</span>
+                <span
+                  className="block text-transparent"
                   style={{
-                    backgroundImage:
-                      'repeating-radial-gradient(circle at 35% 50%, rgba(255,255,255,0.14) 0px, transparent 2px, transparent 9px)',
+                    WebkitTextStroke: '1.5px rgba(255,255,255,0.85)',
                   }}
-                />
-                <div className="absolute top-4 left-4 px-3.5 py-1.5 rounded-full bg-black/80 border border-white/20 text-amber-300 font-mono font-bold text-xs tracking-wider">
-                  BEFORE · SƠN XƯỚC XOÁY & OXI HÓA (ĐỘ BÓNG 42.0 GU)
-                </div>
-              </div>
+                >
+                  {activeMode.headlineMid}
+                </span>
+                <span className="block text-[#FF3B1F]">{activeMode.headlineBot}</span>
+              </h1>
+            </motion.div>
+          </AnimatePresence>
 
-              {/* Vertical Divider Handle */}
-              <div
-                className="absolute top-0 bottom-0 w-0.5 bg-[#FF4D1C] shadow-[0_0_20px_#FF4D1C]"
-                style={{ left: `${sliderPos}%` }}
-              >
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-[#FF4D1C] text-white border-2 border-white flex items-center justify-center shadow-[0_0_30px_rgba(255,77,28,0.8)]">
-                  <SlidersHorizontal className="w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Bottom Range Input for Mobile/Keyboard Accessibility */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-72 sm:w-96 px-4 py-2 rounded-full bg-black/75 backdrop-blur-md border border-white/15 flex items-center gap-3">
-                <span className="font-mono text-[10px] text-amber-300 uppercase">TRƯỚC</span>
-                <input
-                  type="range"
-                  min={5}
-                  max={95}
-                  value={sliderPos}
-                  onChange={e => setSliderPos(Number(e.target.value))}
-                  className="w-full accent-[#FF4D1C] cursor-pointer"
-                />
-                <span className="font-mono text-[10px] text-emerald-400 uppercase">SAU</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. SHOWROOM GALLERY & REAL VEHICLE BUILDS (WITH TELEMETRY LIGHTBOX) */}
-      <section id="gallery" className="py-24 sm:py-32 px-4 sm:px-6 relative z-10 border-t border-white/[0.06]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF4D1C] mb-3">
-                <Layers className="w-3.5 h-3.5" />
-                <span>SHOWROOM PORTFOLIO & VEHICLE LOGS</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-[-0.02em] text-white">
-                Hình Ảnh Thực Tế Các Xe Đã Thi Công
-              </h2>
-              <p className="text-sm text-slate-400 mt-2">
-                Bấm vào bất kỳ chiếc Ô tô hoặc Mô tô PKL nào bên dưới để xem chi tiết hồ sơ kỹ thuật, biển số và các hạng mục đã hoàn thiện.
+          {/* Bottom HUD Bar: Minimal Tagline + 3 Telemetry Specs + Direct Actions */}
+          <div className="mt-10 pt-8 border-t border-white/15 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+            <div className="lg:col-span-4">
+              <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.15em] text-white/75">
+                {activeMode.tagline}
               </p>
             </div>
 
-            {/* Filter Pills */}
-            <div className="flex flex-wrap gap-2">
+            <div className="lg:col-span-4 grid grid-cols-3 gap-4 border-l border-white/15 pl-6">
+              {activeMode.specs.map(s => (
+                <div key={s.label}>
+                  <div className="font-mono text-[10px] tracking-[0.2em] text-white/40 uppercase">
+                    {s.label}
+                  </div>
+                  <div className="font-mono text-base sm:text-xl font-bold text-white mt-0.5 tabular-nums">
+                    {s.val}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
+              <a
+                href={buildBookingHref()}
+                className="px-7 py-4 bg-[#FF3B1F] hover:bg-white text-white hover:text-black font-mono text-xs font-bold uppercase tracking-[0.2em] transition-all flex items-center gap-3"
+                style={{
+                  clipPath: 'polygon(0 0, 100% 0, 100% 75%, 92% 100%, 0 100%)',
+                }}
+              >
+                <span>Đặt Khoang Dịch Vụ</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#intake"
+                className="px-6 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-white font-mono text-xs font-bold uppercase tracking-[0.2em] transition-all"
+              >
+                Nhận Báo Giá CRM
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. VISUAL LOOKBOOK GALLERY (BỐ CỤC TỐI GIẢN, ẢNH LỚN, KHÔNG RƯỜM RÀ) */}
+      <section id="work" className="py-28 sm:py-36 px-4 sm:px-8 border-b border-white/10">
+        <div className="max-w-[1440px] mx-auto">
+          {/* Minimalist Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+            <div>
+              <div className="font-mono text-xs text-[#FF3B1F] tracking-[0.28em] uppercase mb-3">
+                // 01 ARCHIVE
+              </div>
+              <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-[-0.04em] leading-none">
+                SELECTED BUILDS.
+              </h2>
+            </div>
+
+            {/* Minimalist Filter Tabs */}
+            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest">
               {[
-                { key: 'all', label: 'Tất cả xe (06)' },
-                { key: 'car', label: 'Ô tô / Supercar' },
-                { key: 'moto', label: 'Mô tô PKL & Xe máy' },
-                { key: 'ppf', label: 'Dán PPF & Ceramic' },
-                { key: 'tuning', label: 'Độ Performance & Bảo dưỡng' },
+                { id: 'all', label: 'ALL (06)' },
+                { id: 'car', label: 'SUPERCAR / AUTO' },
+                { id: 'moto', label: 'HYPERBIKE / MOTO' },
               ].map(tab => (
                 <button
-                  key={tab.key}
+                  key={tab.id}
                   type="button"
-                  onClick={() => setGalleryFilter(tab.key as any)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
-                    galleryFilter === tab.key
-                      ? 'bg-[#FF4D1C] text-white shadow-[0_8px_20px_rgba(255,77,28,0.3)]'
-                      : 'bg-[#10141D] text-slate-400 hover:text-white border border-white/[0.07]'
+                  onClick={() => setGalleryFilter(tab.id as any)}
+                  className={`px-4 py-2 border transition-all ${
+                    galleryFilter === tab.id
+                      ? 'bg-white text-black border-white font-bold'
+                      : 'bg-transparent text-white/50 border-white/15 hover:border-white/40 hover:text-white'
                   }`}
                 >
                   {tab.label}
@@ -782,64 +419,52 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
             </div>
           </div>
 
-          {/* Asymmetric Bento Grid with Clip-Path Hover & Vehicle License Plate Badges */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-            {filteredGallery.map((item, idx) => {
-              const isWide = idx === 0 || idx === 4;
+          {/* High-Impact Architectural Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {galleryList.map((item, idx) => {
+              const spanClass =
+                idx % 3 === 0
+                  ? 'md:col-span-8 h-[420px] sm:h-[540px]'
+                  : 'md:col-span-4 h-[420px] sm:h-[540px]';
               return (
                 <motion.div
                   key={`${item.caption}-${idx}`}
                   layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: idx * 0.05 }}
-                  onClick={() => setSelectedBuild(item)}
-                  className={`${
-                    isWide ? 'md:col-span-7' : 'md:col-span-5'
-                  } group cursor-pointer p-1.5 rounded-[1.75rem] bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-[#FF4D1C]/50 transition-all duration-500`}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  onClick={() => setActiveLightbox(item)}
+                  className={`${spanClass} group relative overflow-hidden bg-[#0C0E14] border border-white/10 cursor-pointer`}
                 >
-                  <div className="relative h-72 sm:h-80 rounded-[calc(1.75rem-0.375rem)] overflow-hidden bg-[#0D1017]">
-                    <img
-                      src={item.image.src}
-                      alt={item.image.alt}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#06070A] via-[#06070A]/35 to-transparent" />
+                  <img
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    className="w-full h-full object-cover object-center scale-100 group-hover:scale-108 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
 
-                    {/* Top Bar: Vehicle Type + License Plate */}
-                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
-                      <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 font-mono text-[10px] uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
-                        {item.category === 'moto' ? (
-                          <Bike className="w-3.5 h-3.5 text-[#FF4D1C]" />
-                        ) : (
-                          <Car className="w-3.5 h-3.5 text-[#FF4D1C]" />
-                        )}
-                        {item.vehicleModel || 'Showroom Build'}
-                      </span>
+                  {/* Top Index & Category */}
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between font-mono text-xs">
+                    <span className="text-white/60">0{idx + 1}</span>
+                    <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/15 uppercase tracking-widest text-[10px] text-[#FF3B1F]">
+                      {item.category === 'moto' ? 'MOTO ATELIER' : 'AUTO DIVISION'}
+                    </span>
+                  </div>
 
-                      {item.licensePlate && (
-                        <span className="px-2.5 py-1 rounded-md bg-amber-400 text-[#06070A] font-mono font-bold text-xs tracking-wider shadow">
-                          {item.licensePlate}
-                        </span>
-                      )}
+                  {/* Bottom Minimalist Machine Title */}
+                  <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-4">
+                    <div>
+                      <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/50 mb-1">
+                        {item.completionTime || '48H BUILD'} · {item.packagePrice || 'BESPOKE'}
+                      </div>
+                      <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-[-0.03em] text-white">
+                        {item.vehicleModel || item.caption}
+                      </h3>
                     </div>
 
-                    {/* Bottom Info */}
-                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
-                      <div>
-                        {item.ownerName && (
-                          <div className="font-mono text-[10px] uppercase tracking-widest text-[#FF4D1C] mb-1">
-                            KHÁCH HÀNG: {item.ownerName} · HOÀN THIỆN: {item.completionTime || 'Trong ngày'}
-                          </div>
-                        )}
-                        <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
-                          {item.caption}
-                        </h3>
-                      </div>
-
-                      <div className="shrink-0 w-10 h-10 rounded-full bg-white/10 group-hover:bg-[#FF4D1C] text-white border border-white/20 flex items-center justify-center transition-all">
-                        <ArrowUpRight className="w-4 h-4" />
-                      </div>
+                    <div className="w-11 h-11 rounded-full bg-white/10 group-hover:bg-[#FF3B1F] border border-white/20 flex items-center justify-center transition-all duration-300 group-hover:rotate-45 shrink-0">
+                      <Plus className="w-5 h-5 text-white" />
                     </div>
                   </div>
                 </motion.div>
@@ -849,504 +474,381 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
         </div>
       </section>
 
-      {/* 5. LIVE SERVICES & PRICING CATALOG (CONNECTED DIRECTLY TO BOOKING_SERVICES DB) */}
-      <section id="services" className="py-24 sm:py-32 px-4 sm:px-6 relative z-10 border-t border-white/[0.06] bg-[#080A0F]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      {/* 4. RAW VS PERFECTED — LASER SURFACE SLIDER (BEFORE / AFTER) */}
+      <section id="shield" className="py-28 sm:py-36 px-4 sm:px-8 border-b border-white/10 bg-[#07080C]">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF4D1C]/10 border border-[#FF4D1C]/30 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF4D1C] mb-3">
-                <Wrench className="w-3.5 h-3.5" />
-                <span>LIVE SERVICE MENU · ĐỒNG BỘ MODULE BOOKING</span>
+              <div className="font-mono text-xs text-[#FF3B1F] tracking-[0.28em] uppercase mb-3">
+                // 02 SURFACEOPTICS
               </div>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-[-0.02em] text-white">
-                Danh Mục Gói Chăm Sóc, Bảo Dưỡng & Độ Xe
+              <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-[-0.04em] leading-none">
+                RAW VS. 10H SHIELD.
+              </h2>
+            </div>
+            <div className="font-mono text-xs uppercase tracking-[0.2em] text-white/50">
+              DRAG LASER LINE TO INSPECT CLEARCOAT CORRECTION
+            </div>
+          </div>
+
+          <div
+            ref={sliderRef}
+            onPointerMove={e => {
+              if (e.buttons === 1 || e.pointerType !== 'mouse') {
+                handleSliderMove(e.clientX);
+              }
+            }}
+            onClick={e => handleSliderMove(e.clientX)}
+            className="relative h-[380px] sm:h-[580px] w-full overflow-hidden border border-white/15 cursor-ew-resize select-none"
+          >
+            {/* AFTER: Mirror Finish */}
+            <img
+              src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=85&w=2000&auto=format&fit=crop"
+              alt="After 10H Ceramic"
+              className="w-full h-full object-cover object-center pointer-events-none brightness-110 contrast-115 saturate-125"
+            />
+            <div className="absolute bottom-6 right-6 px-4 py-2 bg-black/80 backdrop-blur-md border border-white/15 font-mono text-xs font-bold uppercase tracking-[0.2em] text-white">
+              AFTER // 99.6 GU MIRROR GLOSS
+            </div>
+
+            {/* BEFORE: Oxidized & Swirl Marks */}
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{
+                clipPath: `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)`,
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=85&w=2000&auto=format&fit=crop"
+                alt="Before correction"
+                className="w-full h-full object-cover object-center pointer-events-none brightness-70 contrast-75 saturate-50 blur-[0.8px]"
+              />
+              <div className="absolute bottom-6 left-6 px-4 py-2 bg-black/80 backdrop-blur-md border border-white/15 font-mono text-xs font-bold uppercase tracking-[0.2em] text-white/60">
+                BEFORE // 42.0 GU SWIRL & OXIDATION
+              </div>
+            </div>
+
+            {/* Laser Line */}
+            <div
+              className="absolute top-0 bottom-0 w-[2px] bg-[#FF3B1F] shadow-[0_0_24px_#FF3B1F]"
+              style={{ left: `${sliderPos}%` }}
+            >
+              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-[#FF3B1F] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,31,0.9)]">
+                <SlidersHorizontal className="w-5 h-5" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. MINIMALIST SPEC-SHEET SERVICE MENU (CONNECTED TO BOOKING_SERVICES) */}
+      <section id="specs" className="py-28 sm:py-36 px-4 sm:px-8 border-b border-white/10">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+            <div>
+              <div className="font-mono text-xs text-[#FF3B1F] tracking-[0.28em] uppercase mb-3">
+                // 03 TELEMETRY PACKAGES
+              </div>
+              <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-[-0.04em] leading-none">
+                SERVICE INDEX.
               </h2>
             </div>
             <a
-              href={buildBookingLink()}
-              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#FF4D1C] hover:text-orange-300"
+              href={buildBookingHref()}
+              className="font-mono text-xs uppercase tracking-[0.2em] text-[#FF3B1F] hover:text-white flex items-center gap-2 transition-colors"
             >
-              <span>Mở lịch trống tất cả khoang dịch vụ</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>OPEN FULL BOOKING CALENDAR</span>
+              <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {(liveServices.length > 0
-              ? liveServices.map((svc, index) => {
-                  const fallbackDesc =
-                    data.services[index % data.services.length]?.description ||
-                    'Quy trình thi công tiêu chuẩn phòng sạch quốc tế, lưu hồ sơ bảo hành điện tử theo biển số xe trên hệ thống CRM.';
-                  const isMotoSvc =
-                    svc.name.toLowerCase().includes('mô tô') ||
-                    svc.name.toLowerCase().includes('pkl') ||
-                    svc.name.toLowerCase().includes('xe máy') ||
-                    svc.name.toLowerCase().includes('sh350');
-                  return {
-                    id: svc.id,
-                    title: svc.name,
-                    description: fallbackDesc,
-                    priceFormatted: new Intl.NumberFormat('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                      maximumFractionDigits: 0,
-                    }).format(svc.price),
-                    durationLabel: `${svc.duration_minutes} phút`,
-                    vehicleBadge: isMotoSvc ? 'MÔ TÔ PKL & XE MÁY' : 'Ô TÔ & SUPERCAR',
-                    isMoto: isMotoSvc,
-                  };
-                })
-              : data.services.map(s => ({
-                  id: s.id,
-                  title: s.title,
-                  description: s.description,
-                  priceFormatted: s.priceLabel || 'Liên hệ',
-                  durationLabel: s.durationLabel || '90 phút',
-                  vehicleBadge: s.vehicleType === 'moto' ? 'MÔ TÔ PKL & XE MÁY' : 'Ô TÔ & SUPERCAR',
-                  isMoto: s.vehicleType === 'moto',
-                }))
-            ).map(service => (
-              <div
-                key={service.id}
-                className="p-1.5 rounded-[1.75rem] bg-white/[0.03] border border-white/[0.08] hover:border-[#FF4D1C]/50 transition-all flex flex-col justify-between group"
-              >
-                <div className="p-6 rounded-[calc(1.75rem-0.375rem)] bg-[#0D1017] h-full flex flex-col justify-between">
+          {/* Architectural Row Table */}
+          <div className="border-t border-white/15">
+            {displayServices.map((svc, idx) => {
+              const isActive = hoveredServiceIdx === idx;
+              return (
+                <div
+                  key={svc.id}
+                  onMouseEnter={() => setHoveredServiceIdx(idx)}
+                  className={`group border-b border-white/15 py-6 sm:py-8 px-4 sm:px-6 transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-4 ${
+                    isActive ? 'bg-white/[0.04]' : 'bg-transparent'
+                  }`}
+                >
+                  <div className="flex items-baseline gap-6 sm:gap-10">
+                    <span className="font-mono text-sm sm:text-base font-bold text-[#FF3B1F]">
+                      {svc.index}
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] px-2 py-0.5 border border-white/15 text-white/60">
+                          {svc.isMoto ? 'MOTO / PKL' : 'AUTO / SUPERCAR'}
+                        </span>
+                        <span className="font-mono text-xs text-white/40 flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {svc.duration}
+                        </span>
+                      </div>
+                      <h3 className="text-xl sm:text-3xl font-bold tracking-[-0.02em] text-white group-hover:translate-x-2 transition-transform duration-300">
+                        {svc.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between lg:justify-end gap-6 sm:gap-10 pl-12 lg:pl-0">
+                    <div className="font-mono text-xl sm:text-2xl font-bold text-white tabular-nums">
+                      {svc.price}
+                    </div>
+
+                    <a
+                      href={buildBookingHref({
+                        serviceId: svc.id,
+                        serviceName: svc.title,
+                      })}
+                      className="px-5 py-3 bg-white group-hover:bg-[#FF3B1F] text-black group-hover:text-white font-mono text-xs font-bold uppercase tracking-[0.18em] transition-all flex items-center gap-2 shrink-0"
+                    >
+                      <span>Đặt Khoang</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. LIVE PIT-LANE BAYS + MINIMALIST VEHICLE CRM INTAKE */}
+      <section id="intake" className="py-28 sm:py-36 px-4 sm:px-8 border-b border-white/10 bg-[#07080C]">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left 6 Cols: Live Pit-Lane Bays (from booking_resources) */}
+          <div className="lg:col-span-6 space-y-8">
+            <div>
+              <div className="font-mono text-xs text-[#FF3B1F] tracking-[0.28em] uppercase mb-3">
+                // 04 PIT-LANE TELEMETRY
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-[-0.04em] leading-none">
+                ACTIVE BAYS.
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {(liveResources.length > 0
+                ? liveResources
+                : [
+                    {
+                      id: 'b1',
+                      name: 'Khoang 01: Phòng Sạch PPF & Ceramic',
+                      role_or_capacity: 'ISO Cleanroom · 2 Cars',
+                    },
+                    {
+                      id: 'b2',
+                      name: 'Khoang 02: Cầu Nâng Bảo Dưỡng Gầm Máy',
+                      role_or_capacity: '4-Ton Lift · ECU Diagnostics',
+                    },
+                    {
+                      id: 'b3',
+                      name: 'Khoang 03: Bàn Nâng Thủy Lực Mô Tô PKL',
+                      role_or_capacity: 'Hyperbike & Scooter Lab',
+                    },
+                    {
+                      id: 'b4',
+                      name: 'KTV Trưởng: Master Hoàng Nam',
+                      role_or_capacity: '12 Years Supercar & PKL',
+                    },
+                  ]
+              ).map((bay, idx) => (
+                <a
+                  key={bay.id}
+                  href={buildBookingHref({ resourceId: bay.id })}
+                  className="group p-6 bg-[#0C0E14] border border-white/10 hover:border-[#FF3B1F] transition-all flex flex-col justify-between min-h-[170px]"
+                >
+                  <div className="flex items-center justify-between font-mono text-xs">
+                    <span className="text-white/40">BAY // 0{idx + 1}</span>
+                    <span className="inline-flex items-center gap-1.5 text-emerald-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      READY
+                    </span>
+                  </div>
+
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-4">
-                      <span
-                        className={`px-2.5 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider font-semibold ${
-                          service.isMoto
-                            ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                            : 'bg-[#FF4D1C]/15 text-[#FF4D1C] border border-[#FF4D1C]/30'
+                    <h3 className="text-lg font-bold text-white group-hover:text-[#FF3B1F] transition-colors">
+                      {bay.name}
+                    </h3>
+                    <div className="font-mono text-xs text-white/45 mt-1">
+                      {bay.role_or_capacity}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Right 6 Cols: Minimalist 4-Field CRM Vehicle Intake */}
+          <div className="lg:col-span-6">
+            <div className="p-8 sm:p-10 bg-[#0C0E14] border border-white/15">
+              <div className="flex items-center justify-between pb-6 mb-8 border-b border-white/10">
+                <div>
+                  <div className="font-mono text-xs text-[#FF3B1F] uppercase tracking-[0.22em]">
+                    // DIRECT CRM SYNC
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-[-0.03em] text-white mt-1">
+                    HỒ SƠ XE & BÁO GIÁ.
+                  </h3>
+                </div>
+                <span className="font-mono text-[11px] text-white/40 uppercase">
+                  KHÁCH + DÒNG XE
+                </span>
+              </div>
+
+              {submitted ? (
+                <div className="py-12 text-center space-y-5">
+                  <div className="w-14 h-14 bg-[#FF3B1F] text-white flex items-center justify-center mx-auto">
+                    <Check className="w-7 h-7" />
+                  </div>
+                  <h4 className="text-2xl font-black uppercase tracking-tight">
+                    ĐÃ ĐỒNG BỘ HỒ SƠ XE VÀO CRM
+                  </h4>
+                  <p className="text-sm text-white/60 max-w-md mx-auto">
+                    Thông tin của <strong className="text-white">{leadForm.name}</strong> cùng mẫu xe{' '}
+                    <strong className="text-white">{leadForm.vehicleModel}</strong> đã được chuyển thẳng vào bảng Kanban CRM của xưởng.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmitted(false);
+                      setLeadForm({
+                        name: '',
+                        phone: '',
+                        vehicleType: 'Ô tô',
+                        vehicleModel: '',
+                        service: '',
+                      });
+                    }}
+                    className="px-6 py-3 border border-white/20 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+                  >
+                    Gửi thêm xe khác
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleLeadSubmit} className="space-y-5">
+                  {/* Vehicle Category Toggle */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {['Ô tô', 'Xe máy / Mô tô PKL'].map(type => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setLeadForm({ ...leadForm, vehicleType: type })}
+                        className={`py-3.5 font-mono text-xs font-bold uppercase tracking-widest border transition-all flex items-center justify-center gap-2 ${
+                          leadForm.vehicleType === type
+                            ? 'bg-white text-black border-white'
+                            : 'bg-transparent text-white/50 border-white/15 hover:text-white'
                         }`}
                       >
-                        {service.vehicleBadge}
-                      </span>
-                      <span className="font-mono text-xs text-slate-400 flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-slate-500" />
-                        {service.durationLabel}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-white group-hover:text-[#FF4D1C] transition-colors mb-2.5 leading-snug">
-                      {service.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/[0.07] space-y-3">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-[11px] font-mono uppercase text-slate-500">
-                        Chi phí trọn gói
-                      </span>
-                      <span className="font-mono text-lg font-bold text-white tabular-nums">
-                        {service.priceFormatted}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <a
-                        href={buildBookingLink({
-                          serviceId: service.id,
-                          serviceName: service.title,
-                        })}
-                        className="py-2.5 px-3 rounded-xl bg-[#FF4D1C] hover:bg-[#ff5f33] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
-                      >
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>Đặt Khoang</span>
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          scrollToIntakeWithPreset({
-                            serviceName: service.title,
-                            vehicleType: service.isMoto ? 'Xe máy / Mô tô PKL' : 'Ô tô',
-                          })
-                        }
-                        className="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 font-semibold text-xs border border-white/10 transition-all"
-                      >
-                        Lập Hồ Sơ CRM
+                        {type === 'Ô tô' ? (
+                          <Car className="w-4 h-4" />
+                        ) : (
+                          <Bike className="w-4 h-4" />
+                        )}
+                        <span>{type}</span>
                       </button>
+                    ))}
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[11px] uppercase tracking-widest text-white/50 mb-2">
+                      01 // DÒNG XE CỦA BẠN *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={leadForm.vehicleModel}
+                      onChange={e => setLeadForm({ ...leadForm, vehicleModel: e.target.value })}
+                      placeholder={activeMode.placeholderModel}
+                      className="w-full px-4 py-3.5 bg-[#050507] border border-white/15 focus:border-[#FF3B1F] text-white text-sm outline-none transition-colors"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-mono text-[11px] uppercase tracking-widest text-white/50 mb-2">
+                        02 // HỌ VÀ TÊN CHỦ XE *
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        value={leadForm.name}
+                        onChange={e => setLeadForm({ ...leadForm, name: e.target.value })}
+                        placeholder="Nguyễn Hoàng Minh"
+                        className="w-full px-4 py-3.5 bg-[#050507] border border-white/15 focus:border-[#FF3B1F] text-white text-sm outline-none transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-mono text-[11px] uppercase tracking-widest text-white/50 mb-2">
+                        03 // SỐ ĐIỆN THOẠI *
+                      </label>
+                      <input
+                        required
+                        type="tel"
+                        value={leadForm.phone}
+                        onChange={e => setLeadForm({ ...leadForm, phone: e.target.value })}
+                        placeholder="0909 888 911"
+                        className="w-full px-4 py-3.5 bg-[#050507] border border-white/15 focus:border-[#FF3B1F] text-white font-mono text-sm outline-none transition-colors"
+                      />
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 6. LIVE WORKSHOP BAYS & MASTER TECHNICIANS (CONNECTED TO BOOKING_RESOURCES) */}
-      <section id="bays" className="py-24 sm:py-28 px-4 sm:px-6 relative z-10 border-t border-white/[0.06]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-400 mb-3">
-                <Gauge className="w-3.5 h-3.5" />
-                <span>LIVE WORKSHOP BAY TELEMETRY</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-[-0.02em] text-white">
-                Sơ Đồ Khoang Dịch Vụ & Kỹ Thuật Viên Trưởng
-              </h2>
-            </div>
-            <p className="text-sm text-slate-400 max-w-md">
-              Dữ liệu đồng bộ thời gian thực với Sơ đồ Điều phối (Timeline) trong trang Quản trị Đặt lịch. Khách hàng có thể chọn đích danh Khoang hoặc Kỹ thuật viên.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {(liveResources.length > 0
-              ? liveResources
-              : [
-                  {
-                    id: 'bay-1',
-                    name: 'Khoang 01: Phòng Sạch PPF & Ceramic',
-                    role_or_capacity: 'Kiểm soát bụi ISO · 2 Siêu xe',
-                    status: 'active',
-                  },
-                  {
-                    id: 'bay-2',
-                    name: 'Khoang 02: Cầu Nâng Bảo Dưỡng Gầm Máy',
-                    role_or_capacity: 'Cầu nâng 4 tấn + Máy chẩn đoán ECU',
-                    status: 'active',
-                  },
-                  {
-                    id: 'bay-3',
-                    name: 'Khoang 03: Bàn Nâng Thủy Lực Mô Tô PKL',
-                    role_or_capacity: 'Chuyên Hyperbike, Ducati, BMW, SH350i',
-                    status: 'active',
-                  },
-                  {
-                    id: 'bay-4',
-                    name: 'KTV Trưởng: Master Hoàng Nam',
-                    role_or_capacity: '12 năm kinh nghiệm Supercar & PKL',
-                    status: 'active',
-                  },
-                ]
-            ).map((bay, idx) => (
-              <div
-                key={bay.id}
-                className="p-5 rounded-3xl bg-[#0D1017] border border-white/[0.08] hover:border-emerald-400/50 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="font-mono text-xs font-bold text-slate-400">
-                      BAY #0{idx + 1}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 font-mono text-[10px] text-emerald-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      ONLINE
-                    </span>
+                  <div>
+                    <label className="block font-mono text-[11px] uppercase tracking-widest text-white/50 mb-2">
+                      04 // HẠNG MỤC QUAN TÂM
+                    </label>
+                    <select
+                      value={leadForm.service}
+                      onChange={e => setLeadForm({ ...leadForm, service: e.target.value })}
+                      className="w-full px-4 py-3.5 bg-[#050507] border border-white/15 focus:border-[#FF3B1F] text-white text-sm outline-none transition-colors"
+                    >
+                      <option value="">-- Chọn hạng mục dịch vụ --</option>
+                      {displayServices.map(s => (
+                        <option key={s.id} value={s.title}>
+                          {s.title} ({s.price})
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  <h3 className="text-base font-bold text-white mb-1.5">{bay.name}</h3>
-                  <p className="text-xs text-slate-400 mb-5">
-                    {bay.role_or_capacity || 'Khoang dịch vụ tiêu chuẩn Motorsport'}
-                  </p>
-                </div>
 
-                <a
-                  href={buildBookingLink({ resourceId: bay.id })}
-                  className="w-full py-2.5 px-3 rounded-xl bg-white/[0.05] hover:bg-[#FF4D1C] text-white font-semibold text-xs flex items-center justify-between transition-colors"
-                >
-                  <span>Đặt lịch tại khoang này</span>
-                  <ChevronRight className="w-4 h-4" />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. DIRECT VEHICLE INTAKE & CRM SYNC CONSOLE (#crm-lead-section) */}
-      <section
-        id="crm-lead-section"
-        className="py-24 sm:py-32 px-4 sm:px-6 relative z-10 border-t border-white/[0.06] bg-gradient-to-b from-[#080A0F] to-[#06070A]"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* Left 5 Cols: Explain How CRM Tracks Customer + Vehicle + License Plate */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF4D1C]/10 border border-[#FF4D1C]/30 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF4D1C]">
-                <Zap className="w-3.5 h-3.5" />
-                <span>DIRECT CRM VEHICLE PROFILE SYNC</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.02em] text-white leading-tight">
-                Lập Hồ Sơ Quản Lý Xe Điện Tử & Nhận Báo Giá Kỹ Thuật
-              </h2>
-
-              <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-                Khi bạn gửi thông tin phương tiện tại đây, hệ thống <strong className="text-white">CRM của {data.business.name}</strong> tự động khởi tạo thẻ Hồ sơ Xe gắn liền với <strong className="text-amber-300">Biển số xe, Dòng xe, Số ODO</strong> và thông tin chủ xe để theo dõi tiến độ thi công & nhắc bảo dưỡng định kỳ.
-              </p>
-
-              {/* Sample CRM Vehicle Card Preview */}
-              <div className="p-5 rounded-3xl bg-[#0D1017] border border-white/10 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
-                    MẪU THẺ HỒ SƠ XE TRONG CRM KANBAN
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-amber-400 text-[#06070A] font-mono font-bold text-xs">
-                    {leadForm.licensePlate || quickPlate || '51K-888.99'}
-                  </span>
-                </div>
-                <div className="text-sm font-bold text-white">
-                  {leadForm.vehicleModel || quickModel || 'Porsche 911 Carrera S / Ducati V4S'}
-                </div>
-                <div className="flex flex-wrap gap-2 text-[11px] font-mono text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-                    Loại: {leadForm.vehicleType}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-                    Chủ xe: {leadForm.name || 'Anh Hoàng Minh'}
-                  </span>
-                  {leadForm.odoKm && (
-                    <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-                      ODO: {leadForm.odoKm} km
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full py-4 bg-[#FF3B1F] hover:bg-white text-white hover:text-black font-mono text-xs font-bold uppercase tracking-[0.22em] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                  >
+                    <span>
+                      {submitting ? 'ĐANG ĐỒNG BỘ CRM...' : 'LƯU HỒ SƠ XE & NHẬN TƯ VẤN'}
                     </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Right 7 Cols: Double-Bezel Vehicle Intake Form */}
-            <div className="lg:col-span-7">
-              <div className="p-2 rounded-[2rem] bg-white/[0.04] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.7)]">
-                <div className="p-6 sm:p-8 rounded-[calc(2rem-0.5rem)] bg-[#0D1017]">
-                  {leadSuccess ? (
-                    <div className="py-10 text-center space-y-4">
-                      <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto">
-                        <CheckCircle2 className="w-8 h-8" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-white">
-                        Đã Khởi Tạo Hồ Sơ Xe Trong Hệ Thống CRM!
-                      </h3>
-                      <p className="text-sm text-slate-300 max-w-md mx-auto">
-                        Thông tin xe <strong className="text-amber-300 font-mono">{leadForm.licensePlate}</strong> ({leadForm.vehicleModel}) của <strong className="text-white">{leadForm.name}</strong> đã được đẩy thẳng vào bảng Kanban CRM của xưởng. Cố vấn kỹ thuật sẽ liên hệ trong 5 phút!
-                      </p>
-                      <div className="pt-4 flex flex-wrap justify-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setLeadSuccess(false);
-                            setLeadForm({
-                              name: '',
-                              phone: '',
-                              vehicleType: 'Ô tô',
-                              vehicleModel: '',
-                              licensePlate: '',
-                              odoKm: '',
-                              service: '',
-                              message: '',
-                            });
-                          }}
-                          className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white text-xs font-semibold"
-                        >
-                          Đăng ký thêm xe khác
-                        </button>
-                        <a
-                          href={buildBookingLink()}
-                          className="px-5 py-2.5 rounded-full bg-[#FF4D1C] text-white text-xs font-semibold"
-                        >
-                          Chọn giờ đặt khoang trực tiếp →
-                        </a>
-                      </div>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleLeadSubmit} className="space-y-4">
-                      <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                        <h3 className="text-base sm:text-lg font-bold text-white">
-                          Phiếu Tiếp Nhận Hồ Sơ Phương Tiện (Ô Tô / Xe Máy)
-                        </h3>
-                        <span className="font-mono text-[11px] text-emerald-400">
-                          ● AUTO-SYNC CRM
-                        </span>
-                      </div>
-
-                      {leadError && (
-                        <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs">
-                          {leadError}
-                        </div>
-                      )}
-
-                      {/* Vehicle Type Switcher */}
-                      <div className="grid grid-cols-2 gap-3">
-                        {['Ô tô', 'Xe máy / Mô tô PKL'].map(type => (
-                          <button
-                            key={type}
-                            type="button"
-                            onClick={() => setLeadForm({ ...leadForm, vehicleType: type })}
-                            className={`py-3 px-4 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-                              leadForm.vehicleType === type
-                                ? 'bg-[#FF4D1C] border-[#FF4D1C] text-white'
-                                : 'bg-[#07090E] border-white/10 text-slate-400 hover:text-white'
-                            }`}
-                          >
-                            {type === 'Ô tô' ? (
-                              <Car className="w-4 h-4" />
-                            ) : (
-                              <Bike className="w-4 h-4" />
-                            )}
-                            <span>{type}</span>
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* Owner Name & Phone */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                            Họ tên chủ xe <span className="text-[#FF4D1C]">*</span>
-                          </label>
-                          <input
-                            required
-                            type="text"
-                            value={leadForm.name}
-                            onChange={e => setLeadForm({ ...leadForm, name: e.target.value })}
-                            placeholder="Nguyễn Hoàng Minh"
-                            className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white text-sm outline-none"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                            Số điện thoại (Zalo) <span className="text-[#FF4D1C]">*</span>
-                          </label>
-                          <input
-                            required
-                            type="tel"
-                            value={leadForm.phone}
-                            onChange={e => setLeadForm({ ...leadForm, phone: e.target.value })}
-                            placeholder="0909 888 911"
-                            className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white font-mono text-sm outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Vehicle Make/Model, License Plate, ODO */}
-                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-                        <div className="sm:col-span-5">
-                          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                            Hãng & Dòng xe <span className="text-[#FF4D1C]">*</span>
-                          </label>
-                          <input
-                            required
-                            type="text"
-                            value={leadForm.vehicleModel}
-                            onChange={e =>
-                              setLeadForm({ ...leadForm, vehicleModel: e.target.value })
-                            }
-                            placeholder="Porsche 911 / BMW M4 / SH350i"
-                            className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white text-sm outline-none"
-                          />
-                        </div>
-                        <div className="sm:col-span-4">
-                          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                            Biển số xe <span className="text-[#FF4D1C]">*</span>
-                          </label>
-                          <input
-                            required
-                            type="text"
-                            value={leadForm.licensePlate}
-                            onChange={e =>
-                              setLeadForm({
-                                ...leadForm,
-                                licensePlate: e.target.value.toUpperCase(),
-                              })
-                            }
-                            placeholder="51K-888.88"
-                            className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-amber-300 font-mono font-bold text-sm uppercase outline-none"
-                          />
-                        </div>
-                        <div className="sm:col-span-3">
-                          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                            Số ODO (Km)
-                          </label>
-                          <input
-                            type="text"
-                            value={leadForm.odoKm}
-                            onChange={e => setLeadForm({ ...leadForm, odoKm: e.target.value })}
-                            placeholder="15.000 km"
-                            className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white font-mono text-sm outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Service Selection */}
-                      <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                          Hạng mục cần tư vấn / đặt lịch
-                        </label>
-                        <select
-                          value={leadForm.service}
-                          onChange={e => setLeadForm({ ...leadForm, service: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white text-sm outline-none"
-                        >
-                          <option value="">-- Chọn gói chăm sóc / bảo dưỡng / độ xe --</option>
-                          {(liveServices.length > 0
-                            ? liveServices.map(s => s.name)
-                            : data.services.map(s => s.title)
-                          ).map(name => (
-                            <option key={name} value={name}>
-                              {name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                          Tình trạng xe hoặc yêu cầu đặc biệt
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={leadForm.message}
-                          onChange={e => setLeadForm({ ...leadForm, message: e.target.value })}
-                          placeholder="VD: Xe bị xước dăm nắp capo, cần báo giá dán PPF + bảo dưỡng mốc 20.000km..."
-                          className="w-full px-4 py-3 rounded-xl bg-[#07090E] border border-white/10 focus:border-[#FF4D1C] text-white text-sm outline-none"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={submittingLead}
-                        className="w-full py-4 px-6 rounded-full bg-[#FF4D1C] hover:bg-[#ff5f33] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_12px_30px_rgba(255,77,28,0.4)] transition-all disabled:opacity-50"
-                      >
-                        <span>
-                          {submittingLead
-                            ? 'Đang khởi tạo hồ sơ xe vào CRM...'
-                            : 'Gửi Hồ Sơ Xe & Nhận Báo Giá Kỹ Thuật'}
-                        </span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </form>
-                  )}
-                </div>
-              </div>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* 8. LIVE GARAGE TECHNICAL JOURNAL (CONNECTED TO AI CMS POSTS) */}
-      <section id="journal" className="py-24 sm:py-28 px-4 sm:px-6 relative z-10 border-t border-white/[0.06]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      {/* 7. MINIMALIST VISUAL JOURNAL (AI CMS) */}
+      <section className="py-24 sm:py-32 px-4 sm:px-8 border-b border-white/10">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex items-end justify-between gap-6 mb-12">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF4D1C] mb-3">
-                <FileText className="w-3.5 h-3.5" />
-                <span>GARAGE TECHNICAL JOURNAL · POWERED BY AI CMS</span>
+              <div className="font-mono text-xs text-[#FF3B1F] tracking-[0.28em] uppercase mb-3">
+                // 05 AI CMS JOURNAL
               </div>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-[-0.02em] text-white">
-                Cẩm Nang Chăm Sóc Ô Tô & Mô Tô Phân Khối Lớn
+              <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-[-0.04em] leading-none">
+                TECH NOTES.
               </h2>
             </div>
-
             <a
               href={blogBaseUrl}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white transition-colors"
+              className="font-mono text-xs uppercase tracking-[0.2em] text-white/60 hover:text-white flex items-center gap-2"
             >
-              <span>Xem toàn bộ chuyên trang kỹ thuật</span>
+              <span>ALL ARTICLES</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -1356,249 +858,146 @@ export default function AutoGarageTemplate({ data }: AutoGarageTemplateProps) {
               ? livePosts.slice(0, 3)
               : [
                   {
-                    id: 'p1',
-                    title:
-                      'So Sánh Dán Phim PPF TPU 8.5Mil Và Phủ Ceramic Graphene 10H: Đâu Là Lựa Chọn Tối Ưu Cho Xe Sang?',
+                    id: '1',
+                    title: 'So Sánh Dán Phim PPF TPU 8.5Mil Và Phủ Ceramic Graphene 10H',
                     slug: 'so-sanh-dan-phim-ppf-tpu-va-phu-ceramic-graphene-10h',
-                    content:
-                      'Phân tích chi tiết cơ chế tự phục hồi vết xước của màng PPF TPU 8.5Mil và hiệu ứng lá sen kỵ nước của Ceramic Graphene 10H...',
                     thumbnail_url:
                       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1000&auto=format&fit=crop',
-                    created_at: new Date().toISOString(),
                   },
                   {
-                    id: 'p2',
-                    title:
-                      'Lịch Bảo Dưỡng Mô Tô Phân Khối Lớn (PKL) Định Kỳ Theo Từng Cấp ODO Chủ Xe Cần Nhớ',
-                    slug: 'lich-bao-duong-mo-to-phan-khoi-lon-pkl-dinh-ky-theo-odo',
-                    content:
-                      'Hướng dẫn chi tiết các mốc thay nhớt 300V, vệ sinh kim phun, bảo dưỡng heo dầu Brembo và cân chỉnh phuộc Ohlins cho mô tô PKL...',
+                    id: '2',
+                    title: 'Các Mốc Bảo Dưỡng Mô Tô Phân Khối Lớn (PKL) Theo Số ODO',
+                    slug: 'cac-moc-bao-duong-mo-to-phan-khoi-lon-pkl-theo-so-odo',
                     thumbnail_url:
                       'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1000&auto=format&fit=crop',
-                    created_at: new Date().toISOString(),
                   },
                   {
-                    id: 'p3',
-                    title:
-                      'Quy Trình Detailing Khoang Máy Ô Tô Bằng Hơi Nước Nóng Chuẩn An Toàn Điện Tử ECU',
+                    id: '3',
+                    title: 'Quy Trình Detailing Khoang Máy Bằng Hơi Nước Nóng Chuẩn ECU',
                     slug: 'quy-trinh-detailing-khoang-may-o-to-bang-hoi-nuoc-nong',
-                    content:
-                      'Tại sao không nên xịt nước áp lực cao trực tiếp vào khoang động cơ xe Đức? Khám phá quy trình vệ sinh khoang máy 12 bước an toàn tuyệt đối...',
                     thumbnail_url:
                       'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1000&auto=format&fit=crop',
-                    created_at: new Date().toISOString(),
                   },
                 ]
-            ).map(post => {
-              const excerpt =
-                post.content
-                  ?.replace(/<[^>]*>/g, ' ')
-                  .replace(/\s+/g, ' ')
-                  .trim()
-                  .slice(0, 130) + '...';
-              return (
-                <a
-                  key={post.id}
-                  href={`${blogBaseUrl}/${post.slug}`}
-                  className="group p-1.5 rounded-[1.75rem] bg-white/[0.03] border border-white/[0.08] hover:border-[#FF4D1C]/50 transition-all flex flex-col justify-between"
-                >
-                  <div className="rounded-[calc(1.75rem-0.375rem)] bg-[#0D1017] overflow-hidden h-full flex flex-col justify-between">
-                    <div>
-                      <div className="h-48 overflow-hidden relative">
-                        <img
-                          src={
-                            post.thumbnail_url ||
-                            'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1000&auto=format&fit=crop'
-                          }
-                          alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md font-mono text-[10px] text-[#FF4D1C]">
-                          AI CMS TECHNICAL ARTICLE
-                        </div>
-                      </div>
-                      <div className="p-5">
-                        <h3 className="text-base font-bold text-white group-hover:text-[#FF4D1C] transition-colors line-clamp-2 mb-2">
-                          {post.title}
-                        </h3>
-                        <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
-                          {excerpt}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="px-5 pb-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-slate-400">
-                      <span>Đọc bài phân tích</span>
-                      <ArrowUpRight className="w-4 h-4 text-[#FF4D1C]" />
-                    </div>
-                  </div>
-                </a>
-              );
-            })}
+            ).map((post, idx) => (
+              <a
+                key={post.id}
+                href={`${blogBaseUrl}/${post.slug}`}
+                className="group block bg-[#0C0E14] border border-white/10 hover:border-[#FF3B1F] transition-all overflow-hidden"
+              >
+                <div className="h-64 overflow-hidden relative">
+                  <img
+                    src={
+                      post.thumbnail_url ||
+                      'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1000&auto=format&fit=crop'
+                    }
+                    alt={post.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <span className="absolute top-4 left-4 px-2.5 py-1 bg-black/80 font-mono text-[10px] uppercase tracking-widest text-[#FF3B1F]">
+                    0{idx + 1} // TECH NOTE
+                  </span>
+                </div>
+                <div className="p-6 flex items-end justify-between gap-4">
+                  <h3 className="text-lg font-bold text-white group-hover:text-[#FF3B1F] transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-[#FF3B1F] shrink-0" />
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 9. CUSTOMER REVIEWS & FOOTER */}
-      <footer className="py-16 px-4 sm:px-6 border-t border-white/10 bg-[#050608] relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-            {data.reviews.map(rev => (
-              <div
-                key={rev.id}
-                className="p-6 rounded-3xl bg-[#0B0D13] border border-white/[0.07] space-y-3"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-[#FF4D1C]">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="font-mono text-[11px] text-amber-300 font-semibold">
-                    {rev.vehicle}
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">“{rev.text}”</p>
-                <div className="pt-2 text-xs font-bold text-white">— {rev.author}</div>
-              </div>
-            ))}
+      {/* 8. MINIMALIST FOOTER */}
+      <footer className="py-12 px-4 sm:px-8 bg-[#050507]">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 font-mono text-xs text-white/50">
+          <div className="flex flex-wrap items-center gap-6">
+            <span className="text-white font-bold tracking-[0.2em] uppercase">
+              {data.business.name}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#FF3B1F]" />
+              {data.business.address}
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-white">
+              <Phone className="w-3.5 h-3.5 text-[#FF3B1F]" />
+              {data.business.phone}
+            </span>
           </div>
-
-          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-400">
-            <div>
-              <div className="font-bold text-white text-sm">{data.business.name}</div>
-              <div className="flex flex-wrap items-center gap-4 mt-1">
-                <span className="inline-flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#FF4D1C]" />
-                  {data.business.address}
-                </span>
-                <span className="inline-flex items-center gap-1 font-mono text-slate-300">
-                  <Phone className="w-3.5 h-3.5 text-[#FF4D1C]" />
-                  {data.business.phone}
-                </span>
-              </div>
-            </div>
-            <div className="font-mono text-[11px] text-slate-500">
-              POWERED BY TAVIWEB · INTEGRATED BOOKING + VEHICLE CRM + AI CMS
-            </div>
-          </div>
+          <div>TAVIWEB MOTORSPORT SUITE · BOOKING + VEHICLE CRM + AI CMS</div>
         </div>
       </footer>
 
-      {/* FULL-SCREEN BUILD TELEMETRY LIGHTBOX MODAL */}
+      {/* LIGHTBOX MODAL FOR BUILD PHOTO & SPECS */}
       <AnimatePresence>
-        {selectedBuild && (
+        {activeLightbox && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedBuild(null)}
-            className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl p-4 sm:p-6 flex items-center justify-center"
+            onClick={() => setActiveLightbox(null)}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl p-4 sm:p-8 flex items-center justify-center"
           >
             <motion.div
-              initial={{ scale: 0.94, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.94, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="max-w-4xl w-full rounded-3xl bg-[#0D1017] border border-white/15 overflow-hidden shadow-2xl"
+              className="max-w-5xl w-full bg-[#0C0E14] border border-white/15 overflow-hidden grid grid-cols-1 lg:grid-cols-12"
             >
-              <div className="grid grid-cols-1 md:grid-cols-12">
-                <div className="md:col-span-7 relative h-72 md:h-auto bg-black">
-                  <img
-                    src={selectedBuild.image.src}
-                    alt={selectedBuild.image.alt}
-                    className="w-full h-full object-cover"
-                  />
-                  {selectedBuild.licensePlate && (
-                    <div className="absolute top-4 left-4 px-3 py-1 rounded-md bg-amber-400 text-[#06070A] font-mono font-bold text-xs">
-                      BIỂN SỐ: {selectedBuild.licensePlate}
+              <div className="lg:col-span-8 h-[340px] sm:h-[480px] bg-black relative">
+                <img
+                  src={activeLightbox.image.src}
+                  alt={activeLightbox.image.alt}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="lg:col-span-4 p-7 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="font-mono text-xs text-[#FF3B1F] uppercase tracking-widest">
+                      // BUILD SPEC
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setActiveLightbox(null)}
+                      className="w-8 h-8 border border-white/15 flex items-center justify-center text-white hover:bg-white hover:text-black"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-2">
+                    {activeLightbox.vehicleModel || activeLightbox.caption}
+                  </h3>
+                  <div className="font-mono text-xs text-white/50 mb-6">
+                    {activeLightbox.ownerName} · {activeLightbox.completionTime} ·{' '}
+                    <span className="text-white">{activeLightbox.packagePrice}</span>
+                  </div>
+
+                  {activeLightbox.workSummary && (
+                    <div className="space-y-2.5 border-t border-white/10 pt-5">
+                      {activeLightbox.workSummary.map((s, i) => (
+                        <div key={i} className="flex items-start gap-2.5 text-xs text-white/80">
+                          <span className="font-mono text-[#FF3B1F]">0{i + 1}</span>
+                          <span>{s}</span>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
 
-                <div className="md:col-span-5 p-6 sm:p-7 flex flex-col justify-between space-y-6">
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-[#FF4D1C]">
-                        HỒ SƠ BẢN ĐỘ & CHĂM SÓC XE
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedBuild(null)}
-                        className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    <h3 className="text-xl font-bold text-white mb-2">{selectedBuild.caption}</h3>
-
-                    <div className="grid grid-cols-2 gap-2.5 my-4 p-3.5 rounded-2xl bg-[#07090E] border border-white/10 text-xs">
-                      <div>
-                        <span className="text-slate-500 block text-[10px] font-mono">DÒNG XE</span>
-                        <span className="font-semibold text-white">
-                          {selectedBuild.vehicleModel || 'Supercar / PKL'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block text-[10px] font-mono">CHỦ XE</span>
-                        <span className="font-semibold text-white">
-                          {selectedBuild.ownerName || 'Khách VIP'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block text-[10px] font-mono">
-                          THỜI GIAN THI CÔNG
-                        </span>
-                        <span className="font-mono font-semibold text-emerald-400">
-                          {selectedBuild.completionTime || 'Trong ngày'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block text-[10px] font-mono">
-                          CHI PHÍ THAM KHẢO
-                        </span>
-                        <span className="font-mono font-semibold text-amber-300">
-                          {selectedBuild.packagePrice || 'Liên hệ'}
-                        </span>
-                      </div>
-                    </div>
-
-                    {selectedBuild.workSummary && (
-                      <div className="space-y-2">
-                        <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
-                          CÁC HẠNG MỤC ĐÃ THỰC HIỆN:
-                        </div>
-                        {selectedBuild.workSummary.map((step, i) => (
-                          <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                            <CheckCircle2 className="w-4 h-4 text-[#FF4D1C] shrink-0 mt-0.5" />
-                            <span>{step}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-2 pt-4 border-t border-white/10">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const model = selectedBuild.vehicleModel || '';
-                        const isMoto = selectedBuild.category === 'moto';
-                        setSelectedBuild(null);
-                        scrollToIntakeWithPreset({
-                          serviceName: selectedBuild.caption,
-                          vehicleType: isMoto ? 'Xe máy / Mô tô PKL' : 'Ô tô',
-                          vehicleModel: model,
-                        });
-                      }}
-                      className="w-full py-3 px-4 rounded-xl bg-[#FF4D1C] hover:bg-[#ff5f33] text-white font-semibold text-xs flex items-center justify-center gap-2"
-                    >
-                      <span>Đặt làm gói tương tự cho xe của tôi</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+                <a
+                  href={buildBookingHref({
+                    serviceName: activeLightbox.caption,
+                  })}
+                  className="mt-8 w-full py-4 bg-[#FF3B1F] hover:bg-white text-white hover:text-black font-mono text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all"
+                >
+                  <span>Đặt Lịch Làm Gói Này</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
               </div>
             </motion.div>
           </motion.div>
