@@ -50,7 +50,8 @@ Hệ thống xử lý qua luồng logic:
 | `src/lib/demo/mockDemoData.ts` | Mock data cho các ngành và alias slugs (`xay-dung-an-gia`,...) |
 | `src/lib/demo/templateRouter.ts` | Chọn template theo industry |
 | `src/lib/demo/templateDefaults.ts` | Fallback text, service, image theo ngành |
-| `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry router (chọn engine render tương ứng: `XayDung3Renderer`, `XayDung2Renderer` hoặc `StudioTemplateRenderer`) |
+| `src/components/demo/DemoTemplateRenderer.tsx` | Renderer entry router (định tuyến các mẫu standalone `xay_dung_2`, `xay_dung_3` và hơn 320 mẫu cloned qua `CLONED_TEMPLATE_KEY_MAP` + `getTemplateComponent`, hoặc fallback sang `StudioTemplateRenderer`) |
+| `src/lib/demo/clonedTemplateUtils.ts` | Adapter chuẩn hóa `adaptClonedTemplateData` cho các mẫu cloned (đồng bộ thương hiệu lead, ghi đè JSON dot-notation, hỗ trợ Token Blueprint Mode `__token_preview__`) |
 | `src/components/demo/StudioTemplateRenderer.tsx` | Đóng vai trò bộ định hình (Adapter), thực thi ghép đè JSON nâng cao và registry các template core |
 | `src/template-sources/xay_dung_3` | Mã nguồn template kiến trúc & nội thất BIM XD003 / NT003 (thanh trượt Before/After tương tác, portfolio chuyên sâu) |
 | `src/template-sources/xay_dung_2` | Mã nguồn template kiến trúc & xây dựng cao cấp XD002 (Prague Architecture) |

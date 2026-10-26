@@ -7,7 +7,11 @@ import { buildDemoPageData } from "@/lib/demo/buildDemoPageData";
 import { getMockLeadByPlaceId } from "@/lib/demo/mockDemoData";
 import { routeTemplateByIndustry } from "@/lib/demo/templateRouter";
 import { getBusinessByPlaceId } from "@/lib/supabase/server";
-import { getTemplatesByIndustry, getIndustryByKey } from "@/lib/templates/templateCatalog";
+import {
+  getTemplatesByIndustry,
+  getIndustryByKey,
+  templateCatalog,
+} from "@/lib/templates/templateCatalog";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +28,10 @@ async function resolveLead(placeId: string) {
   return leadFromSupabase ?? getMockLeadByPlaceId(placeId);
 }
 
-export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const { place_id } = await params;
   const { template: requestedTemplate, t } = (await searchParams) || {};
   const selectedTemplate = requestedTemplate || t;
@@ -48,7 +55,9 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 
   const industryKey = routeTemplateByIndustry(lead.industry);
   const allTemplates = getTemplatesByIndustry(industryKey);
-  const renderTemplates = allTemplates.filter((item) => item.type === "render_template");
+  const renderTemplates = allTemplates.filter(
+    (item) => item.type === "render_template"
+  );
 
   const isMockLead = place_id.startsWith("mock-");
 
@@ -60,12 +69,22 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     };
   }
 
+  const matchedCatalogTemplate = selectedTemplate
+    ? templateCatalog.find(
+        (item) =>
+          item.id === selectedTemplate || item.templateKey === selectedTemplate
+      )
+    : undefined;
+
   const activeTemplateKey =
-    selectedTemplate === "xay_dung_2" || selectedTemplate === "XD002" || selectedTemplate === "xay_dung_3" || selectedTemplate === "XD003"
+    selectedTemplate === "xay_dung_2" ||
+    selectedTemplate === "XD002" ||
+    selectedTemplate === "xay_dung_3" ||
+    selectedTemplate === "XD003"
       ? "cong_ty_xay_dung"
       : selectedTemplate === "NT003"
       ? "noi_that"
-      : industryKey;
+      : matchedCatalogTemplate?.industryKey || industryKey;
 
   const data = buildDemoPageData(lead, activeTemplateKey);
 
@@ -90,13 +109,19 @@ export default async function DemoPage({ params, searchParams }: PageProps) {
   if (!lead) notFound();
 
   // If the business industry is under development
-  if (!lead.industry || lead.industry === "dang_phat_trien" || lead.demo_status === "pending") {
+  if (
+    !lead.industry ||
+    lead.industry === "dang_phat_trien" ||
+    lead.demo_status === "pending"
+  ) {
     return <UnderDevelopmentView lead={lead} />;
   }
 
   const industryKey = routeTemplateByIndustry(lead.industry);
   const allTemplates = getTemplatesByIndustry(industryKey);
-  const renderTemplates = allTemplates.filter((item) => item.type === "render_template");
+  const renderTemplates = allTemplates.filter(
+    (item) => item.type === "render_template"
+  );
 
   const isMockLead = placeId.startsWith("mock-");
 
@@ -124,21 +149,45 @@ export default async function DemoPage({ params, searchParams }: PageProps) {
       activeTemplateKey = "cong_ty_xay_dung";
       targetRendererKey = "xay_dung_2";
       activeTemplateName = "Mẫu Kiến Trúc XD002 (Prague Architecture)";
-    } else if (selectedTemplate === "xay_dung_3" || selectedTemplate === "XD003" || selectedTemplate === "NT003") {
-      activeTemplateKey = industryKey === "noi_that" || selectedTemplate === "NT003" ? "noi_that" : "cong_ty_xay_dung";
+    } else if (
+      selectedTemplate === "xay_dung_3" ||
+      selectedTemplate === "XD003" ||
+      selectedTemplate === "NT003"
+    ) {
+      activeTemplateKey =
+        industryKey === "noi_that" || selectedTemplate === "NT003"
+          ? "noi_that"
+          : "cong_ty_xay_dung";
       targetRendererKey = "xay_dung_3";
-      activeTemplateName = "Mẫu Kiến Trúc & Nội Thất XD003 (BIM Creative Studio)";
-    } else if (selectedTemplate === "cong_ty_xay_dung" || selectedTemplate === "XD001") {
+      activeTemplateName =
+        "Mẫu Kiến Trúc & Nội Thất XD003 (BIM Creative Studio)";
+    } else if (
+      selectedTemplate === "cong_ty_xay_dung" ||
+      selectedTemplate === "XD001"
+    ) {
       activeTemplateKey = "cong_ty_xay_dung";
       targetRendererKey = "cong_ty_xay_dung";
       activeTemplateName = "Mẫu Xây Dựng XD001";
     } else {
-      activeTemplateKey = selectedTemplate as any;
-      targetRendererKey = selectedTemplate;
-      const matched = allTemplates.find(
-        (templateItem) => templateItem.id === selectedTemplate || templateItem.templateKey === selectedTemplate
-      );
-      if (matched) activeTemplateName = matched.name;
+      const matched =
+        allTemplates.find(
+          (templateItem) =>
+            templateItem.id === selectedTemplate ||
+            templateItem.templateKey === selectedTemplate
+        ) ??
+        templateCatalog.find(
+          (templateItem) =>
+            templateItem.id === selectedTemplate ||
+            templateItem.templateKey === selectedTemplate
+        );
+      if (matched) {
+        activeTemplateKey = matched.industryKey;
+        targetRendererKey = matched.templateKey || selectedTemplate;
+        activeTemplateName = matched.name;
+      } else {
+        activeTemplateKey = industryKey;
+        targetRendererKey = selectedTemplate;
+      }
     }
   } else if (renderTemplates.length > 0) {
     activeTemplateName = renderTemplates[0].name;
@@ -150,4 +199,3 @@ export default async function DemoPage({ params, searchParams }: PageProps) {
 
   return <DemoTemplateRenderer data={data} />;
 }
-
